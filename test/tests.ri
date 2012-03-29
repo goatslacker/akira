@@ -1,0 +1,5 @@
+concatenate(a, b, c) -> a + b + c
+
+foobar = fn(func, extraWord) -> func: "foo", "bar", extraWord
+
+print: foobar: concatenate, "baz"

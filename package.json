@@ -1,0 +1,19 @@
+{
+  "name": "rini",
+  "author": "Josh Perez <josh@goatslacker.com>",
+  "version": "0.0.1",
+  "description": "project rini",
+
+  "scripts": {
+    "test": "node test/index.js"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/goatslacker/rini.git"
+  },
+
+  "engines": {
+    "node": ">= 0.4.0"
+  }
+}
