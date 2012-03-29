@@ -67,30 +67,35 @@ parser = new Parser (->
     ]
 
     Invocation: [
-      o 'Expression [ Arguments ]', -> new Call $1, $3
-      o 'PRINT [ Arguments ]', -> new Call $1, $3
+      o 'Identifier ( Arguments )', -> new Call $1, $3
+      o 'PRINT ( Arguments )', -> new Call 'print', $3
     ]
 
     Declaration: [
       o 'Identifier LAMBDA Parameters = Expression', -> new Declaration $1, $3, $5
     ]
 
-    Args: [
-      o 'Expression'
-      o 'Declaration'
-    ]
-
     Arguments: [
       o '', -> null
-      o 'Args', -> new Arguments $1
-      o 'Arguments, Args', -> new Arguments $1, $3
+      o 'Expression', -> new Arguments $1
+      o 'Arguments , Expression', -> new Arguments $1, $3
     ]
 
     Parameters: [
       o '', -> null
       o 'Identifier', -> new Arguments $1
-      o 'Parameters, Identifier', -> new Arguments $1, $3
+      o 'Parameters , Identifier', -> new Arguments $1, $3
       o '( Parameters )', -> new Arguments $2
+    ]
+
+    Operation: [
+      o 'Expression COMPARE Expression', -> new Compare $1, $2, $3
+      o 'Expression LOGIC Expression', -> new Compare $1, $2, $3
+      o 'Expression + Expression', -> new Operation $1, '+', $3
+      o 'Expression - Expression', -> new Operation $1, '-', $3
+      o 'Expression * Expression', -> new Operation $1, '*', $3
+      o 'Expression / Expression', -> new Operation $1, '/', $3
+      o '( Expression )', -> $2
     ]
 
     Block: [
@@ -102,12 +107,13 @@ parser = new Parser (->
   }
 
   operators = [
-    ['right', '=', 'RETURN', 'PRINT'],
-    ['nonassoc', '{', '}'],
-    ['left', 'LOGIC'],
-    ['left', 'COMPARE'],
-    ['left', '+', '-'],
-    ['left', '*', '/'],
+    ['right', '=', 'RETURN', 'PRINT']
+    ['nonassoc', '{', '}']
+    ['left', 'LOGIC']
+    ['left', 'COMPARE']
+    ['left', '+', '-']
+    ['left', '*', '/']
+    ['left', ':']
     ['left', '.']
   ]
 
@@ -120,26 +126,5 @@ fs.writeFileSync './lib/parser.js', parser.generate(), 'utf8'
 ###
     // Logical operations, comparisons and math.
     Operation: [
-      o('Expression COMPARE Expression', function () {
-        return new Compare($1, $2, $3)
-      }),
-      o('Expression LOGIC Expression', function () {
-        return new Compare($1, $2, $3)
-      }),
-      o('Expression + Expression', function () {
-        return new Operation($1,"+", $3)
-      }),
-      o('Expression - Expression', function () {
-        return new Operation($1, "-", $3)
-      }),
-      o('Expression * Expression', function () {
-        return new Operation($1, "*", $3)
-      }),
-      o('Expression / Expression', function () {
-        return new Operation($1, "/", $3)
-      }),
-      o('( Expression )', function () {
-        return $2
-      })
     ],
 ###

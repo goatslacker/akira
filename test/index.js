@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+var fs = require('fs');
+var path = require('path');
 
-const lexer = require('../lib/lexer');
+var lexer = require('../lib/lexer');
 
 var parser = require('../lib/parser').parser;
 
@@ -36,5 +36,6 @@ var context = require('../lib/runtime');
 context.env = 'node';
 
 var tokens = lexer.tokenize(code);
+console.log(tokens);
 var parsed = parser.parse(tokens);
 var run = parsed.run([context]);

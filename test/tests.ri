@@ -1,5 +1,3 @@
-concatenate(a, b, c) -> a + b + c
+sum -> a, b = a + b
 
-foobar = fn(func, extraWord) -> func: "foo", "bar", extraWord
-
-print: foobar: concatenate, "baz"
+print(sum(1, 2))
