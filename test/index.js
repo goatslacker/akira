@@ -36,6 +36,5 @@ var context = require('../lib/runtime');
 context.env = 'node';
 
 var tokens = lexer.tokenize(code);
-console.log(tokens);
 var parsed = parser.parse(tokens);
 var run = parsed.run([context]);
