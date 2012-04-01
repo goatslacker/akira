@@ -63,9 +63,11 @@ parser = new Parser (->
     ]
 
     Pipeline: [
-      o 'Literal | Identifier', -> new Call $3, $1
-      o 'Literal | PRINT', -> new Call 'print', $1
-#      o 'Pipeline | Identifier', -> new Pipeline $1, $3
+      o '$ Arguments | Identifier', -> new Call $4, $2
+      o '$ Arguments | PRINT', -> new Call $4, $2
+
+      o 'Pipeline | Identifier', -> new Call $3, $1
+      o 'Pipeline | PRINT', -> new Call $3, $1
     ]
 
     Declaration: [
@@ -74,6 +76,7 @@ parser = new Parser (->
     ]
 
     Arguments: [
+      o '', -> null
       o 'Literal', -> new Arguments $1
       o 'Arguments , Literal', -> new Arguments $1, $3
     ]
@@ -103,14 +106,12 @@ parser = new Parser (->
   }
 
   operators = [
-    ['right', '=', 'PRINT']
+    ['right', '=', '|', '(', ')', 'PRINT']
     ['nonassoc', '{', '}', 'LAMBDA']
     ['left', 'LOGIC']
     ['left', 'COMPARE']
     ['left', '+', '-']
     ['left', '*', '/']
-    ['left', '|']
-    ['left', '(', ')']
   ]
 
   { tokens, bnf, operators, startSymbol }

@@ -1,4 +1,14 @@
-sum(a, b) -> a + b
-log(a) -> a | print
+log(a) -> $a | print
 
-1, 2 | sum | log
+addone(a) -> a + 1
+
+$ 2 | addone | log
+
+
+sum(a, b) -> a + b
+prod(a, b) -> a * b
+square(a) -> $ a, a | prod
+
+three -> 3
+
+$ | three | square | print
