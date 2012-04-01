@@ -68,8 +68,9 @@ parser = new Parser (->
     ]
 
     Declaration: [
-      o 'Identifier LAMBDA Parameters : Expression', -> new Declaration $1, $3, $5
-      o 'Identifier LAMBDA Parameters Block', -> new Declaration $1, $3, $4
+      o 'Identifier | Parameters | LAMBDA Expression', -> new Declaration $1, $3, $6
+      o 'Identifier LAMBDA Expression', -> new Declaration $1, null, $3
+#      o 'Identifier = LAMBDA Parameters Block', -> new Declaration $1, $3, $4
     ]
 
     Arguments: [
@@ -82,7 +83,7 @@ parser = new Parser (->
       o '', -> null
       o 'Identifier', -> new Arguments $1
       o 'Parameters , Identifier', -> new Arguments $1, $3
-      o '( Parameters )', -> new Arguments $2
+#      o '( Parameters )', -> new Arguments $2
     ]
 
     Operation: [
@@ -104,13 +105,12 @@ parser = new Parser (->
   }
 
   operators = [
-    ['right', '=', ':', 'PRINT']
-    ['nonassoc', '{', '}']
+    ['right', '=', '|', 'PRINT']
+    ['nonassoc', '{', '}', 'LAMBDA']
     ['left', 'LOGIC']
     ['left', 'COMPARE']
     ['left', '+', '-']
     ['left', '*', '/']
-    ['left', '.']
   ]
 
   { tokens, bnf, operators, startSymbol }
