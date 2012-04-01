@@ -41,8 +41,8 @@ parser = new Parser (->
 
     Expression: [
       o 'Literal'
-      o 'Invocation'
       o 'Assignment'
+      o 'Pipeline'
       o 'Declaration'
       o 'Operation'
     ]
@@ -62,28 +62,26 @@ parser = new Parser (->
       o 'Identifier = Expression', -> new Assignment $1, $3
     ]
 
-    Invocation: [
-      o 'Identifier ( Arguments )', -> new Call $1, $3
-      o 'PRINT ( Arguments )', -> new Call 'print', $3
+    Pipeline: [
+      o 'Literal | Identifier', -> new Call $3, $1
+      o 'Literal | PRINT', -> new Call 'print', $1
+#      o 'Pipeline | Identifier', -> new Pipeline $1, $3
     ]
 
     Declaration: [
-      o 'Identifier | Parameters | LAMBDA Expression', -> new Declaration $1, $3, $6
+      o 'Identifier ( Parameters ) LAMBDA Expression', -> new Declaration $1, $3, $6
       o 'Identifier LAMBDA Expression', -> new Declaration $1, null, $3
-#      o 'Identifier = LAMBDA Parameters Block', -> new Declaration $1, $3, $4
     ]
 
     Arguments: [
-      o '', -> null
-      o 'Expression', -> new Arguments $1
-      o 'Arguments , Expression', -> new Arguments $1, $3
+      o 'Literal', -> new Arguments $1
+      o 'Arguments , Literal', -> new Arguments $1, $3
     ]
 
     Parameters: [
       o '', -> null
       o 'Identifier', -> new Arguments $1
       o 'Parameters , Identifier', -> new Arguments $1, $3
-#      o '( Parameters )', -> new Arguments $2
     ]
 
     Operation: [
@@ -105,12 +103,14 @@ parser = new Parser (->
   }
 
   operators = [
-    ['right', '=', '|', 'PRINT']
+    ['right', '=', 'PRINT']
     ['nonassoc', '{', '}', 'LAMBDA']
     ['left', 'LOGIC']
     ['left', 'COMPARE']
     ['left', '+', '-']
     ['left', '*', '/']
+    ['left', '|']
+    ['left', '(', ')']
   ]
 
   { tokens, bnf, operators, startSymbol }

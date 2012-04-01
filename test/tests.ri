@@ -1,3 +1,4 @@
-sum |a, b| -> a + b
+sum(a, b) -> a + b
+log(a) -> a | print
 
-print(sum(1, 2))
+1, 2 | sum | log
