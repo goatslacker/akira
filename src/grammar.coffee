@@ -47,10 +47,6 @@ parser = new Parser (->
       o 'Operation'
     ]
 
-    Statement: [
-      o 'Return'
-    ]
-
     Literal: [
       o 'Identifier'
       o 'AlphaNumeric'
@@ -72,7 +68,7 @@ parser = new Parser (->
     ]
 
     Declaration: [
-      o 'Identifier LAMBDA Parameters = Expression', -> new Declaration $1, $3, $5
+      o 'Identifier : Parameters LAMBDA Expression', -> new Declaration $1, $3, $5
     ]
 
     Arguments: [
@@ -107,13 +103,12 @@ parser = new Parser (->
   }
 
   operators = [
-    ['right', '=', 'RETURN', 'PRINT']
+    ['right', '=', ':', 'PRINT']
     ['nonassoc', '{', '}']
     ['left', 'LOGIC']
     ['left', 'COMPARE']
     ['left', '+', '-']
     ['left', '*', '/']
-    ['left', ':']
     ['left', '.']
   ]
 
@@ -122,9 +117,3 @@ parser = new Parser (->
 
 # write to file
 fs.writeFileSync './lib/parser.js', parser.generate(), 'utf8'
-
-###
-    // Logical operations, comparisons and math.
-    Operation: [
-    ],
-###
