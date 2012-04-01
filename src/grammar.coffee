@@ -68,7 +68,8 @@ parser = new Parser (->
     ]
 
     Declaration: [
-      o 'Identifier : Parameters LAMBDA Expression', -> new Declaration $1, $3, $5
+      o 'Identifier LAMBDA Parameters : Expression', -> new Declaration $1, $3, $5
+      o 'Identifier LAMBDA Parameters Block', -> new Declaration $1, $3, $4
     ]
 
     Arguments: [
@@ -97,7 +98,7 @@ parser = new Parser (->
     Block: [
       o '{ }', -> null
       o '{ Expressions }', -> $2
-      o '{ Terinator Expressions }', -> $3
+      o '{ Terminator Expressions }', -> $3
     ]
 
   }
