@@ -1,4 +1,4 @@
-log(a) -> $a | print
+log(a) -> print: a
 
 addone(a) -> a + 1
 
@@ -7,7 +7,7 @@ $ 2 | addone | log
 
 sum(a, b) -> a + b
 prod(a, b) -> a * b
-square(a) -> $ a, a | prod
+square(a) -> prod: a, a
 
 three -> 3
 

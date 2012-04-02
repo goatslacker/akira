@@ -42,6 +42,7 @@ parser = new Parser (->
     Expression: [
       o 'Literal'
       o 'Assignment'
+      o 'Invocation'
       o 'Pipeline'
       o 'Declaration'
       o 'Operation'
@@ -63,11 +64,19 @@ parser = new Parser (->
     ]
 
     Pipeline: [
+      o 'Invocation | PRINT', -> new Call $3, $1
+      o 'Invocation | Identifier', -> new Call $3, $1
+
       o '$ Arguments | Identifier', -> new Call $4, $2
       o '$ Arguments | PRINT', -> new Call $4, $2
 
       o 'Pipeline | Identifier', -> new Call $3, $1
       o 'Pipeline | PRINT', -> new Call $3, $1
+    ]
+
+    Invocation: [
+      o 'Identifier : Arguments', -> new Call $1, $3
+      o 'PRINT : Arguments', -> new Call $1, $3
     ]
 
     Declaration: [
