@@ -1,14 +1,6 @@
-log(a) -> print: a
-
-addone(a) -> a + 1
-
-$ 2 | addone | log
-
-
 sum(a, b) -> a + b
+sub(a, b) -> a - b
 prod(a, b) -> a * b
+div(a, b) -> a / b
 square(a) -> prod: a, a
-
-three -> 3
-
-$ | three | square | print
+cube(a) -> a * a * a
