@@ -44,6 +44,7 @@ parser = new Parser (->
       o 'Assignment'
       o 'Invocation'
       o 'Pipeline'
+      o 'Lists'
       o 'Declaration'
       o 'Operation'
     ]
@@ -66,7 +67,7 @@ parser = new Parser (->
     Pipeline: [
       o 'Invocation | Identifier', -> new Call $3, $1
 
-      o '$ Arguments | Identifier', -> new Call $4, $2
+      o 'Lists | Identifier', -> new Call $3, $1
 
       o 'Pipeline | Identifier', -> new Call $3, $1
     ]
@@ -80,6 +81,10 @@ parser = new Parser (->
       o 'Identifier LAMBDA Expression', -> new Declaration $1, null, $3
       o 'Identifier ( Parameters ) LAMBDA Block', -> new Declaration $1, $3, $6
       o 'Identifier LAMBDA Block', -> new Declaration $1, null, $3
+    ]
+
+    Lists: [
+      o '[ Arguments ]', -> new Arguments $2
     ]
 
     Arguments: [
@@ -113,7 +118,7 @@ parser = new Parser (->
   }
 
   operators = [
-    ['right', '=', '|', '(', ')']
+    ['right', '=', '|', '(', ')', '[', ']']
     ['nonassoc', '{', '}', 'LAMBDA']
     ['left', 'LOGIC']
     ['left', 'COMPARE']
