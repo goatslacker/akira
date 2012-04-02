@@ -5,6 +5,4 @@ div(a, b) -> a / b
 square(a) -> prod: a, a
 cube(a) -> a * a * a
 
-cubed = 2 * 2 * 2
-[cubed] | print
-[2] | cube | print
+print: 2
