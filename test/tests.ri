@@ -4,3 +4,5 @@ prod(a, b) -> a * b
 div(a, b) -> a / b
 square(a) -> prod: a, a
 cube(a) -> a * a * a
+
+print: 30, 9, 1

@@ -13,11 +13,11 @@ parser = new Parser (->
     action = action.replace(/\b(?:Nodes\.add)\b/g, 'yy.$&')
     [patternString, "$$ = " + action + "", options]
 
-  tokens = ["ASSERT", "LAMBDA", "BOOL", "CASE",
-            "COMPARE", "DEFAULT", "ELSE", "FN",
-            "IDENTIFIER", "IF", "LOGIC",
-            "NUMBER", "PRINT", "RETURN", "STRING",
-            "TERMINATOR", "WHILE"].join(" ")
+  tokens = ["ASSERT", "LAMBDA", "BOOL",
+            "COMPARE", "DEFAULT",
+            "IDENTIFIER", "LOGIC",
+            "NUMBER", "STRING",
+            "TERMINATOR",].join(" ")
 
   startSymbol = 'Root'
 
@@ -64,19 +64,15 @@ parser = new Parser (->
     ]
 
     Pipeline: [
-      o 'Invocation | PRINT', -> new Call $3, $1
       o 'Invocation | Identifier', -> new Call $3, $1
 
       o '$ Arguments | Identifier', -> new Call $4, $2
-      o '$ Arguments | PRINT', -> new Call $4, $2
 
       o 'Pipeline | Identifier', -> new Call $3, $1
-      o 'Pipeline | PRINT', -> new Call $3, $1
     ]
 
     Invocation: [
       o 'Identifier : Arguments', -> new Call $1, $3
-      o 'PRINT : Arguments', -> new Call $1, $3
     ]
 
     Declaration: [
@@ -117,7 +113,7 @@ parser = new Parser (->
   }
 
   operators = [
-    ['right', '=', '|', '(', ')', 'PRINT']
+    ['right', '=', '|', '(', ')']
     ['nonassoc', '{', '}', 'LAMBDA']
     ['left', 'LOGIC']
     ['left', 'COMPARE']
