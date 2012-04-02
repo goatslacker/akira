@@ -82,6 +82,8 @@ parser = new Parser (->
     Declaration: [
       o 'Identifier ( Parameters ) LAMBDA Expression', -> new Declaration $1, $3, $6
       o 'Identifier LAMBDA Expression', -> new Declaration $1, null, $3
+      o 'Identifier ( Parameters ) LAMBDA Block', -> new Declaration $1, $3, $6
+      o 'Identifier LAMBDA Block', -> new Declaration $1, null, $3
     ]
 
     Arguments: [
