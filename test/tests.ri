@@ -5,4 +5,15 @@ div(a, b) -> a / b
 square(a) -> prod: a, a
 cube(a) -> a * a * a
 
-print: 2
+[2] | square | cube | print
+
+five = 2
+
+addfive(a) -> {
+  five = 5
+  a + five
+}
+
+print: five
+
+[1] | addfive | print
