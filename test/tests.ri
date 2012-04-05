@@ -5,15 +5,6 @@ div(a, b) -> a / b
 square(a) -> prod: a, a
 cube(a) -> a * a * a
 
-[2] | square | cube | print
-
-five = 2
-
-addfive(a) -> {
-  five = 5
-  a + five
-}
-
-print: five
-
-[1] | addfive | print
+five = sum: 2, 3
+isTrue = five == 7
+assert: isTrue
