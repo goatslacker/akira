@@ -40,12 +40,16 @@ parser = new Parser (->
     Identifier: [ o 'IDENTIFIER' ]
 
     Expression: [
-      o 'Literal'
+      o 'Value'
       o 'Assignment'
       o 'Invocation'
       o 'Pipeline'
       o 'Lists'
       o 'Declaration'
+    ]
+
+    Value: [
+      o 'Literal'
       o 'Operation'
     ]
 
@@ -89,8 +93,8 @@ parser = new Parser (->
 
     Arguments: [
       o '', -> null
-      o 'Literal', -> new Arguments $1
-      o 'Arguments , Literal', -> new Arguments $1, $3
+      o 'Value', -> new Arguments $1
+      o 'Arguments , Value', -> new Arguments $1, $3
     ]
 
     Parameters: [
@@ -100,13 +104,13 @@ parser = new Parser (->
     ]
 
     Operation: [
-      o 'Expression COMPARE Expression', -> new Compare $1, $2, $3
-      o 'Expression LOGIC Expression', -> new Compare $1, $2, $3
-      o 'Expression + Expression', -> new Operation $1, '+', $3
-      o 'Expression - Expression', -> new Operation $1, '-', $3
-      o 'Expression * Expression', -> new Operation $1, '*', $3
-      o 'Expression / Expression', -> new Operation $1, '/', $3
-      o '( Expression )', -> $2
+      o 'Value COMPARE Value', -> new Compare $1, $2, $3
+      o 'Value LOGIC Value', -> new Compare $1, $2, $3
+      o 'Value + Value', -> new Operation $1, '+', $3
+      o 'Value - Value', -> new Operation $1, '-', $3
+      o 'Value * Value', -> new Operation $1, '*', $3
+      o 'Value / Value', -> new Operation $1, '/', $3
+      o '( Value )', -> $2
     ]
 
     Block: [

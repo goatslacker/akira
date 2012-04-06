@@ -5,6 +5,4 @@ div(a, b) -> a / b
 square(a) -> prod: a, a
 cube(a) -> a * a * a
 
-five = sum: 2, 3
-isTrue = five == 7
-assert: isTrue
+print: 2 + 1
