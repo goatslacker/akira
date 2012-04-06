@@ -5,4 +5,7 @@ div(a, b) -> a / b
 square(a) -> prod: a, a
 cube(a) -> a * a * a
 
-print: 2 + 1
+one -> 1
+two(a) -> [a, 2]
+
+one:() | two | sum | print

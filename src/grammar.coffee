@@ -92,7 +92,7 @@ parser = new Parser (->
     ]
 
     Arguments: [
-      o '', -> null
+      o '( )', -> null
       o 'Value', -> new Arguments $1
       o 'Arguments , Value', -> new Arguments $1, $3
     ]
