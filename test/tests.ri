@@ -1,11 +1,19 @@
-sum(a, b) -> a + b
-sub(a, b) -> a - b
-prod(a, b) -> a * b
-div(a, b) -> a / b
-square(a) -> prod: a, a
-cube(a) -> a * a * a
+fibcall(n) -> {
+  one = fib: n - 1
+  two = fib: n - 2
+  [one, two] | sum
+}
 
-one -> 1
-two(a) -> [a, 2]
+fib(n) -> {
+  res = if: n < 1, return, fibcall
+  res: n
+}
 
-one:() | two | sum | print
+fact(n) -> {
+  apply(a) -> [a, n]
+  call(n) -> fact: n - 1
+  res = [n == 1, return, call] | if
+  res: n | apply | prod
+}
+
+[4] | fact | print
