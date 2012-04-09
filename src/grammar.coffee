@@ -47,6 +47,7 @@ parser = new Parser (->
       o 'Pipeline'
       o 'Lists'
       o 'Declaration'
+      o '_'
     ]
 
     Value: [
@@ -102,10 +103,15 @@ parser = new Parser (->
       o 'Arguments , Value', -> new Arguments $1, $3
     ]
 
+    Param: [
+      o 'Identifier'
+      o '_'
+    ]
+
     Parameters: [
       o '', -> null
-      o 'Identifier', -> new Arguments $1
-      o 'Parameters , Identifier', -> new Arguments $1, $3
+      o 'Param', -> new Arguments $1
+      o 'Parameters , Param', -> new Arguments $1, $3
     ]
 
     Operation: [
