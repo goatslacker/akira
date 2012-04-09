@@ -40,6 +40,7 @@ parser = new Parser (->
     Identifier: [ o 'IDENTIFIER' ]
 
     Expression: [
+      o 'Import'
       o 'Value'
       o 'Assignment'
       o 'Invocation'
@@ -66,6 +67,10 @@ parser = new Parser (->
 
     Assignment: [
       o 'Identifier = Expression', -> new Assignment $1, $3
+    ]
+
+    Import: [
+      o '@ STRING', -> new Import $2
     ]
 
     Pipeline: [
