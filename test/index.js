@@ -33,7 +33,9 @@ var code = (function () {
 }());
 
 var context = require('../lib/runtime');
-context.env = 'node';
+
+// load lib
+parser.parse(lexer.tokenize(fs.readFileSync('./lib/runtime.ri').toString())).run([context]);
 
 var tokens = lexer.tokenize(code);
 var parsed = parser.parse(tokens);
