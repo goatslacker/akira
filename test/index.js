@@ -26,7 +26,7 @@ parser.lexer = {
 parser.yy = require('../lib/nodes');
 
 var code = (function () {
-  var file = path.join(__dirname, "tests.ri"),
+  var file = path.join(__dirname, "tests.mem"),
       data = fs.readFileSync(file, 'utf8');
 
   return data;
@@ -35,7 +35,7 @@ var code = (function () {
 var context = require('../lib/runtime');
 
 // load lib
-parser.parse(lexer.tokenize(fs.readFileSync('./lib/runtime.ri').toString())).run([context]);
+parser.parse(lexer.tokenize(fs.readFileSync('./lib/runtime.mem').toString())).run([context]);
 
 var tokens = lexer.tokenize(code);
 var parsed = parser.parse(tokens);
