@@ -1,2 +1,3 @@
 head(a) -> a
 tail(a, _) -> _
+flip(f, a, b) -> f: b, a
