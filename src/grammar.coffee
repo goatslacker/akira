@@ -27,8 +27,8 @@ parser = new Parser (->
     ]
 
     Expressions: [
-      o 'Expression', -> new Nodes $1
-      o 'Expressions TERMINATOR Expression', -> $1.push $3
+      o 'Body', -> new Nodes $1
+      o 'Expressions TERMINATOR Body', -> $1.push $3
       o 'Expressions TERMINATOR', -> new Nodes $1
     ]
 
@@ -38,6 +38,12 @@ parser = new Parser (->
     ]
 
     Identifier: [ o 'IDENTIFIER' ]
+
+    Body: [
+      o 'Expression'
+      o '( Expressions )', -> $2
+      o '( Terminator Expressions )', -> $3
+    ]
 
     Expression: [
       o 'Import'
@@ -67,7 +73,7 @@ parser = new Parser (->
     ]
 
     Assignment: [
-      o 'Identifier = Expression', -> new Assignment $1, $3
+      o 'Identifier = Body', -> new Assignment $1, $3
     ]
 
     Import: [
@@ -87,10 +93,8 @@ parser = new Parser (->
     ]
 
     Declaration: [
-      o 'Identifier ( Parameters ) LAMBDA Expression', -> new Declaration $1, $3, $6
-      o 'Identifier LAMBDA Expression', -> new Declaration $1, null, $3
-      o 'Identifier ( Parameters ) LAMBDA Block', -> new Declaration $1, $3, $6
-      o 'Identifier LAMBDA Block', -> new Declaration $1, null, $3
+      o 'Identifier ( Parameters ) LAMBDA Body', -> new Declaration $1, $3, $6
+      o 'Identifier LAMBDA Body', -> new Declaration $1, null, $3
     ]
 
     Lists: [
@@ -121,15 +125,7 @@ parser = new Parser (->
       o 'Value - Value', -> new Operation $1, '-', $3
       o 'Value * Value', -> new Operation $1, '*', $3
       o 'Value / Value', -> new Operation $1, '/', $3
-#      o '( Value )', -> $2
     ]
-
-    Block: [
-      o '( )', -> null
-      o '( Expressions )', -> $2
-      o '( Terminator Expressions )', -> $3
-    ]
-
   }
 
   operators = [
