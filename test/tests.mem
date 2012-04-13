@@ -22,14 +22,20 @@
 #))
 
 mapper = partial: map, square
-[[1, 2, 3]] | mapper | print
+[[1, 2, 3]] | mapper | (\(a, b, c) -> (
+  assert: a == 1
+  assert: b == 4
+  assert: c == 9
+#  assert: eq, b, 4
+#  assert: eq, c, 9
+))
 
 # Pipes, Anonymous functions, assertions
 [[1, 2, 3]] | (\(list) -> map: square, list) | (\(a, b, c) -> (
+  assert: a == 1
 #  assert: eq, a, 1
 #  assert: eq, b, 4
 #  assert: eq, c, 9
-  assert: a == 1
 ))
 
 print: 'All tests completed'
