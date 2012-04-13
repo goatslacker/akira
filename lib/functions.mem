@@ -1,7 +1,8 @@
 head(a) -> a
 init(_a, b) -> a
 tail(a, _b) -> b
-last(_a, b) -> a
+last(_a, b) -> b
 flip(f, a, b) -> f: b, a
 const(a, b) -> a
 square(x) -> x * x
+partial(fn, arg) -> (\(args) -> fn: arg, args)
