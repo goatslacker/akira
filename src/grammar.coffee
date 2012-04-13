@@ -62,7 +62,6 @@ parser = new Parser (->
       o 'Invocation'
       o 'Pipeline'
       o 'Declaration'
-      o '_ Identifier', -> "_#{$2}"
     ]
 
     Value: [
