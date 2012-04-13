@@ -1,3 +1,4 @@
-@ 'test/fact.mem'
-
-[4] | fact | print
+test = [1,2,3,4]
+fn(a) -> a == 2
+result = filter: test, fn
+print: result
