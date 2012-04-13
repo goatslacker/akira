@@ -1,3 +1,6 @@
 head(a) -> a
+init(_, a) -> _
 tail(a, _) -> _
+last(_, a) -> a
 flip(f, a, b) -> f: b, a
+const(a, b) -> a
