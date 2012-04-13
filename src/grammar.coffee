@@ -108,16 +108,23 @@ parser = new Parser (->
     Declaration: [
       o 'Identifier ( Parameters ) LAMBDA Body', -> new Declaration $1, $3, $6
       o '\\ ( Parameters ) LAMBDA Body', -> new Declaration null, $3, $6
+
+      o '! ( Parameters ) LAMBDA Body', -> new Call (new Declaration null, $3, $6), null
     ]
 
     Lists: [
       o '[ Arguments ]', -> new List $2
     ]
 
+    Arg: [
+      o 'Value'
+      o 'SExpression'
+    ]
+
     Arguments: [
       o '( )', -> null
-      o 'Value', -> new Arguments $1
-      o 'Arguments , Value', -> new Arguments $1, $3
+      o 'Arg', -> new Arguments $1
+      o 'Arguments , Arg', -> new Arguments $1, $3
     ]
 
     Param: [
