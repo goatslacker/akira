@@ -121,20 +121,20 @@ parser = new Parser (->
       o 'Value - Value', -> new Operation $1, '-', $3
       o 'Value * Value', -> new Operation $1, '*', $3
       o 'Value / Value', -> new Operation $1, '/', $3
-      o '( Value )', -> $2
+#      o '( Value )', -> $2
     ]
 
     Block: [
-      o '{ }', -> null
-      o '{ Expressions }', -> $2
-      o '{ Terminator Expressions }', -> $3
+      o '( )', -> null
+      o '( Expressions )', -> $2
+      o '( Terminator Expressions )', -> $3
     ]
 
   }
 
   operators = [
-    ['right', '=', '|', '(', ')', '[', ']']
-    ['nonassoc', '{', '}', 'LAMBDA']
+    ['right', '=', '|', '[', ']']
+    ['nonassoc', '(', ')', 'LAMBDA']
     ['left', 'LOGIC']
     ['left', 'COMPARE']
     ['left', '+', '-']
