@@ -53,7 +53,7 @@ parser = new Parser (->
       o 'Pipeline'
       o 'Lists'
       o 'Declaration'
-      o '_ Identifier', -> $2
+      o '_ Identifier', -> "_#{$2}"
     ]
 
     Value: [
@@ -109,7 +109,7 @@ parser = new Parser (->
 
     Param: [
       o 'Identifier'
-      o '_ Identifier', -> $2
+      o '_ Identifier', -> "_#{$2}"
     ]
 
     Parameters: [
