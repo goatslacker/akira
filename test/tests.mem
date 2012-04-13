@@ -1,3 +1,6 @@
 @ 'test/fact.mem'
 
 [4] | fact | print
+
+fn(a) -> a * 2
+map: fn, [1, 2, 3, 4] | print

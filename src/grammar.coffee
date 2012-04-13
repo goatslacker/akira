@@ -98,7 +98,7 @@ parser = new Parser (->
     ]
 
     Lists: [
-      o '[ Arguments ]', -> new Arguments $2
+      o '[ Arguments ]', -> new List $2
     ]
 
     Arguments: [
