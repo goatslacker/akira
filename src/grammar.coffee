@@ -51,13 +51,13 @@ parser = new Parser (->
       o 'Assignment'
       o 'Invocation'
       o 'Pipeline'
-      o 'Lists'
       o 'Declaration'
       o '_ Identifier', -> "_#{$2}"
     ]
 
     Value: [
       o 'Literal'
+      o 'Lists'
       o 'Operation'
     ]
 
