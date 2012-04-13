@@ -35,7 +35,7 @@ var code = (function () {
 var context = require('../lib/runtime');
 
 // load lib
-parser.parse(lexer.tokenize(fs.readFileSync('./lib/runtime.mem').toString())).run([context]);
+parser.parse(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString())).run([context]);
 
 var tokens = lexer.tokenize(code);
 var parsed = parser.parse(tokens);
