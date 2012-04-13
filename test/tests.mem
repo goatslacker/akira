@@ -3,3 +3,5 @@
   assert: b == 4
   assert: c == 9
 ))
+
+print: 'All tests completed'
