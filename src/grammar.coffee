@@ -45,6 +45,10 @@ parser = new Parser (->
       o '( Terminator Expressions )', -> $3
     ]
 
+    SExpression: [
+      o '( Expression )', -> $2
+    ]
+
     Expression: [
       o 'Import'
       o 'Value'
@@ -80,12 +84,16 @@ parser = new Parser (->
       o '@ STRING', -> new Import $2
     ]
 
+    Piped: [
+      o 'Identifier'
+      o 'SExpression'
+    ]
+
     Pipeline: [
-      o 'Invocation | Identifier', -> new Call $3, $1
+      o 'Invocation | Piped', -> new Call $3, $1
+      o 'Lists | Piped', -> new Call $3, $1
 
-      o 'Lists | Identifier', -> new Call $3, $1
-
-      o 'Pipeline | Identifier', -> new Call $3, $1
+      o 'Pipeline | Piped', -> new Call $3, $1
     ]
 
     Invocation: [
@@ -94,7 +102,7 @@ parser = new Parser (->
 
     Declaration: [
       o 'Identifier ( Parameters ) LAMBDA Body', -> new Declaration $1, $3, $6
-      o 'Identifier LAMBDA Body', -> new Declaration $1, null, $3
+      o '\\ ( Parameters ) LAMBDA Body', -> new Declaration null, $3, $6
     ]
 
     Lists: [
