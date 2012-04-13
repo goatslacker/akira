@@ -23,7 +23,13 @@ parser = new Parser (->
 
   bnf = {
     Root: [
-      ['Expressions', 'return $$ = $1']
+      ['Program', 'return $$ = $1']
+    ]
+
+    Program: [
+      o '', -> new Nodes
+      o 'Terminator Expressions', -> $2
+      o 'Expressions'
     ]
 
     Expressions: [
