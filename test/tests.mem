@@ -1,7 +1,6 @@
 # Runtime tests for Memory
 
 # Functions.mem
-#
 [1, 2, 3] | head | (\(a) -> assert: a == 1)
 [1, 2, 3] | init | (\(a, b) -> (
   assert: a == 1
@@ -12,23 +11,22 @@
   assert: b == 3
 ))
 [1, 2, 3] | last | (\(a) -> assert: a == 3)
-#(\() -> (
-#  print: 'in IEF'
-#
-#  doFlip(a, b) -> ret: a, b | flip
-#  lastEl(a) -> foldr: doFlip, a
-#
-#  [[1, 2, 3]] | lastEl | (\(a) -> assert: a == 3)
-#))
 
-mapper = partial: map, square
-[[1, 2, 3]] | mapper | (\(a, b, c) -> (
-  assert: a == 1
-  assert: b == 4
-  assert: c == 9
-#  assert: eq, b, 4
-#  assert: eq, c, 9
-))
+# IIFE
+!() -> (
+
+# Testing partial application
+  mapper = partial: map, square
+  [[1, 2, 3]] | mapper | (\(a, b, c) -> (
+    assert: a == 1
+    assert: b == 4
+    assert: c == 9
+  ))
+
+# Testing foldr, expressions in arguments, anonymous functions
+  lastEl(a) -> foldl: (\(a, b) -> flip: const, a, b), a
+  [[1, 2, 3]] | lastEl | (\(a) -> assert: a == 3 )
+)
 
 # Pipes, Anonymous functions, assertions
 [[1, 2, 3]] | (\(list) -> map: square, list) | (\(a, b, c) -> (
@@ -38,4 +36,5 @@ mapper = partial: map, square
 #  assert: eq, c, 9
 ))
 
+# Done.
 print: 'All tests completed'
