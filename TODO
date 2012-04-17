@@ -1,2 +1,3 @@
 Lists need their own implementation.
 Stop flattening arguments.
+don't mutate structures!!!!!!!!!
