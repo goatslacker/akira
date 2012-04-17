@@ -39,4 +39,5 @@ parser.parse(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString())).
 
 var tokens = lexer.tokenize(code);
 var parsed = parser.parse(tokens);
-var run = parsed.run([context]);
+var run = parsed.compile([context]);
+console.log(run);
