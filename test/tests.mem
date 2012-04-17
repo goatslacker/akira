@@ -1,8 +1,40 @@
 # Runtime tests for Memory
 
 # Functions.mem
-array = [1, 2, 3]
+[1, 2, 3] | head | (\(a) -> assert: a == 1)
+[1, 2, 3] | init | (\(a, b) -> (
+  assert: a == 1
+  assert: b == 2
+))
+[1, 2, 3] | tail | (\(a, b) -> (
+  assert: a == 2
+  assert: b == 3
+))
+[1, 2, 3] | last | (\(a) -> assert: a == 3)
 
-const: array | const | print
+# IIFE
+!() -> (
 
-last: array | print
+# Testing partial application
+  mapper = partial: map, square
+  [[1, 2, 3]] | mapper | (\(a, b, c) -> (
+    assert: a == 1
+    assert: b == 4
+    assert: c == 9
+  ))
+
+# Testing foldr, expressions in arguments, anonymous functions
+  lastEl(a) -> foldl: (\(a, b) -> flip: const, a, b), a
+  [[1, 2, 3]] | lastEl | (\(a) -> assert: a == 3 )
+)
+
+# Pipes, Anonymous functions, assertions
+[[1, 2, 3]] | (\(list) -> map: square, list) | (\(a, b, c) -> (
+  assert: a == 1
+#  assert: eq, a, 1
+#  assert: eq, b, 4
+#  assert: eq, c, 9
+))
+
+# Done.
+print: 'All tests completed'
