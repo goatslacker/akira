@@ -50,5 +50,5 @@ var run = parsed.compile([context]);
 //util.puts(util.inspect(run, false, 15));
 run = { type: 'Program', body: run };
 
-//util.puts(util.inspect(run, false, 15));
+util.puts(util.inspect(run, false, 15));
 console.log(escodegen.generate(run));
