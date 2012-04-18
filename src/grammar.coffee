@@ -98,7 +98,8 @@ parser = new Parser (->
 
     Pipeline: [
       o 'Invocation | Piped', -> new Call $3, $1
-      o 'Lists | Piped', -> new Call $3, $1
+      o 'Identifier | Piped', -> new Call $3, $1
+      o 'List | Piped', -> new Call $3, $1
 
       o 'Pipeline | Piped', -> new Call $3, $1
     ]

@@ -8,20 +8,13 @@ last: array | (\(a) -> print: a == 3)
 
 # IIFE
 !() -> (
-
-# Testing partial application
-  mapper = partial: map, square
-  mapper: array | (\(a) -> (
-    print: a
-  ))
-
 # Testing foldr, expressions in arguments, anonymous functions
   lastEl(a) -> foldl: (\(a, b) -> flip: consts, a, b), a
-  lastEl: array | (\(a) -> print: a )
+  lastEl: array | (\(a) -> print: a == 3 )
 )
 
 # Pipes, Anonymous functions, print:ions
-[array] | (\(list) -> map: square, list) | (\(a) -> (
+array | (\(list) -> map: square, list) | (\(a) -> (
   print: a
 ))
 
