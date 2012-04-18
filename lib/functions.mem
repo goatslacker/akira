@@ -3,6 +3,6 @@ init(a) -> flatten: a | (\(_a, b) -> a)
 tail(a) -> flatten: a | (\(a, _b) -> b)
 last(a) -> at: a, (length: a)
 flip(f, a, b) -> f: b, a
-const(a, b) -> a
+consts(a, b) -> a
 square(x) -> x * x
 partial(fn, arg) -> (\(args) -> fn: arg, args)

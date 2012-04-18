@@ -24,7 +24,7 @@
   ))
 
 # Testing foldr, expressions in arguments, anonymous functions
-  lastEl(a) -> foldl: (\(a, b) -> flip: const, a, b), a
+  lastEl(a) -> foldl: (\(a, b) -> flip: consts, a, b), a
   [[1, 2, 3]] | lastEl | (\(a) -> print:  a == 3 )
 )
 
