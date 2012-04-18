@@ -1,2 +1,2 @@
 # Runtime tests for Memory
-foo(n) -> n
+foo(n) -> [n]
