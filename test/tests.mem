@@ -18,5 +18,8 @@ array | (\(list) -> map: square, list) | (\(a) -> (
   print: a
 ))
 
+fact(n) -> if n == 1 (n) (prod: n, (fact: n - 1))
+fact: 4 | print
+
 # Done.
 print:'All tests completed'

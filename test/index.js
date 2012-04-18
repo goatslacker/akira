@@ -49,7 +49,7 @@ var parsed = parser.parse(tokens);
 var run = parsed.compile([context]);
 run = { type: 'Program', body: run };
 
-util.puts(util.inspect(run, false, 15));
+//util.puts(util.inspect(run, false, 15));
 var compiled = escodegen.generate(run);
 //console.log(compiled);
 
