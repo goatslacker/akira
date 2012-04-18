@@ -1,40 +1,29 @@
 # Runtime tests for Memory
 
 # Functions.mem
-[1, 2, 3] | head | (\(a) -> print:  a == 1)
-[1, 2, 3] | init | (\(a, b) -> (
-  print:  a == 1
-  print:  b == 2
-))
-[1, 2, 3] | tail | (\(a, b) -> (
-  print:  a == 2
-  print:  b == 3
-))
-[1, 2, 3] | last | (\(a) -> print:  a == 3)
+array = [1, 2, 3]
+
+head: array | (\(a) -> print: a == 1)
+last: array | (\(a) -> print: a == 3)
 
 # IIFE
 !() -> (
 
 # Testing partial application
   mapper = partial: map, square
-  [[1, 2, 3]] | mapper | (\(a, b, c) -> (
-    print:  a == 1
-    print:  b == 4
-    print:  c == 9
+  mapper: array | (\(a) -> (
+    print: a
   ))
 
 # Testing foldr, expressions in arguments, anonymous functions
   lastEl(a) -> foldl: (\(a, b) -> flip: consts, a, b), a
-  [[1, 2, 3]] | lastEl | (\(a) -> print:  a == 3 )
+  lastEl: array | (\(a) -> print: a )
 )
 
-# Pipes, Anonymous functions, print: ions
-[[1, 2, 3]] | (\(list) -> map: square, list) | (\(a, b, c) -> (
-  print:  a == 1
-#  print:  eq, a, 1
-#  print:  eq, b, 4
-#  print:  eq, c, 9
+# Pipes, Anonymous functions, print:ions
+[array] | (\(list) -> map: square, list) | (\(a) -> (
+  print: a
 ))
 
 # Done.
-print: 'All tests completed'
+print:'All tests completed'

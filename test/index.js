@@ -51,5 +51,6 @@ run = { type: 'Program', body: run };
 
 //util.puts(util.inspect(run, false, 15));
 var compiled = escodegen.generate(run);
+console.log(compiled);
 
 vm.runInNewContext(compiled, context);
