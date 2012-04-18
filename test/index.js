@@ -45,8 +45,7 @@ var escodegen = require('escodegen');
 var tokens = lexer.tokenize(code);
 var parsed = parser.parse(tokens);
 var run = parsed.compile([context]);
-run = { type: 'Program', body: run.pop() };
+run = { type: 'Program', body: run };
 
-
-//util.puts(util.inspect(run, false, 15));
+util.puts(util.inspect(run, false, 15));
 console.log(escodegen.generate(run));
