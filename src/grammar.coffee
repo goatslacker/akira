@@ -10,7 +10,7 @@ parser = new Parser (->
     match = unwrap.exec action
     action = if match then match[1] else "(#{action}())"
     action = action.replace(/\bnew /g, '$&yy.')
-    action = action.replace(/\b(?:Nodes\.add)\b/g, 'yy.$&')
+    action = action.replace(/\b(?:Nodes\.wrap)\b/g, 'yy.$&')
     [patternString, "$$ = " + action + "", options]
 
   tokens = ["ASSERT", "LAMBDA", "BOOL",
@@ -23,19 +23,19 @@ parser = new Parser (->
 
   bnf = {
     Root: [
+      ['', 'return $$ = new yy.Nodes;']
       ['Program', 'return $$ = $1']
     ]
 
     Program: [
-      o '', -> new Nodes
       o 'Terminator Expressions', -> $2
       o 'Expressions'
     ]
 
     Expressions: [
-      o 'Body', -> new Nodes $1
+      o 'Body', -> Nodes.wrap $1
       o 'Expressions TERMINATOR Body', -> $1.push $3
-      o 'Expressions TERMINATOR', -> new Nodes $1
+      o 'Expressions TERMINATOR'
     ]
 
     Terminator: [

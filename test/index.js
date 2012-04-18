@@ -48,7 +48,7 @@ var run = parsed.compile([context]);
 //run[0] = { type: 'ExpressionStatement',
 //      expression: run[0] };
 util.puts(util.inspect(run, false, 15));
-run = { type: 'Program', body: [run[0].expression] };
+run = { type: 'Program', body: run };
 
 //util.puts(util.inspect(run, false, 15));
 console.log(escodegen.generate(run));
