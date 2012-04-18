@@ -1,6 +1,3 @@
 fact(n) -> (
-  apply(a) -> [a, n]
-  call(n) -> fact: n - 1
-  res = [n == 1, return, call] | if
-  res: n | apply | prod
+  if n == 1 (n) (fact: n - 1 | prod)
 )
