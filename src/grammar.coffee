@@ -58,6 +58,7 @@ parser = new Parser (->
     Expression: [
       o 'Import'
       o 'Value'
+      o 'If'
       o 'Assignment'
       o 'Invocation'
       o 'Pipeline'
@@ -136,6 +137,10 @@ parser = new Parser (->
       o '', -> null
       o 'Param', -> new Arguments $1
       o 'Parameters , Param', -> new Arguments $1, $3
+    ]
+
+    If: [
+      o 'IF Value ( Body ) ( Body )', -> new If $2, $4, $7
     ]
 
     Operation: [
