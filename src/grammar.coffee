@@ -60,6 +60,7 @@ parser = new Parser (->
       o 'Value'
       o 'If'
       o 'Assignment'
+      o 'Assert'
       o 'Invocation'
       o 'Pipeline'
       o 'Declaration'
@@ -141,6 +142,11 @@ parser = new Parser (->
 
     If: [
       o 'IF Value ( Body ) ( Body )', -> new If $2, $4, $7
+    ]
+
+    Assert: [
+      o 'ASSERT Value COMPARE Value', -> new Assert $2, $3, $4
+      o 'ASSERT Value LOGIC Value', -> new Assert $2, $3, $4
     ]
 
     Operation: [
