@@ -1,8 +1,40 @@
-head(a) -> at: a, 1
-init(a) -> flatten: a | (\(_a, b) -> a)
-tail(a) -> flatten: a | (\(a, _b) -> b)
-last(a) -> at: a, (length: a)
-flip(f, a, b) -> f: b, a
-const(a, b) -> a
-square(x) -> x * x
-partial(fn, arg) -> (\(args) -> fn: arg, args)
+# Runtime tests for Memory
+
+# Functions.mem
+[1, 2, 3] | head | (\(a) -> print:  a == 1)
+[1, 2, 3] | init | (\(a, b) -> (
+  print:  a == 1
+  print:  b == 2
+))
+[1, 2, 3] | tail | (\(a, b) -> (
+  print:  a == 2
+  print:  b == 3
+))
+[1, 2, 3] | last | (\(a) -> print:  a == 3)
+
+# IIFE
+!() -> (
+
+# Testing partial application
+  mapper = partial: map, square
+  [[1, 2, 3]] | mapper | (\(a, b, c) -> (
+    print:  a == 1
+    print:  b == 4
+    print:  c == 9
+  ))
+
+# Testing foldr, expressions in arguments, anonymous functions
+  lastEl(a) -> foldl: (\(a, b) -> flip: const, a, b), a
+  [[1, 2, 3]] | lastEl | (\(a) -> print:  a == 3 )
+)
+
+# Pipes, Anonymous functions, print: ions
+[[1, 2, 3]] | (\(list) -> map: square, list) | (\(a, b, c) -> (
+  print:  a == 1
+#  print:  eq, a, 1
+#  print:  eq, b, 4
+#  print:  eq, c, 9
+))
+
+# Done.
+print: 'All tests completed'
