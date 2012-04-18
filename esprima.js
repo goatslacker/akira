@@ -1,4 +1,7 @@
 var util = require('util');
 var esprima = require('esprima');
-var ast = esprima.parse('foo(1)');
-util.puts(util.inspect(ast.body[0], false, 10));
+var escodegen = require('escodegen');
+var ast = esprima.parse('(function () { return print(1) }())');
+console.log(ast);
+console.log(escodegen.generate(ast));
+//util.puts(util.inspect(ast, false, 10));
