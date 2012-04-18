@@ -1,3 +1,4 @@
+var util = require('util');
 var esprima = require('esprima');
-var ast = esprima.parse('if (n == 1) { n } else { n }');
-console.log(ast.body[0]);
+var ast = esprima.parse('var foo = function foo(n) { return n; };');
+util.puts(util.inspect(ast.body[0], false, 10));

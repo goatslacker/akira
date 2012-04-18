@@ -1,4 +1,5 @@
 var fs = require('fs');
+var util = require('util');
 var path = require('path');
 
 var lexer = require('../lib/lexer');
@@ -44,5 +45,5 @@ var escodegen = require('escodegen');
 var tokens = lexer.tokenize(code);
 var parsed = parser.parse(tokens);
 var run = parsed.compile([context]);
-console.log(run);
+util.puts(util.inspect(run, false, 10));
 console.log(escodegen.generate(run));
