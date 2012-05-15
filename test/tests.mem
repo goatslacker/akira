@@ -3,44 +3,11 @@
 # import test
 import 'test/fact.mem'
 import 'test/tuples.mem'
+import 'test/list.mem'
+import 'test/reserved.mem'
 
 # export fact test
 eq: 24, (fact: 4) | assert
-
-# Functions.mem
-array = [1, 2, 3]
-
-head: array | (\a -> assert: a == 1)
-init: array | (\a -> arrEq: a, [1, 2] | assert)
-tail: array | (\a -> arrEq: a, [2, 3] | assert)
-last: array | (\a -> assert: a == 3)
-
-# IIFE
--> (
-# Testing foldr, expressions in arguments, anonymous functions
-  lastEl(a) -> foldl: (\a, b -> flip: consts, a, b), a
-  lastEl: array | (\a -> assert: a == 3 )
-)
-
-# Pipes, Anonymous functions, Blocks
-array | (\list -> map: square, list) | (\a -> (
-  arrEq: a, [1, 4, 9] | assert
-))
-
-# Partial application
--> (
-  mapper = partial: map, square
-  assertArray(a) -> arrEq: a, [1, 4, 9] | assert
-  array | mapper | assertArray
-)
-
-# JS Reserved words don't apply
--> (
-  try = 1
-  for = 2
-  f(while) -> while
-  assert: 1 == 1
-)
 
 # sum and prod
 eq: 2, (sum: 1, 1) | assert
