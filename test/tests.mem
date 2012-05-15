@@ -8,6 +8,8 @@ eq: 24, (fact: 4) | assert
 array = [1, 2, 3]
 
 head: array | (\a -> assert: a == 1)
+init: array | (\a -> arrEq: a, [1, 2] | assert)
+tail: array | (\a -> arrEq: a, [2, 3] | assert)
 last: array | (\a -> assert: a == 3)
 
 # IIFE
@@ -17,10 +19,17 @@ last: array | (\a -> assert: a == 3)
   lastEl: array | (\a -> assert: a == 3 )
 )
 
-# Pipes, Anonymous functions, print:ions
+# Pipes, Anonymous functions, Blocks
 array | (\list -> map: square, list) | (\a -> (
   arrEq: a, [1, 4, 9] | assert
 ))
+
+# Partial application
+-> (
+  mapper = partial: map, square
+  assertArray(a) -> arrEq: a, [1, 4, 9] | assert
+  array | mapper | assertArray
+)
 
 # Done.
 print:'All tests completed'

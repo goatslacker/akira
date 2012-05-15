@@ -1,7 +1,6 @@
 head(a) -> at: a, 1
-#init(a) -> filter: (\x ->
-#flatten: a | (\(_a, b) -> a)
-#tail(a) -> flatten: a | (\(a, _b) -> b)
+init(a) -> filterNeq: (last: a), a
+tail(a) -> filterNeq: (head: a), a
 last(a) -> at: a, (length: a)
 flip(f, a, b) -> f: b, a
 consts(a, b) -> a
@@ -12,4 +11,5 @@ neq(a, b) -> a != b
 assert(bool) -> if bool == true then print: 'Ok.' else print: 'Fail.'
 arrEq(a, b) -> eq: 0, (length: (filter: (\x, i -> neq: x, (at: b, i)), a))
 arrNeq(a, b) -> arrEq: a, b | invertBool
+filterNeq(n, a) -> filter: (\x -> neq: n, x), a
 invertBool(a) -> a == false
