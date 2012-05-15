@@ -69,6 +69,7 @@ parser = new Parser (->
     Value: [
       o 'Literal'
       o 'Lists'
+      o 'Tuples'
       o 'Operation'
     ]
 
@@ -116,8 +117,32 @@ parser = new Parser (->
       o 'LAMBDA Body', -> new Call (new Declaration null, null, $2), null
     ]
 
+    Comma: [
+      o ','
+      o ', Terminator'
+    ]
+
     Lists: [
       o '[ Arguments ]', -> new List $2
+    ]
+
+    KeyValue: [
+      o 'Identifier : Value', -> new Assignment $1, $3
+    ]
+
+    TupleItems: [
+      o '', -> null
+      o 'KeyValue', -> new Arguments $1
+      o 'TupleItems Comma KeyValue', -> new Arguments $1, $3
+    ]
+
+    OptTerminator: [
+      o ''
+      o 'Terminator'
+    ]
+
+    Tuples: [
+      o '{ OptTerminator TupleItems }', -> new Tuple $3
     ]
 
     Arg: [
@@ -129,7 +154,7 @@ parser = new Parser (->
     Arguments: [
       o '( )', -> null
       o 'Arg', -> new Arguments $1
-      o 'Arguments , Arg', -> new Arguments $1, $3
+      o 'Arguments Comma Arg', -> new Arguments $1, $3
     ]
 
     Param: [

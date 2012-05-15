@@ -1,0 +1,5 @@
+obj = { hello: 1, world: 2 }
+
+tupleEq(a, b) -> eq: 0, (length: (filter: (\x, i -> neq: x, (at: b, i)), a))
+
+tupleEq: obj, { hello: 1, world: 2 }
