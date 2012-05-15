@@ -60,7 +60,7 @@ parser = new Parser (->
       o 'Value'
       o 'If'
       o 'Assignment'
-#      o 'Assert'
+      o 'ARGUMENTS'
       o 'Invocation'
       o 'Pipeline'
       o 'Declaration'
@@ -123,6 +123,7 @@ parser = new Parser (->
     Arg: [
       o 'Value'
       o 'SExpression'
+      o 'ARGUMENTS'
     ]
 
     Arguments: [
@@ -133,7 +134,6 @@ parser = new Parser (->
 
     Param: [
       o 'Identifier'
-      o '_ Identifier', -> "_#{$2}"
     ]
 
     Parameters: [
@@ -146,11 +146,6 @@ parser = new Parser (->
       o 'IF Value THEN Body ELSE Body', -> new If $2, $4, $6
       o 'IF Value Terminator THEN Body Terminator ELSE Body', -> new If $2, $5, $8
     ]
-
-#    Assert: [
-#      o 'ASSERT Value COMPARE Value', -> new Assert $2, $3, $4
-#      o 'ASSERT Value LOGIC Value', -> new Assert $2, $3, $4
-#    ]
 
     Operation: [
       o 'Value COMPARE Value', -> new Compare $1, $2, $3
