@@ -1,14 +1,15 @@
 head(a) -> at: a, 1
-init(a) -> flatten: a | (\(_a, b) -> a)
-tail(a) -> flatten: a | (\(a, _b) -> b)
+#init(a) -> filter: (\x ->
+#flatten: a | (\(_a, b) -> a)
+#tail(a) -> flatten: a | (\(a, _b) -> b)
 last(a) -> at: a, (length: a)
 flip(f, a, b) -> f: b, a
 consts(a, b) -> a
 square(x) -> x * x
-partial(fn, arg) -> (\(args) -> fn: arg, args)
+partial(fn, arg) -> (\args -> fn: arg, args)
 eq(a, b) -> a == b
 neq(a, b) -> a != b
 assert(bool) -> if bool == true then print: 'Ok.' else print: 'Fail.'
-arrEq(a, b) -> eq: 0, (length: (filter: (\(x, i) -> neq: x, (at: b, i)), a))
+arrEq(a, b) -> eq: 0, (length: (filter: (\x, i -> neq: x, (at: b, i)), a))
 arrNeq(a, b) -> arrEq: a, b | invertBool
 invertBool(a) -> a == false

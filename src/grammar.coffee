@@ -111,7 +111,7 @@ parser = new Parser (->
 
     Declaration: [
       o 'Identifier ( Parameters ) LAMBDA Body', -> new Declaration $1, $3, $6
-      o '\\ ( Parameters ) LAMBDA Body', -> new Declaration null, $3, $6
+      o '\\ Parameters LAMBDA Body', -> new Declaration null, $2, $4
 
       o 'LAMBDA Body', -> new Call (new Declaration null, null, $2), null
     ]

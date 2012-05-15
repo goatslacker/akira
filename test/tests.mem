@@ -7,18 +7,18 @@ eq: 24, (fact: 4) | assert
 # Functions.mem
 array = [1, 2, 3]
 
-head: array | (\(a) -> assert: a == 1)
-last: array | (\(a) -> assert: a == 3)
+head: array | (\a -> assert: a == 1)
+last: array | (\a -> assert: a == 3)
 
 # IIFE
 -> (
 # Testing foldr, expressions in arguments, anonymous functions
-  lastEl(a) -> foldl: (\(a, b) -> flip: consts, a, b), a
-  lastEl: array | (\(a) -> assert: a == 3 )
+  lastEl(a) -> foldl: (\a, b -> flip: consts, a, b), a
+  lastEl: array | (\a -> assert: a == 3 )
 )
 
 # Pipes, Anonymous functions, print:ions
-array | (\(list) -> map: square, list) | (\(a) -> (
+array | (\list -> map: square, list) | (\a -> (
   arrEq: a, [1, 4, 9] | assert
 ))
 
