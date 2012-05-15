@@ -31,5 +31,13 @@ array | (\list -> map: square, list) | (\a -> (
   array | mapper | assertArray
 )
 
+# JS Reserved words don't apply
+-> (
+  try = 1
+  for = 2
+  f(while) -> while
+  assert: 1 == 1
+)
+
 # Done.
 print:'All tests completed'
