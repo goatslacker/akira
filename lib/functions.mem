@@ -13,3 +13,5 @@ arrEq(a, b) -> eq: 0, (length: (filter: (\x, i -> neq: x, (at: b, i)), a))
 arrNeq(a, b) -> arrEq: a, b | invertBool
 filterNeq(n, a) -> filter: (\x -> neq: n, x), a
 invertBool(a) -> a == false
+sum() -> foldl: (\a, b -> a + b), arguments
+prod() -> foldl: (\a, b -> a * b), arguments
