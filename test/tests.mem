@@ -1,13 +1,8 @@
 # Runtime tests for Memory
-#@ 'test/fact.mem'
 
-#test fns
-#assertAr(list, index, val) -> (
-#  el = at: list, index
-#  el == val
-#)
-
-#fact: 4 | print
+# import test
+import 'test/fact.mem'
+eq: 24, (fact: 4) | assert
 
 # Functions.mem
 array = [1, 2, 3]
@@ -26,9 +21,6 @@ last: array | (\(a) -> assert: a == 3)
 array | (\(list) -> map: square, list) | (\(a) -> (
   arrEq: a, [1, 4, 9] | assert
 ))
-
-fact(n) -> if n == 1 then n else prod: n, (fact: n - 1)
-eq: 24, (fact: 4) | assert
 
 # Done.
 print:'All tests completed'

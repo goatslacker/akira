@@ -56,7 +56,7 @@ parser = new Parser (->
     ]
 
     Expression: [
-      o 'Import'
+      o 'Modules'
       o 'Value'
       o 'If'
       o 'Assignment'
@@ -87,8 +87,9 @@ parser = new Parser (->
       o 'Identifier = Body', -> new Assignment $1, $3
     ]
 
-    Import: [
-      o '@ STRING', -> new Import $2
+    Modules: [
+      o 'EXPORT Identifier', -> new Export $2
+      o 'IMPORT STRING', -> new Import $2
     ]
 
     Piped: [
