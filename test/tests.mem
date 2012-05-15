@@ -1,25 +1,34 @@
 # Runtime tests for Memory
+#@ 'test/fact.mem'
+
+#test fns
+#assertAr(list, index, val) -> (
+#  el = at: list, index
+#  el == val
+#)
+
+#fact: 4 | print
 
 # Functions.mem
 array = [1, 2, 3]
 
-head: array | (\(a) -> print: a == 1)
-last: array | (\(a) -> print: a == 3)
+head: array | (\(a) -> assert: a == 1)
+last: array | (\(a) -> assert: a == 3)
 
 # IIFE
-!() -> (
+-> (
 # Testing foldr, expressions in arguments, anonymous functions
   lastEl(a) -> foldl: (\(a, b) -> flip: consts, a, b), a
-  lastEl: array | (\(a) -> print: a == 3 )
+  lastEl: array | (\(a) -> assert: a == 3 )
 )
 
 # Pipes, Anonymous functions, print:ions
 array | (\(list) -> map: square, list) | (\(a) -> (
-  print: a
+  arrEq: a, [1, 4, 9] | assert
 ))
 
-fact(n) -> if n == 1 (n) (prod: n, (fact: n - 1))
-fact: 4 | print
+fact(n) -> if n == 1 then n else prod: n, (fact: n - 1)
+eq: 24, (fact: 4) | assert
 
 # Done.
 print:'All tests completed'

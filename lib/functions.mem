@@ -6,3 +6,9 @@ flip(f, a, b) -> f: b, a
 consts(a, b) -> a
 square(x) -> x * x
 partial(fn, arg) -> (\(args) -> fn: arg, args)
+eq(a, b) -> a == b
+neq(a, b) -> a != b
+assert(bool) -> if bool == true then print: 'Ok.' else print: 'Fail.'
+arrEq(a, b) -> eq: 0, (length: (filter: (\(x, i) -> neq: x, (at: b, i)), a))
+arrNeq(a, b) -> arrEq: a, b | invertBool
+invertBool(a) -> a == false

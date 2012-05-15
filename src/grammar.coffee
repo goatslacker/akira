@@ -60,7 +60,7 @@ parser = new Parser (->
       o 'Value'
       o 'If'
       o 'Assignment'
-      o 'Assert'
+#      o 'Assert'
       o 'Invocation'
       o 'Pipeline'
       o 'Declaration'
@@ -112,7 +112,7 @@ parser = new Parser (->
       o 'Identifier ( Parameters ) LAMBDA Body', -> new Declaration $1, $3, $6
       o '\\ ( Parameters ) LAMBDA Body', -> new Declaration null, $3, $6
 
-      o '! ( Parameters ) LAMBDA Body', -> new Call (new Declaration null, $3, $6), null
+      o 'LAMBDA Body', -> new Call (new Declaration null, null, $2), null
     ]
 
     Lists: [
@@ -142,13 +142,14 @@ parser = new Parser (->
     ]
 
     If: [
-      o 'IF Value ( Body ) ( Body )', -> new If $2, $4, $7
+      o 'IF Value THEN Body ELSE Body', -> new If $2, $4, $6
+      o 'IF Value Terminator THEN Body Terminator ELSE Body', -> new If $2, $5, $8
     ]
 
-    Assert: [
-      o 'ASSERT Value COMPARE Value', -> new Assert $2, $3, $4
-      o 'ASSERT Value LOGIC Value', -> new Assert $2, $3, $4
-    ]
+#    Assert: [
+#      o 'ASSERT Value COMPARE Value', -> new Assert $2, $3, $4
+#      o 'ASSERT Value LOGIC Value', -> new Assert $2, $3, $4
+#    ]
 
     Operation: [
       o 'Value COMPARE Value', -> new Compare $1, $2, $3
