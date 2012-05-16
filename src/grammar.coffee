@@ -142,11 +142,6 @@ parser = new Parser (->
       o 'TupleItems Comma KeyValue', -> new Arguments $1, $3
     ]
 
-    OptTerminator: [
-      o ''
-      o 'Terminator'
-    ]
-
     Tuples: [
       o '{ OptTerminator TupleItems }', -> new Tuple $3
     ]
