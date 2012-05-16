@@ -124,8 +124,7 @@ parser = new Parser (->
     ]
 
     Comma: [
-      o ','
-      o ', Terminator'
+      o ', OptTerminator'
     ]
 
     Lists: [
