@@ -45,12 +45,16 @@ parser = new Parser (->
       o 'Terminator TERMINATOR'
     ]
 
+    OptTerminator: [
+      o ''
+      o 'Terminator'
+    ]
+
     Identifier: [ o 'IDENTIFIER' ]
 
     Body: [
       o 'Expression'
-      o '( Expressions )', -> $2
-      o '( Terminator Expressions )', -> $3
+      o '( OptTerminator Expressions )', -> $3
     ]
 
     SExpression: [
@@ -170,8 +174,7 @@ parser = new Parser (->
     ]
 
     If: [
-      o 'IF Value THEN Body ELSE Body', -> new If $2, $4, $6
-      o 'IF Value Terminator THEN Body Terminator ELSE Body', -> new If $2, $5, $8
+      o 'IF Value OptTerminator THEN Body OptTerminator ELSE Body', -> new If $2, $5, $8
     ]
 
     Operation: [
