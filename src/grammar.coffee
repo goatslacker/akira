@@ -8,16 +8,18 @@ parser = new Parser (->
     patternString = patternString.replace(/\s{2,}/g, ' ')
     return [patternString, '$$ = $1', options] if not action
     match = unwrap.exec action
-    action = if match then match[1] else "(#{action}())"
+    action = if match then match[1] else '(#{action}())'
     action = action.replace(/\bnew /g, '$&yy.')
     action = action.replace(/\b(?:Nodes\.wrap)\b/g, 'yy.$&')
-    [patternString, "$$ = " + action + "", options]
+    [patternString, '$$ = ' + action + '', options]
 
-  tokens = ["ASSERT", "LAMBDA", "BOOL",
-            "COMPARE", "DEFAULT",
-            "IDENTIFIER", "LOGIC",
-            "NUMBER", "STRING",
-            "TERMINATOR",].join(" ")
+  tokens = [
+    'ASSERT', 'ARGUMENTS', 'IF', 'THEN', 'ELSE',
+    'LAMBDA',
+    'IDENTIFIER', 'BOOL', 'NUMBER', 'STRING',
+    'LOGIC', 'COMPARE',
+    'TERMINATOR'
+  ].join(' ')
 
   startSymbol = 'Root'
 
@@ -158,8 +160,9 @@ parser = new Parser (->
   }
 
   operators = [
+    ['right', 'IF', 'THEN', 'ELSE', 'IMPORT', 'EXPORT', 'ASSERT', 'ARGUMENTS']
     ['right', '=', '|', '[', ']']
-    ['nonassoc', '(', ')', 'LAMBDA']
+    ['nonassoc', '(', ')']
     ['left', 'LOGIC']
     ['left', 'COMPARE']
     ['left', '+', '-']
