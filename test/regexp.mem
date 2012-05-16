@@ -1,0 +1,4 @@
+rx = regexp: '[A-Z]'
+
+h = call: rx, 'exec', 'HELLO WORLD'
+eq: 'H', (at: h, 1) | assert

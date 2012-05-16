@@ -5,6 +5,7 @@ import 'test/fact.mem'
 import 'test/tuples.mem'
 import 'test/list.mem'
 import 'test/reserved.mem'
+import 'test/regexp.mem'
 
 # export fact test
 eq: 24, (fact: 4) | assert
