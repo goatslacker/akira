@@ -10,7 +10,9 @@ eq: (get: obj, 'hello'), 1 | assert
 
 # calling functions
 myFunction(x) -> x
-tup = { myFunction: myFunction }
+tup = {
+  myFunction: myFunction
+}
 
 eq: (call: tup, 'myFunction', 2), 2 | assert
 
