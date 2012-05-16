@@ -142,7 +142,8 @@ parser = new Parser (->
     ]
 
     Tuples: [
-      o '{ OptTerminator TupleItems }', -> new Tuple $3
+      o '{ TupleItems }', -> new Tuple $2
+      o '{ TERMINATOR TupleItems TERMINATOR }', -> new Tuple $3
     ]
 
     Arg: [
