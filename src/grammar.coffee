@@ -54,8 +54,7 @@ parser = new Parser (->
 
     Body: [
       o 'Expression'
-      o '( Expressions )', -> $2
-      o '( Terminator Expressions )', -> $3
+      o '( OptTerminator Expressions )', -> $3
     ]
 
     SExpression: [
