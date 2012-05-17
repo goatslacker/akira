@@ -46,20 +46,20 @@ tokenize(code, lineNo) -> (
       type = getType: code
 
       fn = work: type
-      item = fn: code
+      item = fn: code, lineNo
       print: item
 
       if item
         then (
           push: tokens, item
-          i = length: item
+          i = length: (at: item, 2)
         )
         else (
           i = 1
         )
 
       chunk = call: code, 'substr', i, len
-#      tokens = call: tokens, 'concat', (tokenize: chunk, lineNo)
+      tokens = call: tokens, 'concat', (tokenize: chunk, lineNo)
       tokens
     )
 )
