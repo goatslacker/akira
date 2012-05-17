@@ -124,7 +124,7 @@ parser = new Parser (->
     ]
 
     Pattern: [
-      o 'Literal LAMBDA Value TERMINATOR', -> [$1, new Call (new Declaration null, (new Arguments 'a'), $3), 'a']
+      o 'Literal LAMBDA Value TERMINATOR', -> [$1, new Call (new Declaration null, null, $3), null]
     ]
 
     Patterns: [
