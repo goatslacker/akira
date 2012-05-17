@@ -27,24 +27,19 @@ parser.lexer = {
 
 parser.yy = require('../lib/nodes');
 
+var context = require('../lib/runtime');
+
+// load lib
+var functions = parser.parse(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString())).compile([context]);
+functions = { type: 'Program', body: functions };
+vm.runInNewContext(escodegen.generate(functions), context);
+
 var code = (function () {
-  var file = path.join(process.env.PWD, process.argv[2]),
+  var file = path.join(__dirname, '..', 'src', 'lexer.mem'),
       data = fs.readFileSync(file, 'utf8');
 
   return data;
 }());
-
-var context = require('../lib/runtime');
-
-//console.log(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString()));
-
-// load lib
-//parser.parse(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString())).run([context]);
-var functions = parser.parse(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString())).compile([context]);
-functions = { type: 'Program', body: functions };
-vm.runInNewContext(escodegen.generate(functions), context);
-//console.log(functions);
-
 
 var tokens = lexer.tokenize(code);
 var parsed = parser.parse(tokens);
@@ -54,13 +49,13 @@ run = { type: 'Program', body: run };
 //util.puts(util.inspect(run, false, 15));
 var compiled = escodegen.generate(run);
 
-console.log(compiled);
+context.code = code;
+context.console = console;
 
-/*
 try {
-  vm.runInNewContext(compiled, context);
+  vm.runInNewContext(compiled + '\nconsole.log(Lexer.tokenize(code))', context);
 } catch (e) {
+  console.error(e.message);
   console.error(e.stack);
   console.log(compiled);
 }
-*/
