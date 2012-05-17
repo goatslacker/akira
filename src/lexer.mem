@@ -42,9 +42,9 @@ tokenize(code, lineNo) -> (
               push: tokens, token
               i = length: token
             )
-            else tokens
+            else false
         )
-        else tokens
+        else false
 
       i = 1
 
@@ -57,6 +57,6 @@ tokenize(code, lineNo) -> (
 generateTokens(code) -> tokenize: (call: code, 'trim'), 0
 
 
-Lexer = { tokenize: generateTokens }
+Lexer = { tokenize = generateTokens }
 
 export Lexer
