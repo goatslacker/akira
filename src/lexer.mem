@@ -1,0 +1,62 @@
+TOKEN = regexp: '^([a-zA-Z]+)'
+number = regexp: '^(\d*\.?\d+)+'
+#string = regexp: '^\'(.*?)\''
+lambda = regexp: '^->'
+operation = regexp: '^(<=|>=|>|<|==|!=|\|\||\&\&|≤|≥)+'
+newline = regexp: '^\n'
+comments = regexp: '^#'
+whitespace = regexp: '^ '
+
+KEYWORDS = ['arguments', 'if', 'then', 'else', 'import', 'export']
+COMPARE = ['==', '!=', '>', '>=', '<', '<=', 'is', 'not', '≤', '≥']
+LOGIC = ['and', 'or', '&&', '||']
+BOOLEAN = ['true', 'false']
+
+processToken(item, lineNo) -> (
+  index = call: KEYWORDS, 'indexOf', item
+  isKeyword = index >= 0
+  if isKeyword
+    then (
+      key = call: item, 'toUpperCase'
+      [key, item, lineNo]
+    )
+    else false
+)
+
+tokenize(code, lineNo) -> (
+  tokens = [null]
+
+  len = length: code
+
+  if len == 0
+    then tokens
+    else (
+      isToken = call: TOKEN, 'test', code
+
+      if isToken == true
+        then (
+          item = at: (call: TOKEN, 'exec'), 2
+          token = processToken: item, lineNo
+          if token
+            then (
+              push: tokens, token
+              i = length: token
+            )
+            else tokens
+        )
+        else tokens
+
+      i = 1
+
+      chunk = call: code, 'substr', i, len
+      tokens = call: tokens, 'concat', (tokenize: chunk, lineNo)
+      tokens
+    )
+)
+
+generateTokens(code) -> tokenize: (call: code, 'trim'), 0
+
+
+Lexer = { tokenize: generateTokens }
+
+export Lexer

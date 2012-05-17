@@ -1,0 +1,122 @@
+/*global module */
+
+var Lexer = (function () {
+
+  var rx = {
+    token: /^([a-zA-Z]+)/,
+    number: /^(\d*\.?\d+)+/,
+    string: /^'(.*?)'/,
+    lambda: /^->/,
+    operation: /^(<=|>=|>|<|==|!=|\|\||\&\&|≤|≥)+/,
+    newline: /^\n/,
+    comments: /^#/,
+    whitespace: /^ /
+  };
+
+  var KEYWORDS = ['arguments', 'if', 'then', 'else', 'import', 'export'];
+
+  var COMPARE = ["==", "!=", ">", ">=", "<", "<=", "is", "not", "≤", "≥"];
+  var LOGIC = ["and", "or", "&&", "||"];
+  var BOOLEAN = ["true", "false"];
+
+  var $ = {};
+
+  function token() {
+  }
+
+  function tokenize(chunk, line_no) {
+    var tokens = [];
+    var k = 0;
+    var lineNo = line_no;
+    var item;
+
+    if (chunk.length === 0) {
+      return tokens;
+    }
+
+    // matches tokens
+    if (rx.token.test(chunk)) {
+      item = rx.token.exec(chunk)[1];
+
+      // is a keyword
+      if (KEYWORDS.indexOf(item) !== -1) {
+        tokens.push([item.toUpperCase(), item, line_no]);
+
+      // logical operator
+      } else if (LOGIC.indexOf(item) !== -1) {
+        tokens.push(["LOGIC", item, line_no]);
+
+      } else if (BOOLEAN.indexOf(item) !== -1) {
+        tokens.push(["BOOL", item, line_no]);
+
+      // is an identifier
+      } else {
+        tokens.push(["IDENTIFIER", item, line_no]);
+      }
+
+      k = item.length;
+
+    // matches numbers
+    } else if (rx.number.test(chunk)) {
+      item = rx.number.exec(chunk)[1];
+      tokens.push(["NUMBER", item, line_no]);
+      k = item.length;
+
+    // matches strings
+    } else if (rx.string.test(chunk)) {
+      item = rx.string.exec(chunk)[1];
+      tokens.push(["STRING", item, line_no]);
+      k = item.length + 2;
+
+    } else if (rx.lambda.test(chunk)) {
+      tokens.push(["LAMBDA", "->", line_no]);
+      k = 2;
+
+    // operations
+    } else if (rx.operation.test(chunk)) {
+      item = rx.operation.exec(chunk)[1];
+
+      if (COMPARE.indexOf(item) !== -1) {
+        tokens.push(["COMPARE", item, line_no]);
+      } else if (LOGIC.indexOf(item) !== -1) {
+        tokens.push(["LOGIC", item, line_no]);
+      } else {
+        tokens.push([item, item, line_no]);
+      }
+
+      k = item.length;
+
+    } else if (rx.comments.test(chunk)) {
+      k = chunk.indexOf('\n') + 1;
+      lineNo = line_no + 1;
+
+    // newlines
+    } else if (rx.newline.test(chunk)) {
+      tokens.push(["TERMINATOR", "\n", line_no]);
+      lineNo = line_no + 1;
+      k = 1;
+
+    // ignore whitespace
+    } else if (rx.whitespace.test(chunk)) {
+      k = 1;
+
+    } else {
+      // nothing matched
+      tokens.push([chunk[0], chunk[0], line_no]);
+      k = 1;
+    }
+
+    tokens = tokens.concat(tokenize(chunk.substr(k, chunk.length), lineNo));
+    return tokens;
+  }
+
+  $.tokenize = function (code) {
+    code.trim();
+    var all = tokenize(code, 0);
+    return all;
+  };
+
+  return $;
+}());
+
+module.exports = Lexer;
