@@ -2,8 +2,8 @@
 tupleEq(a, b) -> eq: 0, (length: (filter: (\x, i -> neq: x, (at: b, i)), a))
 
 # setting tuples
-obj = { hello: 1, world: 2 }
-tupleEq: obj, { hello: 1, world: 2 }
+obj = { hello = 1, world = 2 }
+tupleEq: obj, { hello = 1, world = 2 }
 
 # retrieving properties
 eq: (get: obj, 'hello'), 1 | assert
@@ -11,7 +11,7 @@ eq: (get: obj, 'hello'), 1 | assert
 # calling functions
 myFunction(x) -> x
 tup = {
-  myFunction: myFunction
+  myFunction = myFunction
 }
 
 eq: (call: tup, 'myFunction', 2), 2 | assert
