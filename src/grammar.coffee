@@ -132,7 +132,7 @@ parser = new Parser (->
     ]
 
     KeyValue: [
-      o 'Identifier : Value', -> new Assignment $1, $3
+      o 'Identifier = Value', -> new Assignment $1, $3
     ]
 
     TupleItems: [
