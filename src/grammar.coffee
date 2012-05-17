@@ -70,6 +70,7 @@ parser = new Parser (->
       o 'Invocation'
       o 'Pipeline'
       o 'Declaration'
+      o 'PatternMatching'
     ]
 
     Value: [
@@ -120,6 +121,23 @@ parser = new Parser (->
       o '\\ Parameters LAMBDA Body', -> new Declaration null, $2, $4
 
       o 'LAMBDA Body', -> new Call (new Declaration null, null, $2), null
+    ]
+
+    Pattern: [
+      o 'Literal LAMBDA Value TERMINATOR', -> [$1, new Call (new Declaration null, (new Arguments 'a'), $3), 'a']
+    ]
+
+    Patterns: [
+      o 'Pattern', -> new Arguments $1
+      o 'Patterns Pattern', -> new Arguments $1, $2
+    ]
+
+    PatternMatching: [
+      o 'MATCH Identifier TERMINATOR Patterns', -> new Declaration $2, (new Arguments 'a'), (new Pattern $4)
+    ]
+
+    Comma: [
+      o ', OptTerminator'
     ]
 
     Lists: [

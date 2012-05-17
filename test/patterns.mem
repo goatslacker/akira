@@ -1,0 +1,6 @@
+match numbers
+  'one' -> 1
+  'two' -> 2
+  'three' -> 3
+
+eq: 1, (numbers: 'one') | assert
