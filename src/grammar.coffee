@@ -77,6 +77,7 @@ parser = new Parser (->
       o 'Literal'
       o 'Lists'
       o 'Tuples'
+      o 'ExplicitInvocation'
       o 'Operation'
     ]
 
@@ -106,15 +107,17 @@ parser = new Parser (->
     ]
 
     Pipeline: [
+      o 'Value | Piped', -> new Call $3, $1
       o 'Invocation | Piped', -> new Call $3, $1
-      o 'Identifier | Piped', -> new Call $3, $1
-      o 'List | Piped', -> new Call $3, $1
-
       o 'Pipeline | Piped', -> new Call $3, $1
     ]
 
     Invocation: [
       o 'Identifier : Arguments', -> new Call $1, $3
+    ]
+
+    ExplicitInvocation: [
+      o 'Identifier : Arguments .', -> new Call $1, $3
     ]
 
     Declaration: [
