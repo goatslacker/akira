@@ -1,0 +1,4 @@
+arr = [1, 2, 3]
+
+eq: 5, (2 + last: arr.) | assert
+
