@@ -1,3 +1,8 @@
-fact(n) -> if n == 1 then n else prod: n, (fact: n - 1)
+#fact(n) -> if n == 1 then n else prod: n, (fact: n - 1)
+
+match fact
+  1 -> a
+  a -> prod: a, (fact: a - 1)
+
 
 export fact

@@ -123,8 +123,13 @@ parser = new Parser (->
       o 'LAMBDA Body', -> new Call (new Declaration null, null, $2), null
     ]
 
+    PatternMatches: [
+      o 'Value'
+      o 'Invocation'
+    ]
+
     Pattern: [
-      o 'Literal LAMBDA Value TERMINATOR', -> [$1, new Call (new Declaration null, null, $3), null]
+      o 'Literal LAMBDA PatternMatches TERMINATOR', -> [$1, new Call (new Declaration null, null, $3), null]
     ]
 
     Patterns: [
