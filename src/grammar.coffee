@@ -150,7 +150,7 @@ parser = new Parser (->
     ]
 
     Lists: [
-      o '[ Arguments ]', -> new List $2
+      o '[ OptTerminator Arguments OptTerminator ]', -> new List $3
     ]
 
     KeyValue: [
