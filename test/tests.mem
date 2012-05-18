@@ -16,5 +16,7 @@ eq: 24, (fact: 4) | assert
 eq: 2, (sum: 1, 1) | assert
 eq: 4, (prod: 2, 2) | assert
 
+eq: 5, (2 + {{last: array}}) | assert
+
 # Done.
 print:'All tests completed'
