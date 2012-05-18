@@ -75,7 +75,7 @@ parser = new Parser (->
     Value: [
       o 'Literal'
       o 'Lists'
-#      o 'ExplicitInvocation'
+      o 'ExplicitInvocation'
       o 'Operation'
     ]
 
@@ -115,7 +115,7 @@ parser = new Parser (->
     ]
 
     ExplicitInvocation: [
-#      o 'Identifier
+      o 'Identifier : Arguments .', -> new Call $1, $3
     ]
 
     Declaration: [
