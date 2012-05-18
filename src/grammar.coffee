@@ -76,6 +76,7 @@ parser = new Parser (->
     Value: [
       o 'Literal'
       o 'Lists'
+      o 'Tuples'
       o 'ExplicitInvocation'
       o 'Operation'
     ]
@@ -152,6 +153,21 @@ parser = new Parser (->
       o '[ Arguments ]', -> new List $2
     ]
 
+    KeyValue: [
+      o 'Identifier = Value', -> new Assignment $1, $3
+    ]
+
+    TupleItems: [
+      o '', -> null
+      o 'KeyValue', -> new Arguments $1
+      o 'TupleItems Comma KeyValue', -> new Arguments $1, $3
+    ]
+
+    Tuples: [
+      o '{ TupleItems }', -> new Tuple $2
+      o '{ TERMINATOR TupleItems TERMINATOR }', -> new Tuple $3
+    ]
+
     Arg: [
       o 'Value'
       o 'SExpression'
@@ -161,7 +177,7 @@ parser = new Parser (->
     Arguments: [
       o '( )', -> null
       o 'Arg', -> new Arguments $1
-      o 'Arguments , Arg', -> new Arguments $1, $3
+      o 'Arguments Comma Arg', -> new Arguments $1, $3
     ]
 
     Param: [
