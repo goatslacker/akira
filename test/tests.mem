@@ -48,6 +48,5 @@ eq: 4, (prod: 2, 2) | assert
 
 eq: 5, (2 + {{last: array}}) | assert
 
-
 # Done.
 print:'All tests completed'

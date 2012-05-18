@@ -80,6 +80,11 @@ parser = new Parser (->
       o 'Operation'
     ]
 
+    Values: [
+      o 'Value'
+      o 'Invocation'
+    ]
+
     Literal: [
       o 'Identifier'
       o 'AlphaNumeric'
@@ -126,13 +131,8 @@ parser = new Parser (->
       o 'LAMBDA Body', -> new Call (new Declaration null, null, $2), null
     ]
 
-    PatternMatches: [
-      o 'Value'
-      o 'Invocation'
-    ]
-
     Pattern: [
-      o 'Literal LAMBDA PatternMatches TERMINATOR', -> [$1, new Call (new Declaration null, null, $3), null]
+      o 'Literal LAMBDA Values TERMINATOR', -> [$1, new Call (new Declaration null, null, $3), null]
     ]
 
     Patterns: [
@@ -175,7 +175,7 @@ parser = new Parser (->
     ]
 
     If: [
-      o 'IF Value OptTerminator THEN Body OptTerminator ELSE Body', -> new If $2, $5, $8
+      o 'IF Values OptTerminator THEN Body OptTerminator ELSE Body', -> new If $2, $5, $8
     ]
 
     Operation: [
