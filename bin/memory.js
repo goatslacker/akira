@@ -28,7 +28,10 @@ parser.lexer = {
 parser.yy = require('../lib/nodes');
 
 var code = (function () {
-  var file = path.join(__dirname, "tests.mem"),
+  if (process.argv[2] === 'test') {
+    process.argv[2] = 'test/tests.mem';
+  }
+  var file = path.join(process.env.PWD, process.argv[2]),
       data = fs.readFileSync(file, 'utf8');
 
   return data;
@@ -37,11 +40,9 @@ var code = (function () {
 var context = require('../lib/runtime');
 
 // load lib
-//parser.parse(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString())).run([context]);
 var functions = parser.parse(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString())).compile([context]);
 functions = { type: 'Program', body: functions };
 vm.runInNewContext(escodegen.generate(functions), context);
-//console.log(functions);
 
 
 var tokens = lexer.tokenize(code);
