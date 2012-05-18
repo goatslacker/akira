@@ -46,7 +46,7 @@ array | (\list -> map: square, list) | (\a -> (
 eq: 2, (sum: 1, 1) | assert
 eq: 4, (prod: 2, 2) | assert
 
-eq: 5, (2 + last: array.) | assert
+eq: 5, (2 + {{last: array}}) | assert
 
 
 # Done.
