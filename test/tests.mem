@@ -2,11 +2,11 @@
 
 # import test
 import 'test/fact.mem'
+import 'test/patterns.mem'
 import 'test/tuples.mem'
 import 'test/list.mem'
 import 'test/reserved.mem'
 import 'test/regexp.mem'
-import 'test/patterns.mem'
 import 'test/invocations.mem'
 
 # export fact test
@@ -15,8 +15,6 @@ eq: 24, (fact: 4) | assert
 # sum and prod
 eq: 2, (sum: 1, 1) | assert
 eq: 4, (prod: 2, 2) | assert
-
-eq: 5, (2 + {{last: array}}) | assert
 
 # Done.
 print:'All tests completed'
