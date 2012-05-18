@@ -6,3 +6,10 @@ match numbers(n)
 
 eq: 4, (numbers: 'four') | assert
 eq: 1, (numbers: 'one') | assert
+
+match gtTen(n)
+  n < 10 -> true
+  n > 10 -> false
+
+eq: true, (gtTen: 11) | assert
+eq: false, (gtTen: 2) | assert
