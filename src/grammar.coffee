@@ -133,8 +133,7 @@ parser = new Parser (->
     ]
 
     Pattern: [
-#      o 'Literal LAMBDA Values TERMINATOR', -> [$1, new Call (new Declaration null, null, $3), null]
-      o 'Literal LAMBDA Values TERMINATOR', -> [$1, $3]
+      o 'Value LAMBDA Values TERMINATOR', -> [$1, $3]
     ]
 
     Patterns: [
@@ -143,7 +142,7 @@ parser = new Parser (->
     ]
 
     PatternMatching: [
-      o 'MATCH Identifier ( Parameters ) TERMINATOR Patterns', -> new Declaration $2, $4, (new Pattern $4, $7)
+      o 'MATCH Identifier ( Parameters ) TERMINATOR Patterns', -> new Declaration $2, $4, new Pattern $4, $7
     ]
 
     Comma: [
