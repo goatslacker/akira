@@ -28,6 +28,9 @@ parser.lexer = {
 parser.yy = require('../lib/nodes');
 
 var code = (function () {
+  if (process.argv[2] === 'test') {
+    process.argv[2] = 'test/tests.mem';
+  }
   var file = path.join(process.env.PWD, process.argv[2]),
       data = fs.readFileSync(file, 'utf8');
 
@@ -36,14 +39,10 @@ var code = (function () {
 
 var context = require('../lib/runtime');
 
-//console.log(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString()));
-
 // load lib
-//parser.parse(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString())).run([context]);
 var functions = parser.parse(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString())).compile([context]);
 functions = { type: 'Program', body: functions };
 vm.runInNewContext(escodegen.generate(functions), context);
-//console.log(functions);
 
 
 var tokens = lexer.tokenize(code);
@@ -54,13 +53,9 @@ run = { type: 'Program', body: run };
 //util.puts(util.inspect(run, false, 15));
 var compiled = escodegen.generate(run);
 
-console.log(compiled);
-
-/*
 try {
   vm.runInNewContext(compiled, context);
 } catch (e) {
   console.error(e.stack);
   console.log(compiled);
 }
-*/

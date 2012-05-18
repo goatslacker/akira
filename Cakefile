@@ -24,7 +24,7 @@ build = (watch, callback) ->
   coffee.on 'exit', (status) -> callback?() if status is 0
 
 test = (callback) ->
-  options = ['test/index.js']
+  options = ['bin/memory.js', 'test']
   spec = spawn 'node', options
   spec.stdout.on 'data', (data) -> print data.toString()
   spec.stderr.on 'data', (data) -> log data.toString(), red
