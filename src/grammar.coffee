@@ -150,7 +150,15 @@ parser = new Parser (->
     ]
 
     Lists: [
-      o '[ Arguments ]', -> new List $2
+      o '[ ]', -> new List
+      o '[ OptTerminator ListArgs OptTerminator ]', -> new List $3
+    ]
+
+    ListArgs: [
+      o '( )', -> ''
+      o 'Arg', -> new Arguments $1
+      o 'ListArgs , Arg', -> new Arguments $1, $3
+      o 'ListArgs Terminator Arg', -> new Arguments $1, $3
     ]
 
     KeyValue: [
@@ -158,14 +166,13 @@ parser = new Parser (->
     ]
 
     TupleItems: [
-      o '', -> null
       o 'KeyValue', -> new Arguments $1
-      o 'TupleItems Comma KeyValue', -> new Arguments $1, $3
+      o 'TupleItems , KeyValue', -> new Arguments $1, $3
+      o 'TupleItems Terminator KeyValue', -> new Arguments $1, $3
     ]
 
     Tuples: [
-      o '{ TupleItems }', -> new Tuple $2
-      o '{ TERMINATOR TupleItems TERMINATOR }', -> new Tuple $3
+      o '{ OptTerminator TupleItems OptTerminator }', -> new Tuple $3
     ]
 
     Arg: [
