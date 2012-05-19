@@ -8,7 +8,6 @@ import 'test/list.mem'
 import 'test/reserved.mem'
 import 'test/regexp.mem'
 import 'test/invocations.mem'
-import 'src/grammar.mem'
 import 'test/javascript.mem'
 
 # export fact test

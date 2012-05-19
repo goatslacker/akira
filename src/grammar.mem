@@ -1,5 +1,5 @@
-#fs = require: 'fs'
-#jison = require: 'jison'
+fs = require: 'fs'
+jison = require: 'jison'
 
 PS = regexp: '\s{2,}', 'g'
 o(pattern, action) -> (
@@ -219,7 +219,7 @@ operators = [
 ]
 
 <%
-  parser = new Parser({
+  parser = new jison.Parser({
     tokens: tokens,
     bnf: bnf,
     operators: operators,
