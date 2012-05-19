@@ -12,7 +12,9 @@ eq: (get: obj, 'hello'), 1 | assert
 myFunction(x) -> x
 tup = {
   myFunction = myFunction
+  myNumber = 3
 }
 
 eq: (call: tup, 'myFunction', 2), 2 | assert
+assert: tup.myNumber == 3
 
