@@ -15,3 +15,21 @@ filterNeq(n, a) -> filter: (\x -> neq: n, x), a
 invertBool(a) -> a == false
 sum() -> foldl: (\a, b -> a + b), arguments
 prod() -> foldl: (\a, b -> a * b), arguments
+
+export head
+export init
+export tail
+export last
+export flip
+export consts
+export square
+export partial
+export eq
+export neq
+export assert
+export arrEq
+export arrNeq
+export filterNeq
+export invertBool
+export sum
+export prod
