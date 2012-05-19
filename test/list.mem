@@ -1,4 +1,8 @@
-array = [1, 2, 3]
+array = [
+  1
+  2
+  3
+]
 
 head: array | (\a -> assert: a == 1)
 init: array | (\a -> arrEq: a, [1, 2] | assert)

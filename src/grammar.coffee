@@ -150,7 +150,15 @@ parser = new Parser (->
     ]
 
     Lists: [
-      o '[ OptTerminator Arguments OptTerminator ]', -> new List $3
+      o '[ ]', -> new List
+      o '[ OptTerminator ListArgs OptTerminator ]', -> new List $3
+    ]
+
+    ListArgs: [
+      o '( )', -> ''
+      o 'Arg', -> new Arguments $1
+      o 'ListArgs , Arg', -> new Arguments $1, $3
+      o 'ListArgs TERMINATOR Arg', -> new Arguments $1, $3
     ]
 
     KeyValue: [
