@@ -8,6 +8,7 @@ import 'test/list.mem'
 import 'test/reserved.mem'
 import 'test/regexp.mem'
 import 'test/invocations.mem'
+import 'src/grammar.mem'
 
 # export fact test
 eq: 24, (fact: 4) | assert
