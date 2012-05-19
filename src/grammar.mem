@@ -208,8 +208,6 @@ tokens = [
   'TERMINATOR'
 ]
 
-startSymbol = 'Root'
-
 operators = [
   ['right', 'IF', 'THEN', 'ELSE', 'IMPORT', 'EXPORT', 'ASSERT', 'ARGUMENTS']
   ['right', '=', '|', '[', ']']
@@ -220,8 +218,13 @@ operators = [
   ['left', '*', '/']
 ]
 
-#print: bnf
-#{ tokens, bnf, operators, startSymbol }
+<%
+  parser = new Parser({
+    tokens: tokens,
+    bnf: bnf,
+    operators: operators,
+    startSymbol: 'Root'
+  })
 
-
-
+  fs.writeFileSync('./lib/parser.js', parser.generate(), 'utf8');
+%>
