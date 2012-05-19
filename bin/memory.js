@@ -1,61 +1,21 @@
-var fs = require('fs');
-var util = require('util');
 var path = require('path');
-var vm = require('vm');
-
-var lexer = require('../lib/lexer');
-var parser = require('../lib/parser').parser;
-var escodegen = require('escodegen');
-
-parser.lexer = {
-  lex: function () {
-    var tag, _ref2;
-    _ref2 = this.tokens[this.pos++] || [''];
-    tag = _ref2[0];
-    this.yytext = _ref2[1];
-    this.yylineno = _ref2[2] || 0;
-    return tag;
-  },
-  setInput: function (tokens) {
-    this.tokens = tokens;
-    return this.pos = 0;
-  },
-  upcomingInput: function () {
-    return "";
-  }
-};
-
-parser.yy = require('../lib/nodes');
-
-var code = (function () {
-  if (process.argv[2] === 'test') {
-    process.argv[2] = 'test/tests.mem';
-  }
-  var file = path.join(process.env.PWD, process.argv[2]),
-      data = fs.readFileSync(file, 'utf8');
-
-  return data;
-}());
-
 var context = require('../lib/runtime');
+var escodegen = require('escodegen');
+var vm = require('vm');
+var memory = require('../memory');
 
-// load lib
-var functions = parser.parse(lexer.tokenize(fs.readFileSync('./lib/functions.mem').toString())).compile([context]);
-functions = { type: 'Program', body: functions };
-vm.runInNewContext(escodegen.generate(functions), context);
+if (process.argv[2] === 'test') {
+  process.argv[2] = 'test/tests.mem';
+}
 
+var functions = memory(path.join(__dirname, '..', 'lib', 'functions.mem'));
+vm.runInNewContext(functions, context);
 
-var tokens = lexer.tokenize(code);
-var parsed = parser.parse(tokens);
-var run = parsed.compile([context]);
-run = { type: 'Program', body: run };
-
-//util.puts(util.inspect(run, false, 15));
-var compiled = escodegen.generate(run);
+var code = memory(path.join(process.env.PWD, process.argv[2]));
 
 try {
-  vm.runInNewContext(compiled, context);
+  vm.runInNewContext(code, context);
 } catch (e) {
   console.error(e.stack);
-  console.log(compiled);
+  console.log(code);
 }
