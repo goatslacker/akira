@@ -71,6 +71,7 @@ parser = new Parser (->
       o 'Pipeline'
       o 'Declaration'
       o 'PatternMatching'
+      o 'JAVASCRIPT', -> new JavaScript $1
     ]
 
     Value: [

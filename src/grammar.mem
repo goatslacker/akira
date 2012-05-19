@@ -220,8 +220,8 @@ operators = [
   ['left', '*', '/']
 ]
 
-print: bnf
-{ tokens, bnf, operators, startSymbol }
+#print: bnf
+#{ tokens, bnf, operators, startSymbol }
 
 
 

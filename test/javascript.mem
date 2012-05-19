@@ -1,0 +1,9 @@
+<%
+  function foo() {
+    return 2;
+  }
+
+  this.b = foo();
+%>
+
+assert: b == 2
