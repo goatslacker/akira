@@ -157,7 +157,7 @@ parser = new Parser (->
     ListArgs: [
       o '( )', -> ''
       o 'Arg', -> new Arguments $1
-      o 'ListArgs , Arg', -> new Arguments $1, $3
+      o 'ListArgs Comma Arg', -> new Arguments $1, $3
       o 'ListArgs Terminator Arg', -> new Arguments $1, $3
     ]
 
@@ -167,7 +167,7 @@ parser = new Parser (->
 
     TupleItems: [
       o 'KeyValue', -> new Arguments $1
-      o 'TupleItems , KeyValue', -> new Arguments $1, $3
+      o 'TupleItems Comma KeyValue', -> new Arguments $1, $3
       o 'TupleItems Terminator KeyValue', -> new Arguments $1, $3
     ]
 
