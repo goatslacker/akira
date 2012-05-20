@@ -30,6 +30,7 @@ parser.yy = require('./lib/nodes');
 function compile(file) {
   var code = fs.readFileSync(file).toString();
   var tokens = lexer.tokenize(code);
+  console.log(tokens);
   var parsed = parser.parse(tokens);
   var run = parsed.compile([context]);
   run = { type: 'Program', body: run };
