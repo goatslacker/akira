@@ -80,6 +80,7 @@ parser = new Parser (->
       o 'Tuples'
       o 'ExplicitInvocation'
       o 'Operation'
+      o 'Access'
     ]
 
     Values: [
@@ -174,6 +175,10 @@ parser = new Parser (->
 
     Tuples: [
       o '{ OptTerminator TupleItems OptTerminator }', -> new Tuple $3
+    ]
+
+    Access: [
+      o 'Identifier . Literal', -> new Access $1, $3
     ]
 
     Arg: [
