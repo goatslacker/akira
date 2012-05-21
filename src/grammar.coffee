@@ -91,7 +91,8 @@ parser = new Parser (->
     Literal: [
       o 'Identifier'
       o 'AlphaNumeric'
-      o 'BOOL'
+      o 'BOOL', -> new Literal Bool $1
+      o 'REGEXP', -> new Literal $1
     ]
 
     AlphaNumeric: [
