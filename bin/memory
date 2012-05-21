@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var path = require('path');
 var context = require('../lib/runtime');
 var escodegen = require('escodegen');

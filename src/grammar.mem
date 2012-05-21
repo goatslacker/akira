@@ -81,7 +81,6 @@ bnf = {
     o: 'Tuples';
     o: 'ExplicitInvocation';
     o: 'Operation';
-    o: 'Value';
   ]
 
   Values = [
