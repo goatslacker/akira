@@ -93,7 +93,7 @@ bnf = {
     o: 'Identifier';
     o: 'AlphaNumeric';
     o: 'BOOL', (\-> construct Literal: (Boolean: $1));
-    o: 'RegExp', (\-> construct Literal: (construct RegExp: $1));
+    o: 'REGEXP', (\-> construct Literal: $1);
   ]
 
   AlphaNumeric = [
@@ -131,7 +131,7 @@ bnf = {
   ]
 
   ExplicitInvocation = [
-    o: '{{ Identifier : Arguments }}', (\-> construct Call: $2, $4);
+    o: 'Identifier : Arguments ;', (\-> construct Call: $1, $3);
   ]
 
   Declaration = [
@@ -163,7 +163,7 @@ bnf = {
   ]
 
   ListArgs = [
-    o: '( )', '';
+    o: '( )', (\-> null);
     o: 'Arg', (\-> construct Arguments: $1);
     o: 'ListArgs Comma Arg', (\-> construct Arguments: $1, $3);
     o: 'ListArgs Terminator Arg', (\-> construct Arguments: $1, $3);
