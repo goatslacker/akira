@@ -1,14 +1,20 @@
 fs = require: 'fs'
 jison = require: 'jison'
 
+unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
+
 o(pattern, action) -> (
   patternStringRegExp = /\s{2,}/g
   patternString = pattern.replace: patternStringRegExp, ' '
   if action == null
     then [patternString, '$$ = $1']
     else (
-      newaction = action.replace: 'new ', 'new yy.'
-      [patternString, '$$ = ' + newaction]
+#      match = unwrap.exec: action
+#      action = if match then match[1] else '(#{action}())'
+#      newaction = match[1].replace: /\bnew /g, '$&yy.'
+#      action = action.replace(/\b(?:Nodes\.wrap)\b/g, 'yy.$&')
+#      newaction2 = newaction.replace: 'new ', 'new yy.'
+      [patternString, '$$ = ' + action]
     )
 )
 
