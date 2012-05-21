@@ -120,6 +120,7 @@ parser = new Parser (->
 
     Invocation: [
       o 'Identifier : Arguments', -> new Call $1, $3
+      o 'Identifier . Identifier : Arguments', -> new Call (new Access $1, $3), $5
     ]
 
     ExplicitInvocation: [
