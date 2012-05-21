@@ -131,7 +131,7 @@ parser = new Parser (->
     ]
 
     ExplicitInvocation: [
-      o '` Identifier : Arguments `', -> new Call $2, $4
+      o '{ { Identifier : Arguments } }', -> new Call $3, $5
     ]
 
     Declaration: [
@@ -226,8 +226,8 @@ parser = new Parser (->
 
   operators = [
     ['right', 'IF', 'THEN', 'ELSE', 'IMPORT', 'EXPORT', 'ASSERT', 'ARGUMENTS']
-    ['right', '=', '|', '[', ']']
-    ['nonassoc', '(', ')']
+    ['right', '=', '|']
+    ['nonassoc', '(', ')', '[', ']', '{', '}']
     ['left', 'LOGIC']
     ['left', 'COMPARE']
     ['left', '+', '-']
