@@ -7,3 +7,9 @@
 %>
 
 assert: b == 2
+
+<%
+  this.c = "hello world";
+%>
+
+assert: c == 'hello world'
