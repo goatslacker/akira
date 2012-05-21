@@ -1,0 +1,6 @@
+> lexer needs better javascript mode...turn on JSmode when encountering <%
+register all next tokens as JS and turn off when encountering %>
+
+> RegExp literals
+
+> Constructor keyword is like calling new

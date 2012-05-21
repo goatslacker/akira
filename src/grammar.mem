@@ -3,7 +3,7 @@ jison = require: 'jison'
 
 PS = regexp: '\s{2,}', 'g'
 o(pattern, action) -> (
-  patternString = call: pattern, 'replace', PS
+  patternString = pattern.replace: PS, ' '
   if action == null
     then [patternString, '$$ = $1']
     else (
@@ -218,13 +218,13 @@ operators = [
   ['left', '*', '/']
 ]
 
-<%
-  parser = new jison.Parser({
-    tokens: tokens,
-    bnf: bnf,
-    operators: operators,
-    startSymbol: 'Root'
-  })
+Parser = jison.Parser
+grammar = {
+  tokens = tokens
+  bnf = bnf
+  operators = operators
+  startSymbol = 'Root'
+}
 
-  fs.writeFileSync('./lib/parser.js', parser.generate(), 'utf8');
-%>
+parser = construct Parser: grammar
+fs.writeFileSync: './lib/parser.js', (parser.generate: null), 'utf8'
