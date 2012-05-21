@@ -125,7 +125,7 @@ parser = new Parser (->
     ]
 
     ExplicitInvocation: [
-      o '` Identifier : Arguments `', -> new Call $2, $4
+      o 'Identifier : Arguments ;', -> new Call $1, $3
     ]
 
     Declaration: [
