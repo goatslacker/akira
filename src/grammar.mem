@@ -1,9 +1,9 @@
 fs = require: 'fs'
 jison = require: 'jison'
 
-PS = regexp: '\s{2,}', 'g'
 o(pattern, action) -> (
-  patternString = pattern.replace: PS, ' '
+  patternStringRegExp = /\s{2,}/g
+  patternString = pattern.replace: patternStringRegExp, ' '
   if action == null
     then [patternString, '$$ = $1']
     else (
