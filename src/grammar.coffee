@@ -72,6 +72,7 @@ parser = new Parser (->
       o 'Declaration'
       o 'PatternMatching'
       o 'JAVASCRIPT', -> new JavaScript $1
+      o 'Construct'
     ]
 
     Value: [
@@ -91,7 +92,7 @@ parser = new Parser (->
     Literal: [
       o 'Identifier'
       o 'AlphaNumeric'
-      o 'BOOL', -> new Literal Bool $1
+      o 'BOOL', -> new Literal Boolean $1
       o 'REGEXP', -> new Literal $1
     ]
 
@@ -107,6 +108,10 @@ parser = new Parser (->
     Modules: [
       o 'EXPORT Identifier', -> new Export $2
       o 'IMPORT STRING', -> new Import $2
+    ]
+
+    Construct: [
+      o 'CONSTRUCT Invocation', -> new Construction $2
     ]
 
     Piped: [
