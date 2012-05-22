@@ -1,6 +1,7 @@
 var fs = require('fs');
-var util = require('util');
 var path = require('path');
+var util = require('util');
+var vm = require('vm');
 var escodegen = require('escodegen');
 
 var lexer = require('./lib/lexer');
@@ -28,13 +29,35 @@ parser.lexer = {
 parser.yy = require('./lib/nodes');
 
 function compile(file) {
-  var code = fs.readFileSync(file).toString();
+  var code = fs.readFileSync(path.join(process.env.PWD, file)).toString();
   var tokens = lexer.tokenize(code);
   var parsed = parser.parse(tokens);
   var run = parsed.compile([context]);
-  run = { type: 'Program', body: parsed.getUtils().concat(run) };
-  //  util.puts(util.inspect(run, false, 30));
-  return '(function () {\n' + escodegen.generate(run) + '}.call(this))';
+  var ast = { type: 'Program', body: parsed.getUtils().concat(run) };
+//    util.puts(util.inspect(ast, false, 30));
+  var compiled = '(function () {\n' + escodegen.generate(ast) + '\n}.call(this))';
+//  util.puts(compiled);
+  return compiled
 }
 
-module.exports = compile;
+function run(code) {
+  try {
+    vm.runInNewContext(code, context);
+  } catch (e) {
+    console.error(e.stack);
+    console.log(compiled);
+  }
+}
+
+/** main **/
+function memory(args) {
+  var action = args[0];
+  switch (action) {
+    case 'test':
+      return run(compile('test/tests.mem'));
+    case 'compile':
+      return console.log(compile(args[1]));
+  }
+}
+
+module.exports = memory;
