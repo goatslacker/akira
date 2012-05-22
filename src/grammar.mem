@@ -53,6 +53,10 @@ bnf = {
 
   Identifier = [ o: 'IDENTIFIER'; ]
 
+  Utils = [
+    o: 'UTILS', (\-> construct Utils: $1);
+  ]
+
   Body = [
     o: 'Expression';
     o: '( OptTerminator Expressions )', (\-> $3);
@@ -81,6 +85,8 @@ bnf = {
     o: 'Tuples';
     o: 'ExplicitInvocation';
     o: 'Operation';
+    o: 'Access';
+    o: 'Utils';
   ]
 
   Values = [
@@ -116,6 +122,7 @@ bnf = {
   Piped = [
     o: 'Identifier';
     o: 'SExpression';
+    o: 'Utils';
   ]
 
   Pipeline = [
@@ -126,6 +133,7 @@ bnf = {
 
   Invocation = [
     o: 'Identifier : Arguments', (\-> construct Call: $1, $3);
+    o: 'Utils : Arguments', (\-> construct Call: $1, $3);
     o: 'Access : Arguments', (\-> construct Call: $1, $5);
   ]
 
