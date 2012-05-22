@@ -130,7 +130,7 @@ bnf = {
   ]
 
   ExplicitInvocation = [
-    o: 'Identifier : Arguments ;', (\-> construct Call: $1, $3);
+    o: 'Invocation ;', (\-> $1);
   ]
 
   Declaration = [
