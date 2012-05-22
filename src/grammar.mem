@@ -76,6 +76,7 @@ bnf = {
     o: 'Pipeline';
     o: 'Declaration';
     o: 'PatternMatching';
+    o: 'JAVASCRIPT', (\-> construct JavaScript: $1);
     o: 'Construct';
   ]
 
@@ -134,7 +135,7 @@ bnf = {
   Invocation = [
     o: 'Identifier : Arguments', (\-> construct Call: $1, $3);
     o: 'Utils : Arguments', (\-> construct Call: $1, $3);
-    o: 'Access : Arguments', (\-> construct Call: $1, $5);
+    o: 'Access : Arguments', (\-> construct Call: $1, $3);
   ]
 
   ExplicitInvocation = [
