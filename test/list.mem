@@ -27,3 +27,5 @@ array | (\list -> map: square, list) | (\a -> (
   assertArray(a) -> arrEq: a, [1, 4, 9] | assert
   array | mapper | assertArray
 )
+
+assert: array::2 == 2

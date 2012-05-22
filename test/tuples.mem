@@ -16,6 +16,6 @@ tup = {
 }
 
 eq: (call: tup, 'myFunction', 2), 2 | assert
-assert: tup.myNumber == 3
-eq: (tup.myFunction: 2), 2 | assert
+assert: tup::myNumber == 3
+eq: (tup::myFunction: 2), 2 | assert
 
