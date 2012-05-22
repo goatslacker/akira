@@ -3,24 +3,18 @@ jison = require: 'jison'
 
 unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
 
+getMatch(x, action) -> if x then x::2 else '(' + action + '())'
+
 o(pattern, action) -> (
   patternStringRegExp = /\s{2,}/g
   patternString = pattern::replace: patternStringRegExp, ' '
   if action == null
     then [patternString, '$$ = $1']
     else (
-      <%
-        var match = unwrap.exec(action);
-        action = match ? match[1] : '(' + action + '())';
-        action = action.replace(/\bnew /g, '$&yy.');
-        this.newaction = action.replace(/\b(?:Nodes\.wrap)\b/g, 'yy.$&');
-      %>
-#      match = unwrap.exec: action
-#      action = if match then match[1] else '(#{action}())'
-#      newaction = match[1].replace: /\bnew /g, '$&yy.'
-#      action = action.replace(/\b(?:Nodes\.wrap)\b/g, 'yy.$&')
-#      newaction2 = newaction.replace: 'new ', 'new yy.'
-      [patternString, '$$ = ' + newaction]
+      action2 = getMatch: (unwrap::exec: action), action
+      action3 = action2::replace: /\bnew /g, '$&yy.'
+      action4 = action3::replace: /\b(?:Nodes\.wrap)\b/g, 'yy.$&'
+      [patternString, '$$ = ' + action4]
     )
 )
 
