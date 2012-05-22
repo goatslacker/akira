@@ -6,7 +6,7 @@ var escodegen = require('escodegen');
 
 var lexer = require('./lib/lexer');
 var parser = require('./lib/parser').parser;
-var context = require('./lib/runtime');
+var context = {};
 
 parser.lexer = {
   lex: function () {
@@ -41,8 +41,10 @@ function compile(file) {
 }
 
 function run(code) {
+  var new_context = Object.create(context);
+  new_context.console = console;
   try {
-    vm.runInNewContext(code, context);
+    vm.runInNewContext(code, new_context);
   } catch (e) {
     console.error(e.stack);
     console.log(compiled);
