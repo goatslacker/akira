@@ -32,7 +32,8 @@ function compile(file) {
   var tokens = lexer.tokenize(code);
   var parsed = parser.parse(tokens);
   var run = parsed.compile([context]);
-  run = { type: 'Program', body: run };
+  run = { type: 'Program', body: parsed.getUtils().concat(run) };
+  //  util.puts(util.inspect(run, false, 30));
   return '(function () {\n' + escodegen.generate(run) + '}.call(this))';
 }
 

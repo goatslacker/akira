@@ -8,10 +8,11 @@ if (process.argv[2] === 'test') {
   process.argv[2] = 'test/tests.mem';
 }
 
-var functions = memory(path.join(__dirname, '..', 'lib', 'functions.mem'));
-vm.runInNewContext(functions, context);
+//var functions = memory(path.join(__dirname, '..', 'lib', 'functions.mem'));
+//vm.runInNewContext(functions, context);
 
 var code = memory(path.join(process.env.PWD, process.argv[2]));
+//console.log(code);
 
 try {
   vm.runInNewContext(code, context);
