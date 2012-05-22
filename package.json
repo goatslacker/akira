@@ -5,7 +5,8 @@
   "description": "project rini",
 
   "scripts": {
-    "test": "node test/index.js"
+    "pretest": "bin/memory compile src/grammar.mem > lib/grammar.js && node lib/grammar.js",
+    "test": "bin/memory test"
   },
 
   "repository": {
