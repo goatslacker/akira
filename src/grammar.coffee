@@ -52,6 +52,10 @@ parser = new Parser (->
 
     Identifier: [ o 'IDENTIFIER' ]
 
+    Utils: [
+      o 'UTILS', -> new Utils $1
+    ]
+
     Body: [
       o 'Expression'
       o '( OptTerminator Expressions )', -> $3
@@ -82,6 +86,7 @@ parser = new Parser (->
       o 'ExplicitInvocation'
       o 'Operation'
       o 'Access'
+      o 'Utils'
     ]
 
     Values: [
@@ -116,6 +121,7 @@ parser = new Parser (->
 
     Piped: [
       o 'Identifier'
+      o 'Utils'
       o 'SExpression'
     ]
 
@@ -127,11 +133,12 @@ parser = new Parser (->
 
     Invocation: [
       o 'Identifier : Arguments', -> new Call $1, $3
+      o 'Utils : Arguments', -> new Call $1, $3
       o 'Access : Arguments', -> new Call $1, $3
     ]
 
     ExplicitInvocation: [
-      o 'Identifier : Arguments ;', -> new Call $1, $3
+      o 'Invocation ;', -> $1
     ]
 
     Declaration: [
@@ -202,6 +209,7 @@ parser = new Parser (->
 
     Param: [
       o 'Identifier'
+      o 'Utils'
     ]
 
     Parameters: [
