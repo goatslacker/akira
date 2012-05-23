@@ -12,10 +12,76 @@ rx = {
   whitespace = /^ /
 }
 
-filter-tokens-fn(a) -> partial: filter, (= x -> call: (get: rx, x), 'test', a)
-to-upper(x) -> x.toUpperCase: null
+KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export']
+COMPARE = ['==', '!=', '>', '>=', '<', '<=', 'is', 'not']
+LOGIC = ['and', 'or', '&&', '||']
+BOOLEAN = ['true', 'false']
+UTILS = [
+  'arrEq'
+  'assert'
+  'at'
+  'call'
+  'consts'
+  'div'
+  'eq'
+  'filter'
+  'flip'
+  'foldl'
+  'foldr'
+  'get'
+  'head'
+  'init'
+  'last'
+  'length'
+  'map'
+  'mod'
+  'neq'
+  'partial'
+  'pop'
+  'print'
+  'prod'
+  'range'
+  'sub'
+  'sum'
+  'square'
+  'tail'
+]
 
-type(a) -> (
+
+filter-tokens-fn(a) -> partial: filter, (= x -> call: (get: rx, x), 'test', a)
+to-upper(x) -> x.toUpperCase: ()
+to-lower(x) -> x.toLowerCase: ()
+
+get-type(a) -> (
   filter-tokens = filter-tokens-fn: a
   rx | Object.keys | filter-tokens | pop | to-upper
 )
+
+parse-token(t, chunk) -> (
+  key = t | to-lower
+  exec = call: (get: rx, key), 'exec', chunk
+  [exec.2, t]
+)
+
+get-token(chunk, t) =
+  'NUMBER' -> parse-token: t, chunk
+
+process-chunk(tokens, code, i) -> (
+  token = get-token: code, (get-type: code)
+  tokens.push: token
+  tokens.concat: (return-tokens: code, i + 1)
+)
+
+return-tokens(code, i) -> (
+  tokens = []
+  len = length: code
+  chunk = code.substr: i, len
+
+  if chunk
+    then process-chunk: tokens, chunk, i
+    else tokens
+)
+
+tokenize(code) -> return-tokens: (code.trim: ()), 0
+
+print: (tokenize: '2')

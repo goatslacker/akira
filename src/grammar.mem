@@ -46,7 +46,7 @@ bnf = {
   ]
 
   Identifier = [
-    o: 'IDENTIFIER', (=i -> $1.replace: /-([a-z])/g, (=i -> i.2.toUpperCase: null));
+    o: 'IDENTIFIER', (=i -> $1.replace: /-([a-z])/g, (=i -> i.2.toUpperCase: ()));
   ]
 
   Utils = [
@@ -163,12 +163,11 @@ bnf = {
   ]
 
   Lists = [
-    o: '[ ]', (=-> construct List: null);
+    o: '[ ]', (=-> construct List: ());
     o: '[ OptTerminator ListArgs OptTerminator ]', (=-> construct List: $3);
   ]
 
   ListArgs = [
-    o: '( )', (=-> null);
     o: 'Arg', (=-> construct Arguments: $1);
     o: 'ListArgs Comma Arg', (=-> construct Arguments: $1, $3);
     o: 'ListArgs Terminator Arg', (=-> construct Arguments: $1, $3);
@@ -261,4 +260,4 @@ grammar = {
 }
 
 parser = construct Parser: grammar
-fs.writeFileSync: './lib/parser.js', (parser.generate: null), 'utf8'
+fs.writeFileSync: './lib/parser.js', (parser.generate: ()), 'utf8'
