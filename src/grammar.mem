@@ -45,7 +45,9 @@ bnf = {
     o: 'Terminator';
   ]
 
-  Identifier = [ o: 'IDENTIFIER'; ]
+  Identifier = [
+    o: 'IDENTIFIER', (=i -> $1\replace: /-([a-z])/g, (=i -> i\2\toUpperCase: null));
+  ]
 
   Utils = [
     o: 'UTILS', (=-> construct Utils: $1);
