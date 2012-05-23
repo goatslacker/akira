@@ -1,4 +1,4 @@
-match numbers(n)
+numbers(n) =
   'one' -> 1
   'two' -> 2
   'three' -> 3
@@ -7,7 +7,7 @@ match numbers(n)
 eq: 4, (numbers: 'four') | assert
 eq: 1, (numbers: 'one') | assert
 
-match gtTen(n)
+gtTen(n) =
   n < 10 -> true
   n > 10 -> false
 
