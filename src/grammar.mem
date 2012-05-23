@@ -3,17 +3,17 @@ jison = require: 'jison'
 
 unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
 
-getMatch(x, action) -> if x then x\2 else '(' + action + '())'
+getMatch(x, action) -> if x then x.2 else '(' + action + '())'
 
 o(pattern, action) -> (
   patternStringRegExp = /\s{2,}/g
-  patternString = pattern\replace: patternStringRegExp, ' '
+  patternString = pattern.replace: patternStringRegExp, ' '
   if action == null
     then [patternString, '$$ = $1']
     else (
-      action2 = getMatch: (unwrap\exec: action), action
-      action3 = action2\replace: /\bnew /g, '$&yy.'
-      action4 = action3\replace: /\b(?:Nodes\.wrap)\b/g, 'yy.$&'
+      action2 = getMatch: (unwrap.exec: action), action
+      action3 = action2.replace: /\bnew /g, '$&yy.'
+      action4 = action3.replace: /\b(?:Nodes\.wrap)\b/g, 'yy.$&'
       [patternString, '$$ = ' + action4]
     )
 )
@@ -30,8 +30,8 @@ bnf = {
   ]
 
   Expressions = [
-    o: 'Body', (=-> Nodes\wrap: $1);
-    o: 'Expressions TERMINATOR Body', (=-> $1\push: $3);
+    o: 'Body', (=-> Nodes.wrap: $1);
+    o: 'Expressions TERMINATOR Body', (=-> $1.push: $3);
     o: 'Expressions TERMINATOR';
   ]
 
@@ -46,7 +46,7 @@ bnf = {
   ]
 
   Identifier = [
-    o: 'IDENTIFIER', (=i -> $1\replace: /-([a-z])/g, (=i -> i\2\toUpperCase: null));
+    o: 'IDENTIFIER', (=i -> $1.replace: /-([a-z])/g, (=i -> i.2.toUpperCase: null));
   ]
 
   Utils = [
@@ -193,7 +193,7 @@ bnf = {
   ]
 
   Accessor = [
-    o: '\ Literal', (=-> $2);
+    o: '. Literal', (=-> $2);
   ]
 
   Arg = [
@@ -251,7 +251,7 @@ operators = [
   ['left', '*', '/']
 ]
 
-Parser = jison\Parser
+Parser = jison.Parser
 grammar = {
   tokens = tokens
   bnf = bnf
@@ -260,4 +260,4 @@ grammar = {
 }
 
 parser = construct Parser: grammar
-fs\writeFileSync: './lib/parser.js', (parser\generate: null), 'utf8'
+fs.writeFileSync: './lib/parser.js', (parser.generate: null), 'utf8'

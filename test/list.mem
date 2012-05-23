@@ -28,4 +28,4 @@ array | (=list -> map: square, list) | (=a -> (
   array | mapper | assertArray
 )
 
-assert: array\2 == 2
+assert: array.2 == 2
