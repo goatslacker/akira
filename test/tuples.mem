@@ -1,5 +1,5 @@
 # test function
-tupleEq(a, b) -> eq: 0, (length: (filter: (\x, i -> neq: x, (at: b, i)), a))
+tupleEq(a, b) -> eq: 0, (length: (filter: (= x, i -> neq: x, (at: b, i)), a))
 
 # setting tuples
 obj = { hello = 1, world = 2 }
@@ -16,6 +16,6 @@ tup = {
 }
 
 eq: (call: tup, 'myFunction', 2), 2 | assert
-assert: tup::myNumber == 3
-eq: (tup::myFunction: 2), 2 | assert
+assert: tup\myNumber == 3
+eq: (tup\myFunction: 2), 2 | assert
 

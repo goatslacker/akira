@@ -137,7 +137,7 @@ parser = new Parser (->
 
     Declaration: [
       o 'Identifier ( Parameters ) LAMBDA Body', -> new Declaration $1, $3, $6
-      o '\\ Parameters LAMBDA Body', -> new Declaration null, $2, $4
+      o '= Parameters LAMBDA Body', -> new Declaration null, $2, $4
 
       o 'LAMBDA Body', -> new Call (new Declaration null, null, $2), null
     ]
@@ -186,7 +186,12 @@ parser = new Parser (->
     ]
 
     Access: [
-      o 'Identifier : : Literal', -> new Access $1, $4
+      o 'Identifier Accessor', -> new Access $1, $2
+      o 'Access Accessor', -> new Access $1, $2
+    ]
+
+    Accessor: [
+      o '\\ Literal', -> $2
     ]
 
     Arg: [

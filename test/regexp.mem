@@ -1,4 +1,4 @@
 rx = /[A-Z]/
 
-h = rx::exec: 'HELLO WORLD'
+h = rx\exec: 'HELLO WORLD'
 eq: 'H', (at: h, 1) | assert
