@@ -186,7 +186,11 @@ bnf = {
   ]
 
   Access = [
-    o: 'Identifier : : Literal', (\-> construct Access: $1, $4);
+    o: 'Identifier Accessor', (\-> construct Access: $1, $2);
+  ]
+
+  Accessor = [
+    o: ': : Literal', (\-> $3);
   ]
 
   Arg = [
