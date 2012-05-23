@@ -1,15 +1,15 @@
 rx = {
-  token = /^([a-zA-Z_$][0-9a-zA-Z_\-$]*)/
-  number = /^((\d+\.)?\d+)+/
-  string = /^'(.*?)'/
-  lambda = /^->/
-  operation = /^(<=|>=|>|<|==|!=|\|\||\&\&|≤|≥)+/
-  newline = /^\n/
-  regex = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
-  javascriptStart = /^<%/
-  javascriptEnd = /^%>/
-  comments = /^#/
-  whitespace = /^ /
+  IDENTIFIER = /^([a-zA-Z_$][0-9a-zA-Z_\-$]*)/
+  NUMBER = /^((\d+\.)?\d+)+/
+  STRING = /^'(.*?)'/
+  LAMBDA = /^->/
+  OPERATION = /^(<=|>=|>|<|==|!=|\|\||\&\&|≤|≥)+/
+  NEWLINE = /^\n/
+  REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
+#  javascriptStart = /^<%/
+#  javascriptEnd = /^%>/
+  COMMENTS = /^#/
+  WHITESPACE = /^ /
 }
 
 KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export']
@@ -49,39 +49,53 @@ UTILS = [
 
 
 filter-tokens-fn(a) -> partial: filter, (= x -> call: (get: rx, x), 'test', a)
-to-upper(x) -> x.toUpperCase: ()
-to-lower(x) -> x.toLowerCase: ()
 
 get-type(a) -> (
   filter-tokens = filter-tokens-fn: a
-  rx | Object.keys | filter-tokens | pop | to-upper
+  rx | Object.keys | filter-tokens | pop
 )
 
-parse-token(t, chunk) -> (
-  key = t | to-lower
-  exec = call: (get: rx, key), 'exec', chunk
-  [exec.2, t]
+extract(key, chunk) -> call: (get: rx, key), 'exec', chunk
+
+parse-alphanumeric(t, chunk) -> (
+  exec = extract: t, chunk
+  exec.2
+)
+
+parse-identifier(t, chunk) -> (
+  exec = extract: t, chunk
+  item = exec.2
+# check if it's a keyword, logic, bool, or utils here
+  item
 )
 
 get-token(chunk, t) =
-  'NUMBER' -> parse-token: t, chunk
+  'IDENTIFIER'  -> parse-identifier: t, chunk
+  'NUMBER' -> parse-alphanumeric: t, chunk
+  'STRING' -> parse-alphanumeric: t, chunk
+  'LAMBDA' -> '->'
 
-process-chunk(tokens, code, i) -> (
-  token = get-token: code, (get-type: code)
-  tokens.push: token
-  tokens.concat: (return-tokens: code, i + 1)
+process-chunk(code, line) -> (
+  type = get-type: code
+  token = get-token: code, type
+  [token, type, line]
 )
 
-return-tokens(code, i) -> (
+return-tokens(code, i, line) -> (
   tokens = []
   len = length: code
   chunk = code.substr: i, len
 
   if chunk
-    then process-chunk: tokens, chunk, i
+    then (
+      token = process-chunk: chunk, line
+      token-length = length: token.1
+      tokens.push: token
+      tokens.concat: (return-tokens: code, i + token-length, 0)
+    )
     else tokens
 )
 
-tokenize(code) -> return-tokens: (code.trim: ()), 0
+tokenize(code) -> return-tokens: (code.trim: ()), 0, 0
 
 print: (tokenize: '2')
