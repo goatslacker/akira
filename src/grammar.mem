@@ -119,6 +119,7 @@ bnf = {
   Piped = [
     o: 'Identifier';
     o: 'SExpression';
+    o: 'Access';
     o: 'Utils';
   ]
 

@@ -1,0 +1,21 @@
+rx = {
+  token = /^([a-zA-Z_$][0-9a-zA-Z_\-$]*)/
+  number = /^((\d+\.)?\d+)+/
+  string = /^'(.*?)'/
+  lambda = /^->/
+  operation = /^(<=|>=|>|<|==|!=|\|\||\&\&|≤|≥)+/
+  newline = /^\n/
+  regex = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
+  javascriptStart = /^<%/
+  javascriptEnd = /^%>/
+  comments = /^#/
+  whitespace = /^ /
+}
+
+filter-tokens-fn(a) -> partial: filter, (= x -> call: (get: rx, x), 'test', a)
+to-upper(x) -> x.toUpperCase: null
+
+type(a) -> (
+  filter-tokens = filter-tokens-fn: a
+  rx | Object.keys | filter-tokens | pop | to-upper
+)
