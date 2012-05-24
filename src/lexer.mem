@@ -12,40 +12,42 @@ rx = {
   WHITESPACE = /^ /
 }
 
-KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export']
-COMPARE = ['==', '!=', '>', '>=', '<', '<=', 'is', 'not']
-LOGIC = ['and', 'or', '&&', '||']
-BOOLEAN = ['true', 'false']
-UTILS = [
-  'arrEq'
-  'assert'
-  'at'
-  'call'
-  'consts'
-  'div'
-  'eq'
-  'filter'
-  'flip'
-  'foldl'
-  'foldr'
-  'get'
-  'head'
-  'init'
-  'last'
-  'length'
-  'map'
-  'mod'
-  'neq'
-  'partial'
-  'pop'
-  'print'
-  'prod'
-  'range'
-  'sub'
-  'sum'
-  'square'
-  'tail'
-]
+identifiers = {
+  KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export']
+  COMPARE = ['==', '!=', '>', '>=', '<', '<=', 'is', 'not']
+  LOGIC = ['and', 'or', '&&', '||']
+  BOOLEAN = ['true', 'false']
+  UTILS = [
+    'arrEq'
+    'assert'
+    'at'
+    'call'
+    'consts'
+    'div'
+    'eq'
+    'filter'
+    'flip'
+    'foldl'
+    'foldr'
+    'get'
+    'head'
+    'init'
+    'last'
+    'length'
+    'map'
+    'mod'
+    'neq'
+    'partial'
+    'pop'
+    'print'
+    'prod'
+    'range'
+    'sub'
+    'sum'
+    'square'
+    'tail'
+  ]
+}
 
 
 filter-tokens-fn(a) -> partial: filter, (= x -> call: (get: rx, x), 'test', a)
@@ -62,23 +64,33 @@ parse-alphanumeric(t, chunk) -> (
   exec.2
 )
 
+filter-identifiers-fn(iden) -> partial: filter, (= x -> neq: 0 - 1, (call: (get: identifiers, x), 'indexOf', iden))
+
 parse-identifier(t, chunk) -> (
-  exec = extract: t, chunk
-  item = exec.2
-# check if it's a keyword, logic, bool, or utils here
-  item
+  item = extract: t, chunk
+  filter-identifiers = filter-identifiers-fn: item.2
+  token = identifiers | Object.keys | filter-identifiers | pop
+  if token
+    then [item.2, token]
+    else [item.2, t]
 )
 
 get-token(chunk, t) =
-  'IDENTIFIER'  -> parse-identifier: t, chunk
+  'IDENTIFIER' -> parse-identifier: t, chunk
   'NUMBER' -> parse-alphanumeric: t, chunk
   'STRING' -> parse-alphanumeric: t, chunk
   'LAMBDA' -> '->'
+  'WHITESPACE' -> ' '
 
 process-chunk(code, line) -> (
   type = get-type: code
   token = get-token: code, type
-  [token, type, line]
+  if Array.isArray: token
+    then (
+      token.push: line
+      token
+    )
+    else [token, type, line]
 )
 
 return-tokens(code, i, line) -> (
@@ -96,6 +108,10 @@ return-tokens(code, i, line) -> (
     else tokens
 )
 
-tokenize(code) -> return-tokens: (code.trim: ()), 0, 0
+tokenize(code) -> (
+  ignore = ['COMMENTS', 'WHITESPACE']
+  tokens = return-tokens: (code.trim: ()), 0, 0
+  filter: (= token -> eq: 0 - 1, (ignore.indexOf: token.2)), tokens
+)
 
 print: (tokenize: '2')
