@@ -47,7 +47,7 @@ function run(code) {
     vm.runInNewContext(code, new_context);
   } catch (e) {
     console.error(e.stack);
-    console.log(compiled);
+    console.log(code);
   }
 }
 
