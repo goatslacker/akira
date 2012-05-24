@@ -32,7 +32,7 @@ function compile(file) {
   var code = fs.readFileSync(path.join(process.env.PWD, file)).toString();
   var tokens = lexer.tokenize(code);
   var parsed = parser.parse(tokens);
-  var run = parsed.compile([context]);
+  var run = parsed.compile(context);
   var ast = { type: 'Program', body: parsed.getUtils().concat(run) };
 //    util.puts(util.inspect(ast, false, 30));
   var compiled = '(function () {\n' + escodegen.generate(ast) + '\n}.call(typeof module !== "undefined" ? module.exports : this))';
