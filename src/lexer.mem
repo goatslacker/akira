@@ -4,7 +4,7 @@ rx = {
   STRING = /^'(.*?)'/
   LAMBDA = /^->/
   OPERATION = /^(<=|>=|>|<|==|!=|\|\||\&\&|≤|≥)+/
-  NEWLINE = /^\n/
+  TERMINATOR = /^\n/
   REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
 #  javascriptStart = /^<%/
 #  javascriptEnd = /^%>/
@@ -81,6 +81,7 @@ get-token(chunk, t) =
   'STRING' -> parse-alphanumeric: t, chunk
   'LAMBDA' -> '->'
   'WHITESPACE' -> ' '
+  'TERMINATOR' -> ' '
 
 process-chunk(code, line) -> (
   type = get-type: code
@@ -93,6 +94,10 @@ process-chunk(code, line) -> (
     else [token, type, line]
 )
 
+get-length(i, len, type) =
+  'STRING' -> i + len + 2
+  otherwise -> i + len
+
 return-tokens(code, i, line) -> (
   tokens = []
   len = length: code
@@ -101,9 +106,8 @@ return-tokens(code, i, line) -> (
   if chunk
     then (
       token = process-chunk: chunk, line
-      token-length = length: token.1
       tokens.push: token
-      tokens.concat: (return-tokens: code, i + token-length, 0)
+      tokens.concat: (return-tokens: code, (get-length: i, (length: token.1), token.2), 0)
     )
     else tokens
 )
@@ -114,4 +118,4 @@ tokenize(code) -> (
   filter: (= token -> eq: 0 - 1, (ignore.indexOf: token.2)), tokens
 )
 
-print: (tokenize: '2')
+print: (tokenize: '"hello world"')
