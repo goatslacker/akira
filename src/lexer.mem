@@ -107,6 +107,10 @@ get-length(i, len, type) =
   'STRING' -> i + len + 2
   otherwise -> i + len
 
+incr-line(line, type) =
+  'TERMINATOR' -> line + 1
+  otherwise -> line
+
 return-tokens(code, i, line) -> (
   tokens = []
   len = length: code
@@ -116,15 +120,15 @@ return-tokens(code, i, line) -> (
     then (
       token = process-chunk: chunk, line
       tokens.push: token
-      tokens.concat: (return-tokens: code, (get-length: i, (length: (token.2.toString: ())), token.1), 0)
+      tokens.concat: (return-tokens: code, (get-length: i, (length: (token.2.toString: ())), token.1), (incr-line: line, token.1))
     )
     else tokens
 )
 
 tokenize(code) -> (
   ignore = ['COMMENTS', 'WHITESPACE']
-  tokens = return-tokens: (code.trim: ()), 0, 0
+  tokens = return-tokens: (code.trim: ()), 0, 1
   filter: (= token -> eq: 0 - 1, (ignore.indexOf: token.1)), tokens
 )
 
-print: (tokenize: '2 + 1')
+print: (tokenize: '2 + 1\n3 + 4')
