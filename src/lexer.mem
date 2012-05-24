@@ -6,8 +6,6 @@ rx = {
   OPERATION = /^(<=|>=|>|<|==|!=|\|\||\&\&|≤|≥)+/
   TERMINATOR = /^\n/
   REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
-#  javascriptStart = /^<%/
-#  javascriptEnd = /^%>/
   COMMENTS = /^(#.*)/
   WHITESPACE = /^ /
 }
@@ -16,7 +14,7 @@ identifiers = {
   KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export']
   COMPARE = ['==', '!=', '>', '>=', '<', '<=', 'is', 'not']
   LOGIC = ['and', 'or', '&&', '||']
-  BOOLEAN = ['true', 'false']
+  BOOL = ['true', 'false']
   UTILS = [
     'arrEq'
     'assert'
@@ -66,13 +64,17 @@ parse-alphanumeric(t, chunk) -> (
 
 filter-identifiers-fn(iden) -> partial: filter, (= x -> neq: 0 - 1, (call: (get: identifiers, x), 'indexOf', iden))
 
+return-identifier(item, type) =
+  'KEYWORDS' -> [(item.toUpperCase: ()), item]
+  otherwise -> [type, item]
+
+
 parse-identifier(t, chunk) -> (
   item = extract: t, chunk
   filter-identifiers = filter-identifiers-fn: item.2
   token = identifiers | Object.keys | filter-identifiers | pop
-  if token
-    then [token, item.2]
-    else [t, item.2]
+
+  return-identifier: item.2, token || t
 )
 
 parse-regular-expressions(t, chunk) -> (
@@ -132,4 +134,4 @@ tokenize(code) -> (
   filter: (= token -> eq: 0 - 1, (ignore.indexOf: token.1)), tokens
 )
 
-print: (tokenize: '# what\n3 + 4')
+export tokenize

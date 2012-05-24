@@ -35,7 +35,7 @@ function compile(file) {
   var run = parsed.compile([context]);
   var ast = { type: 'Program', body: parsed.getUtils().concat(run) };
 //    util.puts(util.inspect(ast, false, 30));
-  var compiled = '(function () {\n' + escodegen.generate(ast) + '\n}.call(this))';
+  var compiled = '(function () {\n' + escodegen.generate(ast) + '\n}.call(typeof module !== "undefined" ? module.exports : this))';
 //  util.puts(compiled);
   return compiled
 }
