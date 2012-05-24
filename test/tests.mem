@@ -2,6 +2,7 @@
 
 # import test
 import 'test/fact.mem'
+import 'test/assignments.mem'
 import 'test/patterns.mem'
 import 'test/tuples.mem'
 import 'test/list.mem'
