@@ -90,6 +90,7 @@ get-token(chunk, t) =
   'REGEX' -> parse-regular-expressions: t, chunk
   'WHITESPACE' -> ' '
   'TERMINATOR' -> ' '
+  otherwise -> [chunk.1, chunk.1]
 
 process-chunk(code, line) -> (
   type = get-type: code
@@ -123,7 +124,7 @@ return-tokens(code, i, line) -> (
 tokenize(code) -> (
   ignore = ['COMMENTS', 'WHITESPACE']
   tokens = return-tokens: (code.trim: ()), 0, 0
-  filter: (= token -> eq: 0 - 1, (ignore.indexOf: token.2)), tokens
+  filter: (= token -> eq: 0 - 1, (ignore.indexOf: token.1)), tokens
 )
 
-print: (tokenize: '/[a-z]/g')
+print: (tokenize: '2 + 1')
