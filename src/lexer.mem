@@ -71,8 +71,14 @@ parse-identifier(t, chunk) -> (
   filter-identifiers = filter-identifiers-fn: item.2
   token = identifiers | Object.keys | filter-identifiers | pop
   if token
-    then [item.2, token]
-    else [item.2, t]
+    then [token, item.2]
+    else [t, item.2]
+)
+
+parse-regular-expressions(t, chunk) -> (
+  item = extract: t, chunk
+  regexp = construct RegExp: item.3, item.4
+  ['REGEXP', regexp]
 )
 
 get-token(chunk, t) =
@@ -81,6 +87,7 @@ get-token(chunk, t) =
   'STRING' -> parse-alphanumeric: t, chunk
   'OPERATION' -> parse-identifier: t, chunk
   'LAMBDA' -> '->'
+  'REGEX' -> parse-regular-expressions: t, chunk
   'WHITESPACE' -> ' '
   'TERMINATOR' -> ' '
 
@@ -92,7 +99,7 @@ process-chunk(code, line) -> (
       token.push: line
       token
     )
-    else [token, type, line]
+    else [type, token, line]
 )
 
 get-length(i, len, type) =
@@ -108,7 +115,7 @@ return-tokens(code, i, line) -> (
     then (
       token = process-chunk: chunk, line
       tokens.push: token
-      tokens.concat: (return-tokens: code, (get-length: i, (length: token.1), token.2), 0)
+      tokens.concat: (return-tokens: code, (get-length: i, (length: (token.2.toString: ())), token.1), 0)
     )
     else tokens
 )
@@ -119,4 +126,4 @@ tokenize(code) -> (
   filter: (= token -> eq: 0 - 1, (ignore.indexOf: token.2)), tokens
 )
 
-print: (tokenize: '2 is 1')
+print: (tokenize: '/[a-z]/g')
