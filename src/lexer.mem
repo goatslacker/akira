@@ -8,7 +8,7 @@ rx = {
   REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
 #  javascriptStart = /^<%/
 #  javascriptEnd = /^%>/
-  COMMENTS = /^#/
+  COMMENTS = /^(#.*)/
   WHITESPACE = /^ /
 }
 
@@ -88,6 +88,7 @@ get-token(chunk, t) =
   'OPERATION' -> parse-identifier: t, chunk
   'LAMBDA' -> '->'
   'REGEX' -> parse-regular-expressions: t, chunk
+  'COMMENTS' -> parse-alphanumeric: t, chunk
   'WHITESPACE' -> ' '
   'TERMINATOR' -> ' '
   otherwise -> [chunk.1, chunk.1]
@@ -131,4 +132,4 @@ tokenize(code) -> (
   filter: (= token -> eq: 0 - 1, (ignore.indexOf: token.1)), tokens
 )
 
-print: (tokenize: '2 + 1\n3 + 4')
+print: (tokenize: '# what\n3 + 4')
