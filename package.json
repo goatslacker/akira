@@ -5,7 +5,7 @@
   "description": "project rini",
 
   "scripts": {
-    "start": "bin/memory compile src/grammar.mem > lib/grammar.js && node lib/grammar.js",
+    "start": "bin/memory compile src/lexer.mem > lexer.js && mv lexer.js lib/ && bin/memory compile src/grammar.mem > lib/grammar.js && node lib/grammar.js",
     "test": "bin/memory test"
   },
 
