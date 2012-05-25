@@ -28,27 +28,31 @@ parser.lexer = {
 
 parser.yy = require('./lib/nodes');
 
-function compile(file) {
-  var code = fs.readFileSync(path.join(process.env.PWD, file)).toString();
+function compile(code) {
   var tokens = lexer.tokenize(code);
   var parsed = parser.parse(tokens);
-  var run = parsed.compile(context);
+  var run = parsed.compile(Object.create(context));
   var ast = { type: 'Program', body: parsed.getUtils().concat(run) };
-//    util.puts(util.inspect(ast, false, 30));
   var compiled = '(function () {\n' + escodegen.generate(ast) + '\n}.call(typeof module !== "undefined" ? module.exports : this))';
-//  util.puts(compiled);
   return compiled
+}
+
+function file(filepath) {
+  var code = fs.readFileSync(path.join(process.env.PWD, filepath)).toString();
+  return compile(code);
 }
 
 function run(code) {
   var new_context = Object.create(context);
+  var result = null;
   new_context.console = console;
   try {
-    vm.runInNewContext(code, new_context);
+    result = vm.runInNewContext(code, new_context);
   } catch (e) {
-    console.error(e.stack);
-    console.log(code);
+    util.error(e.stack);
+    util.debug(code);
   }
+  return result;
 }
 
 /** main **/
@@ -56,9 +60,9 @@ function memory(args) {
   var action = args[0];
   switch (action) {
     case 'test':
-      return run(compile('test/tests.mem'));
+      return run(file('test/tests.mem'));
     case 'compile':
-      return console.log(compile(args[1]));
+      return process.stdout.write(file(args[1]) + '\n');
   }
 }
 
