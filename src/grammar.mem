@@ -10,8 +10,7 @@ getMatch(action) -> (
 addYY(str) -> str.replace: /new /g, 'new yy.'
 
 o(pattern, action) -> (
-  patternStringRegExp = /\s{2,}/g
-  patternString = pattern.replace: patternStringRegExp, ' '
+  patternString = pattern.replace: /\s{2,}/g, ' '
   if action == null
     then [patternString, '$$ = $1']
     else (
