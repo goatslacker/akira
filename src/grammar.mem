@@ -73,6 +73,7 @@ bnf = {
     o: 'Pipeline';
     o: 'Declaration';
     o: 'PatternMatching';
+    o: 'Exceptions';
     o: 'JAVASCRIPT', (=-> construct JavaScript: $1);
     o: 'Construct';
   ]
@@ -217,6 +218,10 @@ bnf = {
     o: '', (=-> null);
     o: 'Param', (=-> construct Arguments: $1);
     o: 'Parameters , Param', (=-> construct Arguments: $1, $3);
+  ]
+
+  Exceptions = [
+    o: 'TRY Body CATCH Body', (=-> construct Exception: $2, $4);
   ]
 
   If = [

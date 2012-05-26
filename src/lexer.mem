@@ -11,7 +11,7 @@ rx = {
 }
 
 identifiers = {
-  KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export']
+  KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch']
   COMPARE = ['==', '!=', '>', '>=', '<', '<=', 'is', 'not']
   LOGIC = ['and', 'or', '&&', '||']
   BOOL = ['true', 'false']
