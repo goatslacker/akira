@@ -12,3 +12,5 @@ b = 2
 )
 
 eq: 3, a + b | assert
+
+c = if true then 1 else 2

@@ -33,6 +33,7 @@ function compile(code) {
   var parsed = parser.parse(tokens);
   var run = parsed.compile(Object.create(context));
   var ast = { type: 'Program', body: parsed.getUtils().concat(run) };
+//  util.debug(util.inspect(ast, false, 30));
   var compiled = '(function () {\n' + escodegen.generate(ast) + '\n}.call(typeof module !== "undefined" ? module.exports : this))';
   return compiled
 }
@@ -63,6 +64,8 @@ function memory(args) {
       return run(file('test/tests.mem'));
     case 'compile':
       return process.stdout.write(file(args[1]) + '\n');
+    case 'run':
+      return run(file(args[1]));
   }
 }
 
