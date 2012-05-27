@@ -6,3 +6,5 @@ foo(x) -> (
       if true then true else false
     )
 )
+
+if 1 then true else if 2 then true else false
