@@ -96,7 +96,7 @@ bnf = {
   Literal = [
     o: 'Identifier';
     o: 'AlphaNumeric';
-    o: 'BOOL', (=-> construct Literal: (Boolean: $1));
+    o: 'BOOL', (=-> construct Literal: ($1 == 'true'));
     o: 'REGEXP', (=-> construct Literal: $1);
   ]
 
@@ -195,7 +195,8 @@ bnf = {
   ]
 
   Accessor = [
-    o: '. Literal', (=-> $2);
+    o: '. Identifier', (=-> $2);
+    o: '. AlphaNumeric', (=-> $2);
   ]
 
   Arg = [
