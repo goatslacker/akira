@@ -1,0 +1,8 @@
+foo(x) -> (
+  if true
+    then (
+      if true then true else (false)
+    ) else (
+      if true then true else false
+    )
+)
