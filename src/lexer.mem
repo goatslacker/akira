@@ -131,8 +131,7 @@ return-tokens(code, i, line) -> (
 
 tokenize(code) -> (
   ignore = ['COMMENTS', 'WHITESPACE']
-  tokens = return-tokens: (code.trim: ()), 0, 1
-  filter: (= token -> eq: 0 - 1, (ignore.indexOf: token.1)), tokens
+  filter: (= token -> eq: 0 - 1, (ignore.indexOf: token.1)), (return-tokens: code, 0, 1)
 )
 
 export tokenize
