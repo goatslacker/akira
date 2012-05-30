@@ -1,5 +1,7 @@
 a = 1
 b = 2
+assert: a == 1
+assert: b == 2
 -> (
   # local a, no shadowing
   a = 3
@@ -15,3 +17,7 @@ eq: 3, a + b | assert
 
 c = if true then 1 else 2
 d = if 1 then true else if 2 then true else false
+e = f = g = 1
+assert: e == f
+assert: f == g
+assert: g == 1
