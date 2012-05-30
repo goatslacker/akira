@@ -13,3 +13,12 @@ gtTen(n) =
 
 eq: true, (gtTen: 11) | assert
 eq: false, (gtTen: 2) | assert
+
+starts-with(noun, prefix) -> prefix == noun.1 + noun.2
+
+spanish-gender-of-noun(noun) =
+  starts-with: noun, 'el'; -> 'male'
+  starts-with: noun, 'la'; -> 'female'
+
+eq: 'female', (spanish-gender-of-noun: 'la casa') | assert
+eq: 'male', (spanish-gender-of-noun: 'el carro') | assert
