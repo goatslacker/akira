@@ -14,3 +14,4 @@ b = 2
 eq: 3, a + b | assert
 
 c = if true then 1 else 2
+d = if 1 then true else if 2 then true else false
