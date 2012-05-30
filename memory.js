@@ -29,10 +29,11 @@ parser.lexer = {
 parser.yy = require('./lib/nodes');
 
 function compile(code) {
+  var self = Object.create(context);
   var tokens = lexer.tokenize(code);
   var parsed = parser.parse(tokens);
-  var run = parsed.compile(Object.create(context));
-  var ast = { type: 'Program', body: parsed.getUtils().concat(run) };
+  var run = parsed.compile(self);
+  var ast = { type: 'Program', body: parsed.getUtils().concat(parsed.addVars(self).concat(run)) };
 //  util.debug(util.inspect(ast, false, 30));
   var compiled = '(function () {\n' + escodegen.generate(ast) + '\n}.call(typeof module !== "undefined" ? module.exports : this))';
   return compiled
