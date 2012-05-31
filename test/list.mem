@@ -26,7 +26,7 @@ array | (=list -> map: square, list) | (=a -> (
   mapper = partial: map, square
   assertArray(a) -> arrEq: a, [1, 4, 9] | assert
 
-  array => map: square, @ => assertArray
+  array |> map: square, @ |> assertArray
   array | mapper | assertArray
 )
 
