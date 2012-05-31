@@ -3,6 +3,7 @@ rx = {
   NUMBER = /^((\d+\.)?\d+)+/
   STRING = /^'(.*?)'/
   LAMBDA = /^->/
+  PIPE = /^=>/
   OPERATION = /^(<=|>=|>|<|==|!=|\|\||\&\&|≤|≥)+/
   TERMINATOR = /^\n/
   REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
@@ -90,6 +91,7 @@ get-token(chunk, t) =
   'STRING' -> parse-alphanumeric: t, chunk
   'OPERATION' -> parse-identifier: t, chunk
   'LAMBDA' -> '->'
+  'PIPE' -> '=>'
   'REGEX' -> parse-regular-expressions: t, chunk
   'COMMENTS' -> parse-alphanumeric: t, chunk
   'WHITESPACE' -> ' '

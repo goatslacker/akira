@@ -78,7 +78,7 @@ bnf = {
     o: 'Assignment';
     o: 'Invocation';
     o: 'Pipeline';
-    o: 'PipelinePartial';
+    o: 'FatPipeline';
     o: 'Construct';
   ]
 
@@ -135,9 +135,15 @@ bnf = {
     o: 'Pipeline | Piped', (=-> construct Call: $3, $1);
   ]
 
-  PipelinePartial = [
-    o: 'Invocation | Invocation', (=-> construct Pipeline: $1, $3);
-    o: 'PipelinePartial | Invocation', (=-> construct Pipeline: $1, $3);
+  FatPipe = [
+    o: 'Piped';
+    o: 'Invocation';
+  ]
+
+  FatPipeline = [
+    o: 'Value PIPE FatPipe', (=-> construct Pipeline: $1, $3);
+    o: 'Invocation PIPE FatPipe', (=-> construct Pipeline: $1, $3);
+    o: 'FatPipeline PIPE FatPipe', (=-> construct Pipeline: $1, $3);
   ]
 
   Invocation = [
