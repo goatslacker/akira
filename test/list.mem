@@ -30,4 +30,6 @@ array | (\list -> map: square, list) | (\a -> (
   array | mapper | assertArray
 )
 
+array.map: square |> arrEq: @, [1, 4, 9]
+
 assert: array.2 == 2

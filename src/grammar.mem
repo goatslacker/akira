@@ -214,6 +214,7 @@ bnf = {
   Accessor = [
     o: '. Identifier', (\-> $2);
     o: '. AlphaNumeric', (\-> $2);
+    o: '. UTILS', (\-> $2);
   ]
 
   Arg = [
