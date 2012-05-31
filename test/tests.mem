@@ -22,7 +22,7 @@ eq: 4, (prod: 2, 2) | assert
 
 -> (
   b = 'hello-world'
-  c = b.replace: /-([a-z])/g, (=i -> i.2.toUpperCase: null)
+  c = b.replace: /-([a-z])/g, (\i -> i.2.toUpperCase: null)
   assert: c == 'helloWorld'
 )
 
