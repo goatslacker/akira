@@ -49,14 +49,14 @@ identifiers = {
 }
 
 
-filter-tokens-fn(a) -> partial: filter, (= x -> call: (get: rx, x), 'test', a)
+filter-tokens-fn(a) -> partial: filter, (= x -> get: rx, x | call: @, 'test', a)
 
 get-type(a) -> (
   filter-tokens = filter-tokens-fn: a
   rx | Object.keys | filter-tokens | pop
 )
 
-extract(key, chunk) -> call: (get: rx, key), 'exec', chunk
+extract(key, chunk) -> get: rx, key | call: @, 'exec', chunk
 
 parse-alphanumeric(t, chunk) -> (
   exec = extract: t, chunk
@@ -131,7 +131,7 @@ return-tokens(code, i, line) -> (
 
 tokenize(code) -> (
   ignore = ['COMMENTS', 'WHITESPACE']
-  filter: (= token -> eq: 0 - 1, (ignore.indexOf: token.1)), (return-tokens: code, 0, 1)
+  return-tokens: code, 0, 1 | filter: (= token -> ignore.indexOf: token.1 | eq: 0 - 1, @), @
 )
 
 export tokenize
