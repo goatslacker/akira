@@ -63,7 +63,7 @@ parse-alphanumeric(t, chunk) -> (
   exec.2
 )
 
-filter-identifiers-fn(iden) -> partial: filter, (= x -> neq: 0 - 1, (call: (get: identifiers, x), 'indexOf', iden))
+filter-identifiers-fn(iden) -> partial: filter, (= x -> get: identifiers, x | call: @, 'indexOf', iden | neq: 0 - 1, @)
 
 return-identifier(item, type) =
   'KEYWORDS' -> [(item.toUpperCase: ()), item]
