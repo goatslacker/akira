@@ -66,7 +66,7 @@ parse-alphanumeric(t, chunk) -> (
 
 filter-identifiers-fn(iden) -> partial: filter, (= x -> get: identifiers, x |> call: @, 'indexOf', iden |> neq: 0 - 1, @)
 
-return-identifier(item, type) =
+return-identifier(item, type)
   'KEYWORDS' -> [(item.toUpperCase: ()), item]
   otherwise -> [type, item]
 
@@ -85,7 +85,7 @@ parse-regular-expressions(t, chunk) -> (
   ['REGEXP', regexp]
 )
 
-get-token(chunk, t) =
+get-token(chunk, t)
   'IDENTIFIER' -> parse-identifier: t, chunk
   'NUMBER' -> parse-alphanumeric: t, chunk
   'STRING' -> parse-alphanumeric: t, chunk
@@ -109,11 +109,11 @@ process-chunk(code, line) -> (
     else [type, token, line]
 )
 
-get-length(i, len, type) =
+get-length(i, len, type)
   'STRING' -> i + len + 2
   otherwise -> i + len
 
-incr-line(line, type) =
+incr-line(line, type)
   'TERMINATOR' -> line + 1
   otherwise -> line
 

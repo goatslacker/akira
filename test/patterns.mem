@@ -1,4 +1,4 @@
-numbers(n) =
+numbers(n)
   'one' -> 1
   'two' -> 2
   'three' -> 3
@@ -7,7 +7,7 @@ numbers(n) =
 eq: 4, (numbers: 'four') | assert
 eq: 1, (numbers: 'one') | assert
 
-gtTen(n) =
+gtTen(n)
   n < 10 -> true
   n > 10 -> false
 
@@ -16,7 +16,7 @@ eq: false, (gtTen: 2) | assert
 
 starts-with(noun, prefix) -> prefix == noun.1 + noun.2
 
-spanish-gender-of-noun(noun) =
+spanish-gender-of-noun(noun)
   starts-with: noun, 'el'; -> 'male'
   starts-with: noun, 'la'; -> 'female'
 

@@ -1,6 +1,6 @@
 #fact(n) -> if n == 1 then n else n * `fact: n - 1`
 
-fact(n) =
+fact(n)
   1 -> 1
   n -> n * fact: n - 1;
 
