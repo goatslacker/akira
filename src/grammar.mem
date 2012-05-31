@@ -60,7 +60,8 @@ bnf = {
   ]
 
   SExpression = [
-    o: '( Expression )', (=-> $2);
+    o: '( Assignable )', (=-> $2);
+    o: '( Declaration )', (=-> $2);
   ]
 
   Expression = [
