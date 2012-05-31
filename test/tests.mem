@@ -1,16 +1,17 @@
 # Runtime tests for Memory
 
 # import test
-import 'test/fact.mem'
 import 'test/assignments.mem'
-import 'test/patterns.mem'
-import 'test/tuples.mem'
-import 'test/list.mem'
-import 'test/reserved.mem'
-import 'test/regexp.mem'
-import 'test/invocations.mem'
 import 'test/exceptions.mem'
+import 'test/fact.mem'
 import 'test/if.mem'
+import 'test/invocations.mem'
+import 'test/list.mem'
+import 'test/patterns.mem'
+import 'test/regexp.mem'
+import 'test/reserved.mem'
+import 'test/strings.mem'
+import 'test/tuples.mem'
 
 # export fact test
 eq: 24, (fact: 4) | assert

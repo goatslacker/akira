@@ -206,6 +206,7 @@ bnf = {
 
   Access = [
     o: 'Identifier Accessor', (=-> construct Access: $1, $2);
+    o: 'ExplicitInvocation Accessor', (=-> construct Access: $1, $2);
     o: 'Access Accessor', (=-> construct Access: $1, $2);
   ]
 
