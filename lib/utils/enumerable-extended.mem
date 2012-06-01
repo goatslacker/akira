@@ -1,0 +1,19 @@
+average(list) -> foldl: sum, list |> div: @, (length: list)
+compact(list) -> filter: (\x -> x | neq | neq), list
+count(fn, list) -> filter: fn, list | length
+intersect(list1, list2) -> filter: (\x -> list2.indexOf: x |> neq: 0 - 1, @), list1
+max(list) -> foldl: (\a, b -> if a > b then a else b), list
+min(list) -> foldl: (\a, b -> if a < b then a else b), list
+none(fn, list) -> filter: fn, list |> length: @ |> eq: @, 0
+randomize(list) -> sort: (\-> Math.random: () |> gt: @, 0.5), list
+unique(list) -> filter: (\x, i -> list.indexOf: x |> eq: i, @), list
+
+export average
+export compact
+export count
+export intersect
+export max
+export min
+export none
+export randomize
+export unique
