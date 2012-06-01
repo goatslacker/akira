@@ -1,0 +1,6 @@
+export my-id(n) -> n
+
+my-a = 2
+export my-a
+
+export my-k = 3

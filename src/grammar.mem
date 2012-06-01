@@ -111,6 +111,8 @@ bnf = {
 
   Modules = [
     o: 'EXPORT Identifier', (\-> construct Export: $2);
+    o: 'EXPORT Declaration', (\-> construct Export: $2);
+    o: 'EXPORT Assignment', (\-> construct Export: $2);
     o: 'IMPORT STRING', (\-> construct Import: $2);
   ]
 

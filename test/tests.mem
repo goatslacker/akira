@@ -13,6 +13,11 @@ import 'test/reserved.mem'
 import 'test/strings.mem'
 import 'test/tuples.mem'
 import 'test/utils.mem'
+import 'test/exporting.mem'
+
+eq: my-k, 3 | assert
+eq: my-a, 2 | assert
+my-id: 5 |> eq: @, 5 |> assert
 
 # export fact test
 eq: 24, (fact: 4) | assert
