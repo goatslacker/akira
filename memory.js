@@ -33,7 +33,7 @@ function compile(code) {
   var tokens = lexer.tokenize(code);
   var parsed = parser.parse(tokens);
   var run = parsed.compile(self);
-  var ast = { type: 'Program', body: parsed.getUtils().concat(parsed.addVars(self).concat(run)) };
+  var ast = { type: 'Program', body: parsed.getUtils(self).concat(parsed.addVars(self).concat(run)) };
 //  util.debug(util.inspect(ast, false, 30));
   var compiled = '(function () {\n' + escodegen.generate(ast) + '\n}.call(typeof module !== "undefined" ? module.exports : this))';
   return compiled
@@ -52,7 +52,7 @@ function run(code) {
     result = vm.runInNewContext(code, new_context);
   } catch (e) {
     util.error(e.stack);
-    util.debug(code);
+    util.puts(code);
   }
   return result;
 }
