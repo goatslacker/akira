@@ -195,6 +195,7 @@ bnf = {
   ]
 
   Tuples = [
+    o: '{ }', (\-> construct Tuple: ());
     o: '{ OptTerminator TupleItems OptTerminator }', (\-> construct Tuple: $3);
   ]
 
