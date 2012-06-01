@@ -47,11 +47,7 @@ bnf = {
   ]
 
   Identifier = [
-    o: 'IDENTIFIER', (\i -> $1.replace: /-([a-z])/g, (\i -> i.2.toUpperCase: ()));
-  ]
-
-  Utils = [
-    o: 'UTILS', (\-> construct Utils: $1);
+    o: 'IDENTIFIER', (\i -> construct Utils: $1);
   ]
 
   Body = [
@@ -90,7 +86,6 @@ bnf = {
     o: 'ExplicitInvocation';
     o: 'Operation';
     o: 'Access';
-    o: 'Utils';
   ]
 
   Values = [
@@ -127,7 +122,6 @@ bnf = {
     o: 'Identifier';
     o: 'SExpression';
     o: 'Access';
-    o: 'Utils';
   ]
 
   Pipeline = [
@@ -149,7 +143,6 @@ bnf = {
 
   Invocation = [
     o: 'Identifier : Arguments', (\-> construct Call: $1, $3);
-    o: 'Utils : Arguments', (\-> construct Call: $1, $3);
     o: 'Access : Arguments', (\-> construct Call: $1, $3);
   ]
 
@@ -214,7 +207,6 @@ bnf = {
   Accessor = [
     o: '. Identifier', (\-> $2);
     o: '. AlphaNumeric', (\-> $2);
-    o: '. UTILS', (\-> $2);
   ]
 
   Arg = [

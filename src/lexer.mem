@@ -16,37 +16,6 @@ identifiers = {
   COMPARE = ['==', '!=', '>', '>=', '<', '<=', 'is', 'not']
   LOGIC = ['and', 'or', '&&', '||']
   BOOL = ['true', 'false']
-  UTILS = [
-    'arrEq'
-    'assert'
-    'at'
-    'call'
-    'consts'
-    'div'
-    'eq'
-    'filter'
-    'flip'
-    'foldl'
-    'foldr'
-    'get'
-    'head'
-    'init'
-    'last'
-    'length'
-    'map'
-    'mod'
-    'neq'
-    'partial'
-    'pop'
-    'print'
-    'prod'
-    'raise'
-    'range'
-    'sub'
-    'sum'
-    'square'
-    'tail'
-  ]
 }
 
 
