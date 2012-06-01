@@ -47,7 +47,7 @@ bnf = {
   ]
 
   Identifier = [
-    o: 'IDENTIFIER', (\i -> construct Utils: $1);
+    o: 'IDENTIFIER', (\-> construct Identifier: $1);
   ]
 
   Body = [
