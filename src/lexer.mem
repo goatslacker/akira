@@ -4,7 +4,7 @@ rx = {
   STRING = /^'(.*?)'/
   LAMBDA = /^->/
   PIPE = /^\|>/
-  OPERATION = /^(<=|>=|>|<|==|!=|\|\||\&\&|≤|≥)+/
+  OPERATION = /^(<=|>=|>|<|(!|=)==?|\|\||\&\&)+/
   TERMINATOR = /^\n/
   REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
   COMMENTS = /^(#.*)/
@@ -13,7 +13,7 @@ rx = {
 
 identifiers = {
   KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch']
-  COMPARE = ['==', '!=', '>', '>=', '<', '<=', 'is', 'not']
+  COMPARE = ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt', 'not']
   LOGIC = ['and', 'or', '&&', '||']
   BOOL = ['true', 'false']
 }
