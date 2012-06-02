@@ -5,3 +5,17 @@ hi = str.split: '';.reduce: (\a, b -> a + b)
 assert: hi == str
 
 capitalize: str |> eq: @, 'Hello' |> assert
+
+camelize: 'hello-world' |> eq: @, 'helloWorld' |> assert
+camelize: 'hello_world' |> eq: @, 'helloWorld' |> assert
+camelize: 'hello_world-i_am_Memory' |> eq: @, 'helloWorldIAmMemory' |> assert
+
+uppercase: str |> eq: @, 'HELLO' |> assert
+
+chars: uppercase, str |> join: '', @ |> eq: @, 'HELLO' |> assert
+
+compact: '      foo bar ' |> eq: @, 'foobar' |> assert
+
+#pad: 2, str |> eq: @, '  hello  ' |> assert
+
+repeat: 3, str |> eq: @, 'hellohellohello' |> assert
