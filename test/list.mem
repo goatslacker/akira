@@ -1,4 +1,4 @@
-import 'modules/enumerable.mem'
+import 'enumerable.mem'
 
 array = [
   1

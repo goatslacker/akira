@@ -1,4 +1,4 @@
-import 'modules/strings.mem'
+import 'strings.mem'
 
 str = 'hello'
 hi = str.split: '';.reduce: (\a, b -> a + b)
