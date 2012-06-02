@@ -1,3 +1,5 @@
+import 'modules/enumerable.mem'
+
 array = [
   1
   2
@@ -30,6 +32,8 @@ array | (\list -> map: square, list) | (\a -> (
   array | mapper | assertArray
 )
 
-array.map: square |> arrEq: @, [1, 4, 9]
+array.map: square |> arrEq: @, [1, 4, 9] |> assert
 
 assert: array.2 == 2
+
+average: array |> eq: 2, @ |> assert

@@ -1,3 +1,4 @@
+sum(a, b) -> a + b
 export average(list) -> foldl: sum, list |> div: @, (length: list)
 export compact(list) -> filter: (\x -> x | neq | neq), list
 export count(fn, list) -> filter: fn, list | length
