@@ -1,0 +1,88 @@
+fs = require: 'fs'
+path = require: 'path'
+util = require: 'util'
+vm = require: 'vm'
+escodegen = require: 'escodegen'
+
+lexer = require: './lib/lexer'
+Parser = require: './lib/parser'
+parser = Parser.parser
+context = {}
+
+set-parser-options(n) -> (
+  lex() -> (
+#    tag, _ref2
+#    _ref2 = this.tokens[this.pos++] || ['']
+#    tag = _ref2[0]
+#    this.yytext = _ref2[1]
+#    this.yylineno = _ref2[2] || 0
+#    return tag
+    'hai'
+  )
+  set-input(tokens) -> (
+    set: this.tokens, tokens
+    set: this.pos, 0
+  )
+  upcoming-input() -> ''
+
+  parser-options = {
+    lex = lex
+    setInput = set-input
+    upcomingInput = upocming-input
+  }
+
+  set: parser.lexer, parser-options
+)
+
+set: parser.yy, (require: './lib/nodes')
+
+compile(code) -> (
+
+  self = Object.create: context
+  tokens = lexer.tokenize: code
+  parsed = parser.parse: tokens
+  run = parsed.compile: self
+  ast = parsed.getUtils: self |> concat: @, (parsed.addVars: self) |> concat: @, run
+
+  program = {
+    type = 'Program'
+    body = ast
+  }
+
+  generated = escodegen.generate: program
+  '(function () {\n' + generated + '\n}.call(typeof module !== "undefined" ? module.exports : this))'
+)
+
+file(filepath) -> path.join: process.env.PWD, filepath |> fs.readFileSync |> compile: (code.toString: ())
+
+
+#function run(code) {
+#  new_context = Object.create(context)
+#  result = null
+#  new_context.console = console
+#  try {
+#    result = vm.runInNewContext(code, new_context)
+#  } catch (e) {
+#    util.error(e.stack)
+#    util.puts(code)
+#  }
+#  return result
+#}
+
+#main
+#function memory(args) {
+#  action = args[0]
+#  switch (action) {
+#    case 'test':
+#      return run(file('test/tests.mem'))
+#    case 'compile':
+#      return process.stdout.write(file(args[1]) + '\n')
+#    case 'run':
+#      return run(file(args[1]))
+#  }
+#}
+
+memory(item, action)
+  'compile' -> process.stdout.write: (file: item)
+
+export memory

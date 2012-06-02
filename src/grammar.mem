@@ -50,6 +50,10 @@ bnf = {
     o: 'IDENTIFIER', (\-> construct Identifier: $1);
   ]
 
+  IdentifierNoUtils = [
+    o: 'IDENTIFIER', (\-> construct Identifier: $1, true);
+  ]
+
   Body = [
     o: 'Expression';
     o: '( OptTerminator Expressions )', (\-> $3);
@@ -194,7 +198,7 @@ bnf = {
   ]
 
   KeyValue = [
-    o: 'Identifier = Value', (\-> construct Assignment: $1, $3);
+    o: 'IdentifierNoUtils = Value', (\-> construct Assignment: $1, $3);
   ]
 
   TupleItems = [
@@ -215,7 +219,7 @@ bnf = {
   ]
 
   Accessor = [
-    o: '. Identifier', (\-> $2);
+    o: '. IdentifierNoUtils', (\-> $2);
     o: '. AlphaNumeric', (\-> $2);
   ]
 
