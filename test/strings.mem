@@ -1,3 +1,7 @@
+import 'modules/strings.mem'
+
 str = 'hello'
 hi = str.split: '';.reduce: (\a, b -> a + b)
 assert: hi == str
+
+capitalize: str |> eq: @, 'Hello' |> assert
