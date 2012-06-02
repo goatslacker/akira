@@ -13,7 +13,8 @@ rx = {
 
 identifiers = {
   KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch']
-  COMPARE = ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt', 'not']
+  COMPARE = ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
+  NOT = ['not']
   LOGIC = ['and', 'or', '&&', '||']
   BOOL = ['true', 'false']
 }
