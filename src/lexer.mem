@@ -21,21 +21,21 @@ identifiers = {
 }
 
 
-filter-tokens-fn(a) -> partial: filter, (\x -> get: rx, x |> call: @, 'test', a)
+filter-tokens-fn(a) -> partial: filter, (\x -> rx !! x |> call: @, 'test', a)
 
 get-type(a) -> (
   filter-tokens = filter-tokens-fn: a
   rx | Object.keys | filter-tokens | pop
 )
 
-extract(key, chunk) -> get: rx, key |> call: @, 'exec', chunk
+extract(key, chunk) -> rx !! key |> call: @, 'exec', chunk
 
 parse-alphanumeric(t, chunk) -> (
   exec = extract: t, chunk
   exec.2
 )
 
-filter-identifiers-fn(iden) -> partial: filter, (\x -> get: identifiers, x |> call: @, 'indexOf', iden |> neq: 0 - 1, @)
+filter-identifiers-fn(iden) -> partial: filter, (\x -> identifiers !! x |> call: @, 'indexOf', iden |> neq: 0 - 1, @)
 
 return-identifier(item, type)
   'KEYWORDS' -> [(item.toUpperCase: ()), item]
@@ -97,7 +97,7 @@ return-tokens(code, i, line) -> (
     then (
       token = process-chunk: chunk, line
       tokens.push: token
-      tokens.concat: (return-tokens: code, (get-length: i, (length: (token.2.toString: ())), token.1), (incr-line: line, token.1))
+      tokens ++ return-tokens: code, (get-length: i, (length: (token.2.toString: ())), token.1), (incr-line: line, token.1);
     )
     else tokens
 )
