@@ -1,6 +1,6 @@
 export camelize(str) -> str.replace: /(-|_)+([a-zA-Z0-9$_])/g, (\i -> i.2.to-upper-case: ())
 export uppercase(str) -> str.to-upper-case: ()
-export capitalize(str) -> str.1.to-upper-case: () |> concat: @, (str.slice: 1)
+export capitalize(str) -> str.1.to-upper-case: (); ++ str.slice: 1;
 export chars(fn, str) -> str.split: '' |> map: fn, @
 export compact(str) -> str.replace: /\ /g, ''
 export lines(fn, str) -> str.split: '\n' |> map: fn, @
