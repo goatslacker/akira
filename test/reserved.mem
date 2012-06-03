@@ -3,3 +3,5 @@ for = 2
 f(while) -> while
 assert: 1 == 1
 value-of = 1
+null = 2
+assert: null == 2
