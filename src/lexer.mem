@@ -12,7 +12,7 @@ rx = {
 }
 
 identifiers = {
-  KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch']
+  KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none']
   COMPARE = ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
   OPERATORS = ['++', '+:', '!!']
   NOT = ['not']
