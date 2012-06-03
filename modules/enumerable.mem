@@ -5,7 +5,7 @@ export count(fn, list) -> filter: fn, list | length
 export intersect(list1, list2) -> filter: (\x -> list2.indexOf: x |> neq: 0 - 1, @), list1
 export max(list) -> foldl: (\a, b -> if a > b then a else b), list
 export min(list) -> foldl: (\a, b -> if a < b then a else b), list
-export none(fn, list) -> filter: fn, list |> length: @ |> eq: @, 0
+export nothing(fn, list) -> filter: fn, list |> length: @ |> eq: @, 0
 export randomize(list) -> sort: (\-> Math.random:! |> gt: @, 0.5), list
 export unique(list) -> filter: (\x, i -> list.indexOf: x |> eq: i, @), list
 
