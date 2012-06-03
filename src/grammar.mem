@@ -238,6 +238,7 @@ bnf = {
 
   Param = [
     o: 'Identifier';
+    o: 'Identifier = Value', (\-> construct Assignment: $1, $3);
   ]
 
   Parameters = [
