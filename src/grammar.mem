@@ -5,7 +5,7 @@ unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
 
 getMatch(action) -> (
   x = unwrap.exec: action
-  if x then x.2 else '(' + action + '())'
+  if x then x.2 else '(' ++ action ++ '())'
 )
 addYY(str) -> str.replace: /new /g, 'new yy.'
 
@@ -15,7 +15,7 @@ o(pattern, action) -> (
     then [patternString, '$$ = $1']
     else (
       newaction = action | getMatch | addYY
-      [patternString, '$$ = ' + newaction]
+      [patternString, '$$ = ' ++ newaction]
     )
 )
 
@@ -258,6 +258,7 @@ bnf = {
   Operation = [
     o: 'Value COMPARE Value', (\-> construct Compare: $1, $2, $3);
     o: 'Value LOGIC Value', (\-> construct Compare: $1, $2, $3);
+    o: 'Value OPERATORS Value', (\-> construct Operation: $1, $2, $3);
     o: 'NOT Value', (\-> construct Compare: $2, $1);
     o: 'Value + Value', (\-> construct Operation: $1, '+', $3);
     o: 'Value - Value', (\-> construct Operation: $1, '-', $3);
@@ -279,9 +280,10 @@ operators = [
   ['right', 'NOT']
   ['right', 'IF', 'THEN', 'ELSE', 'IMPORT', 'EXPORT', 'ASSERT', 'ARGUMENTS']
   ['right', '=', '|']
-  ['nonassoc', '(', ')', '[', ']', '{', '}']
+  ['nonassoc', '(', ')', '[', ']', '{', '}', ':']
   ['left', 'LOGIC']
   ['left', 'COMPARE']
+  ['left', 'OPERATORS']
   ['left', '+', '-']
   ['left', '*', '/']
 ]
