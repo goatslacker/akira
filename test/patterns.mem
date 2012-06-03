@@ -11,8 +11,8 @@ gtTen(n)
   n < 10 -> true
   n > 10 -> false
 
-eq: true, (gtTen: 11) | assert
-eq: false, (gtTen: 2) | assert
+eq: false, (gtTen: 11) | assert
+eq: true, (gtTen: 2) | assert
 
 starts-with(noun, prefix) -> prefix == noun.1 + noun.2
 
