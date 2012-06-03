@@ -8,3 +8,15 @@ export min(list) -> foldl: (\a, b -> if a < b then a else b), list
 export none(fn, list) -> filter: fn, list |> length: @ |> eq: @, 0
 export randomize(list) -> sort: (\-> Math.random: () |> gt: @, 0.5), list
 export unique(list) -> filter: (\x, i -> list.indexOf: x |> eq: i, @), list
+
+take-while(fn, [x, rest])
+  fn: x; == true -> x +: take-while: fn, rest;
+  otherwise -> []
+
+export take-while
+
+take-until(fn, [x, rest])
+  fn: x; == true -> [x]
+  otherwise -> x +: take-until: fn, rest;
+
+export take-until
