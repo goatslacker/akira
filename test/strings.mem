@@ -19,3 +19,4 @@ compact: '      foo bar ' |> eq: @, 'foobar' |> assert
 #pad: 2, str |> eq: @, '  hello  ' |> assert
 
 repeat: 3, str |> eq: @, 'hellohellohello' |> assert
+'hi' * 3 |> eq: @, 'hihihi' |> assert
