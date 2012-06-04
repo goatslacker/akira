@@ -3,4 +3,4 @@ my-arr = [1, 2, 3]
 eq: 5, 2 + last: my-arr; | assert
 
 foo(i, x = 2) -> i + x
-foo: 2 |> eq: 4, @ |> assert
+foo: 2 | eq: 4, @ | assert

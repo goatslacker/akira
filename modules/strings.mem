@@ -1,9 +1,9 @@
 export camelize(str) -> str.replace: /(-|_)+([a-zA-Z0-9$_])/g, (\i -> i.2.to-upper-case:!)
 export uppercase(str) -> str.to-upper-case:!
 export capitalize(str) -> str.1.to-upper-case:!; ++ str.slice: 1;
-export chars(fn, str) -> str.split: '' |> map: fn, @
+export chars(fn, str) -> str.split: '' | map: fn, @
 export compact(str) -> str.replace: /\ /g, ''
-export lines(fn, str) -> str.split: '\n' |> map: fn, @
+export lines(fn, str) -> str.split: '\n' | map: fn, @
 #export pad(padding, str) -> concat: c, str, c
-export repeat(times, str) -> construct Array: (times + 1) |> join: str, @
-export words(fn, str) -> str.split: ' ' |> map: fn, @
+export repeat(times, str) -> construct Array: (times + 1) | join: str, @
+export words(fn, str) -> str.split: ' ' | map: fn, @

@@ -1,13 +1,15 @@
+#export nothing(fn, list) -> filter: fn, list | (if @ == true then foo else bar)
+
 sum(a, b) -> a + b
-export average(list) -> foldl: sum, list |> div: @, (length: list)
+export average(list) -> foldl: sum, list | div: @, (length: list)
 export compact(list) -> filter: (\x -> x | neq | neq), list
 export count(fn, list) -> filter: fn, list | length
-export intersect(list1, list2) -> filter: (\x -> list2.indexOf: x |> neq: 0 - 1, @), list1
+export intersect(list1, list2) -> filter: (\x -> list2.indexOf: x | 0 - 1 isnt @), list1
 export max(list) -> foldl: (\a, b -> if a > b then a else b), list
 export min(list) -> foldl: (\a, b -> if a < b then a else b), list
-export nothing(fn, list) -> filter: fn, list |> length: @ |> eq: @, 0
-export randomize(list) -> sort: (\-> Math.random:! |> gt: @, 0.5), list
-export unique(list) -> filter: (\x, i -> list.indexOf: x |> eq: i, @), list
+export nothing(fn, list) -> filter: fn, list | length: @ | @ is 0
+export randomize(list) -> sort: (\-> Math.random:!; > 0.5), list
+export unique(list) -> filter: (\x, i -> list.indexOf: x | i is @), list
 
 take-while(fn, [x, rest])
   fn: x; == true -> x +: take-while: fn, rest;
