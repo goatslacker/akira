@@ -102,7 +102,7 @@ return-tokens(code, i, line) -> (
 
 tokenize(code) -> (
   ignore = ['COMMENTS', 'WHITESPACE']
-  return-tokens: code, 0, 1 | filter: (\token -> ignore.indexOf: token.1 | 0 < @), @
+  return-tokens: code, 0, 1 | filter: (\token -> ignore.indexOf: token.1 | 0 > @), @
 )
 
 export tokenize
