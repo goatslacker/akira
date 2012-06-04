@@ -24,7 +24,7 @@ filter-tokens-fn(a) -> partial: filter, (\x -> rx !! x | call: @, 'test', a)
 
 get-type(a) -> (
   filter-tokens = filter-tokens-fn: a
-  rx | Object.keys | filter-tokens | pop
+  rx | Object.keys | filter-tokens | last
 )
 
 extract(key, chunk) -> rx !! key | call: @, 'exec', chunk
@@ -44,7 +44,7 @@ return-identifier(item, type)
 parse-identifier(t, chunk) -> (
   item = extract: t, chunk
   filter-identifiers = filter-identifiers-fn: item.2
-  token = identifiers | Object.keys | filter-identifiers | pop
+  token = identifiers | Object.keys | filter-identifiers | last
 
   return-identifier: item.2, token || t
 )
