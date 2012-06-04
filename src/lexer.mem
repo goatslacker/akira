@@ -3,7 +3,6 @@ rx = {
   NUMBER = /^((\d+\.)?\d+)+/
   STRING = /^'(.*?)'/
   LAMBDA = /^->/
-  PIPE = /^\|>/
   OPERATION = /^(<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
   TERMINATOR = /^\n/
   REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
@@ -21,21 +20,21 @@ identifiers = {
 }
 
 
-filter-tokens-fn(a) -> partial: filter, (\x -> rx !! x |> call: @, 'test', a)
+filter-tokens-fn(a) -> partial: filter, (\x -> rx !! x | call: @, 'test', a)
 
 get-type(a) -> (
   filter-tokens = filter-tokens-fn: a
   rx | Object.keys | filter-tokens | pop
 )
 
-extract(key, chunk) -> rx !! key |> call: @, 'exec', chunk
+extract(key, chunk) -> rx !! key | call: @, 'exec', chunk
 
 parse-alphanumeric(t, chunk) -> (
   exec = extract: t, chunk
   exec.2
 )
 
-filter-identifiers-fn(iden) -> partial: filter, (\x -> identifiers !! x |> call: @, 'indexOf', iden |> neq: 0 - 1, @)
+filter-identifiers-fn(iden) -> partial: filter, (\x -> identifiers !! x | call: @, 'indexOf', iden | neq: 0 - 1, @)
 
 return-identifier(item, type)
   'KEYWORDS' -> [(item.toUpperCase:!), item]
@@ -62,7 +61,6 @@ get-token(chunk, t)
   'STRING' -> parse-alphanumeric: t, chunk
   'OPERATION' -> parse-identifier: t, chunk
   'LAMBDA' -> '->'
-  'PIPE' -> '|>'
   'REGEX' -> parse-regular-expressions: t, chunk
   'COMMENTS' -> parse-alphanumeric: t, chunk
   'WHITESPACE' -> ' '
@@ -104,7 +102,7 @@ return-tokens(code, i, line) -> (
 
 tokenize(code) -> (
   ignore = ['COMMENTS', 'WHITESPACE']
-  return-tokens: code, 0, 1 |> filter: (\token -> ignore.indexOf: token.1 |> eq: 0 - 1, @), @
+  return-tokens: code, 0, 1 | filter: (\token -> ignore.indexOf: token.1 | 0 < @), @
 )
 
 export tokenize

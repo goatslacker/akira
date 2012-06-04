@@ -28,20 +28,20 @@ array | (\list -> map: square, list) | (\a -> (
   mapper = partial: map, square
   assertArray(a) -> arrEq: a, [1, 4, 9] | assert
 
-  array |> map: square, @ |> assertArray
+  array | map: square, @ | assertArray
   array | mapper | assertArray
 )
 
-array.map: square |> arrEq: @, [1, 4, 9] |> assert
+array.map: square | arrEq: @, [1, 4, 9] | assert
 
 assert: array.2 == 2
 
-average: array |> eq: 2, @ |> assert
-min: array |> eq: 1, @ |> assert
-max: array |> eq: 3, @ |> assert
-unique: [1, 1, 2, 1, 3, 2] |> arrEq: @, array |> assert
+average: array | eq: 2, @ | assert
+min: array | eq: 1, @ | assert
+max: array | eq: 3, @ | assert
+unique: [1, 1, 2, 1, 3, 2] | arrEq: @, array | assert
 
-array !! 0 |> eq: @, 1 |> assert
-array ++ [4] |> arrEq: @, [1, 2, 3, 4] |> assert
-0 +: array |> arrEq: @, [0, 1, 2, 3] |> assert
+array !! 0 | eq: @, 1 | assert
+array ++ [4] | arrEq: @, [1, 2, 3, 4] | assert
+0 +: array | arrEq: @, [0, 1, 2, 3] | assert
 arrEq: array, [1, 2, 3] | assert
