@@ -143,6 +143,7 @@ bnf = {
 
   Invocation = [
     o: 'Identifier : Arguments', (\-> construct Call: $1, $3);
+    o: '@ : Arguments', (\-> construct Call: $1, $3);
     o: 'Access : Arguments', (\-> construct Call: $1, $3);
   ]
 
@@ -186,6 +187,7 @@ bnf = {
 
   KeyValue = [
     o: 'IdentifierNoUtils = Value', (\-> construct Assignment: $1, $3);
+    o: 'IdentifierNoUtils = SExpression', (\-> construct Assignment: $1, $3);
   ]
 
   TupleItems = [
@@ -201,6 +203,7 @@ bnf = {
 
   Access = [
     o: 'Identifier Accessor', (\-> construct Access: $1, $2);
+    o: '@ Accessor', (\-> construct Access: $1, $2);
     o: 'ExplicitInvocation Accessor', (\-> construct Access: $1, $2);
     o: 'Access Accessor', (\-> construct Access: $1, $2);
   ]
