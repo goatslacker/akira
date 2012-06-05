@@ -20,21 +20,21 @@ identifiers = {
 }
 
 
-filter-tokens-fn(a) -> partial: filter, (\x -> rx !! x | call: @, 'test', a)
+filter-tokens-fn(a) -> partial: filter, (\x -> rx !! x | @.test: a)
 
 get-type(a) -> (
   filter-tokens = filter-tokens-fn: a
   rx | Object.keys | filter-tokens | last
 )
 
-extract(key, chunk) -> rx !! key | call: @, 'exec', chunk
+extract(key, chunk) -> rx !! key | @.exec: chunk
 
 parse-alphanumeric(t, chunk) -> (
   exec = extract: t, chunk
   exec.2
 )
 
-filter-identifiers-fn(iden) -> partial: filter, (\x -> identifiers !! x | call: @, 'indexOf', iden | neq: 0 - 1, @)
+filter-identifiers-fn(iden) -> partial: filter, (\x -> identifiers !! x | @.indexOf: iden | @ >= 0)
 
 return-identifier(item, type)
   'KEYWORDS' -> [(item.toUpperCase:!), item]
