@@ -1,8 +1,8 @@
 {
-  "name": "rini",
+  "name": "memory",
   "author": "Josh Perez <josh@goatslacker.com>",
   "version": "0.0.1",
-  "description": "project rini",
+  "description": "tiny language that compiles to javascript",
 
   "scripts": {
     "start": "bin/memory compile src/lexer.mem > lexer.js && mv lexer.js lib/ && bin/memory compile src/grammar.mem > lib/grammar.js && node lib/grammar.js",
@@ -13,6 +13,12 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/goatslacker/rini.git"
+  },
+
+  "dependencies": {
+    "esprima": "*",
+    "escodegen": "*",
+    "jison": "*"
   },
 
   "engines": {
