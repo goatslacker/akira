@@ -19,20 +19,13 @@ identifiers = {
   BOOL = ['true', 'false']
 }
 
+ignore = ['COMMENTS', 'WHITESPACE']
 
-filter-tokens-fn(a) -> partial: filter, (\x -> rx !! x | @.test: a)
-
-get-type(a) -> (
-  filter-tokens = filter-tokens-fn: a
-  rx | Object.keys | filter-tokens | last
-)
+get-type(a) -> rx | Object.keys | filter: (\x -> rx !! x | @.test: a), @ | last
 
 extract(key, chunk) -> rx !! key | @.exec: chunk
 
-parse-alphanumeric(t, chunk) -> (
-  exec = extract: t, chunk
-  exec.2
-)
+parse-alphanumeric(t, chunk) -> extract: t, chunk | @.2
 
 filter-identifiers-fn(iden) -> partial: filter, (\x -> identifiers !! x | @.indexOf: iden | @ >= 0)
 
@@ -100,9 +93,4 @@ return-tokens(code, i, line) -> (
     else tokens
 )
 
-tokenize(code) -> (
-  ignore = ['COMMENTS', 'WHITESPACE']
-  return-tokens: code, 0, 1 | filter: (\token -> ignore.indexOf: token.1 | 0 > @), @
-)
-
-export tokenize
+export tokenize(code) -> return-tokens: code, 0, 1 | filter: (\token -> ignore.indexOf: token.1 | 0 > @), @
