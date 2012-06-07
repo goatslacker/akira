@@ -32,7 +32,30 @@ wrap(program) -> (
 
 compile(code) -> code | tokenize | parse | ast | wrap
 
+walk(tree, cb) -> (
+  try (
+    stat = fs.stat-sync: tree
+  ) catch (
+    raise: err
+  )
+
+  if stat.is-directory:!
+    then fs.readdir-sync: tree | map: (\v -> path.join: tree, v | walk: @, cb), @
+    else (
+      if tree.index-of: '.mem'; >= 0
+        then file: tree | cb: @, tree
+        else none
+    )
+)
+
+
 file(filepath) -> path.join: process.env.PWD, filepath | fs.read-file-sync | @.to-string:!
+files(dirname, cb) -> (
+  stat = fs.stat-sync: dirname
+  if stat.is-directory:!
+    then walk: dirname, cb
+    else file: dirname | cb: @, dirname
+)
 
 run(code) -> (
   try (
@@ -55,7 +78,7 @@ write(code, item) -> (
 
 #main
 memory(item, action)
-  'compile' -> file: item | compile | write: @, item
+  'compile' -> files: item, (\code, name -> code | compile | write: @, name)
   'code' -> file: item | compile | output
   'test' -> file: 'test/tests.mem' | compile | run
   'run' -> file: item | compile | run
