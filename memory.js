@@ -4,12 +4,13 @@ function map(fn, list) {
         return fn(node, index + 1, list);
     });
 }
-var fs, path, util, vm, escodegen, lexer, Parser, parser, tokenize, parse, ast, wrap, compile, file, run, output, analyze, memory;
+var fs, path, util, vm, escodegen, me, lexer, Parser, parser, tokenize, parse, ast, wrap, compile, file, run, output, analyze, memory;
 fs = require('fs');
 path = require('path');
 util = require('util');
 vm = require('vm');
 escodegen = require('escodegen');
+me = require('./package.json');
 lexer = require('./lib/lexer');
 Parser = require('./lib/parser');
 parser = Parser.parser;
@@ -51,7 +52,7 @@ file = function file(filepath) {
 run = function run(code) {
     var result;
     try {
-        result = vm.runInNewContext(code, {
+        result = vm.runInNewContext(code.join(''), {
             console: console
         });
     } catch (err) {
@@ -80,6 +81,8 @@ memory = function memory(item, action) {
         return analyze(tokenize(file(item)));
     case !(action === 'ast'):
         return analyze(ast(parse(tokenize(file(item)))));
+    case !(action === 'version'):
+        return util.puts('memory '.concat(me.version));
     }
 };
 this.memory = memory;

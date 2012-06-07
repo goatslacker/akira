@@ -3,7 +3,7 @@ path = require: 'path'
 util = require: 'util'
 vm = require: 'vm'
 escodegen = require: 'escodegen'
-me = require: 'package.json'
+me = require: './package.json'
 
 lexer = require: './lib/lexer'
 Parser = require: './lib/parser'
@@ -36,7 +36,7 @@ file(filepath) -> path.join: process.env.PWD, filepath | fs.read-file-sync | @.t
 
 run(code) -> (
   try (
-    result = vm.run-in-new-context: code, { console = console }
+    result = vm.run-in-new-context: (code.join: ''), { console = console }
   ) catch (
     util.error: err.stack
     util.debug: code
@@ -55,6 +55,6 @@ memory(item, action)
   'run' -> file: item | compile | run
   'tokens' -> file: item | tokenize | analyze
   'ast' -> file: item | tokenize | parse | ast | analyze
-  'version' -> me.version | output
+  'version' -> 'memory ' ++ me.version | util.puts
 
 export memory
