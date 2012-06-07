@@ -7,42 +7,16 @@ escodegen = require: 'escodegen'
 lexer = require: './lib/lexer'
 Parser = require: './lib/parser'
 parser = Parser.parser
+parser.yy <+ require: './lib/nodes';
 context = {}
 
-set-parser-options(n) -> (
-  lex() -> (
-#    tag, _ref2
-#    _ref2 = this.tokens[this.pos++] || ['']
-#    tag = _ref2[0]
-#    this.yytext = _ref2[1]
-#    this.yylineno = _ref2[2] || 0
-#    return tag
-    'hai'
-  )
-  set-input(tokens) -> (
-    set: this.tokens, tokens
-    set: this.pos, 0
-  )
-  upcoming-input() -> ''
-
-  parser-options = {
-    lex = lex
-    setInput = set-input
-    upcomingInput = upocming-input
-  }
-
-  set: parser.lexer, parser-options
-)
-
-set: parser.yy, (require: './lib/nodes')
-
-compile(code) -> (
-
+compile(buf) -> (
+  code = buf.toString:!
   self = Object.create: context
   tokens = lexer.tokenize: code
   parsed = parser.parse: tokens
   run = parsed.compile: self
-  ast = parsed.getUtils: self |> concat: @, (parsed.addVars: self) |> concat: @, run
+  ast = parsed.getUtils: self; ++ parsed.addVars: self; ++ run
 
   program = {
     type = 'Program'
@@ -50,10 +24,10 @@ compile(code) -> (
   }
 
   generated = escodegen.generate: program
-  '(function () {\n' + generated + '\n}.call(typeof module !== "undefined" ? module.exports : this))'
+  '(function () {' + generated + '}.call(typeof module !== "undefined" ? module.exports : this))'
 )
 
-file(filepath) -> path.join: process.env.PWD, filepath |> fs.readFileSync |> compile: (code.toString: ())
+file(filepath) -> path.join: process.env.PWD, filepath | fs.readFileSync | compile
 
 
 #function run(code) {
@@ -84,5 +58,6 @@ file(filepath) -> path.join: process.env.PWD, filepath |> fs.readFileSync |> com
 
 memory(item, action)
   'compile' -> process.stdout.write: (file: item)
+  'test' ->
 
 export memory
