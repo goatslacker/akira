@@ -3,12 +3,12 @@ path = require: 'path'
 util = require: 'util'
 vm = require: 'vm'
 escodegen = require: 'escodegen'
-me = require: './package.json'
+me = require: '../package.json'
 
-lexer = require: './lib/lexer'
-Parser = require: './lib/parser'
+lexer = require: './lexer'
+Parser = require: './parser'
 parser = Parser.parser
-parser.yy <+ require: './lib/nodes';
+parser.yy <+ require: './nodes';
 
 tokenize(code) -> lexer.tokenize: code
 parse(tokens) -> parser.parse: tokens
@@ -48,9 +48,15 @@ run(code) -> (
 output(list) -> map: (\x -> x | util.puts), list
 analyze(body) -> body | util.inspect: @, false, 50 | util.puts
 
+write(code, item) -> (
+  filepath = item.replace: 'src', 'lib' | @.replace: '.mem', '.js' | path.join: process.env.PWD, @
+  code | join-lines | fs.write-file-sync: filepath, @
+)
+
 #main
 memory(item, action)
-  'compile' -> file: item | compile | output
+  'compile' -> file: item | compile | write: @, item
+  'code' -> file: item | compile | output
   'test' -> file: 'test/tests.mem' | compile | run
   'run' -> file: item | compile | run
   'tokens' -> file: item | tokenize | analyze
