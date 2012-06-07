@@ -1,4 +1,5 @@
 rx = /[A-Z]/
 
 h = rx.exec: 'HELLO WORLD'
-eq: 'H', (at: h, 1) | assert
+assert: 'H', h.1
+assert: 'H', h !! 0

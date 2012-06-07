@@ -4,15 +4,15 @@ numbers(n)
   'three' -> 3
   n -> 4
 
-eq: 4, (numbers: 'four') | assert
-eq: 1, (numbers: 'one') | assert
+assert: 4, (numbers: 'four')
+assert: 1, (numbers: 'one')
 
 gtTen(n)
   n < 10 -> true
   n > 10 -> false
 
-eq: false, (gtTen: 11) | assert
-eq: true, (gtTen: 2) | assert
+assert: false, (gtTen: 11)
+assert: true, (gtTen: 2)
 
 starts-with(noun, prefix) -> prefix == noun.1 + noun.2
 
@@ -20,8 +20,8 @@ spanish-gender-of-noun(noun)
   starts-with: noun, 'el'; -> 'male'
   starts-with: noun, 'la'; -> 'female'
 
-eq: 'female', (spanish-gender-of-noun: 'la casa') | assert
-eq: 'male', (spanish-gender-of-noun: 'el carro') | assert
+assert: 'female', (spanish-gender-of-noun: 'la casa')
+assert: 'male', (spanish-gender-of-noun: 'el carro')
 
 # implementations of our util functions in memory
 init([_, a]) -> _
@@ -33,8 +33,8 @@ get-middle([a, _, b]) -> _
 
 ls = [1, 2, 3, 4, 5]
 
-ls | get-middle | arrEq: @, [2, 3, 4] | assert
-ls | init | arrEq: @, [1, 2, 3, 4] | assert
-ls | tail | arrEq: @, [2, 3, 4, 5] | assert
-ls | head | eq: @, 1 | assert
-ls | last | eq: @, 5 | assert
+ls | get-middle | assert-deep: @, [2, 3, 4]
+ls | init | arrEq: @, [1, 2, 3, 4]
+ls | tail | arrEq: @, [2, 3, 4, 5]
+ls | head | assert: @, 1
+ls | last | assert: @, 5

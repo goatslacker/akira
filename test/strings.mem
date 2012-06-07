@@ -2,21 +2,21 @@ import 'strings.mem'
 
 str = 'hello'
 hi = str.split: '';.reduce: (\a, b -> a + b)
-assert: hi == str
+assert: hi, str
 
-capitalize: str | eq: @, 'Hello' | assert
+capitalize: str | assert: @, 'Hello'
 
-camelize: 'hello-world' | eq: @, 'helloWorld' | assert
-camelize: 'hello_world' | eq: @, 'helloWorld' | assert
-camelize: 'hello_world-i_am_Memory' | eq: @, 'helloWorldIAmMemory' | assert
+camelize: 'hello-world' | assert: @, 'helloWorld'
+camelize: 'hello_world' | assert: @, 'helloWorld'
+camelize: 'hello_world-i_am_Memory' | assert: @, 'helloWorldIAmMemory'
 
-uppercase: str | eq: @, 'HELLO' | assert
+uppercase: str | assert: @, 'HELLO'
 
-chars: uppercase, str | join: '', @ | eq: @, 'HELLO' | assert
+chars: uppercase, str | join: '', @ | assert: @, 'HELLO'
 
-compact: '      foo bar ' | eq: @, 'foobar' | assert
+compact: '      foo bar ' | assert: @, 'foobar'
 
-#pad: 2, str | eq: @, '  hello  ' | assert
+#pad: 2, str | assert: @, '  hello  '
 
-repeat: 3, str | eq: @, 'hellohellohello' | assert
-'hi' * 3 | eq: @, 'hihihi' | assert
+repeat: 3, str | assert: @, 'hellohellohello'
+'hi' * 3 | assert: @, 'hihihi'

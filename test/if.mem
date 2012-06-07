@@ -1,10 +1,18 @@
 foo(x) -> (
-  if true
+  if x
     then (
-      if true then true else (false)
+      if not x then true else (false)
     ) else (
-      if true then true else false
+      if not x then true else false
     )
 )
 
-if 1 then true else if 2 then true else false
+foo-true = foo: true
+foo-false = foo: false
+
+assert: foo-true, false
+assert: foo-false, true
+
+a = if false then true else if true then true else false
+assert: a, true
+

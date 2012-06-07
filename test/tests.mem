@@ -1,5 +1,22 @@
 # Runtime tests for Memory
 
+start = Date.now:!
+assertions = []
+failed = []
+assert(a, b) -> if a == b then assertions.push: [a, b]; else failed.push: [a, b]
+
+assert-deep(a, b) -> (
+  len = filter: (\x, i -> x is b !! i - 1), a | @.length
+  if len is a.length
+    then assertions.push: [a, b]
+    else failed.push: [a, b]
+)
+
+print-failures() -> (
+  print: 'FAIL ' ++ failed.length ++ ' tests'
+  print: failed
+)
+
 # import test
 import 'test/assignments.mem'
 import 'test/exceptions.mem'
@@ -11,27 +28,41 @@ import 'test/patterns.mem'
 import 'test/regexp.mem'
 import 'test/reserved.mem'
 import 'test/strings.mem'
-import 'test/tuples.mem'
+#import 'test/tuples.mem'
 import 'test/utils.mem'
 import 'test/exporting.mem'
 
-eq: my-k, 3 | assert
-eq: my-a, 2 | assert
-my-id: 5 | eq: @, 5 | assert
+assert: my-k, 3
+assert: my-a, 2
+my-id: 5 | assert: @, 5
 
 # export fact test
-eq: 24, (fact: 4) | assert
+assert: 24, (fact: 4)
 
 # sum and prod
-eq: 2, (sum: 1, 1) | assert
-eq: 4, (prod: 2, 2) | assert
+assert: 2, (sum: 1, 1)
+assert: 4, (prod: 2, 2)
 
 -> (
   b = 'hello-world'
   c = b.replace: /-([a-z])/g, (\i -> i.2.toUpperCase:!)
-  assert: c == 'helloWorld'
+  assert: c, 'helloWorld'
 )
 
 
 # Done.
-print:'All tests completed'
+end = Date.now:!
+failures = failed.length
+success = assertions.length
+
+print: 'Done!'
+
+if success
+  then print: 'OK ' ++ assertions.length ++ ' tests'
+  else none
+
+if failures
+  then print-failures:!
+  else none
+
+print: 'Time ' ++ end - start ++ 'ms'

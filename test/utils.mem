@@ -1,4 +1,4 @@
 square(x) -> prod: x, x
 newlist = map: square, [1, 2, 3]
 
-[1, 4, 9] | arrEq: newlist, @ | assert
+[1, 4, 9] | assert-deep: newlist, @

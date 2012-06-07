@@ -6,42 +6,38 @@ array = [
   3
 ]
 
-head: array | (\a -> assert: a == 1)
-init: array | (\a -> arrEq: a, [1, 2] | assert)
-tail: array | (\a -> arrEq: a, [2, 3] | assert)
-last: array | (\a -> assert: a == 3)
 
 # IIFE
 -> (
 # Testing foldr, expressions in arguments, anonymous functions
   lastEl(a) -> foldl: (\a, b -> flip: consts, a, b), a
-  lastEl: array | (\a -> assert: a == 3 )
+  lastEl: array | (\a -> assert: a, 3 )
 )
-
-# Pipes, Anonymous functions, Blocks
-array | (\list -> map: square, list) | (\a -> (
-  arrEq: a, [1, 4, 9] | assert
-))
 
 # Partial application
 -> (
   mapper = partial: map, square
-  assertArray(a) -> arrEq: a, [1, 4, 9] | assert
+  assertArray(a) -> assert-deep: a, [1, 4, 9]
 
   array | map: square, @ | assertArray
   array | mapper | assertArray
 )
 
-array.map: square | arrEq: @, [1, 4, 9] | assert
+array.map: square | assert-deep: @, [1, 4, 9]
 
-assert: array.2 == 2
+assert: array.2, 2
 
-average: array | eq: 2, @ | assert
-min: array | eq: 1, @ | assert
-max: array | eq: 3, @ | assert
-unique: [1, 1, 2, 1, 3, 2] | arrEq: @, array | assert
+head: array | assert: @, 1
+init: array | assert-deep: @, [1, 2]
+tail: array | assert-deep: @, [2, 3]
+last: array | assert: @, 3
 
-array !! 0 | eq: @, 1 | assert
-array ++ [4] | arrEq: @, [1, 2, 3, 4] | assert
-0 +: array | arrEq: @, [0, 1, 2, 3] | assert
-arrEq: array, [1, 2, 3] | assert
+average: array | assert: 2, @
+min: array | assert: 1, @
+max: array | assert: 3, @
+unique: [1, 1, 2, 1, 3, 2] | assert-deep: @, array
+
+array !! 0 | assert: @, 1
+array ++ [4] | assert-deep: @, [1, 2, 3, 4]
+0 +: array | assert-deep: @, [0, 1, 2, 3]
+assert-deep: array, [1, 2, 3]
