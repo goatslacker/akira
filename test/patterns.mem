@@ -22,3 +22,19 @@ spanish-gender-of-noun(noun)
 
 eq: 'female', (spanish-gender-of-noun: 'la casa') | assert
 eq: 'male', (spanish-gender-of-noun: 'el carro') | assert
+
+# implementations of our util functions in memory
+init([_, a]) -> _
+tail([a, _]) -> _
+head([a, _]) -> a
+last([_, a]) -> a
+get-middle([a, _, b]) -> _
+
+
+ls = [1, 2, 3, 4, 5]
+
+ls | get-middle | arrEq: @, [2, 3, 4] | assert
+ls | init | arrEq: @, [1, 2, 3, 4] | assert
+ls | tail | arrEq: @, [2, 3, 4, 5] | assert
+ls | head | eq: @, 1 | assert
+ls | last | eq: @, 5 | assert
