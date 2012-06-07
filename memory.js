@@ -1,73 +1,86 @@
-var fs = require('fs');
-var path = require('path');
-var util = require('util');
-var vm = require('vm');
-var escodegen = require('escodegen');
-
-var lexer = require('./lib/lexer');
-var parser = require('./lib/parser').parser;
-var context = {};
-
-parser.lexer = {
-  lex: function () {
-    var tag, _ref2;
-    _ref2 = this.tokens[this.pos++] || [''];
-    tag = _ref2[0];
-    this.yytext = _ref2[1];
-    this.yylineno = _ref2[2] || 0;
-    return tag;
-  },
-  setInput: function (tokens) {
-    this.tokens = tokens;
-    return this.pos = 0;
-  },
-  upcomingInput: function () {
-    return "";
-  }
+(function () {
+function map(fn, list) {
+    return Array.prototype.map.call(list, function (node, index, list) {
+        return fn(node, index + 1, list);
+    });
+}
+var fs, path, util, vm, escodegen, lexer, Parser, parser, tokenize, parse, ast, wrap, compile, file, run, output, analyze, memory;
+fs = require('fs');
+path = require('path');
+util = require('util');
+vm = require('vm');
+escodegen = require('escodegen');
+lexer = require('./lib/lexer');
+Parser = require('./lib/parser');
+parser = Parser.parser;
+(function () {
+    var $$obj = require('./lib/nodes');
+    Object.keys($$obj).forEach(function (key) {
+        parser.yy[key] = $$obj[key];
+    });
+}());
+tokenize = function tokenize(code) {
+    return lexer.tokenize(code);
 };
-
-parser.yy = require('./lib/nodes');
-
-function compile(code) {
-  var self = Object.create(context);
-  var tokens = lexer.tokenize(code);
-  var parsed = parser.parse(tokens);
-  var run = parsed.compile(self);
-  var ast = { type: 'Program', body: parsed.getUtils(self).concat(parsed.addVars(self).concat(run)) };
-//  util.debug(util.inspect(ast, false, 30));
-  var compiled = '(function () {\n' + escodegen.generate(ast) + '\n}.call(typeof module !== "undefined" ? module.exports : this))';
-  return compiled
-}
-
-function file(filepath) {
-  var code = fs.readFileSync(path.join(process.env.PWD, filepath)).toString();
-  return compile(code);
-}
-
-function run(code) {
-  var new_context = Object.create(context);
-  var result = null;
-  new_context.console = console;
-  try {
-    result = vm.runInNewContext(code, new_context);
-  } catch (e) {
-    util.error(e.stack);
-    util.puts(code);
-  }
-  return result;
-}
-
-/** main **/
-function memory(args) {
-  var action = args[0];
-  switch (action) {
-    case 'test':
-      return run(file('test/tests.mem'));
-    case 'compile':
-      return process.stdout.write(file(args[1]) + '\n');
-    case 'run':
-      return run(file(args[1]));
-  }
-}
-
-module.exports = memory;
+parse = function parse(tokens) {
+    return parser.parse(tokens);
+};
+ast = function ast(parsed) {
+    var self, body, ast, program;
+    self = Object.create({});
+    body = parsed.compile(self);
+    ast = parsed.getUtils(self).concat(parsed.addVars(self)).concat(body);
+    return program = {
+        type: 'Program',
+        body: ast
+    };
+};
+wrap = function wrap(program) {
+    return [
+        '(function () {',
+        escodegen.generate(program),
+        '}.call(typeof module !== "undefined" ? module.exports : this))'
+    ];
+};
+compile = function compile(code) {
+    return wrap(ast(parse(tokenize(code))));
+};
+file = function file(filepath) {
+    return fs.readFileSync(path.join(process.env.PWD, filepath)).toString();
+};
+run = function run(code) {
+    var result;
+    try {
+        result = vm.runInNewContext(code, {
+            console: console
+        });
+    } catch (err) {
+        util.error(err.stack);
+        util.debug(code);
+    }
+    return result;
+};
+output = function output(list) {
+    return map(function (x) {
+        return util.puts(x);
+    }, list);
+};
+analyze = function analyze(body) {
+    return util.puts(util.inspect(body, false, 50));
+};
+memory = function memory(item, action) {
+    switch (false) {
+    case !(action === 'compile'):
+        return output(compile(file(item)));
+    case !(action === 'test'):
+        return run(compile(file('test/tests.mem')));
+    case !(action === 'run'):
+        return run(compile(file(item)));
+    case !(action === 'tokens'):
+        return analyze(tokenize(file(item)));
+    case !(action === 'ast'):
+        return analyze(ast(parse(tokenize(file(item)))));
+    }
+};
+this.memory = memory;
+}.call(typeof module !== "undefined" ? module.exports : this))
