@@ -1,0 +1,2 @@
+square-list = foldl => flip => square
+[1, 2, 3] | square-list | assert: 9, @

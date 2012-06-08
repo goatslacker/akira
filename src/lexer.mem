@@ -3,7 +3,7 @@ rx = {
   NUMBER = /^((\d+\.)?\d+)+/
   STRING = /^'(.*?)'/
   LAMBDA = /^->/
-  OPERATION = /^(<\+|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
+  OPERATION = /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
   TERMINATOR = /^\n/
   REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
   COMMENTS = /^(#.*)/
@@ -13,7 +13,8 @@ rx = {
 identifiers = {
   KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none']
   COMPARE = ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
-  OPERATORS = ['++', '+:', '!!', '<+']
+  LEFT_OPERATORS = ['++', '+:', '!!', '<+']
+  RIGHT_OPERATORS = ['=>']
   NOT = ['not']
   LOGIC = ['and', 'or', '&&', '||']
   BOOL = ['true', 'false']

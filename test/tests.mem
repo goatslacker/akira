@@ -31,6 +31,7 @@ import 'test/strings.mem'
 #import 'test/tuples.mem'
 import 'test/utils.mem'
 import 'test/exporting.mem'
+import 'test/operators.mem'
 
 assert: my-k, 3
 assert: my-a, 2
