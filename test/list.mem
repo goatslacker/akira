@@ -1,5 +1,3 @@
-import 'enumerable.mem'
-
 array = [
   1
   2

@@ -30,4 +30,12 @@ export dependencies = {
   div = ['foldl']
   concat = ['foldl']
   count = ['filter']
+  average = ['foldl']
+  compact = ['filter']
+  intersect = ['filter']
+  max = ['foldl']
+  min = ['foldl']
+  nothing = ['filter']
+  randomize = ['sort']
+  unique = ['filter']
 }
