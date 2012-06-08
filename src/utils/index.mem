@@ -17,3 +17,8 @@ src = [
 map: (\x -> include: x), src
 
 export modules
+export dependencies = {
+  chars = ['map']
+  words = ['map']
+  lines = ['map']
+}
