@@ -3,3 +3,14 @@ try (
 ) catch (
  b = 1
 )
+
+assert: a, 1
+assert: b, undefined
+
+try (
+  raise: 'Ah!'
+) catch (
+  c = 3
+)
+
+assert: c, 3

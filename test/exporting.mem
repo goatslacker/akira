@@ -4,3 +4,10 @@ my-a = 2
 export my-a
 
 export my-k = 3
+
+
+fact(n)
+  1 -> 1
+  n -> n * fact: n - 1;
+
+export fact

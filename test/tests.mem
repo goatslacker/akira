@@ -20,7 +20,6 @@ print-failures() -> (
 # import test
 import 'test/assignments.mem'
 import 'test/exceptions.mem'
-import 'test/fact.mem'
 import 'test/if.mem'
 import 'test/invocations.mem'
 import 'test/list.mem'
