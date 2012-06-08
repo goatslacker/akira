@@ -10,7 +10,7 @@ camelize: 'hello_world-i_am_Memory' | assert: @, 'helloWorldIAmMemory'
 
 uppercase: str | assert: @, 'HELLO'
 
-chars: uppercase, str | join: '', @ | assert: @, 'HELLO'
+chars: uppercase, str | join: @, '' | assert: @, 'HELLO'
 
 compact: '      foo bar ' | assert: @, 'foobar'
 
