@@ -6,6 +6,7 @@
 
   "scripts": {
     "start": "bin/memory compile src/ && node lib/grammar.js",
+    "postinstall": "node lib/grammar.js",
     "stop": "git co lib/grammar.js && node lib/grammar.js",
     "test": "bin/memory test"
   },
@@ -18,7 +19,7 @@
   "dependencies": {
     "esprima": "*",
     "escodegen": "*",
-    "jison": "*"
+    "jison": "0.2.x"
   },
 
   "bin": { "memory": "./bin/memory" },
