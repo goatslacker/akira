@@ -1,8 +1,8 @@
 modules = {}
 path = require: 'path'
 
-include(mod) -> (
-  functions = path.join: __dirname, mod | require: @
+include(m) -> (
+  functions = path.join: __dirname, m | require: @
   modules <+ functions
 )
 
@@ -23,8 +23,11 @@ export dependencies = {
   words = ['map']
   lines = ['map']
   even = ['mod']
+  odd = ['even', 'mod']
   sum = ['foldl']
   sub = ['foldl']
   prod = ['foldl']
   div = ['foldl']
+  concat = ['foldl']
+  count = ['filter']
 }

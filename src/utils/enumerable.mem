@@ -1,0 +1,10 @@
+export head([x]) -> x
+export init([_, x]) -> _
+export tail([x, _]) -> _
+export last([_, x]) -> x
+export at(list, index) -> list !! index - 1
+export get(obj, prop) -> obj !! prop
+export length(of) -> of.length
+export join(list, by) -> list.join: by
+export concat() -> foldl: (\a, b -> a ++ b), arguments
+export count(fn, list) -> filter: fn, list | @.length

@@ -226,8 +226,8 @@ bnf = {
   ]
 
   Param = [
-    o: 'Identifier';
-    o: 'Identifier = Value', (\-> construct Assignment: $1, $3);
+    o: 'IdentifierNoUtils';
+    o: 'IdentifierNoUtils = Value', (\-> construct Assignment: $1, $3);
     o: 'Lists';
   ]
 
