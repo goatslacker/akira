@@ -7,6 +7,7 @@ include(mod) -> (
 )
 
 src = [
+  'javascript'
   'enumerable'
   'strings'
   'functions'
@@ -21,4 +22,9 @@ export dependencies = {
   chars = ['map']
   words = ['map']
   lines = ['map']
+  even = ['mod']
+  sum = ['foldl']
+  sub = ['foldl']
+  prod = ['foldl']
+  div = ['foldl']
 }
