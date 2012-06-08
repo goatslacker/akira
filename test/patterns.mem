@@ -34,7 +34,7 @@ get-middle([a, _, b]) -> _
 ls = [1, 2, 3, 4, 5]
 
 ls | get-middle | assert-deep: @, [2, 3, 4]
-ls | init | arrEq: @, [1, 2, 3, 4]
-ls | tail | arrEq: @, [2, 3, 4, 5]
+ls | init | assert-deep: @, [1, 2, 3, 4]
+ls | tail | assert-deep: @, [2, 3, 4, 5]
 ls | head | assert: @, 1
 ls | last | assert: @, 5
