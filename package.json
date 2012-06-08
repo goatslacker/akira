@@ -19,7 +19,8 @@
   "dependencies": {
     "esprima": "*",
     "escodegen": "*",
-    "jison": "0.2.x"
+    "jison": "0.2.x",
+    "nodewatch": "*"
   },
 
   "bin": { "memory": "./bin/memory" },

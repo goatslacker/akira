@@ -3,6 +3,7 @@ path = require: 'path'
 util = require: 'util'
 vm = require: 'vm'
 escodegen = require: 'escodegen'
+nodewatch = require: 'nodewatch'
 me = require: '../package.json'
 
 lexer = require: './lexer'
@@ -76,6 +77,8 @@ write(code, item) -> (
   code | join-lines | fs.write-file-sync: filepath, @
 )
 
+watch(filename) -> nodewatch.add: filename;.onChange: (\-> file: filename | compile | write: @, filename)
+
 #main
 memory(item, action)
   'compile' -> files: item, (\code, name -> code | compile | write: @, name)
@@ -85,5 +88,6 @@ memory(item, action)
   'tokens' -> file: item | tokenize | analyze
   'ast' -> file: item | tokenize | parse | ast | analyze
   'version' -> 'memory ' ++ me.version | util.puts
+  'watch' -> watch: item
 
 export memory
