@@ -1,0 +1,6 @@
+export eq(a, b) -> a is b
+export neq(a, b) -> a isnt b
+export gt(a, b) -> a > b
+export lt(a, b) -> a < b
+export gte(a, b) -> a >= b
+export lte(a, b) -> a <= b
