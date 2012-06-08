@@ -1,0 +1,19 @@
+modules = {}
+path = require: 'path'
+
+include(mod) -> (
+  functions = path.join: __dirname, mod | require: @
+  modules <+ functions
+)
+
+src = [
+  'enumerable'
+  'strings'
+  'functions'
+  'math'
+  'debug'
+]
+
+map: (\x -> include: x), src
+
+export modules
