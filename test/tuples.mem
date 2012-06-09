@@ -1,21 +1,20 @@
 # test function
-tupleEq(a, b) -> eq: 0, (length: (filter: (\x, i -> neq: x, (at: b, i)), a))
+tuple-eq(a, b) -> filter: (\x, i -> x isnt b !! i), a | @.length | assert: 0, @
 
 # setting tuples
 obj = { hello = 1, world = 2 }
-tupleEq: obj, { hello = 1, world = 2 }
+tuple-eq: obj, { hello = 1, world = 2 }
 
 # retrieving properties
-eq: (get: obj, 'hello'), 1 | assert
+assert: (get: obj, 'hello'), 1
 
 # calling functions
-myFunction(x) -> x
 tup = {
-  myFunction = myFunction
-  myNumber = 3
+  my-function = id
+  my-number = 3
 }
 
-eq: (call: tup, 'myFunction', 2), 2 | assert
-assert: tup.myNumber == 3
-eq: (tup.myFunction: 2), 2 | assert
-
+assert: (call: tup, 'myFunction', 2), 2
+assert: tup.my-number, 3
+assert: (tup.myFunction: 2), 2
+assert: (tup.my-function: 'a'), 'a'
