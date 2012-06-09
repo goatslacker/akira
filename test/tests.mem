@@ -1,20 +1,10 @@
 # Runtime tests for Memory
 
 start = Date.now:!
-assertions = []
-failed = []
-assert(a, b) -> if a == b then assertions.push: [a, b]; else failed.push: [a, b]
-
-assert-deep(a, b) -> (
-  len = filter: (\x, i -> x is b !! i - 1), a | @.length
-  if len is a.length
-    then assertions.push: [a, b]
-    else failed.push: [a, b]
-)
 
 print-failures() -> (
-  print: 'FAIL ' ++ failed.length ++ ' tests'
-  print: failed
+  print: 'FAIL ' ++ assert.failures.length ++ ' tests'
+  print: assert.failures
 )
 
 # import test
@@ -52,16 +42,14 @@ assert: 4, (prod: 2, 2)
 
 # Done.
 end = Date.now:!
-failures = failed.length
-success = assertions.length
 
 print: 'Done!'
 
-if success
-  then print: 'OK ' ++ assertions.length ++ ' tests'
+if assert.successes
+  then print: 'OK ' ++ assert.successes.length ++ ' tests'
   else none
 
-if failures
+if assert.failures.length
   then print-failures:!
   else none
 

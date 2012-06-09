@@ -12,7 +12,7 @@ uppercase: str | assert: @, 'HELLO'
 
 chars: uppercase, str | join: @, '' | assert: @, 'HELLO'
 
-compact: '      foo bar ' | assert: @, 'foobar'
+condense: '      foo bar ' | assert: @, 'foobar'
 
 #pad: 2, str | assert: @, '  hello  '
 
