@@ -1,11 +1,5 @@
 # Runtime tests for Memory
-
 start = Date.now:!
-
-print-failures() -> (
-  print: 'FAIL ' ++ assert.failures.length ++ ' tests'
-  print: assert.failures
-)
 
 # import test
 import 'test/assignments.mem'
@@ -50,7 +44,10 @@ if assert.successes
   else none
 
 if assert.failures.length
-  then print-failures:!
+  then (
+    print: 'FAIL ' ++ assert.failures.length ++ ' tests'
+    print: assert.failures
+  )
   else none
 
 print: 'Time ' ++ end - start ++ 'ms'
