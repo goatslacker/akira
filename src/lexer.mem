@@ -49,7 +49,7 @@ parse-regular-expressions(t, chunk) -> (
   ['REGEXP', regexp]
 )
 
-get-token(chunk, t)
+get-token(chunk, n, t)
   'IDENTIFIER' -> parse-identifier: t, chunk
   'NUMBER' -> parse-alphanumeric: t, chunk
   'STRING' -> parse-alphanumeric: t, chunk
@@ -61,15 +61,15 @@ get-token(chunk, t)
   'TERMINATOR' -> ' '
   otherwise -> [chunk.1, chunk.1]
 
-process-chunk(code, line) -> (
+process-chunk(code, n) -> (
   type = get-type: code
-  token = get-token: code, type
+  token = get-token: code, n, type
   if Array.isArray: token
     then (
-      token.push: line
+      token.push: n.line
       token
     )
-    else [type, token, line]
+    else [type, token, n.line]
 )
 
 get-length(i, len, type)
@@ -80,18 +80,22 @@ incr-line(line, type)
   'TERMINATOR' -> line + 1
   otherwise -> line
 
-return-tokens(code, i, line) -> (
+return-tokens(code, n) -> (
   tokens = []
   len = length: code
-  chunk = code.substr: i, len
+  chunk = code.substr: n.index, len
 
   if chunk
     then (
-      token = process-chunk: chunk, line
+      token = process-chunk: chunk, n
       tokens.push: token
-      tokens ++ return-tokens: code, (get-length: i, (length: (token.2.toString:!)), token.1), (incr-line: line, token.1);
+      n2 = {
+        index = get-length: n.index, (length: (token.2.toString:!)), token.1;
+        line = incr-line: n.line, token.1;
+      }
+      tokens ++ return-tokens: code, n2;
     )
     else tokens
 )
 
-export tokenize(code) -> return-tokens: code, 0, 0 | filter: (\token -> ignore.indexOf: token.1 | 0 > @), @
+export tokenize(code) -> return-tokens: code, { index = 0, line = 0 } | filter: (\token -> ignore.indexOf: token.1 | 0 > @), @
