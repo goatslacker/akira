@@ -61,7 +61,6 @@ bnf = {
 
   SExpression = [
     o: '( Assignable )', (\-> $2);
-    o: '( Declaration )', (\-> $2);
   ]
 
   Expression = [
@@ -88,6 +87,7 @@ bnf = {
     o: 'Tuples';
     o: 'ExplicitInvocation';
     o: 'Operation';
+    o: 'Anonymous';
     o: 'Access';
     o: '@';
   ]
@@ -153,8 +153,11 @@ bnf = {
 
   Declaration = [
     o: 'Identifier ( Parameters ) LAMBDA Body', (\-> construct Declaration: $1, $3, $6);
-    o: '\ Parameters LAMBDA Body', (\-> construct Declaration: none, $2, $4);
     o: 'LAMBDA Body', (\-> construct Call: (construct Declaration: none, none, $2), none);
+  ]
+
+  Anonymous = [
+    o: '( \ Parameters LAMBDA Body )', (\-> construct Declaration: none, $3, $5);
   ]
 
   Pattern = [
