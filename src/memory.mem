@@ -94,7 +94,7 @@ display-help = \none {
 }
 
 #main
-memory(item, action)
+memory = \item, action
   'compile' -> files: item, (\code, name -> code | compile | write: @, name)
   'code' -> file: item | compile | output
   'test' -> file: 'test/tests.mem' | compile | run
@@ -103,6 +103,6 @@ memory(item, action)
   'ast' -> file: item | tokenize | parse | ast | analyze
   'version' -> 'memory ' ++ me.version | util.puts
   'watch' -> watch: item
-  otherwise -> display-help:!
+  else -> display-help:!
 
 export memory

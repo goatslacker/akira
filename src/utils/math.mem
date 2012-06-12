@@ -1,8 +1,8 @@
-export square(x) -> x * x
-export sum() -> foldl: (\a, b -> a + b), arguments
-export sub() -> foldl: (\a, b -> a - b), arguments
-export prod() -> foldl: (\a, b -> a * b), arguments
-export div() -> foldl: (\a, b -> a / b), arguments
-export even(n) -> mod: n, 2 | @ is 0
-export odd(n) -> not even: n;
-export abs(n) -> Math.abs: n
+export square = \x -> x * x
+export sum = \none -> foldl: (\a, b -> a + b), arguments
+export sub = \none -> foldl: (\a, b -> a - b), arguments
+export prod = \none -> foldl: (\a, b -> a * b), arguments
+export div = \none -> foldl: (\a, b -> a / b), arguments
+export even = \n -> mod: n, 2 | @ is 0
+export odd = \n -> not even: n;
+export abs = \n -> Math.abs: n

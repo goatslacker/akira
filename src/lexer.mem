@@ -30,9 +30,9 @@ parse-alphanumeric = \t, chunk -> extract: t, chunk | @.2
 
 filter-identifiers-fn = \iden -> partial: filter, (\x -> identifiers !! x | @.indexOf: iden | @ >= 0)
 
-return-identifier(item, type)
+return-identifier = \item, type
   'KEYWORDS' -> [(item.toUpperCase:!), item]
-  otherwise -> [type, item]
+  else -> [type, item]
 
 
 parse-identifier = \t, chunk {
@@ -49,7 +49,7 @@ parse-regular-expressions = \t, chunk {
   ['REGEXP', regexp]
 }
 
-get-token(chunk, n, t)
+get-token = \chunk, n, t
   'IDENTIFIER' -> parse-identifier: t, chunk
   'NUMBER' -> parse-alphanumeric: t, chunk
   'STRING' -> parse-alphanumeric: t, chunk
@@ -59,7 +59,7 @@ get-token(chunk, n, t)
   'COMMENTS' -> parse-alphanumeric: t, chunk
   'WHITESPACE' -> ' '
   'TERMINATOR' -> ' '
-  otherwise -> [chunk.1, chunk.1]
+  else -> [chunk.1, chunk.1]
 
 process-chunk = \code, n {
   type = get-type: code
@@ -72,13 +72,13 @@ process-chunk = \code, n {
     else [type, token, n.line]
 }
 
-get-length(i, token)
+get-length = \i, token
   'STRING' -> i + 2
-  otherwise -> i
+  else -> i
 
-incr-line(line, type)
+incr-line = \line, type
   'TERMINATOR' -> line + 1
-  otherwise -> line
+  else -> line
 
 return-tokens = \code, n {
   tokens = []

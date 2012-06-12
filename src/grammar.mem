@@ -64,7 +64,6 @@ bnf = {
     o: 'Modules';
     o: 'Assignable';
     o: 'ARGUMENTS';
-    o: 'PatternMatching';
     o: 'Exceptions';
   ]
 
@@ -73,6 +72,7 @@ bnf = {
     o: 'If';
     o: 'Assignment';
     o: 'Declaration';
+    o: 'PatternMatching';
     o: 'Invocation';
     o: 'Pipeline';
     o: 'Construct';
@@ -161,8 +161,12 @@ bnf = {
     o: 'Patterns Pattern', (\none -> construct Arguments: $1, $2);
   ]
 
+  Default := [
+    o: 'ELSE LAMBDA Body TERMINATOR', (\none -> construct Arguments: [$1, $3]);
+  ]
+
   PatternMatching := [
-    o: 'Identifier ( Parameters ) TERMINATOR Patterns', (\none -> construct Declaration: $1, $3, (construct Pattern: $3, $6));
+    o: '\ Parameters TERMINATOR Patterns Default', (\none -> construct Declaration: none, $2, (construct Pattern: $2, $4, $5));
   ]
 
   Comma := [

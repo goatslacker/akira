@@ -1,30 +1,30 @@
-export head([x]) -> x
-export init([_, x]) -> _
-export tail([x, _]) -> _
-export last([_, x]) -> x
-export at(list, index) -> list !! index - 1
-export get(obj, prop) -> obj !! prop
-export length(of) -> of.length
-export join(list, by) -> list.join: by
-export concat() -> foldl: (\a, b -> a ++ b), arguments
-export count(fn, list) -> filter: fn, list | @.length
-export average(list) -> foldl: (\a, b -> a + b), list | @ / list.length
-export compact(list) -> filter: (\x -> not not x), list
-export intersect(list1, list2) -> filter: (\x -> list2.indexOf: x | 0 - 1 isnt @), list1
-export max(list) -> foldl: (\a, b -> if a > b then a else b), list
-export min(list) -> foldl: (\a, b -> if a < b then a else b), list
-export nothing(fn, list) -> filter: fn, list | @.length | @ is 0
-export randomize(list) -> sort: (\-> Math.random:!; > 0.5), list
-export unique(list) -> filter: (\x, i -> list.indexOf: x | i is @), list
+export head = \[x] -> x
+export init = \[_, x] -> _
+export tail = \[x, _] -> _
+export last = \[_, x] -> x
+export at = \list, index -> list !! index - 1
+export get = \obj, prop -> obj !! prop
+export length = \of -> of.length
+export join = \list, by -> list.join: by
+export concat = \none -> foldl: (\a, b -> a ++ b), arguments
+export count = \fn, list -> filter: fn, list | @.length
+export average = \list -> foldl: (\a, b -> a + b), list | @ / list.length
+export compact = \list -> filter: (\x -> not not x), list
+export intersect = \list1, list2 -> filter: (\x -> list2.indexOf: x | 0 - 1 isnt @), list1
+export max = \list -> foldl: (\a, b -> if a > b then a else b), list
+export min = \list -> foldl: (\a, b -> if a < b then a else b), list
+export nothing = \fn, list -> filter: fn, list | @.length | @ is 0
+export randomize = \list -> sort: (\none -> Math.random:!; > 0.5), list
+export unique = \list -> filter: (\x, i -> list.indexOf: x | i is @), list
 
-take-while(fn, [x, rest])
-  fn: x; == true -> x +: take-while: fn, rest;
-  otherwise -> []
+take-while = \fn, [x, _]
+  fn: x; == true -> x +: take-while: fn, _;
+  else -> []
 
 export take-while
 
-take-until(fn, [x, rest])
+take-until = \fn, [x, _]
   fn: x; == true -> [x]
-  otherwise -> x +: take-until: fn, rest;
+  else -> x +: take-until: fn, _;
 
 export take-until
