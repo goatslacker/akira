@@ -1,17 +1,17 @@
 # test function
-tuple-eq(a, b) -> filter: (\x, i -> x isnt b !! i), a | @.length | assert: 0, @
+tuple-eq = \a, b -> filter: (\x, i -> x isnt b !! i), a | @.length | assert: 0, @
 
 # setting tuples
-obj = { hello = 1, world = 2 }
-tuple-eq: obj, { hello = 1, world = 2 }
+obj = { hello =: 1, world =: 2 }
+tuple-eq: obj, { hello =: 1, world =: 2 }
 
 # retrieving properties
 assert: (get: obj, 'hello'), 1
 
 # calling functions
 tup = {
-  my-function = id
-  my-number = 3
+  my-function =: id
+  my-number =: 3
 }
 
 assert: (call: tup, 'myFunction', 2), 2

@@ -1,16 +1,16 @@
-try (
+try {
   a = 1
-) catch (
+} catch {
  b = 1
-)
+}
 
 assert: a, 1
 assert: b, undefined
 
-try (
+try {
   raise: 'Ah!'
-) catch (
+} catch {
   c = 3
-)
+}
 
 assert: c, 3

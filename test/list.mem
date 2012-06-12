@@ -6,20 +6,20 @@ array = [
 
 
 # IIFE
--> (
+(\none {
 # Testing foldr, expressions in arguments, anonymous functions
-  lastEl(a) -> foldl: (\a, b -> flip: consts, a, b), a
+  lastEl = \a -> foldl: (\a, b -> flip: consts, a, b), a
   lastEl: array | (\a -> assert: a, 3 )
-)
+}): none
 
 # Partial application
--> (
+(\none {
   mapper = partial: map, square
-  assertArray(a) -> assert-deep: a, [1, 4, 9]
+  assertArray = \a -> assert-deep: a, [1, 4, 9]
 
   array | map: square, @ | assertArray
   array | mapper | assertArray
-)
+}): none
 
 array.map: square | assert-deep: @, [1, 4, 9]
 

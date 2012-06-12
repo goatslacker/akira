@@ -1,11 +1,11 @@
-foo(x) -> (
+foo = \x {
   if x
-    then (
-      if not x then true else (false)
-    ) else (
+    then {
+      if not x then true else {false}
+    } else {
       if not x then true else false
-    )
-)
+    }
+}
 
 foo-true = foo: true
 foo-false = foo: false

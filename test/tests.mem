@@ -27,11 +27,11 @@ assert: 24, (fact: 4)
 assert: 2, (sum: 1, 1)
 assert: 4, (prod: 2, 2)
 
--> (
+(\none {
   b = 'hello-world'
   c = b.replace: /-([a-z])/g, (\i -> i.2.toUpperCase:!)
   assert: c, 'helloWorld'
-)
+}): none
 
 
 # Done.
@@ -44,10 +44,10 @@ if assert.successes
   else none
 
 if assert.failures.length
-  then (
+  then {
     print: 'FAIL ' ++ assert.failures.length ++ ' tests'
     print: assert.failures
-  )
+  }
   else none
 
 print: 'Time ' ++ end - start ++ 'ms'

@@ -1,34 +1,36 @@
-numbers(n)
+numbers = \n
   'one' -> 1
   'two' -> 2
   'three' -> 3
-  n -> 4
+  else -> 4
 
 assert: 4, (numbers: 'four')
 assert: 1, (numbers: 'one')
 
-gtTen(n)
+gtTen = \n
   n < 10 -> true
   n > 10 -> false
+  else -> none
 
 assert: false, (gtTen: 11)
 assert: true, (gtTen: 2)
 
-starts-with(noun, prefix) -> prefix == noun.1 + noun.2
+starts-with = \noun, prefix -> prefix == noun.1 + noun.2
 
-spanish-gender-of-noun(noun)
+spanish-gender-of-noun = \noun
   starts-with: noun, 'el'; -> 'male'
   starts-with: noun, 'la'; -> 'female'
+  else -> none
 
 assert: 'female', (spanish-gender-of-noun: 'la casa')
 assert: 'male', (spanish-gender-of-noun: 'el carro')
 
 # implementations of our util functions in memory
-init([_, a]) -> _
-tail([a, _]) -> _
-head([a, _]) -> a
-last([_, a]) -> a
-get-middle([a, _, b]) -> _
+init = \[_, a] -> _
+tail = \[a, _] -> _
+head = \[a, _] -> a
+last = \[_, a] -> a
+get-middle = \[a, _, b] -> _
 
 
 ls = [1, 2, 3, 4, 5]
