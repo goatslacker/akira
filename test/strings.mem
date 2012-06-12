@@ -1,5 +1,5 @@
 str = 'hello'
-hi = str.split: '';.reduce: (\a, b -> a + b)
+hi = str.split: '' | @.reduce: (\a, b -> a + b)
 assert: hi, str
 
 capitalize: str | assert: @, 'Hello'

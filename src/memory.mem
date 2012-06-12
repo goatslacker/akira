@@ -25,7 +25,7 @@ ast = \parsed {
 wrap = \program {
   [
     '(function () {'
-    escodegen.generate: program;
+    (escodegen.generate: program)
     '}.call(typeof module !== "undefined" ? module.exports : this))'
   ]
 }
@@ -43,7 +43,7 @@ walk = \tree, cb {
   if stat.is-directory:!
     then fs.readdir-sync: tree | map: (\v -> path.join: tree, v | walk: @, cb), @
     else {
-      if tree.index-of: '.mem'; >= 0
+      if (tree.index-of: '.mem') >= 0
         then file: tree | cb: @, tree
         else none
     }
@@ -77,7 +77,7 @@ write = \code, item {
   code | join-lines | fs.write-file-sync: filepath, @
 }
 
-watch = \filename -> nodewatch.add: filename;.onChange: (\none -> file: filename | compile | write: @, filename)
+watch = \filename -> nodewatch.add: filename | @.on-change: (\none -> file: filename | compile | write: @, filename)
 
 display-help = \none {
   util.puts: '               memory'

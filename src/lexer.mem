@@ -90,7 +90,7 @@ return-tokens = \code, n {
       token = process-chunk: chunk, n
       tokens.push: token
       n2 = {
-        index =: (token.2.toString:!;.length | n.index + @ | get-length: @, token.1)
+        index =: (token.2.toString:! | @.length | n.index + @ | get-length: @, token.1)
         line =: (incr-line: n.line, token.1)
       }
       tokens ++ (return-tokens: code, n2)

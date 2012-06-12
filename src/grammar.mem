@@ -27,219 +27,219 @@ bnf = {
   ]
 
   Program =: [
-    o: 'Terminator Expressions', (\none -> $2);
-    o: 'Expressions';
+    (o: 'Terminator Expressions', (\none -> $2))
+    (o: 'Expressions')
   ]
 
   Expressions =: [
-    o: 'Body', (\none -> yy.Nodes.wrap: $1);
-    o: 'Expressions TERMINATOR Body', (\none -> $1.push: $3);
-    o: 'Expressions TERMINATOR';
+    (o: 'Body', (\none -> yy.Nodes.wrap: $1))
+    (o: 'Expressions TERMINATOR Body', (\none -> $1.push: $3))
+    (o: 'Expressions TERMINATOR')
   ]
 
   Terminator =: [
-    o: 'TERMINATOR';
-    o: 'Terminator TERMINATOR';
+    (o: 'TERMINATOR')
+    (o: 'Terminator TERMINATOR')
   ]
 
   OptTerminator =: [
-    o: '';
-    o: 'Terminator';
+    (o: '')
+    (o: 'Terminator')
   ]
 
   Identifier =: [
-    o: 'IDENTIFIER', (\none -> construct Identifier: $1);
+    (o: 'IDENTIFIER', (\none -> construct Identifier: $1))
   ]
 
   IdentifierNoUtils =: [
-    o: 'IDENTIFIER', (\none -> construct Identifier: $1, true);
+    (o: 'IDENTIFIER', (\none -> construct Identifier: $1, true))
   ]
 
   Body =: [
-    o: 'Expression';
-    o: '{ OptTerminator Expressions }', (\none -> $3);
+    (o: 'Expression')
+    (o: '{ OptTerminator Expressions }', (\none -> $3))
   ]
 
   Expression =: [
-    o: 'Modules';
-    o: 'Assignable';
-    o: 'Exceptions';
-    o: 'ARGUMENTS';
+    (o: 'Modules')
+    (o: 'Assignable')
+    (o: 'Exceptions')
+    (o: 'ARGUMENTS')
   ]
 
   Assignable =: [
-    o: 'Value';
-    o: 'If';
-    o: 'Assignment';
-    o: 'Declaration';
-    o: 'PatternMatching';
-    o: 'Invocation';
-    o: 'Pipeline';
-    o: 'Construct';
+    (o: 'Value')
+    (o: 'If')
+    (o: 'Assignment')
+    (o: 'Declaration')
+    (o: 'PatternMatching')
+    (o: 'Invocation')
+    (o: 'Pipeline')
+    (o: 'Construct')
   ]
 
   Value =: [
-    o: 'Literal';
-    o: 'Lists';
-    o: 'Tuples';
-    o: 'ExplicitInvocation';
-    o: 'Operation';
-    o: 'Access';
-    o: '@';
-    o: '( Assignable )', (\none -> $2);
+    (o: 'Literal')
+    (o: 'Lists')
+    (o: 'Tuples')
+    (o: 'ExplicitInvocation')
+    (o: 'Operation')
+    (o: 'Access')
+    (o: '@')
+    (o: '( Assignable )', (\none -> $2))
   ]
 
   Values =: [
-    o: 'Value';
-    o: 'Invocation';
+    (o: 'Value')
+    (o: 'Invocation')
   ]
 
   Literal =: [
-    o: 'Identifier';
-    o: 'AlphaNumeric';
-    o: 'NONE', (\none -> construct Literal: none);
-    o: 'BOOL', (\none -> construct Literal: ($1 == 'true'));
-    o: 'REGEXP', (\none -> construct Literal: $1);
+    (o: 'Identifier')
+    (o: 'AlphaNumeric')
+    (o: 'NONE', (\none -> construct Literal: none))
+    (o: 'BOOL', (\none -> construct Literal: ($1 == 'true')))
+    (o: 'REGEXP', (\none -> construct Literal: $1))
   ]
 
   AlphaNumeric =: [
-    o: 'NUMBER', (\none -> construct Literal: (Number: $1));
-    o: 'STRING', (\none -> construct Literal: (String: $1));
+    (o: 'NUMBER', (\none -> construct Literal: (Number: $1)))
+    (o: 'STRING', (\none -> construct Literal: (String: $1)))
   ]
 
   Assignment =: [
-    o: 'Identifier = Assignable', (\none -> construct Assignment: $1, $3);
+    (o: 'Identifier = Assignable', (\none -> construct Assignment: $1, $3))
   ]
 
   Modules =: [
-    o: 'EXPORT Value', (\none -> construct Export: $2);
-    o: 'EXPORT Assignment', (\none -> construct Export: $2);
-    o: 'IMPORT STRING', (\none -> construct Import: $2);
+    (o: 'EXPORT Value', (\none -> construct Export: $2))
+    (o: 'EXPORT Assignment', (\none -> construct Export: $2))
+    (o: 'IMPORT STRING', (\none -> construct Import: $2))
   ]
 
   Construct =: [
-    o: 'CONSTRUCT Invocation', (\none -> construct Construction: $2);
+    (o: 'CONSTRUCT Invocation', (\none -> construct Construction: $2))
   ]
 
   Pipeline =: [
-    o: 'Value | Values', (\none -> construct Pipeline: $1, $3);
-    o: 'Invocation | Values', (\none -> construct Pipeline: $1, $3);
-    o: 'Pipeline | Values', (\none -> construct Pipeline: $1, $3);
+    (o: 'Value | Values', (\none -> construct Pipeline: $1, $3))
+    (o: 'Invocation | Values', (\none -> construct Pipeline: $1, $3))
+    (o: 'Pipeline | Values', (\none -> construct Pipeline: $1, $3))
   ]
 
   Invocation =: [
-    o: 'Value : Arguments', (\none -> construct Call: $1, $3);
+    (o: 'Value : Arguments', (\none -> construct Call: $1, $3))
   ]
 
   ExplicitInvocation =: [
-    o: 'Invocation ;', (\none -> $1);
+    (o: 'Invocation ;', (\none -> $1))
   ]
 
   Declaration =: [
-    o: '\ Parameters LAMBDA Expression', (\none -> construct Declaration: none, $2, $4);
-    o: '\ Parameters Body', (\none -> construct Declaration: none, $2, $3);
+    (o: '\ Parameters LAMBDA Expression', (\none -> construct Declaration: none, $2, $4))
+    (o: '\ Parameters Body', (\none -> construct Declaration: none, $2, $3))
   ]
 
   Pattern =: [
-    o: 'Value LAMBDA Body TERMINATOR', (\none -> [$1, $3] );
+    (o: 'Value LAMBDA Body TERMINATOR', (\none -> [$1, $3] ))
   ]
 
   Patterns =: [
-    o: 'Pattern', (\none -> construct Arguments: $1);
-    o: 'Patterns Pattern', (\none -> construct Arguments: $1, $2);
+    (o: 'Pattern', (\none -> construct Arguments: $1))
+    (o: 'Patterns Pattern', (\none -> construct Arguments: $1, $2))
   ]
 
   Default =: [
-    o: 'ELSE LAMBDA Body TERMINATOR', (\none -> construct Arguments: [$1, $3]);
+    (o: 'ELSE LAMBDA Body TERMINATOR', (\none -> construct Arguments: [$1, $3]))
   ]
 
   PatternMatching =: [
-    o: '\ Parameters TERMINATOR Patterns Default', (\none -> construct Declaration: none, $2, (construct Pattern: $2, $4, $5));
+    (o: '\ Parameters TERMINATOR Patterns Default', (\none -> construct Declaration: none, $2, (construct Pattern: $2, $4, $5)))
   ]
 
   Comma =: [
-    o: ', OptTerminator';
+    (o: ', OptTerminator')
   ]
 
   Lists =: [
-    o: '[ ]', (\none -> construct List:!);
-    o: '[ OptTerminator ListArgs OptTerminator ]', (\none -> construct List: $3);
+    (o: '[ ]', (\none -> construct List:!))
+    (o: '[ OptTerminator ListArgs OptTerminator ]', (\none -> construct List: $3))
   ]
 
   ListArgs =: [
-    o: 'Arg', (\none -> construct Arguments: $1);
-    o: 'ListArgs Comma Arg', (\none -> construct Arguments: $1, $3);
-    o: 'ListArgs Terminator Arg', (\none -> construct Arguments: $1, $3);
+    (o: 'Arg', (\none -> construct Arguments: $1))
+    (o: 'ListArgs Comma Arg', (\none -> construct Arguments: $1, $3))
+    (o: 'ListArgs Terminator Arg', (\none -> construct Arguments: $1, $3))
   ]
 
   KeyValue =: [
-    o: 'Identifier = : Value', (\none -> construct Assignment: $1, $4);
+    (o: 'Identifier = : Value', (\none -> construct Assignment: $1, $4))
   ]
 
   TupleItems =: [
-    o: 'KeyValue', (\none -> construct Arguments: $1);
-    o: 'TupleItems Comma KeyValue', (\none -> construct Arguments: $1, $3);
-    o: 'TupleItems Terminator KeyValue', (\none -> construct Arguments: $1, $3);
+    (o: 'KeyValue', (\none -> construct Arguments: $1))
+    (o: 'TupleItems Comma KeyValue', (\none -> construct Arguments: $1, $3))
+    (o: 'TupleItems Terminator KeyValue', (\none -> construct Arguments: $1, $3))
   ]
 
   Tuples =: [
-    o: '{ }', (\none -> construct Tuple:!);
-    o: '{ OptTerminator TupleItems OptTerminator }', (\none -> construct Tuple: $3);
+    (o: '{ }', (\none -> construct Tuple:!))
+    (o: '{ OptTerminator TupleItems OptTerminator }', (\none -> construct Tuple: $3))
   ]
 
   Access =: [
-    o: 'Identifier Accessor', (\none -> construct Access: $1, $2);
-    o: '@ Accessor', (\none -> construct Access: $1, $2);
-    o: 'ExplicitInvocation Accessor', (\none -> construct Access: $1, $2);
-    o: 'Access Accessor', (\none -> construct Access: $1, $2);
+    (o: 'Identifier Accessor', (\none -> construct Access: $1, $2))
+    (o: '@ Accessor', (\none -> construct Access: $1, $2))
+    (o: 'ExplicitInvocation Accessor', (\none -> construct Access: $1, $2))
+    (o: 'Access Accessor', (\none -> construct Access: $1, $2))
   ]
 
   Accessor =: [
-    o: '. IdentifierNoUtils', (\none -> $2);
-    o: '. AlphaNumeric', (\none -> $2);
+    (o: '. IdentifierNoUtils', (\none -> $2))
+    (o: '. AlphaNumeric', (\none -> $2))
   ]
 
   Arg =: [
-    o: 'Value';
-    o: 'ARGUMENTS';
+    (o: 'Value')
+    (o: 'ARGUMENTS')
   ]
 
   Arguments =: [
-    o: '!', (\none -> none);
-    o: 'Arg', (\none -> construct Arguments: $1);
-    o: 'Arguments Comma Arg', (\none -> construct Arguments: $1, $3);
+    (o: '!', (\none -> none))
+    (o: 'Arg', (\none -> construct Arguments: $1))
+    (o: 'Arguments Comma Arg', (\none -> construct Arguments: $1, $3))
   ]
 
   Param =: [
-    o: 'IdentifierNoUtils';
-    o: 'IdentifierNoUtils = Value', (\none -> construct Assignment: $1, $3);
-    o: 'Lists';
+    (o: 'IdentifierNoUtils')
+    (o: 'IdentifierNoUtils = Value', (\none -> construct Assignment: $1, $3))
+    (o: 'Lists')
   ]
 
   Parameters =: [
-    o: 'NONE', (\none -> none);
-    o: 'Param', (\none -> construct Arguments: $1);
-    o: 'Parameters , Param', (\none -> construct Arguments: $1, $3);
+    (o: 'NONE', (\none -> none))
+    (o: 'Param', (\none -> construct Arguments: $1))
+    (o: 'Parameters , Param', (\none -> construct Arguments: $1, $3))
   ]
 
   Exceptions =: [
-    o: 'TRY Body CATCH Body', (\none -> construct Exception: $2, $4);
+    (o: 'TRY Body CATCH Body', (\none -> construct Exception: $2, $4))
   ]
 
   If =: [
-    o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body', (\none -> construct If: $2, $5, $8);
+    (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body', (\none -> construct If: $2, $5, $8))
   ]
 
   Operation =: [
-    o: 'Value COMPARE Value', (\none -> construct Compare: $1, $2, $3);
-    o: 'Value LOGIC Value', (\none -> construct Compare: $1, $2, $3);
-    o: 'Value LEFT_OPERATORS Value', (\none -> construct Operation: $1, $2, $3);
-    o: 'Value RIGHT_OPERATORS Value', (\none -> construct Operation: $1, $2, $3);
-    o: 'NOT Value', (\none -> construct Compare: $2, $1);
-    o: 'Value + Value', (\none -> construct Operation: $1, '+', $3);
-    o: 'Value - Value', (\none -> construct Operation: $1, '-', $3);
-    o: 'Value * Value', (\none -> construct Operation: $1, '*', $3);
-    o: 'Value / Value', (\none -> construct Operation: $1, '/', $3);
+    (o: 'Value COMPARE Value', (\none -> construct Compare: $1, $2, $3))
+    (o: 'Value LOGIC Value', (\none -> construct Compare: $1, $2, $3))
+    (o: 'Value LEFT_OPERATORS Value', (\none -> construct Operation: $1, $2, $3))
+    (o: 'Value RIGHT_OPERATORS Value', (\none -> construct Operation: $1, $2, $3))
+    (o: 'NOT Value', (\none -> construct Compare: $2, $1))
+    (o: 'Value + Value', (\none -> construct Operation: $1, '+', $3))
+    (o: 'Value - Value', (\none -> construct Operation: $1, '-', $3))
+    (o: 'Value * Value', (\none -> construct Operation: $1, '*', $3))
+    (o: 'Value / Value', (\none -> construct Operation: $1, '/', $3))
   ]
 }
 
