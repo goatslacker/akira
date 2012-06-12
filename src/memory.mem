@@ -9,17 +9,17 @@ me = require: '../package.json'
 lexer = require: './lexer'
 Parser = require: './parser'
 parser = Parser.parser
-parser.yy <+ require: './nodes';
+parser.yy <+ (require: './nodes')
 
 tokenize = \code -> lexer.tokenize: code
 parse = \tokens -> parser.parse: tokens
 ast = \parsed {
   self = Object.create: {}
   body = parsed.compile: self
-  ast = parsed.getUtils: self; ++ parsed.addVars: self; ++ body
+  ast = (parsed.getUtils: self) ++ (parsed.addVars: self) ++ body
   program = {
-    type := 'Program'
-    body := ast
+    type =: 'Program'
+    body =: ast
   }
 }
 wrap = \program {
@@ -60,7 +60,7 @@ files = \dirname, cb {
 
 run = \code {
   try {
-    result = vm.run-in-new-context: (code.join: ''), { console := console }
+    result = vm.run-in-new-context: (code.join: ''), { console =: console }
   } catch {
     util.error: err.stack
     util.debug: code
