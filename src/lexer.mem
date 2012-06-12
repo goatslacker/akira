@@ -1,53 +1,53 @@
 rx = {
-  IDENTIFIER = /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
-  NUMBER = /^((\d+\.)?\d+)+/
-  STRING = /^'(.*?)'/
-  LAMBDA = /^->/
-  OPERATION = /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
-  TERMINATOR = /^\n/
-  REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
-  COMMENTS = /^(#.*)/
-  WHITESPACE = /^ /
+  IDENTIFIER := /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
+  NUMBER := /^((\d+\.)?\d+)+/
+  STRING := /^'(.*?)'/
+  LAMBDA := /^->/
+  OPERATION := /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
+  TERMINATOR := /^\n/
+  REGEX := /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
+  COMMENTS := /^(#.*)/
+  WHITESPACE := /^ /
 }
 
 identifiers = {
-  KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none']
-  COMPARE = ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
-  LEFT_OPERATORS = ['++', '!!', '<+']
-  RIGHT_OPERATORS = ['=>', '+:']
-  NOT = ['not']
-  LOGIC = ['and', 'or', '&&', '||']
-  BOOL = ['true', 'false']
+  KEYWORDS := ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none']
+  COMPARE := ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
+  LEFT_OPERATORS := ['++', '!!', '<+']
+  RIGHT_OPERATORS := ['=>', '+:']
+  NOT := ['not']
+  LOGIC := ['and', 'or', '&&', '||']
+  BOOL := ['true', 'false']
 }
 
 ignore = ['COMMENTS', 'WHITESPACE']
 
-get-type(a) -> rx | Object.keys | filter: (\x -> rx !! x | @.test: a), @ | last
+get-type = \a -> rx | Object.keys | filter: (\x -> rx !! x | @.test: a), @ | last
 
-extract(key, chunk) -> rx !! key | @.exec: chunk
+extract = \key, chunk -> rx !! key | @.exec: chunk
 
-parse-alphanumeric(t, chunk) -> extract: t, chunk | @.2
+parse-alphanumeric = \t, chunk -> extract: t, chunk | @.2
 
-filter-identifiers-fn(iden) -> partial: filter, (\x -> identifiers !! x | @.indexOf: iden | @ >= 0)
+filter-identifiers-fn = \iden -> partial: filter, (\x -> identifiers !! x | @.indexOf: iden | @ >= 0)
 
 return-identifier(item, type)
   'KEYWORDS' -> [(item.toUpperCase:!), item]
   otherwise -> [type, item]
 
 
-parse-identifier(t, chunk) -> (
+parse-identifier = \t, chunk {
   item = extract: t, chunk
   filter-identifiers = filter-identifiers-fn: item.2
   token = identifiers | Object.keys | filter-identifiers | last
 
   return-identifier: item.2, token || t
-)
+}
 
-parse-regular-expressions(t, chunk) -> (
+parse-regular-expressions = \t, chunk {
   item = extract: t, chunk
   regexp = construct RegExp: item.3, item.4
   ['REGEXP', regexp]
-)
+}
 
 get-token(chunk, n, t)
   'IDENTIFIER' -> parse-identifier: t, chunk
@@ -61,16 +61,16 @@ get-token(chunk, n, t)
   'TERMINATOR' -> ' '
   otherwise -> [chunk.1, chunk.1]
 
-process-chunk(code, n) -> (
+process-chunk = \code, n {
   type = get-type: code
   token = get-token: code, n, type
   if Array.isArray: token
-    then (
+    then {
       token.push: n.line
       token
-    )
+    }
     else [type, token, n.line]
-)
+}
 
 get-length(i, token)
   'STRING' -> i + 2
@@ -80,22 +80,24 @@ incr-line(line, type)
   'TERMINATOR' -> line + 1
   otherwise -> line
 
-return-tokens(code, n) -> (
+return-tokens = \code, n {
   tokens = []
   len = length: code
   chunk = code.substr: n.index, len
 
   if chunk
-    then (
+    then {
       token = process-chunk: chunk, n
       tokens.push: token
       n2 = {
-        index = (token.2.toString:!;.length | n.index + @ | get-length: @, token.1)
-        line = incr-line: n.line, token.1;
+        index := (token.2.toString:!;.length | n.index + @ | get-length: @, token.1)
+        line := incr-line: n.line, token.1;
       }
       tokens ++ return-tokens: code, n2;
-    )
+    }
     else tokens
-)
+}
 
-export tokenize(code) -> return-tokens: code, { index = 0, line = 0 } | filter: (\token -> ignore.indexOf: token.1 | 0 > @), @
+filter-whitespace = \token -> ignore.indexOf: token.1 | 0 > @
+
+export tokenize = \code -> return-tokens: code, { index := 0, line := 0 } | filter: filter-whitespace, @

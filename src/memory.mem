@@ -11,75 +11,75 @@ Parser = require: './parser'
 parser = Parser.parser
 parser.yy <+ require: './nodes';
 
-tokenize(code) -> lexer.tokenize: code
-parse(tokens) -> parser.parse: tokens
-ast(parsed) -> (
+tokenize = \code -> lexer.tokenize: code
+parse = \tokens -> parser.parse: tokens
+ast = \parsed {
   self = Object.create: {}
   body = parsed.compile: self
   ast = parsed.getUtils: self; ++ parsed.addVars: self; ++ body
   program = {
-    type = 'Program'
-    body = ast
+    type := 'Program'
+    body := ast
   }
-)
-wrap(program) -> (
+}
+wrap = \program {
   [
     '(function () {'
     escodegen.generate: program;
     '}.call(typeof module !== "undefined" ? module.exports : this))'
   ]
-)
+}
 
 
-compile(code) -> code | tokenize | parse | ast | wrap
+compile = \code -> code | tokenize | parse | ast | wrap
 
-walk(tree, cb) -> (
-  try (
+walk = \tree, cb {
+  try {
     stat = fs.stat-sync: tree
-  ) catch (
+  } catch {
     raise: err
-  )
+  }
 
   if stat.is-directory:!
     then fs.readdir-sync: tree | map: (\v -> path.join: tree, v | walk: @, cb), @
-    else (
+    else {
       if tree.index-of: '.mem'; >= 0
         then file: tree | cb: @, tree
         else none
-    )
-)
+    }
+}
 
 
-file(filepath) -> path.join: process.env.PWD, filepath | fs.read-file-sync | @.to-string:!
-files(dirname, cb) -> (
+file = \filepath -> path.join: process.env.PWD, filepath | fs.read-file-sync | @.to-string:!
+files = \dirname, cb {
   stat = fs.stat-sync: dirname
   if stat.is-directory:!
     then walk: dirname, cb
     else file: dirname | cb: @, dirname
-)
+}
 
-run(code) -> (
-  try (
-    result = vm.run-in-new-context: (code.join: ''), { console = console }
-  ) catch (
+run = \code {
+  try {
+    result = vm.run-in-new-context: (code.join: ''), { console := console }
+  } catch {
     util.error: err.stack
     util.debug: code
-  )
+  }
   result
-)
+}
 
 
-output(list) -> map: (\x -> x | util.puts), list
-analyze(body) -> body | util.inspect: @, false, 50 | util.puts
+output = \list -> map: (\x -> x | util.puts), list
+analyze = \body -> body | util.inspect: @, false, 50 | util.puts
 
-write(code, item) -> (
+write = \code, item {
   filepath = item.replace: 'src', 'lib' | @.replace: '.mem', '.js' | path.join: process.env.PWD, @
   code | join-lines | fs.write-file-sync: filepath, @
-)
+}
 
-watch(filename) -> nodewatch.add: filename;.onChange: (\-> file: filename | compile | write: @, filename)
+watch = \filename -> nodewatch.add: filename;.onChange: (\none -> file: filename | compile | write: @, filename)
 
-display-help() -> (
+display-help = \none {
   util.puts: '               memory'
   util.puts: ''
   util.puts: 'ast [file]     - output the Mozilla Parse API for that file'
@@ -91,7 +91,7 @@ display-help() -> (
   util.puts: 'version        - memory version'
   util.puts: 'watch [file]   - watch a file for changes and compile on change'
   util.puts: ''
-)
+}
 
 #main
 memory(item, action)
