@@ -25,3 +25,21 @@ assert: d, true
 assert: e, f
 assert: f, g
 assert: g, 1
+
+# assigning
+a1 = 1
+assert: a1, 1
+a2 = [1]
+assert-deep: a2, [1]
+a3 = { a =: 1 }
+assert: a3.a, 1
+a4 = 2 * 4
+assert: a4, 8
+a5 = (\x -> x)
+a5: 4 | assert: @, 4
+a6 = (if true then 1 else 2)
+assert: a6, 1
+a7 = a5: 12
+assert: a7, 12
+a8 = 6 | a5
+assert: a8, 6

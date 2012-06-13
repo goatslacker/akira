@@ -12,5 +12,11 @@ try {
 } catch {
   c = 3
 }
-
 assert: c, 3
+
+try f = 2
+catch raise: err
+assert: f, 2
+
+try k = 1 catch g = 2
+assert: k, 1
