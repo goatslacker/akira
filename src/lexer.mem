@@ -28,17 +28,13 @@ extract = \key, chunk -> rx !! key | @.exec: chunk
 
 parse-alphanumeric = \t, chunk -> extract: t, chunk | @.2
 
-filter-identifiers-fn = \iden -> partial: filter, (\x -> identifiers !! x | @.indexOf: iden | @ >= 0)
-
 return-identifier = \item, type
   'KEYWORDS' -> [(item.toUpperCase:!), item]
   else -> [type, item]
 
-
 parse-identifier = \t, chunk {
   item = extract: t, chunk
-  filter-identifiers = filter-identifiers-fn: item.2
-  token = identifiers | Object.keys | filter-identifiers | last
+  token = identifiers | Object.keys | filter: (\x -> identifiers !! x | @.indexOf: item.2 | @ >= 0), @ | last
 
   return-identifier: item.2, token || t
 }
@@ -81,21 +77,19 @@ incr-line = \line, type
   else -> line
 
 return-tokens = \code, n {
-  tokens = []
-  len = length: code
-  chunk = code.substr: n.index, len
+  chunk = code.substr: n.index, code.length
 
   if chunk
     then {
       token = process-chunk: chunk, n
-      tokens.push: token
+      tokens = token +: []
       n2 = ({
         index = (token.2.toString:! | @.length | n.index + @ | get-length: @, token.1)
         line = (incr-line: n.line, token.1)
       })
       tokens ++ (return-tokens: code, n2)
     }
-    else tokens
+    else []
 }
 
 filter-whitespace = \token -> ignore.indexOf: token.1 | 0 > @
