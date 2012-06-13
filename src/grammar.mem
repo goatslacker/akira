@@ -82,7 +82,6 @@ bnf = {
     (o: 'Literal')
     (o: 'Lists')
     (o: 'Tuples')
-    (o: 'ExplicitInvocation')
     (o: 'Operation')
     (o: 'Access')
     (o: '@')
@@ -129,10 +128,6 @@ bnf = {
 
   Invocation =: [
     (o: 'Value : Arguments', (\none -> construct Call: $1, $3))
-  ]
-
-  ExplicitInvocation =: [
-    (o: 'Invocation ;', (\none -> $1))
   ]
 
   Declaration =: [
@@ -190,7 +185,6 @@ bnf = {
   Access =: [
     (o: 'Identifier Accessor', (\none -> construct Access: $1, $2))
     (o: '@ Accessor', (\none -> construct Access: $1, $2))
-    (o: 'ExplicitInvocation Accessor', (\none -> construct Access: $1, $2))
     (o: 'Access Accessor', (\none -> construct Access: $1, $2))
   ]
 
@@ -274,5 +268,5 @@ grammar = {
 }
 
 parser = construct Parser: grammar
-code = parser.generate:!; ++ 'parser.yy = {}; parser.lexer = { lex: function () { var tag, _ref2; _ref2 = this.tokens[this.pos++] || [""]; tag = _ref2[0]; this.yytext = _ref2[1]; this.yylineno = _ref2[2] || 0; return tag; }, setInput: function (tokens) { this.tokens = tokens; return this.pos = 0; } }'
+code = (parser.generate:!) ++ 'parser.yy = {}; parser.lexer = { lex: function () { var tag, _ref2; _ref2 = this.tokens[this.pos++] || [""]; tag = _ref2[0]; this.yytext = _ref2[1]; this.yylineno = _ref2[2] || 0; return tag; }, setInput: function (tokens) { this.tokens = tokens; return this.pos = 0; } }'
 fs.writeFileSync: './lib/parser.js', code, 'utf8'
