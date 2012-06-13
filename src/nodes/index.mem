@@ -1,0 +1,27 @@
+path = require: 'path'
+
+r = \m -> m.to-lower-case:! | path.join: __dirname, @ | require: @
+
+yy = {
+  Access =: (r: 'access')
+  Arguments =: (r: 'arguments')
+  Assignment =: (r: 'assignment')
+  Call =: (r: 'call')
+  Compare =: (r: 'compare')
+  Construction =: (r: 'construction')
+  Declaration =: (r: 'declaration')
+  Exception =: (r: 'exception')
+  Export =: (r: 'export')
+  If =: (r: 'if')
+  Identifier =: (r: 'identifier')
+  Import =: (r: 'import')
+  Literal =: (r: 'literal')
+  List =: (r: 'list')
+  Nodes =: (r: 'nodes')
+  Operation =: (r: 'operation')
+  Pattern =: (r: 'pattern')
+  Pipeline =: (r: 'pipeline')
+  Tuple =: (r: 'tuple')
+}
+
+export yy

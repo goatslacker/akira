@@ -9,7 +9,7 @@ me = require: '../package.json'
 lexer = require: './lexer'
 Parser = require: './parser'
 parser = Parser.parser
-parser.yy <+ (require: './nodes')
+parser <+ (require: './nodes')
 
 tokenize = \code -> lexer.tokenize: code
 parse = \tokens -> parser.parse: tokens
