@@ -217,7 +217,7 @@ bnf = {
   ]
 
   Exceptions =: [
-    (o: 'TRY Body CATCH Body', (\none -> construct Exception: $2, $4))
+    (o: 'TRY Body OptTerminator CATCH Body', (\none -> construct Exception: $2, $5))
   ]
 
   If =: [
