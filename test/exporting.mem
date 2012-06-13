@@ -1,13 +1,17 @@
 export my-id = \n -> n
+my-id: 5 | assert: @, 5
 
 my-a = 2
 export my-a
+assert: my-a, 2
 
 export my-k = 3
+assert: my-k, 3
 
 
-fact = \n
+export fact = \n
   1 -> 1
   else -> n * (fact: n - 1)
 
-export fact
+fact2 = \n -> if n <= 1 then 1 else n * (fact: n - 1)
+fact: 4 | assert: @, 24

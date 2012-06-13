@@ -16,23 +16,8 @@ import 'test/utils.mem'
 import 'test/exporting.mem'
 import 'test/operators.mem'
 
-assert: my-k, 3
-assert: my-a, 2
-my-id: 5 | assert: @, 5
-
 # export fact test
 assert: 24, (fact: 4)
-
-# sum and prod
-assert: 2, (sum: 1, 1)
-assert: 4, (prod: 2, 2)
-
-(\none {
-  b = 'hello-world'
-  c = b.replace: /-([a-z])/g, (\i -> i.2.toUpperCase:!)
-  assert: c, 'helloWorld'
-}): none
-
 
 # Done.
 end = Date.now:!

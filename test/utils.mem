@@ -2,3 +2,8 @@ square = \x -> prod: x, x
 newlist = map: square, [1, 2, 3]
 
 [1, 4, 9] | assert-deep: newlist, @
+
+# sum and prod
+assert: 2, (sum: 1, 1)
+assert: 4, (prod: 2, 2)
+
