@@ -7,7 +7,7 @@ export lte = \a, b -> a <= b
 
 export assert = \a, b {
   if not assert.successes
-    then assert <+ { successes =: [], failures =: [] }
+    then assert <+ ({ successes = [], failures = [] })
     else none
 
   if a == b then (assert.successes.push: [a, b]) else (assert.failures.push: [a, b])

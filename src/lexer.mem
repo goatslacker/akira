@@ -1,24 +1,24 @@
-rx = {
-  IDENTIFIER =: /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
-  NUMBER =: /^((\d+\.)?\d+)+/
-  STRING =: /^'(.*?)'/
-  LAMBDA =: /^->/
-  OPERATION =: /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
-  TERMINATOR =: /^\n/
-  REGEX =: /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
-  COMMENTS =: /^(#.*)/
-  WHITESPACE =: /^ /
-}
+rx = ({
+  IDENTIFIER = /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
+  NUMBER = /^((\d+\.)?\d+)+/
+  STRING = /^'(.*?)'/
+  LAMBDA = /^->/
+  OPERATION = /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
+  TERMINATOR = /^\n/
+  REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
+  COMMENTS = /^(#.*)/
+  WHITESPACE = /^ /
+})
 
-identifiers = {
-  KEYWORDS =: ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none']
-  COMPARE =: ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
-  LEFT_OPERATORS =: ['++', '!!', '<+']
-  RIGHT_OPERATORS =: ['=>', '+:']
-  NOT =: ['not']
-  LOGIC =: ['and', 'or', '&&', '||']
-  BOOL =: ['true', 'false']
-}
+identifiers = ({
+  KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none']
+  COMPARE = ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
+  LEFT_OPERATORS = ['++', '!!', '<+']
+  RIGHT_OPERATORS = ['=>', '+:']
+  NOT = ['not']
+  LOGIC = ['and', 'or', '&&', '||']
+  BOOL = ['true', 'false']
+})
 
 ignore = ['COMMENTS', 'WHITESPACE']
 
@@ -89,10 +89,10 @@ return-tokens = \code, n {
     then {
       token = process-chunk: chunk, n
       tokens.push: token
-      n2 = {
-        index =: (token.2.toString:! | @.length | n.index + @ | get-length: @, token.1)
-        line =: (incr-line: n.line, token.1)
-      }
+      n2 = ({
+        index = (token.2.toString:! | @.length | n.index + @ | get-length: @, token.1)
+        line = (incr-line: n.line, token.1)
+      })
       tokens ++ (return-tokens: code, n2)
     }
     else tokens
@@ -100,4 +100,4 @@ return-tokens = \code, n {
 
 filter-whitespace = \token -> ignore.indexOf: token.1 | 0 > @
 
-export tokenize = \code -> return-tokens: code, { index =: 0, line =: 0 } | filter: filter-whitespace, @
+export tokenize = \code -> return-tokens: code, ({ index = 0, line = 0 }) | filter: filter-whitespace, @

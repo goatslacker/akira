@@ -14,13 +14,13 @@ parser <+ (require: './nodes')
 tokenize = \code -> lexer.tokenize: code
 parse = \tokens -> parser.parse: tokens
 ast = \parsed {
-  self = Object.create: {}
+  self = Object.create: ({})
   body = parsed.compile: self
   ast = (parsed.getUtils: self) ++ (parsed.addVars: self) ++ body
-  program = {
-    type =: 'Program'
-    body =: ast
-  }
+  program = ({
+    type = 'Program'
+    body = ast
+  })
 }
 wrap = \program {
   [
@@ -60,7 +60,7 @@ files = \dirname, cb {
 
 run = \code {
   try {
-    result = vm.run-in-new-context: (code.join: ''), { console =: console }
+    result = vm.run-in-new-context: (code.join: ''), ({ console = console })
   } catch {
     util.error: err.stack
     util.debug: code

@@ -1,4 +1,4 @@
-modules = {}
+modules = ({})
 path = require: 'path'
 
 include = \m {
@@ -18,25 +18,25 @@ src = [
 map: (\x -> include: x), src
 
 export modules
-export dependencies = {
-  chars =: ['map']
-  words =: ['map']
-  lines =: ['map']
-  even =: ['mod']
-  odd =: ['even', 'mod']
-  sum =: ['foldl']
-  sub =: ['foldl']
-  prod =: ['foldl']
-  div =: ['foldl']
-  concat =: ['foldl']
-  count =: ['filter']
-  average =: ['foldl']
-  compact =: ['filter']
-  intersect =: ['filter']
-  max =: ['foldl']
-  min =: ['foldl']
-  nothing =: ['filter']
-  randomize =: ['sort']
-  unique =: ['filter']
-  assert-deep =: ['assert', 'filter']
-}
+export dependencies = ({
+  chars = ['map']
+  words = ['map']
+  lines = ['map']
+  even = ['mod']
+  odd = ['even', 'mod']
+  sum = ['foldl']
+  sub = ['foldl']
+  prod = ['foldl']
+  div = ['foldl']
+  concat = ['foldl']
+  count = ['filter']
+  average = ['foldl']
+  compact = ['filter']
+  intersect = ['filter']
+  max = ['foldl']
+  min = ['foldl']
+  nothing = ['filter']
+  randomize = ['sort']
+  unique = ['filter']
+  assert-deep = ['assert', 'filter']
+})
