@@ -13,25 +13,26 @@ parser <+ (require: './nodes')
 
 tokenize = \code -> lexer.tokenize: code
 parse = \tokens -> parser.parse: tokens
-ast = \parsed {
-  self = Object.create: ({})
+ast = \parsed, context, evald {
+  self = context || ({})
   body = parsed.compile: self
-  ast = (parsed.getUtils: self) ++ (parsed.addVars: self) ++ body
+  ast = (parsed.get-utils: self) ++ (parsed.add-vars: self, evald) ++ body
   program = ({
     type = 'Program'
     body = ast
   })
 }
-wrap = \program {
+generate = \program -> escodegen.generate: program
+wrap = \code {
   [
     '(function () {'
-    (escodegen.generate: program)
+    code
     '}.call(typeof module !== "undefined" ? module.exports : this))'
   ]
 }
 
-
-compile = \code -> code | tokenize | parse | ast | wrap
+export compile = \code, context, evald -> no-wrap: code, context, evald | wrap
+no-wrap = \code, context, evald -> code | tokenize | parse | ast: @, context, evald | generate
 
 walk = \tree, cb {
   try {
@@ -58,7 +59,7 @@ files = \dirname, cb {
     else file: dirname | cb: @, dirname
 }
 
-run = \code {
+export run = \code {
   try {
     result = vm.run-in-new-context: (code.join: ''), ({ console = console })
   } catch {
@@ -69,7 +70,7 @@ run = \code {
 }
 
 
-output = \list -> map: (\x -> x | util.puts), list
+export output = \list -> map: (\x -> x | util.puts), list
 analyze = \body -> body | util.inspect: @, false, 50 | util.puts
 
 write = \code, item {
@@ -93,8 +94,25 @@ display-help = \none {
   util.puts: ''
 }
 
+start-repl = \none {
+  context = ({})
+  repl: (\data {
+    no-wrap: data, context, true | eval | print
+    prompt:!
+  })
+  prompt:!
+}
+
+prompt = \chunk -> process.stdout.write: 'memory> '
+
+repl = \fn {
+  stdin = process.open-stdin:!
+  stdin.set-encoding: 'utf8'
+  stdin.on: 'data', fn
+}
+
 #main
-memory = \item, action
+export memory = \item, action
   'compile' -> files: item, (\code, name -> code | compile | write: @, name)
   'code' -> file: item | compile | output
   'test' -> file: 'test/tests.mem' | compile | run
@@ -103,6 +121,5 @@ memory = \item, action
   'ast' -> file: item | tokenize | parse | ast | analyze
   'version' -> 'memory ' ++ me.version | util.puts
   'watch' -> watch: item
-  else -> display-help:!
-
-export memory
+  'help' -> display-help:!
+  else -> start-repl:!
