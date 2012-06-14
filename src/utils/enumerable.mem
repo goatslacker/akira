@@ -16,6 +16,8 @@ export min = \list -> foldl: (\a, b -> if a < b then a else b), list
 export nothing = \fn, list -> filter: fn, list | @.length | @ is 0
 export randomize = \list -> sort: (\none -> (Math.random:!) > 0.5), list
 export unique = \list -> filter: (\x, i -> list.indexOf: x | i is @), list
+export take = \n, list -> list.slice: 0, n
+export drop = \n, list list.slice: n
 
 export take-while = \fn, [x, ...xs]
   (fn: x) == true -> x +: (take-while: fn, xs)
