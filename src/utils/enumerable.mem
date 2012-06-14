@@ -1,7 +1,7 @@
 export head = \[x] -> x
-export init = \[_, x] -> _
-export tail = \[x, _] -> _
-export last = \[_, x] -> x
+export init = \[...xs, x] -> xs
+export tail = \[x, ...xs] -> xs
+export last = \[...xs, x] -> x
 export at = \list, index -> list !! index - 1
 export get = \obj, prop -> obj !! prop
 export length = \of -> of.length
@@ -17,14 +17,10 @@ export nothing = \fn, list -> filter: fn, list | @.length | @ is 0
 export randomize = \list -> sort: (\none -> (Math.random:!) > 0.5), list
 export unique = \list -> filter: (\x, i -> list.indexOf: x | i is @), list
 
-take-while = \fn, [x, _]
-  (fn: x) == true -> x +: (take-while: fn, _)
+export take-while = \fn, [x, ...xs]
+  (fn: x) == true -> x +: (take-while: fn, xs)
   else -> []
 
-export take-while
-
-take-until = \fn, [x, _]
+export take-until = \fn, [x, ...xs]
   (fn: x) == true -> [x]
-  else -> x +: (take-until: fn, _)
-
-export take-until
+  else -> x +: (take-until: fn, xs)

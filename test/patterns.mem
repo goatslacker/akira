@@ -25,22 +25,22 @@ spanish-gender-of-noun = \noun
 assert: 'female', (spanish-gender-of-noun: 'la casa')
 assert: 'male', (spanish-gender-of-noun: 'el carro')
 
-sort-even-odd = \[x, _]
+sort-even-odd = \[x, ...xs]
   not x -> []
   else -> {
     if (odd: x)
-      then (sort-even-odd: _) ++ [x]
-      else x +: (sort-even-odd: _)
+      then (sort-even-odd: xs) ++ [x]
+      else x +: (sort-even-odd: xs)
   }
 
 [1,2,3,4,5,6] | sort-even-odd | assert-deep: @, [2, 4, 6, 5, 3, 1]
 
 # implementations of our util functions in memory
-init = \[_, a] -> _
-tail = \[a, _] -> _
-head = \[a, _] -> a
-last = \[_, a] -> a
-get-middle = \[a, _, b] -> _
+init = \[...a, b] -> a
+tail = \[a, ...b] -> b
+head = \[a, ...b] -> a
+last = \[...a, b] -> b
+get-middle = \[a, ...b, c] -> b
 
 
 ls = [1, 2, 3, 4, 5]

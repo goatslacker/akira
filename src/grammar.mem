@@ -55,6 +55,10 @@ bnf = ({
     (o: 'IDENTIFIER', (\none -> construct Identifier: $1, true))
   ]
 
+  Rest = [
+    (o: '. . . IDENTIFIER', (\none -> construct Identifier: $4, false, true))
+  ]
+
   Body = [
     (o: 'Expression')
     (o: '{ OptTerminator Expressions }', (\none -> $3))
@@ -196,6 +200,7 @@ bnf = ({
   Arg = [
     (o: 'Value')
     (o: 'ARGUMENTS')
+    (o: 'Rest')
   ]
 
   Arguments = [
@@ -207,6 +212,7 @@ bnf = ({
   Param = [
     (o: 'IdentifierNoUtils')
     (o: 'IdentifierNoUtils = Value', (\none -> construct Assignment: $1, $3))
+    (o: 'Rest')
     (o: 'Lists')
   ]
 
