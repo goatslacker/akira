@@ -1,5 +1,5 @@
 export my-id = \n -> n
-my-id: 5 | assert: @, 5
+my-id: 5 | assert: 5
 
 my-a = 2
 export my-a
@@ -14,4 +14,4 @@ export fact = \n
   else -> n * (fact: n - 1)
 
 fact2 = \n -> if n <= 1 then 1 else n * (fact: n - 1)
-fact: 4 | assert: @, 24
+fact: 4 | assert: 24

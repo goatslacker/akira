@@ -33,7 +33,7 @@ sort-even-odd = \[x, ...xs]
       else x +: (sort-even-odd: xs)
   }
 
-[1,2,3,4,5,6] | sort-even-odd | assert-deep: @, [2, 4, 6, 5, 3, 1]
+[1,2,3,4,5,6] | sort-even-odd | assert-deep: [2, 4, 6, 5, 3, 1]
 
 # implementations of our util functions in memory
 init = \[...a, b] -> a
@@ -45,8 +45,8 @@ get-middle = \[a, ...b, c] -> b
 
 ls = [1, 2, 3, 4, 5]
 
-ls | get-middle | assert-deep: @, [2, 3, 4]
-ls | init | assert-deep: @, [1, 2, 3, 4]
-ls | tail | assert-deep: @, [2, 3, 4, 5]
-ls | head | assert: @, 1
-ls | last | assert: @, 5
+ls | get-middle | assert-deep: [2, 3, 4]
+ls | init | assert-deep: [1, 2, 3, 4]
+ls | tail | assert-deep: [2, 3, 4, 5]
+ls | head | assert: 1
+ls | last | assert: 5

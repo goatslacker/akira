@@ -1,5 +1,5 @@
 # test function
-tuple-eq = \a, b -> filter: (\x, i -> x isnt b !! i), a | @.length | assert: 0, @
+tuple-eq = \a, b -> filter: (\x, i -> x isnt b !! i), a | @.length | assert: 0
 
 # setting tuples
 obj = ({ hello = 1, world = 2 })

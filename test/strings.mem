@@ -2,22 +2,20 @@ str = 'hello'
 hi = str.split: '' | @.reduce: (\a, b -> a + b)
 assert: hi, str
 
-capitalize: str | assert: @, 'Hello'
+capitalize: str | assert: 'Hello'
 
-camelize: 'hello-world' | assert: @, 'helloWorld'
-camelize: 'hello_world' | assert: @, 'helloWorld'
-camelize: 'hello_world-i_am_Memory' | assert: @, 'helloWorldIAmMemory'
+camelize: 'hello-world' | assert: 'helloWorld'
+camelize: 'hello_world' | assert: 'helloWorld'
+camelize: 'hello_world-i_am_Memory' | assert: 'helloWorldIAmMemory'
 
-uppercase: str | assert: @, 'HELLO'
+uppercase: str | assert: 'HELLO'
 
-chars: uppercase, str | join: @, '' | assert: @, 'HELLO'
+chars: uppercase, str | join: '' | assert: 'HELLO'
 
-condense: '      foo bar ' | assert: @, 'foobar'
+condense: '      foo bar ' | assert: 'foobar'
 
-#pad: 2, str | assert: @, '  hello  '
-
-repeat: 3, str | assert: @, 'hellohellohello'
-'hi' * 3 | assert: @, 'hihihi'
+repeat: 3, str | assert: 'hellohellohello'
+'hi' * 3 | assert: 'hihihi'
 
 (\none {
   b = 'hello-world'

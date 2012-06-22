@@ -36,7 +36,7 @@ assert: a3.a, 1
 a4 = 2 * 4
 assert: a4, 8
 a5 = (\x -> x)
-a5: 4 | assert: @, 4
+a5: 4 | assert: 4
 a6 = (if true then 1 else 2)
 assert: a6, 1
 a7 = a5: 12
