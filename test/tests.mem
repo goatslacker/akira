@@ -15,6 +15,7 @@ import 'test/tuples.mem'
 import 'test/utils.mem'
 import 'test/exporting.mem'
 import 'test/operators.mem'
+import 'test/pipeline.mem'
 
 # export fact test
 assert: 24, (fact: 4)

@@ -17,25 +17,25 @@ array = [
   mapper = partial: map, square
   assertArray = \a -> assert-deep: a, [1, 4, 9]
 
-  array | map: square, @ | assertArray
+  array | map: square | assertArray
   array | mapper | assertArray
 }): none
 
-array.map: square | assert-deep: @, [1, 4, 9]
+array.map: square | assert-deep: [1, 4, 9]
 
 assert: array.2, 2
 
-head: array | assert: @, 1
-init: array | assert-deep: @, [1, 2]
-tail: array | assert-deep: @, [2, 3]
-last: array | assert: @, 3
+head: array | assert: 1
+init: array | assert-deep: [1, 2]
+tail: array | assert-deep: [2, 3]
+last: array | assert: 3
 
-average: array | assert: 2, @
-min: array | assert: 1, @
-max: array | assert: 3, @
-unique: [1, 1, 2, 1, 3, 2] | assert-deep: @, array
+average: array | assert: 2
+min: array | assert: 1
+max: array | assert: 3
+unique: [1, 1, 2, 1, 3, 2] | assert-deep: array
 
-array !! 0 | assert: @, 1
-array ++ [4] | assert-deep: @, [1, 2, 3, 4]
-0 +: array | assert-deep: @, [0, 1, 2, 3]
+array !! 0 | assert: 1
+array ++ [4] | assert-deep: [1, 2, 3, 4]
+0 +: array | assert-deep: [0, 1, 2, 3]
 assert-deep: array, [1, 2, 3]
