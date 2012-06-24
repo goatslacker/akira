@@ -28,7 +28,7 @@ extract = \key, chunk -> rx !! key | @.exec: chunk
 
 parse-alphanumeric = \t, chunk -> extract: t, chunk | @.2
 
-return-identifier = \item, type
+return-identifier = \type, item
   'KEYWORDS' -> [(item.toUpperCase:!), item]
   else -> [type, item]
 
@@ -36,7 +36,7 @@ parse-identifier = \t, chunk {
   item = extract: t, chunk
   token = identifiers | Object.keys | filter: (\x -> identifiers !! x | @.indexOf: item.2 | @ >= 0), @ | last
 
-  return-identifier: item.2, token || t
+  return-identifier: token || t, item.2
 }
 
 parse-regular-expressions = \t, chunk {
@@ -45,7 +45,7 @@ parse-regular-expressions = \t, chunk {
   ['REGEXP', regexp]
 }
 
-get-token = \chunk, n, t
+get-token = \t, chunk, n
   'IDENTIFIER' -> parse-identifier: t, chunk
   'NUMBER' -> parse-alphanumeric: t, chunk
   'STRING' -> parse-alphanumeric: t, chunk
@@ -59,7 +59,7 @@ get-token = \chunk, n, t
 
 process-chunk = \code, n {
   type = get-type: code
-  token = get-token: code, n, type
+  token = get-token: type, code, n
   if Array.isArray: token
     then {
       token.push: n.line
@@ -68,11 +68,11 @@ process-chunk = \code, n {
     else [type, token, n.line]
 }
 
-get-length = \i, token
+get-length = \token, i
   'STRING' -> i + 2
   else -> i
 
-incr-line = \line, type
+incr-line = \type, line
   'TERMINATOR' -> line + 1
   else -> line
 
@@ -84,8 +84,8 @@ return-tokens = \code, n {
       token = process-chunk: chunk, n
       tokens = token +: []
       n2 = ({
-        index = (token.2.toString:! | @.length | n.index + @ | get-length: @, token.1)
-        line = (incr-line: n.line, token.1)
+        index = (token.2.toString:! | @.length | n.index + @ | get-length: token.1)
+        line = (incr-line: token.1, n.line)
       })
       tokens ++ (return-tokens: code, n2)
     }

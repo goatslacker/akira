@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../lib/memory').memory(process.argv[3], process.argv[2]);
+require('../lib/memory').memory(process.argv[2], process.argv[3]);

@@ -112,7 +112,7 @@ repl = \fn {
 }
 
 #main
-export memory = \item, action
+export memory = \action, item
   'compile' -> files: item, (\code, name -> code | compile | write: @, name)
   'code' -> file: item | compile | output
   'test' -> file: 'test/tests.mem' | compile | run
