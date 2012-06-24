@@ -38,5 +38,6 @@ export dependencies = ({
   nothing = ['filter']
   randomize = ['sort']
   unique = ['filter']
+  assert = ['merge']
   assert-deep = ['assert', 'filter']
 })
