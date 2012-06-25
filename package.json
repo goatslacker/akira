@@ -5,9 +5,9 @@
   "description": "tiny language that compiles to javascript",
 
   "scripts": {
-    "start": "bin/memory compile src/",
+    "start": "bin/memory compile src/ && node lib/grammar.js",
     "postinstall": "node lib/grammar.js",
-    "stop": "git co lib/grammar.js",
+    "stop": "git co lib/grammar.js && node lib/grammar.js",
     "test": "bin/memory test"
   },
 
@@ -18,11 +18,8 @@
 
   "dependencies": {
     "esprima": "*",
-    "escodegen": "*"
-  },
-
-  "devDependencies": {
-    "jison": "*",
+    "escodegen": "*",
+    "jison": "0.2.x",
     "nodewatch": "*"
   },
 

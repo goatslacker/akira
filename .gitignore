@@ -2,6 +2,7 @@ TODO
 sample
 node_modules
 npm-debug.log
+lib/parser.js
 lib-cov
 *.seed
 *.log
