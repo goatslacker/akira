@@ -7,7 +7,7 @@ nodewatch = require: 'nodewatch'
 me = require: '../package.json'
 
 lexer = require: './lexer'
-Parser = require: './parser'
+Parser = require: './grammar'
 parser = Parser.parser
 parser.yy <+ (require: './nodes')
 
