@@ -198,6 +198,7 @@ bnf = ({
 
   Arg = [
     (o: 'Value')
+    (o: 'MathOperators')
     (o: 'ARGUMENTS')
     (o: 'Rest')
   ]
@@ -227,6 +228,13 @@ bnf = ({
 
   If = [
     (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body', (\none -> construct If: $2, $5, $8))
+  ]
+
+  MathOperators = [
+    (o: '+', (\none -> construct Identifier: 'sum'))
+    (o: '-', (\none -> construct Identifier: 'sub'))
+    (o: '*', (\none -> construct Identifier: 'prod'))
+    (o: '/', (\none -> construct Identifier: 'div'))
   ]
 
   Operation = [
