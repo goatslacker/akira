@@ -5,8 +5,7 @@
   "description": "tiny language that compiles to javascript",
 
   "scripts": {
-    "start": "bin/memory compile src/",
-    "postinstall": "node lib/grammar.js",
+    "start": "bin/memory compile src/ && node lib/grammar.js",
     "stop": "git co lib/grammar.js",
     "test": "bin/memory test"
   },
