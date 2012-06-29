@@ -1,3 +1,27 @@
+export apply = \f, ...args -> f.apply: f, args
 export consts = \a -> a
 export id = \a -> a
 export flip = \f, a, b -> f: b, a
+export partial = \f, ...args -> \...xargs -> f.apply: f, args ++ xargs
+export partialr = \f, ...args -> \...xargs -> f.apply: f, xargs ++ args
+export curry = \fn, args
+  fn.length < 1 -> fn
+  else -> {
+    \arg {
+      xargs = (args || []) ++ [arg]
+      if xargs.length < fn.length
+        then curry: fn, xargs
+        else fn.apply: fn, xargs
+    }
+  }
+
+export curryr = \fn, args
+  fn.length < 1 -> fn
+  else -> {
+    \arg {
+      xargs = [arg] ++ (args || [])
+      if xargs.length < fn.length
+        then curryr: fn, xargs
+        else fn.apply: fn, xargs
+    }
+  }

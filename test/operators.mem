@@ -23,3 +23,6 @@ assert: 3 * 0, 0
 assert: 4 / 2, 2
 
 a | foldl: + | assert: 6
+a | foldl: * | assert: 6
+a | map: (* 2) | assert-deep: [2, 4, 6]
+a | map: (- 1) | assert-deep: [0, 1, 2]
