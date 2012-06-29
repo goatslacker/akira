@@ -231,10 +231,10 @@ bnf = ({
   ]
 
   MathOperators = [
-    (o: '+', (\none -> construct Identifier: 'sum'))
-    (o: '-', (\none -> construct Identifier: 'sub'))
-    (o: '*', (\none -> construct Identifier: 'prod'))
-    (o: '/', (\none -> construct Identifier: 'div'))
+    (o: '+', (\none -> construct Identifier: '_add'))
+    (o: '-', (\none -> construct Identifier: '_sub'))
+    (o: '*', (\none -> construct Identifier: '_mul'))
+    (o: '/', (\none -> construct Identifier: '_div'))
   ]
 
   Operation = [
