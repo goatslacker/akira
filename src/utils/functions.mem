@@ -20,3 +20,4 @@ export curryr = \fn {
 
   if fn.length < 1 then fn else c: none
 }
+export show = \i -> i.to-string:!
