@@ -235,7 +235,7 @@ bnf = ({
     (o: '-', (\none -> construct Identifier: '_sub'))
     (o: '*', (\none -> construct Identifier: '_mul'))
     (o: '/', (\none -> construct Identifier: '_div'))
-    (o: '( MathOperators NUMBER )', (\none -> construct Call: (construct Identifier: 'curryr'), (construct Arguments: $2, $3)))
+    (o: '( MathOperators NUMBER )', (\none -> construct Call: (construct Call: (construct Identifier: 'curryr'), (construct Arguments: $2)), (construct Arguments: $3)))
   ]
 
   Operation = [
