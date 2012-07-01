@@ -50,3 +50,10 @@ ls | init | assert-deep: [1, 2, 3, 4]
 ls | tail | assert-deep: [2, 3, 4, 5]
 ls | head | assert: 1
 ls | last | assert: 5
+
+add-two = \n = 0
+  n is 0 -> 0
+  else -> n + 2
+
+add-two: 0 | assert: 0
+add-two: 2 | assert: 4
