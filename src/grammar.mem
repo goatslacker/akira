@@ -79,6 +79,7 @@ bnf = ({
     (o: 'Invocation')
     (o: 'Pipeline')
     (o: 'Construct')
+    (o: 'Comprehensions')
   ]
 
   Value = [
@@ -157,6 +158,10 @@ bnf = ({
 
   Comma = [
     (o: ', OptTerminator')
+  ]
+
+  Comprehensions = [
+    (o: 'NUMBER . . NUMBER Declaration', (\none -> construct Comprehension: $1, $4, $5))
   ]
 
   Lists = [
