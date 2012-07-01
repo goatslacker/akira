@@ -161,7 +161,23 @@ bnf = ({
   ]
 
   Comprehensions = [
-    (o: 'NUMBER . . NUMBER Declaration', (\none -> construct Comprehension: $1, $4, $5))
+    (o: 'NUMBER . . Numbers ComprehensionBy ComprehensionFunction', (\none -> construct Comprehension: $1, $4, $5, $6))
+    (o: 'Identifier . . Numbers ComprehensionBy ComprehensionFunction', (\none -> construct Comprehension: $1, $4, $5, $6))
+  ]
+
+  Numbers = [
+    (o: 'NUMBER')
+    (o: 'Identifier')
+  ]
+
+  ComprehensionFunction = [
+    (o: '', (\none -> none))
+    (o: ', Declaration', (\none -> $2))
+  ]
+
+  ComprehensionBy = [
+    (o: '', (\none -> construct Literal: 1))
+    (o: 'Numbers')
   ]
 
   Lists = [
