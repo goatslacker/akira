@@ -1,0 +1,6 @@
+head = \it -> it:!
+take = \n, it -> 1..n, \none -> it:!
+filter = \f, [...list] -> self = \none {
+  item = list.shift:!
+  if not item then [] else if (f: item) is true then item else self: none
+}
