@@ -1,6 +1,13 @@
-head = \it -> it:!
-take = \n, it -> 1..n, \none -> it:!
-filter = \f, [...list] -> self = \none {
-  item = list.shift:!
-  if not item then [] else if (f: item) is true then item else self: none
+export head = \f -> f: 1
+export last = \f -> f: none | (\[...xs, x] -> x)
+export every = \f -> f: none
+export take = \n, f -> f: n
+
+export filter = \f, list {
+  iter = \n, i, [x, ...xs]
+    not x -> []
+    (f: x) is true -> if i < n then [x] ++ (iter: n, i + 1, xs) else []
+    else -> iter: n, i, xs
+
+  \n ->  iter: n || list.length, 0, list
 }
