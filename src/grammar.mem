@@ -80,6 +80,7 @@ bnf = ({
     (o: 'Pipeline')
     (o: 'Construct')
     (o: 'Comprehensions')
+    (o: 'IMPORT STRING', (\none -> construct Import: $2))
   ]
 
   Value = [
@@ -118,7 +119,6 @@ bnf = ({
   Modules = [
     (o: 'EXPORT Value', (\none -> construct Export: $2))
     (o: 'EXPORT Assignment', (\none -> construct Export: $2))
-    (o: 'IMPORT STRING', (\none -> construct Import: $2))
   ]
 
   Construct = [

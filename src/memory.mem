@@ -17,19 +17,28 @@ ast = \parsed, context, evald {
   self = context || ({})
   body = parsed.compile: self
   ast = (parsed.get-utils: self) ++ (parsed.add-vars: self, evald) ++ body
+
+  xform = ({
+    type = 'CallExpression'
+    callee = ({
+      type = 'FunctionExpression'
+      id = none
+      params = [({ type = 'Identifier', name = '$$export' })]
+      body = ({
+        type = 'BlockStatement'
+        body = ast
+      })
+    })
+    'arguments' = []
+  })
+
   program = ({
     type = 'Program'
-    body = ast
+    body = [({ type = 'ExpressionStatement', expression = xform })]
   })
 }
 generate = \program -> escodegen.generate: program
-wrap = \code {
-  [
-    '(function () {'
-    code
-    '}.call(typeof module !== "undefined" ? module.exports : this))'
-  ]
-}
+wrap = \code -> [code]
 
 export compile = \code, context, evald -> no-wrap: code, context, evald | wrap
 no-wrap = \code, context, evald -> code | tokenize | parse | ast: @, context, evald | generate
