@@ -1,12 +1,13 @@
 path = require: 'path'
 
-r = \m -> m.to-lower-case:! | path.join: __dirname, @ | require: @
+r = \m -> m.to-lower-case:! | path.join: __dirname | require
 
 export Access = (r: 'access')
 export Arguments = (r: 'arguments')
 export Assignment = (r: 'assignment')
 export Call = (r: 'call')
 export Compare = (r: 'compare')
+export Comprehension = (r: 'comprehension')
 export Construction = (r: 'construction')
 export Declaration = (r: 'declaration')
 export Exception = (r: 'exception')

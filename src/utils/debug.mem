@@ -6,9 +6,8 @@ export gte = \a, b -> a >= b
 export lte = \a, b -> a <= b
 
 export assert = \a, b {
-  if not assert.successes
-    then assert <+ ({ successes = [], failures = [] })
-    else none
+  assert.successes = []
+  assert.failures = []
 
   if a == b then (assert.successes.push: [a, b]) else (assert.failures.push: [a, b])
 }

@@ -79,6 +79,7 @@ bnf = ({
     (o: 'Invocation')
     (o: 'Pipeline')
     (o: 'Construct')
+    (o: 'Comprehensions')
   ]
 
   Value = [
@@ -111,6 +112,7 @@ bnf = ({
 
   Assignment = [
     (o: 'Identifier = Assignable', (\none -> construct Assignment: $1, $3))
+    (o: 'Access = Assignable', (\none -> construct Assignment: $1, $3))
   ]
 
   Modules = [
@@ -157,6 +159,26 @@ bnf = ({
 
   Comma = [
     (o: ', OptTerminator')
+  ]
+
+  Comprehensions = [
+    (o: 'NUMBER . . Numbers ComprehensionBy ComprehensionFunction', (\none -> construct Comprehension: $1, $4, $5, $6))
+    (o: 'Identifier . . Numbers ComprehensionBy ComprehensionFunction', (\none -> construct Comprehension: $1, $4, $5, $6))
+  ]
+
+  Numbers = [
+    (o: 'NUMBER')
+    (o: 'Identifier')
+  ]
+
+  ComprehensionFunction = [
+    (o: '', (\none -> none))
+    (o: ', Declaration', (\none -> $2))
+  ]
+
+  ComprehensionBy = [
+    (o: '', (\none -> construct Literal: 1))
+    (o: 'Numbers')
   ]
 
   Lists = [
@@ -231,10 +253,11 @@ bnf = ({
   ]
 
   MathOperators = [
-    (o: '+', (\none -> construct Identifier: 'sum'))
-    (o: '-', (\none -> construct Identifier: 'sub'))
-    (o: '*', (\none -> construct Identifier: 'prod'))
-    (o: '/', (\none -> construct Identifier: 'div'))
+    (o: '+', (\none -> construct Identifier: '_add'))
+    (o: '-', (\none -> construct Identifier: '_sub'))
+    (o: '*', (\none -> construct Identifier: '_mul'))
+    (o: '/', (\none -> construct Identifier: '_div'))
+    (o: '( MathOperators NUMBER )', (\none -> construct Call: (construct Call: (construct Identifier: 'curryr'), (construct Arguments: $2)), (construct Arguments: $3)))
   ]
 
   Operation = [

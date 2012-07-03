@@ -1,5 +1,7 @@
+a = [1, 2, 3]
+
 square-list = foldl => flip => square
-[1, 2, 3] | square-list | assert: 9
+a | square-list | assert: 9
 
 assert-deep: [1] ++ [2], [1, 2]
 
@@ -20,3 +22,7 @@ assert: 1 - 1, 0
 assert: 3 * 0, 0
 assert: 4 / 2, 2
 
+a | foldl: + | assert: 6
+a | foldl: * | assert: 6
+a | map: (* 2) | assert-deep: [2, 4, 6]
+a | map: (- 1) | assert-deep: [0, 1, 2]
