@@ -12,9 +12,4 @@ filter = \f, list {
   \n ->  iter: n || list.length, 0, list
 }
 
-export ({
-  head = head
-  last = last
-  every = every
-  take = take
-})
+export ({ head, last, every, take, filter })
