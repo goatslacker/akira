@@ -67,7 +67,6 @@ bnf = ({
     (o: 'Modules')
     (o: 'Assignable')
     (o: 'Exceptions')
-    (o: 'ARGUMENTS')
   ]
 
   Assignable = [
@@ -114,6 +113,13 @@ bnf = ({
   Assignment = [
     (o: 'Identifier = Assignable', (\none -> construct Assignment: $1, $3))
     (o: 'Access = Assignable', (\none -> construct Assignment: $1, $3))
+    (o: 'Lists = Assignable', (\none -> construct Assignment: $1, $3))
+    (o: 'Tuples = Assignable', (\none -> construct Assignment: $1, $3))
+  ]
+
+  Identifiers = [
+    (o: 'Identifier', (\none -> construct Arguments: $1))
+    (o: 'Identifiers Comma Identifier', (\none -> construct Arguments: $1, $3))
   ]
 
   Modules = [
@@ -193,6 +199,7 @@ bnf = ({
   ]
 
   KeyValue = [
+    (o: 'IdentifierNoUtils', (\none -> construct Assignment: $1, $1))
     (o: 'IdentifierNoUtils = Value', (\none -> construct Assignment: $1, $3))
   ]
 
@@ -221,7 +228,6 @@ bnf = ({
   Arg = [
     (o: 'Value')
     (o: 'MathOperators')
-    (o: 'ARGUMENTS')
     (o: 'Rest')
   ]
 
@@ -275,7 +281,7 @@ bnf = ({
 
 
 tokens = [
-  'ASSERT', 'ARGUMENTS', 'IF', 'THEN', 'ELSE',
+  'ASSERT', 'IF', 'THEN', 'ELSE',
   'LAMBDA',
   'IDENTIFIER', 'BOOL', 'NUMBER', 'STRING',
   'LOGIC', 'COMPARE',
@@ -284,7 +290,7 @@ tokens = [
 
 operators = [
   ['right', 'NOT']
-  ['right', 'IF', 'THEN', 'ELSE', 'IMPORT', 'EXPORT', 'ASSERT', 'ARGUMENTS']
+  ['right', 'IF', 'THEN', 'ELSE', 'IMPORT', 'EXPORT']
   ['right', '=', '|']
   ['right', 'RIGHT_OPERATORS']
   ['nonassoc', '(', ')', '[', ']', '{', '}', ':']

@@ -11,7 +11,7 @@ rx = ({
 })
 
 identifiers = ({
-  KEYWORDS = ['arguments', 'construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none']
+  KEYWORDS = ['construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none']
   COMPARE = ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
   LEFT_OPERATORS = ['++', '!!', '<+']
   RIGHT_OPERATORS = ['=>', '+:']
