@@ -8,13 +8,14 @@ getMatch = \action {
 }
 
 addYY = \str -> str.replace: /new /g, 'new yy.'
+addLine = \str -> 'yy.L(yylineno, ' ++ (str.replace: ';', '') ++ ');'
 
 o = \pattern, action {
   patternString = pattern.replace: /\s{2,}/g, ' '
   if not action
     then [patternString, '$$ = $1']
     else {
-      newaction = action | getMatch | addYY
+      newaction = action | getMatch | addYY | addLine
       [patternString, '$$ = ' ++ newaction]
     }
 }
