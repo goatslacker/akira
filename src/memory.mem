@@ -12,9 +12,9 @@ parser.yy <+ (require: './nodes')
 
 tokenize = \code -> lexer: code
 parse = \tokens -> parser.parse: tokens
-ast = \parsed, context, evald {
+ast = \parsed, name, context, evald {
   self = context || ({})
-  body = parsed.compile: self
+  body = parsed.compile: self, name
   ast = (parsed.get-utils: self) ++ (parsed.add-vars: self, evald) ++ body
 
   xform = ({
@@ -44,8 +44,8 @@ wrap = \code {
   ]
 }
 
-compile = \code, context, evald -> no-wrap: code, context, evald | wrap
-no-wrap = \code, context, evald -> code | tokenize | parse | ast: @, context, evald | generate
+compile = \code, name, context, evald -> no-wrap: code, name, context, evald | wrap
+no-wrap = \code, name, context, evald -> code | tokenize | parse | ast: @, name, context, evald | generate
 
 walk = \tree, cb {
   try {
@@ -110,7 +110,7 @@ display-help = \none {
 start-repl = \none {
   context = ({})
   repl: (\data {
-    no-wrap: data, context, true | eval | print
+    no-wrap: data, 'repl', context, true | eval | print
     prompt:!
   })
   prompt:!
@@ -126,12 +126,12 @@ repl = \fn {
 
 #main
 export memory = \action, item
-  'compile' -> files: item, (\code, name -> code | compile | write: @, name)
-  'code' -> file: item | compile | output
-  'test' -> file: 'test/tests.mem' | compile | run
-  'run' -> file: item | compile | run
+  'compile' -> files: item, (\code, name -> code | compile: @, item | write: @, name)
+  'code' -> file: item | compile: @, item | output
+  'test' -> file: 'test/tests.mem' | compile: @, 'test/tests.mem' | run
+  'run' -> file: item | compile: @, item | run
   'tokens' -> file: item | tokenize | analyze
-  'ast' -> file: item | tokenize | parse | ast | analyze
+  'ast' -> file: item | tokenize | parse | ast: @, item | analyze
   'version' -> 'memory ' ++ me.version | util.puts
   'watch' -> watch: item
   'help' -> display-help:!
