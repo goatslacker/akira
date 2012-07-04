@@ -40,7 +40,7 @@ ast = \parsed, context, evald {
 generate = \program -> escodegen.generate: program
 wrap = \code -> [code]
 
-export compile = \code, context, evald -> no-wrap: code, context, evald | wrap
+compile = \code, context, evald -> no-wrap: code, context, evald | wrap
 no-wrap = \code, context, evald -> code | tokenize | parse | ast: @, context, evald | generate
 
 walk = \tree, cb {
@@ -68,7 +68,7 @@ files = \dirname, cb {
     else file: dirname | cb: @, dirname
 }
 
-export run = \code {
+run = \code {
   try {
     result = vm.run-in-new-context: (code.join: ''), ({ console = console })
   } catch {
@@ -79,7 +79,7 @@ export run = \code {
 }
 
 
-export output = \list -> map: (\x -> x | util.puts), list
+output = \list -> map: (\x -> x | util.puts), list
 analyze = \body -> body | util.inspect: @, false, 50 | util.puts
 
 write = \code, item {
