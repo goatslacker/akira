@@ -37,7 +37,12 @@ ast = \parsed, context, evald {
   })
 }
 generate = \program -> escodegen.generate: program
-wrap = \code -> ['module.exports = ' ++ code]
+wrap = \code {
+  [
+    'var $$MEMORY = (typeof module !== "undefined") ? module : {}'
+    '$$MEMORY.exports = ' ++ code
+  ]
+}
 
 compile = \code, context, evald -> no-wrap: code, context, evald | wrap
 no-wrap = \code, context, evald -> code | tokenize | parse | ast: @, context, evald | generate
