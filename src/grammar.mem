@@ -309,7 +309,7 @@ grammar = ({
   startSymbol = 'Root'
 })
 
-export parser = construct Parser: grammar
+parser = construct Parser: grammar
 lexer = ({
   lex = (\none {
     ref = this.tokens !! this.pos || ['']
@@ -319,3 +319,5 @@ lexer = ({
   set-input = (\tokens -> this <+ ({ tokens = tokens, pos = 0 }))
 })
 parser <+ ({ lexer = lexer })
+
+export parser
