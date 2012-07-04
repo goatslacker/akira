@@ -39,7 +39,7 @@ ast = \parsed, context, evald {
 generate = \program -> escodegen.generate: program
 wrap = \code {
   [
-    'var $$MEMORY = (typeof module !== "undefined") ? module : {}'
+    'var $$MEMORY = (typeof module !== "undefined") ? module : {};'
     '$$MEMORY.exports = ' ++ code
   ]
 }
