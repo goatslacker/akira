@@ -7,11 +7,10 @@ nodewatch = require: 'nodewatch'
 me = require: '../package.json'
 
 lexer = require: './lexer'
-Parser = require: './grammar'
-parser = Parser.parser
+parser = require: './grammar'
 parser.yy <+ (require: './nodes')
 
-tokenize = \code -> lexer.tokenize: code
+tokenize = \code -> lexer: code
 parse = \tokens -> parser.parse: tokens
 ast = \parsed, context, evald {
   self = context || ({})
@@ -38,7 +37,7 @@ ast = \parsed, context, evald {
   })
 }
 generate = \program -> escodegen.generate: program
-wrap = \code -> [code]
+wrap = \code -> ['module.exports = ' ++ code]
 
 compile = \code, context, evald -> no-wrap: code, context, evald | wrap
 no-wrap = \code, context, evald -> code | tokenize | parse | ast: @, context, evald | generate
