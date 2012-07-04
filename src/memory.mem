@@ -29,7 +29,7 @@ ast = \parsed, context, evald {
         body = ast
       })
     })
-    'arguments' = []
+    arguments = []
   })
 
   program = ({
