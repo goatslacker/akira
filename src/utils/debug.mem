@@ -1,18 +1,20 @@
-export eq = \a, b -> a is b
-export neq = \a, b -> a isnt b
-export gt = \a, b -> a > b
-export lt = \a, b -> a < b
-export gte = \a, b -> a >= b
-export lte = \a, b -> a <= b
+eq = \a, b -> a is b
+neq = \a, b -> a isnt b
+gt = \a, b -> a > b
+lt = \a, b -> a < b
+gte = \a, b -> a >= b
+lte = \a, b -> a <= b
 
-export assert = \a, b {
+assert = \a, b {
   assert.successes = []
   assert.failures = []
 
   if a == b then (assert.successes.push: [a, b]) else (assert.failures.push: [a, b])
 }
 
-export assert-deep = \a, b {
+assert-deep = \a, b {
   len = filter: (\x, i -> x is b !! i - 1), a | @.length
   assert: len, b.length
 }
+
+export ({ eq, neq, gt, lt, gte, lte, assert, assert-deep })

@@ -1,17 +1,10 @@
-export my-id = \n -> n
-my-id: 5 | assert: 5
-
-my-a = 2
-export my-a
-assert: my-a, 2
-
-export my-k = 3
-assert: my-k, 3
-
-
-export fact = \n
+fact = \n
   1 -> 1
   else -> n * (fact: n - 1)
 
 fact2 = \n -> if n <= 1 then 1 else n * (fact: n - 1)
+
 fact: 4 | assert: 24
+fact2: 4 | assert: 24
+
+export fact

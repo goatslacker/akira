@@ -1,28 +1,35 @@
-export head = \[x] -> x
-export init = \[...xs, x] -> xs
-export tail = \[x, ...xs] -> xs
-export last = \[...xs, x] -> x
-export at = \index, list -> list !! index - 1
-export get = \obj, prop -> obj !! prop
-export length = \of -> of.length
-export join = \by, list -> list.join: by
-export concat = \...args -> foldl: (\a, b -> a ++ b), args
-export count = \fn, list -> filter: fn, list | @.length
-export average = \list -> foldl: (\a, b -> a + b), list | @ / list.length
-export compact = \list -> filter: (\x -> not not x), list
-export intersect = \list1, list2 -> filter: (\x -> list2.indexOf: x | 0 - 1 isnt @), list1
-export max = \list -> foldl: (\a, b -> if a > b then a else b), list
-export min = \list -> foldl: (\a, b -> if a < b then a else b), list
-export nothing = \fn, list -> filter: fn, list | @.length | @ is 0
-export randomize = \list -> sort: (\none -> (Math.random:!) > 0.5), list
-export unique = \list -> filter: (\x, i -> list.indexOf: x | i - 1 is @), list
-export take = \n, list -> list.slice: 0, n
-export drop = \n, list list.slice: n
+head = \[x] -> x
+init = \[...xs, x] -> xs
+tail = \[x, ...xs] -> xs
+last = \[...xs, x] -> x
+at = \index, list -> list !! index - 1
+get = \obj, prop -> obj !! prop
+length = \of -> of.length
+join = \by, list -> list.join: by
+concat = \...args -> foldl: (\a, b -> a ++ b), args
+count = \fn, list -> filter: fn, list | @.length
+average = \list -> foldl: (\a, b -> a + b), list | @ / list.length
+compact = \list -> filter: (\x -> not not x), list
+intersect = \list1, list2 -> filter: (\x -> list2.indexOf: x | 0 - 1 isnt @), list1
+max = \list -> foldl: (\a, b -> if a > b then a else b), list
+min = \list -> foldl: (\a, b -> if a < b then a else b), list
+nothing = \fn, list -> filter: fn, list | @.length | @ is 0
+randomize = \list -> sort: (\none -> (Math.random:!) > 0.5), list
+unique = \list -> filter: (\x, i -> list.indexOf: x | i - 1 is @), list
+take = \n, list -> list.slice: 0, n
+drop = \n, list list.slice: n
 
-export take-while = \fn, [x, ...xs]
+take-while = \fn, [x, ...xs]
   (fn: x) == true -> x +: (take-while: fn, xs)
   else -> []
 
-export take-until = \fn, [x, ...xs]
+take-until = \fn, [x, ...xs]
   (fn: x) == true -> [x]
   else -> x +: (take-until: fn, xs)
+
+export ({
+  head, init, tail, last, at, get, length
+  join, concat, count, average, compact
+  intersect, max, min, nothing, randomize
+  unique, take, drop, take-while, take-until
+})

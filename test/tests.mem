@@ -13,11 +13,11 @@ import 'test/reserved.mem'
 import 'test/strings.mem'
 import 'test/tuples.mem'
 import 'test/utils.mem'
-import 'test/exporting.mem'
 import 'test/operators.mem'
 import 'test/pipeline.mem'
 import 'test/comprehensions.mem'
 import 'test/destructors.mem'
+fact = import 'test/exporting.mem'
 
 # export fact test
 assert: 24, (fact: 4)

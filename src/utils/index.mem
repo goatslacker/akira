@@ -17,8 +17,7 @@ src = [
 
 map: (\x -> include: x), src
 
-export modules
-export dependencies = ({
+dependencies = ({
   chars = ['map']
   words = ['map']
   lines = ['map']
@@ -41,3 +40,5 @@ export dependencies = ({
   assert = ['merge']
   assert-deep = ['assert', 'filter']
 })
+
+export ({ modules, dependencies })
