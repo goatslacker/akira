@@ -324,10 +324,15 @@ parser = construct Parser: grammar
 lexer = ({
   lex = (\none {
     ref = this.tokens !! this.pos || ['']
-    this <+ ({ pos = this.pos + 1, yytext = ref !! 1, yylineno = ref !! 2 })
+    this.pos = this.pos + 1
+    this.yytext = ref !! 1
+    this.yylineno = ref !! 2
     ref !! 0
   })
-  set-input = (\tokens -> this <+ ({ tokens = tokens, pos = 0 }))
+  set-input = (\tokens {
+    this.tokens = tokens
+    this.pos = 0
+  })
 })
 parser <+ ({ lexer = lexer })
 
