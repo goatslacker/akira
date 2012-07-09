@@ -334,6 +334,6 @@ lexer = ({
     this.pos = 0
   })
 })
-parser <+ ({ lexer = lexer })
+parser.lexer = lexer
 
 export parser
