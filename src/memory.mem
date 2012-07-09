@@ -51,7 +51,7 @@ walk = \tree, cb {
   try {
     stat = fs.stat-sync: tree
   } catch {
-    raise: err
+    raise err
   }
 
   if stat.is-directory:!

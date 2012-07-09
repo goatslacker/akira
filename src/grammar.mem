@@ -108,6 +108,10 @@ bnf = ({
 
   AlphaNumeric = [
     (o: 'NUMBER', (\none -> construct Literal: (Number: $1)))
+    (o: 'String')
+  ]
+
+  String = [
     (o: 'STRING', (\none -> construct Literal: (String: $1)))
   ]
 
@@ -253,6 +257,12 @@ bnf = ({
 
   Exceptions = [
     (o: 'TRY Body OptTerminator CATCH Body', (\none -> construct Exception: $2, $5))
+    (o: 'RAISE Value ErrorType', (\none -> construct Exception: $1, $2, $3))
+  ]
+
+  ErrorType = [
+    (o: '', (\none -> none))
+    (o: 'Identifier')
   ]
 
   If = [
