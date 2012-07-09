@@ -43,3 +43,9 @@ a7 = a5: 12
 assert: a7, 12
 a8 = 6 | a5
 assert: a8, 6
+
+h = \x -> x
+assert: (h: 5), 5
+
+i = h: 4
+assert: i, 4
