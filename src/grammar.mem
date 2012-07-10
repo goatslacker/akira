@@ -11,12 +11,12 @@ addYY = \str -> str.replace: /new /g, 'new yy.'
 addLine = \str -> 'yy.L(yylineno, ' ++ (str.replace: ';', '') ++ ');'
 
 o = \pattern, action {
-  patternString = pattern.replace: /\s{2,}/g, ' '
+  pattern-string = pattern.replace: /\s{2,}/g, ' '
   if not action
-    then [patternString, '$$ = $1']
+    then [pattern-string, '$$ = $1']
     else {
       newaction = action | getMatch | addYY | addLine
-      [patternString, '$$ = ' ++ newaction]
+      [pattern-string, '$$ = ' ++ newaction]
     }
 }
 
@@ -80,7 +80,7 @@ bnf = ({
     (o: 'Pipeline')
     (o: 'Construct')
     (o: 'Comprehensions')
-    (o: 'IMPORT STRING', (\none -> construct Import: $2))
+    (o: 'IMPORT STR', (\none -> construct Import: $2))
   ]
 
   Value = [
@@ -89,6 +89,7 @@ bnf = ({
     (o: 'Tuples')
     (o: 'Operation')
     (o: 'Access')
+    (o: 'Type')
     (o: '@')
     (o: '( Assignable )', (\none -> $2))
   ]
@@ -96,6 +97,10 @@ bnf = ({
   Values = [
     (o: 'Value')
     (o: 'Invocation')
+  ]
+
+  Type = [
+    (o: 'TYPE', (\none -> construct Identifier: $1))
   ]
 
   Literal = [
@@ -107,12 +112,12 @@ bnf = ({
   ]
 
   AlphaNumeric = [
-    (o: 'NUMBER', (\none -> construct Literal: (Number: $1)))
-    (o: 'String')
+    (o: 'NUM', (\none -> construct Literal: (Number: $1)))
+    (o: 'Strings')
   ]
 
-  String = [
-    (o: 'STRING', (\none -> construct Literal: (String: $1)))
+  Strings = [
+    (o: 'STR', (\none -> construct Literal: (String: $1)))
   ]
 
   Assignment = [
@@ -173,12 +178,12 @@ bnf = ({
   ]
 
   Comprehensions = [
-    (o: 'NUMBER . . Numbers ComprehensionBy ComprehensionFunction', (\none -> construct Comprehension: $1, $4, $5, $6))
+    (o: 'NUM . . Numbers ComprehensionBy ComprehensionFunction', (\none -> construct Comprehension: $1, $4, $5, $6))
     (o: 'Identifier . . Numbers ComprehensionBy ComprehensionFunction', (\none -> construct Comprehension: $1, $4, $5, $6))
   ]
 
   Numbers = [
-    (o: 'NUMBER')
+    (o: 'NUM')
     (o: 'Identifier')
   ]
 
@@ -222,6 +227,7 @@ bnf = ({
   Access = [
     (o: 'Identifier Accessor', (\none -> construct Access: $1, $2))
     (o: '@ Accessor', (\none -> construct Access: $1, $2))
+    (o: 'Type Accessor', (\none -> construct Access: $1, $2))
     (o: 'Access Accessor', (\none -> construct Access: $1, $2))
   ]
 
@@ -274,7 +280,7 @@ bnf = ({
     (o: '-', (\none -> construct Identifier: '_sub'))
     (o: '*', (\none -> construct Identifier: '_mul'))
     (o: '/', (\none -> construct Identifier: '_div'))
-    (o: '( MathOperators NUMBER )', (\none -> construct Call: (construct Call: (construct Identifier: 'curryr'), (construct Arguments: $2)), (construct Arguments: $3)))
+    (o: '( MathOperators NUM )', (\none -> construct Call: (construct Call: (construct Identifier: 'curryr'), (construct Arguments: $2)), (construct Arguments: $3)))
   ]
 
   Operation = [
@@ -294,7 +300,7 @@ bnf = ({
 tokens = [
   'ASSERT', 'IF', 'THEN', 'ELSE',
   'LAMBDA',
-  'IDENTIFIER', 'BOOL', 'NUMBER', 'STRING',
+  'IDENTIFIER', 'BOOL', 'NUM', 'STR',
   'LOGIC', 'COMPARE',
   'TERMINATOR'
 ]

@@ -1,7 +1,7 @@
 rx = ({
   IDENTIFIER = /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
-  NUMBER = /^((\d+\.)?\d+)+/
-  STRING = /^'(.*?)'/
+  NUM = /^((\d+\.)?\d+)+/
+  STR = /^'(.*?)'/
   LAMBDA = /^->/
   OPERATION = /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
   TERMINATOR = /^\n/
@@ -12,6 +12,7 @@ rx = ({
 
 identifiers = ({
   KEYWORDS = ['construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none', 'raise']
+  TYPE = ['Function', 'Number', 'String', 'Array', 'Object', 'Null']
   COMPARE = ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
   LEFT_OPERATORS = ['++', '!!', '<+']
   RIGHT_OPERATORS = ['=>', '+:']
@@ -47,8 +48,8 @@ parse-regular-expressions = \t, chunk {
 
 get-token = \t, chunk, n
   'IDENTIFIER' -> parse-identifier: t, chunk
-  'NUMBER' -> parse-alphanumeric: t, chunk
-  'STRING' -> parse-alphanumeric: t, chunk
+  'NUM' -> parse-alphanumeric: t, chunk
+  'STR' -> parse-alphanumeric: t, chunk
   'OPERATION' -> parse-identifier: t, chunk
   'LAMBDA' -> '->'
   'REGEX' -> parse-regular-expressions: t, chunk
@@ -69,7 +70,7 @@ process-chunk = \code, n {
 }
 
 get-length = \token, i
-  'STRING' -> i + 2
+  'STR' -> i + 2
   else -> i
 
 incr-line = \type, line
