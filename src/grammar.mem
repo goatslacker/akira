@@ -48,19 +48,19 @@ bnf = ({
   ]
 
   Identifier = [
-    (o: 'IDENTIFIER', (\none -> construct Identifier: $1))
+    (o: 'IDENTIFIER', (\none -> clone Identifier: $1))
   ]
 
   IdentifierNoUtils = [
-    (o: 'IDENTIFIER', (\none -> construct Identifier: $1, true))
+    (o: 'IDENTIFIER', (\none -> clone Identifier: $1, true))
   ]
 
   Prototype = [
-    (o: 'PROTOTYPE', (\none -> construct Identifier: $1))
+    (o: 'PROTOTYPE', (\none -> clone Identifier: $1))
   ]
 
   Rest = [
-    (o: '. . . IDENTIFIER', (\none -> construct Identifier: $4, false, true))
+    (o: '. . . IDENTIFIER', (\none -> clone Identifier: $4, false, true))
   ]
 
   Body = [
@@ -83,10 +83,10 @@ bnf = ({
     (o: 'PatternMatching')
     (o: 'Invocation')
     (o: 'Pipeline')
-    (o: 'Construct')
+    (o: 'Cloning')
     (o: 'Comprehensions')
     (o: 'Prototype')
-    (o: 'IMPORT STR', (\none -> construct Import: $2))
+    (o: 'IMPORT STR', (\none -> clone Import: $2))
   ]
 
   Value = [
@@ -106,35 +106,35 @@ bnf = ({
   ]
 
   Type = [
-    (o: 'TYPE', (\none -> construct Identifier: $1))
+    (o: 'TYPE', (\none -> clone Identifier: $1))
   ]
 
   Literal = [
     (o: 'Identifier')
     (o: 'AlphaNumeric')
-    (o: 'NONE', (\none -> construct Literal: none))
-    (o: 'BOOL', (\none -> construct Literal: ($1 == 'true')))
-    (o: 'REGEXP', (\none -> construct Literal: $1))
+    (o: 'NONE', (\none -> clone Literal: none))
+    (o: 'BOOL', (\none -> clone Literal: ($1 == 'true')))
+    (o: 'REGEXP', (\none -> clone Literal: $1))
   ]
 
   AlphaNumeric = [
-    (o: 'NUM', (\none -> construct Literal: (Number: $1)))
+    (o: 'NUM', (\none -> clone Literal: (Number: $1)))
     (o: 'Strings')
   ]
 
   Strings = [
-    (o: 'STR', (\none -> construct Literal: (String: $1)))
+    (o: 'STR', (\none -> clone Literal: (String: $1)))
   ]
 
   Assignment = [
-    (o: 'Identifier = Assignable', (\none -> construct Assignment: $1, $3))
-    (o: 'Access = Assignable', (\none -> construct Assignment: $1, $3))
-    (o: 'Lists = Assignable', (\none -> construct Assignment: $1, $3))
-    (o: 'Maps = Assignable', (\none -> construct Assignment: $1, $3))
+    (o: 'Identifier = Assignable', (\none -> clone Assignment: $1, $3))
+    (o: 'Access = Assignable', (\none -> clone Assignment: $1, $3))
+    (o: 'Lists = Assignable', (\none -> clone Assignment: $1, $3))
+    (o: 'Maps = Assignable', (\none -> clone Assignment: $1, $3))
   ]
 
   Objects = [
-    (o: 'OBJECT Identifier OptClones Maps', (\none -> construct Objects: $2, $3, $4))
+    (o: 'OBJECT Identifier OptClones Maps', (\none -> clone Objects: $2, $3, $4))
   ]
 
   OptClones = [
@@ -143,27 +143,26 @@ bnf = ({
   ]
 
   Modules = [
-    (o: 'EXPORT Assignable', (\none -> construct Export: $2))
+    (o: 'EXPORT Assignable', (\none -> clone Export: $2))
   ]
 
-  Construct = [
-    (o: 'CONSTRUCT Invocation', (\none -> construct Construction: $2))
-    (o: 'CLONE Invocation', (\none -> construct Construction: $2))
+  Cloning = [
+    (o: 'CLONE Invocation', (\none -> clone Construction: $2))
   ]
 
   Pipeline = [
-    (o: 'Value | Values', (\none -> construct Pipeline: $1, $3))
-    (o: 'Invocation | Values', (\none -> construct Pipeline: $1, $3))
-    (o: 'Pipeline | Values', (\none -> construct Pipeline: $1, $3))
+    (o: 'Value | Values', (\none -> clone Pipeline: $1, $3))
+    (o: 'Invocation | Values', (\none -> clone Pipeline: $1, $3))
+    (o: 'Pipeline | Values', (\none -> clone Pipeline: $1, $3))
   ]
 
   Invocation = [
-    (o: 'Value : Arguments', (\none -> construct Call: $1, $3))
+    (o: 'Value : Arguments', (\none -> clone Call: $1, $3))
   ]
 
   Declaration = [
-    (o: '\ Parameters LAMBDA Expression', (\none -> construct Declaration: none, $2, $4))
-    (o: '\ Parameters Body', (\none -> construct Declaration: none, $2, $3))
+    (o: '\ Parameters LAMBDA Expression', (\none -> clone Declaration: none, $2, $4))
+    (o: '\ Parameters Body', (\none -> clone Declaration: none, $2, $3))
   ]
 
   Pattern = [
@@ -171,16 +170,16 @@ bnf = ({
   ]
 
   Patterns = [
-    (o: 'Pattern', (\none -> construct Arguments: $1))
-    (o: 'Patterns Pattern', (\none -> construct Arguments: $1, $2))
+    (o: 'Pattern', (\none -> clone Arguments: $1))
+    (o: 'Patterns Pattern', (\none -> clone Arguments: $1, $2))
   ]
 
   Default = [
-    (o: 'ELSE LAMBDA Body TERMINATOR', (\none -> construct Arguments: [$1, $3]))
+    (o: 'ELSE LAMBDA Body TERMINATOR', (\none -> clone Arguments: [$1, $3]))
   ]
 
   PatternMatching = [
-    (o: '\ Parameters TERMINATOR Patterns Default', (\none -> construct Declaration: none, $2, (construct Pattern: $2, $4, $5)))
+    (o: '\ Parameters TERMINATOR Patterns Default', (\none -> clone Declaration: none, $2, (clone Pattern: $2, $4, $5)))
   ]
 
   Comma = [
@@ -188,8 +187,8 @@ bnf = ({
   ]
 
   Comprehensions = [
-    (o: 'NUM . . Numbers ComprehensionBy ComprehensionFunction', (\none -> construct Comprehension: $1, $4, $5, $6))
-    (o: 'Identifier . . Numbers ComprehensionBy ComprehensionFunction', (\none -> construct Comprehension: $1, $4, $5, $6))
+    (o: 'NUM . . Numbers ComprehensionBy ComprehensionFunction', (\none -> clone Comprehension: $1, $4, $5, $6))
+    (o: 'Identifier . . Numbers ComprehensionBy ComprehensionFunction', (\none -> clone Comprehension: $1, $4, $5, $6))
   ]
 
   Numbers = [
@@ -203,43 +202,43 @@ bnf = ({
   ]
 
   ComprehensionBy = [
-    (o: '', (\none -> construct Literal: 1))
+    (o: '', (\none -> clone Literal: 1))
     (o: 'Numbers')
   ]
 
   Lists = [
-    (o: '[ ]', (\none -> construct List:!))
-    (o: '[ OptTerminator ListArgs OptTerminator ]', (\none -> construct List: $3))
+    (o: '[ ]', (\none -> clone List:!))
+    (o: '[ OptTerminator ListArgs OptTerminator ]', (\none -> clone List: $3))
   ]
 
   ListArgs = [
-    (o: 'Arg', (\none -> construct Arguments: $1))
-    (o: 'ListArgs Comma Arg', (\none -> construct Arguments: $1, $3))
-    (o: 'ListArgs Terminator Arg', (\none -> construct Arguments: $1, $3))
+    (o: 'Arg', (\none -> clone Arguments: $1))
+    (o: 'ListArgs Comma Arg', (\none -> clone Arguments: $1, $3))
+    (o: 'ListArgs Terminator Arg', (\none -> clone Arguments: $1, $3))
   ]
 
   KeyValue = [
-    (o: 'IdentifierNoUtils', (\none -> construct Assignment: $1, $1))
-    (o: 'IdentifierNoUtils = Value', (\none -> construct Assignment: $1, $3))
+    (o: 'IdentifierNoUtils', (\none -> clone Assignment: $1, $1))
+    (o: 'IdentifierNoUtils = Value', (\none -> clone Assignment: $1, $3))
   ]
 
   MapItems = [
-    (o: 'KeyValue', (\none -> construct Arguments: $1))
-    (o: 'MapItems Comma KeyValue', (\none -> construct Arguments: $1, $3))
-    (o: 'MapItems Terminator KeyValue', (\none -> construct Arguments: $1, $3))
+    (o: 'KeyValue', (\none -> clone Arguments: $1))
+    (o: 'MapItems Comma KeyValue', (\none -> clone Arguments: $1, $3))
+    (o: 'MapItems Terminator KeyValue', (\none -> clone Arguments: $1, $3))
   ]
 
   Maps = [
-    (o: '( { } )', (\none -> construct Map:!))
-    (o: '( { OptTerminator MapItems OptTerminator } )', (\none -> construct Map: $4))
+    (o: '( { } )', (\none -> clone Map:!))
+    (o: '( { OptTerminator MapItems OptTerminator } )', (\none -> clone Map: $4))
   ]
 
   Access = [
-    (o: 'Identifier Accessor', (\none -> construct Access: $1, $2))
-    (o: '@ Accessor', (\none -> construct Access: $1, $2))
-    (o: 'Prototype Accessor', (\none -> construct Access: $1, $2))
-    (o: 'Type Accessor', (\none -> construct Access: $1, $2))
-    (o: 'Access Accessor', (\none -> construct Access: $1, $2))
+    (o: 'Identifier Accessor', (\none -> clone Access: $1, $2))
+    (o: '@ Accessor', (\none -> clone Access: $1, $2))
+    (o: 'Prototype Accessor', (\none -> clone Access: $1, $2))
+    (o: 'Type Accessor', (\none -> clone Access: $1, $2))
+    (o: 'Access Accessor', (\none -> clone Access: $1, $2))
   ]
 
   Accessor = [
@@ -255,26 +254,26 @@ bnf = ({
 
   Arguments = [
     (o: '!', (\none -> none))
-    (o: 'Arg', (\none -> construct Arguments: $1))
-    (o: 'Arguments Comma Arg', (\none -> construct Arguments: $1, $3))
+    (o: 'Arg', (\none -> clone Arguments: $1))
+    (o: 'Arguments Comma Arg', (\none -> clone Arguments: $1, $3))
   ]
 
   Param = [
     (o: 'IdentifierNoUtils')
-    (o: 'IdentifierNoUtils = Value', (\none -> construct Assignment: $1, $3))
+    (o: 'IdentifierNoUtils = Value', (\none -> clone Assignment: $1, $3))
     (o: 'Rest')
     (o: 'Lists')
   ]
 
   Parameters = [
     (o: 'NONE', (\none -> none))
-    (o: 'Param', (\none -> construct Arguments: $1))
-    (o: 'Parameters , Param', (\none -> construct Arguments: $1, $3))
+    (o: 'Param', (\none -> clone Arguments: $1))
+    (o: 'Parameters , Param', (\none -> clone Arguments: $1, $3))
   ]
 
   Exceptions = [
-    (o: 'TRY Body OptTerminator CATCH Body', (\none -> construct Exception: $2, $5))
-    (o: 'RAISE Value ErrorType', (\none -> construct Exception: $1, $2, $3))
+    (o: 'TRY Body OptTerminator CATCH Body', (\none -> clone Exception: $2, $5))
+    (o: 'RAISE Value ErrorType', (\none -> clone Exception: $1, $2, $3))
   ]
 
   ErrorType = [
@@ -283,27 +282,27 @@ bnf = ({
   ]
 
   If = [
-    (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body', (\none -> construct If: $2, $5, $8))
+    (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body', (\none -> clone If: $2, $5, $8))
   ]
 
   MathOperators = [
-    (o: '+', (\none -> construct Identifier: '_add'))
-    (o: '-', (\none -> construct Identifier: '_sub'))
-    (o: '*', (\none -> construct Identifier: '_mul'))
-    (o: '/', (\none -> construct Identifier: '_div'))
-    (o: '( MathOperators NUM )', (\none -> construct Call: (construct Call: (construct Identifier: 'curryr'), (construct Arguments: $2)), (construct Arguments: $3)))
+    (o: '+', (\none -> clone Identifier: '_add'))
+    (o: '-', (\none -> clone Identifier: '_sub'))
+    (o: '*', (\none -> clone Identifier: '_mul'))
+    (o: '/', (\none -> clone Identifier: '_div'))
+    (o: '( MathOperators NUM )', (\none -> clone Call: (clone Call: (clone Identifier: 'curryr'), (clone Arguments: $2)), (clone Arguments: $3)))
   ]
 
   Operation = [
-    (o: 'Value COMPARE Value', (\none -> construct Compare: $1, $2, $3))
-    (o: 'Value LOGIC Value', (\none -> construct Compare: $1, $2, $3))
-    (o: 'Value LEFT_OPERATORS Value', (\none -> construct Operation: $1, $2, $3))
-    (o: 'Value RIGHT_OPERATORS Value', (\none -> construct Operation: $1, $2, $3))
-    (o: 'NOT Value', (\none -> construct Compare: $2, $1))
-    (o: 'Value + Value', (\none -> construct Operation: $1, '+', $3))
-    (o: 'Value - Value', (\none -> construct Operation: $1, '-', $3))
-    (o: 'Value * Value', (\none -> construct Operation: $1, '*', $3))
-    (o: 'Value / Value', (\none -> construct Operation: $1, '/', $3))
+    (o: 'Value COMPARE Value', (\none -> clone Compare: $1, $2, $3))
+    (o: 'Value LOGIC Value', (\none -> clone Compare: $1, $2, $3))
+    (o: 'Value LEFT_OPERATORS Value', (\none -> clone Operation: $1, $2, $3))
+    (o: 'Value RIGHT_OPERATORS Value', (\none -> clone Operation: $1, $2, $3))
+    (o: 'NOT Value', (\none -> clone Compare: $2, $1))
+    (o: 'Value + Value', (\none -> clone Operation: $1, '+', $3))
+    (o: 'Value - Value', (\none -> clone Operation: $1, '-', $3))
+    (o: 'Value * Value', (\none -> clone Operation: $1, '*', $3))
+    (o: 'Value / Value', (\none -> clone Operation: $1, '/', $3))
   ]
 })
 
@@ -337,7 +336,7 @@ grammar = ({
   startSymbol = 'Root'
 })
 
-parser = construct Parser: grammar
+parser = clone Parser: grammar
 lexer = ({
   lex = (\none {
     ref = this.tokens !! this.pos || ['']

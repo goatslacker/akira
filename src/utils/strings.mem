@@ -4,7 +4,7 @@ capitalize = \str -> (str.1.to-upper-case:!) ++ (str.slice: 1)
 chars = \fn, str -> str.split: '' | map: fn, @
 condense = \str -> str.replace: /\ /g, ''
 lines = \fn, str -> str.split: '\n' | map: fn, @
-repeat = \times, str -> (construct Array: (times + 1)) | @.join: str
+repeat = \times, str -> (clone Array: (times + 1)) | @.join: str
 words = \fn, str -> str.split: ' ' | map: fn, @
 
 export ({

@@ -11,7 +11,7 @@ rx = ({
 })
 
 identifiers = ({
-  KEYWORDS = ['construct', 'if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none', 'raise', 'object', 'clones', 'clone', 'prototype']
+  KEYWORDS = ['if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none', 'raise', 'object', 'clones', 'clone', 'prototype']
   TYPE = ['Function', 'Number', 'String', 'Array', 'Object', 'Null']
   COMPARE = ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
   LEFT_OPERATORS = ['++', '!!', '<+']
@@ -42,7 +42,7 @@ parse-identifier = \t, chunk {
 
 parse-regular-expressions = \t, chunk {
   item = extract: t, chunk
-  regexp = construct RegExp: item.3, item.4
+  regexp = clone RegExp: item.3, item.4
   ['REGEXP', regexp]
 }
 
