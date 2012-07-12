@@ -68,6 +68,7 @@ bnf = ({
     (o: 'Modules')
     (o: 'Assignable')
     (o: 'Exceptions')
+    (o: 'Objects')
   ]
 
   Assignable = [
@@ -127,12 +128,22 @@ bnf = ({
     (o: 'Maps = Assignable', (\none -> construct Assignment: $1, $3))
   ]
 
+  Objects = [
+    (o: 'OBJECT Identifier OptClones Maps', (\none -> construct Objects: $2, $3, $4))
+  ]
+
+  OptClones = [
+    (o: '', (\none -> none))
+    (o: 'CLONES Identifier', (\none -> $2))
+  ]
+
   Modules = [
     (o: 'EXPORT Assignable', (\none -> construct Export: $2))
   ]
 
   Construct = [
     (o: 'CONSTRUCT Invocation', (\none -> construct Construction: $2))
+    (o: 'CLONE Invocation', (\none -> construct Construction: $2))
   ]
 
   Pipeline = [

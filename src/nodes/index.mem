@@ -20,6 +20,7 @@ export ({
   Literal = (r: 'literal')
   List = (r: 'list')
   Nodes = (r: 'nodes')
+  Objects = (r: 'objects')
   Operation = (r: 'operation')
   Pattern = (r: 'pattern')
   Pipeline = (r: 'pipeline')
