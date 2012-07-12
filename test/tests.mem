@@ -18,6 +18,7 @@ import 'test/pipeline.mem'
 import 'test/comprehensions.mem'
 import 'test/destructors.mem'
 import 'test/oo.mem'
+import 'test/interpolate.mem'
 fact = import 'test/exporting.mem'
 
 # export fact test
@@ -29,14 +30,14 @@ end = Date.now:!
 print: 'Done!'
 
 if assert.successes
-  then print: 'OK ' ++ assert.successes.length ++ ' tests'
+  then print: 'OK {{assert.successes.length}} tests'
   else none
 
 if assert.failures.length
   then {
-    print: 'FAIL ' ++ assert.failures.length ++ ' tests'
+    print: 'FAIL {{assert.failures.length}} tests'
     print: assert.failures
   }
   else none
 
-print: 'Time ' ++ end - start ++ 'ms'
+print: 'Time {{end - start}}ms'

@@ -4,7 +4,7 @@ unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
 
 getMatch = \action {
   x = unwrap.exec: action
-  if x then x.2 else '(' ++ action ++ '())'
+  if x then x.2 else '({{action}}())'
 }
 
 addYY = \str -> str.replace: /new /g, 'new yy.'
@@ -16,7 +16,7 @@ o = \pattern, action {
     then [pattern-string, '$$ = $1']
     else {
       newaction = action | getMatch | addYY | addLine
-      [pattern-string, '$$ = ' ++ newaction]
+      [pattern-string, '$$ = {{newaction}}']
     }
 }
 

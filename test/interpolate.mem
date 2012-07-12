@@ -1,0 +1,37 @@
+world = 'world'
+iz = 'is'
+
+a = 'hello {{world}} what {{iz}} up'
+b = '{{world}} {{iz}} awesome'
+c = 'hai {{world}}'
+d = '{{c}}2'
+
+assert: a, 'hello world what is up'
+assert: b, 'world is awesome'
+assert: c, 'hai world'
+assert: d, 'hai world2'
+
+obj = ({ where = 'where' })
+mind = ['mind']
+mind2 = 'mind'
+
+e = '{{obj.where}} is my mind'
+f = '{{obj.where}} is my {{mind[0]}}'
+g = '{{obj.where}} is my {{mind2}}'
+h = '{{mind[0]}} your own {{world}}'
+
+assert: e, 'where is my mind'
+assert: f, 'where is my mind'
+assert: g, 'where is my mind'
+assert: h, 'mind your own world'
+
+i = if true then '{{iz}}{{world}}' else 'not{{world}}'
+assert: i, 'isworld'
+
+assert: '{{2-2}}', '0'
+assert: '{{1 + 1}}', '2'
+assert: '{{12 * 10}}', '120'
+assert: '{{32 /4}}', '8'
+
+j = 6
+assert: '{{j* j}}', '36'
