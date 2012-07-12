@@ -1,0 +1,23 @@
+# I have to make a Animal, Cat example...
+object Animal ({
+  speak = (\none -> 'my name is ' ++ this.name)
+  walk = (\direction -> true)
+  sleep = (\none -> 'ZzZzZ...')
+  alive = true
+  eyes = 2
+})
+
+object Cat clones Animal ({
+  speak = (\none -> 'meow i am ' ++ this.name)
+  sleep = (\none -> 'Purr ' ++ (Animal.prototype.sleep.call: this))
+  legs = 4
+})
+
+cat = clone Cat: ({ name = 'Luna' })
+
+cat.speak:! | assert: 'meow i am Luna'
+cat.alive | assert: true
+cat.eyes | assert: 2
+cat.legs | assert: 4
+cat.walk:! | assert: true
+cat.sleep:! | assert: 'Purr ZzZzZ...'

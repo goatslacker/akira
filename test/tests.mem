@@ -17,6 +17,7 @@ import 'test/operators.mem'
 import 'test/pipeline.mem'
 import 'test/comprehensions.mem'
 import 'test/destructors.mem'
+import 'test/oo.mem'
 fact = import 'test/exporting.mem'
 
 # export fact test
