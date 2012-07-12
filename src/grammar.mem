@@ -128,8 +128,7 @@ bnf = ({
   ]
 
   Modules = [
-    (o: 'EXPORT Value', (\none -> construct Export: $2))
-    (o: 'EXPORT Assignment', (\none -> construct Export: $2))
+    (o: 'EXPORT Assignable', (\none -> construct Export: $2))
   ]
 
   Construct = [
