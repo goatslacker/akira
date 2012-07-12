@@ -86,7 +86,7 @@ bnf = ({
   Value = [
     (o: 'Literal')
     (o: 'Lists')
-    (o: 'Tuples')
+    (o: 'Maps')
     (o: 'Operation')
     (o: 'Access')
     (o: 'Type')
@@ -124,7 +124,7 @@ bnf = ({
     (o: 'Identifier = Assignable', (\none -> construct Assignment: $1, $3))
     (o: 'Access = Assignable', (\none -> construct Assignment: $1, $3))
     (o: 'Lists = Assignable', (\none -> construct Assignment: $1, $3))
-    (o: 'Tuples = Assignable', (\none -> construct Assignment: $1, $3))
+    (o: 'Maps = Assignable', (\none -> construct Assignment: $1, $3))
   ]
 
   Modules = [
@@ -207,15 +207,15 @@ bnf = ({
     (o: 'IdentifierNoUtils = Value', (\none -> construct Assignment: $1, $3))
   ]
 
-  TupleItems = [
+  MapItems = [
     (o: 'KeyValue', (\none -> construct Arguments: $1))
-    (o: 'TupleItems Comma KeyValue', (\none -> construct Arguments: $1, $3))
-    (o: 'TupleItems Terminator KeyValue', (\none -> construct Arguments: $1, $3))
+    (o: 'MapItems Comma KeyValue', (\none -> construct Arguments: $1, $3))
+    (o: 'MapItems Terminator KeyValue', (\none -> construct Arguments: $1, $3))
   ]
 
-  Tuples = [
-    (o: '( { } )', (\none -> construct Tuple:!))
-    (o: '( { OptTerminator TupleItems OptTerminator } )', (\none -> construct Tuple: $4))
+  Maps = [
+    (o: '( { } )', (\none -> construct Map:!))
+    (o: '( { OptTerminator MapItems OptTerminator } )', (\none -> construct Map: $4))
   ]
 
   Access = [

@@ -23,5 +23,5 @@ export ({
   Operation = (r: 'operation')
   Pattern = (r: 'pattern')
   Pipeline = (r: 'pipeline')
-  Tuple = (r: 'tuple')
+  Map = (r: 'map')
 })
