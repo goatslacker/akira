@@ -9,7 +9,7 @@ object Animal ({
 
 object Cat clones Animal ({
   speak = (\none -> 'meow i am ' ++ this.name)
-  sleep = (\none -> 'Purr ' ++ (Animal.prototype.sleep.call: this))
+  sleep = (\none -> 'Purr ' ++ (prototype.sleep:!))
   legs = 4
 })
 

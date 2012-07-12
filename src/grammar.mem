@@ -55,6 +55,10 @@ bnf = ({
     (o: 'IDENTIFIER', (\none -> construct Identifier: $1, true))
   ]
 
+  Prototype = [
+    (o: 'PROTOTYPE', (\none -> construct Identifier: $1))
+  ]
+
   Rest = [
     (o: '. . . IDENTIFIER', (\none -> construct Identifier: $4, false, true))
   ]
@@ -81,6 +85,7 @@ bnf = ({
     (o: 'Pipeline')
     (o: 'Construct')
     (o: 'Comprehensions')
+    (o: 'Prototype')
     (o: 'IMPORT STR', (\none -> construct Import: $2))
   ]
 
@@ -232,6 +237,7 @@ bnf = ({
   Access = [
     (o: 'Identifier Accessor', (\none -> construct Access: $1, $2))
     (o: '@ Accessor', (\none -> construct Access: $1, $2))
+    (o: 'Prototype Accessor', (\none -> construct Access: $1, $2))
     (o: 'Type Accessor', (\none -> construct Access: $1, $2))
     (o: 'Access Accessor', (\none -> construct Access: $1, $2))
   ]
