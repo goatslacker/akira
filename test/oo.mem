@@ -3,6 +3,7 @@ object Animal ({
   speak = (\none -> 'my name is ' ++ this.name)
   walk = (\direction -> true)
   sleep = (\none -> 'ZzZzZ...')
+  setName = (\name -> this.name = name)
   alive = true
   eyes = 2
 })
@@ -21,3 +22,7 @@ cat.eyes | assert: 2
 cat.legs | assert: 4
 cat.walk! | assert: true
 cat.sleep! | assert: 'Purr ZzZzZ...'
+
+cat.setName: 'Wasabi'
+
+cat.speak! | assert: 'meow i am Wasabi'
