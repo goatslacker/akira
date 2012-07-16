@@ -9,15 +9,15 @@ object Animal ({
 
 object Cat clones Animal ({
   speak = (\none -> 'meow i am ' ++ this.name)
-  sleep = (\none -> 'Purr ' ++ (prototype.sleep:!))
+  sleep = (\none -> 'Purr ' ++ (prototype.sleep!))
   legs = 4
 })
 
 cat = clone Cat: ({ name = 'Luna' })
 
-cat.speak:! | assert: 'meow i am Luna'
+cat.speak! | assert: 'meow i am Luna'
 cat.alive | assert: true
 cat.eyes | assert: 2
 cat.legs | assert: 4
-cat.walk:! | assert: true
-cat.sleep:! | assert: 'Purr ZzZzZ...'
+cat.walk! | assert: true
+cat.sleep! | assert: 'Purr ZzZzZ...'

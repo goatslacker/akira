@@ -19,6 +19,6 @@ repeat: 3, str | assert: 'hellohellohello'
 
 (\none {
   b = 'hello-world'
-  c = b.replace: /-([a-z])/g, (\i -> i.2.toUpperCase:!)
+  c = b.replace: /-([a-z])/g, (\i -> i.2.toUpperCase!)
   assert: c, 'helloWorld'
 }): none

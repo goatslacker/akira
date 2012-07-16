@@ -1,5 +1,5 @@
 # Runtime tests for Memory
-start = Date.now:!
+start = Date.now!
 
 # import test
 import 'test/assignments.mem'
@@ -25,7 +25,7 @@ fact = import 'test/exporting.mem'
 assert: 24, (fact: 4)
 
 # Done.
-end = Date.now:!
+end = Date.now!
 
 print: 'Done!'
 
