@@ -54,7 +54,7 @@ walk = \tree, cb {
     raise err
   }
 
-  if stat.is-directory:!
+  if stat.is-directory!
     then fs.readdir-sync: tree | map: (\v -> path.join: tree, v | walk: @, cb), @
     else {
       if (tree.index-of: '.mem') >= 0
@@ -64,10 +64,10 @@ walk = \tree, cb {
 }
 
 
-file = \filepath -> path.join: process.env.PWD, filepath | fs.read-file-sync | @.to-string:!
+file = \filepath -> path.join: process.env.PWD, filepath | fs.read-file-sync | @.to-string!
 files = \dirname, cb {
   stat = fs.stat-sync: dirname
-  if stat.is-directory:!
+  if stat.is-directory!
     then walk: dirname, cb
     else file: dirname | cb: @, dirname
 }
@@ -111,15 +111,15 @@ start-repl = \none {
   context = ({})
   repl: (\data {
     no-wrap: data, 'repl', context, true | eval | print
-    prompt:!
+    prompt!
   })
-  prompt:!
+  prompt!
 }
 
 prompt = \chunk -> process.stdout.write: 'memory> '
 
 repl = \fn {
-  stdin = process.open-stdin:!
+  stdin = process.open-stdin!
   stdin.set-encoding: 'utf8'
   stdin.on: 'data', fn
 }
@@ -134,5 +134,5 @@ export memory = \action, item
   'ast' -> file: item | tokenize | parse | ast: @, item | analyze
   'version' -> 'memory ' ++ me.version | util.puts
   'watch' -> watch: item
-  'help' -> display-help:!
-  else -> start-repl:!
+  'help' -> display-help!
+  else -> start-repl!

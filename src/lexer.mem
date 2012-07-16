@@ -30,7 +30,7 @@ extract = \key, chunk -> rx !! key | @.exec: chunk
 parse-alphanumeric = \t, chunk -> extract: t, chunk | @.2
 
 return-identifier = \type, item
-  'KEYWORDS' -> [(item.toUpperCase:!), item]
+  'KEYWORDS' -> [(item.toUpperCase!), item]
   else -> [type, item]
 
 parse-identifier = \t, chunk {
@@ -85,7 +85,7 @@ return-tokens = \code, n {
       token = process-chunk: chunk, n
       tokens = token +: []
       n2 = ({
-        index = (token.2.toString:! | @.length | n.index + @ | get-length: token.1)
+        index = (token.2.toString! | @.length | n.index + @ | get-length: token.1)
         line = (incr-line: token.1, n.line)
       })
       tokens ++ (return-tokens: code, n2)

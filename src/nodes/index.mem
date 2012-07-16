@@ -1,6 +1,6 @@
 path = require: 'path'
 
-r = \m -> m.to-lower-case:! | path.join: __dirname | require
+r = \m -> m.to-lower-case! | path.join: __dirname | require
 
 export ({
   Access = (r: 'access')

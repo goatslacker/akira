@@ -158,6 +158,7 @@ bnf = ({
 
   Invocation = [
     (o: 'Value : Arguments', (\none -> clone Call: $1, $3))
+    (o: 'Value !', (\none -> clone Call: $1))
   ]
 
   Declaration = [
@@ -207,7 +208,7 @@ bnf = ({
   ]
 
   Lists = [
-    (o: '[ ]', (\none -> clone List:!))
+    (o: '[ ]', (\none -> clone List!))
     (o: '[ OptTerminator ListArgs OptTerminator ]', (\none -> clone List: $3))
   ]
 
@@ -229,7 +230,7 @@ bnf = ({
   ]
 
   Maps = [
-    (o: '( { } )', (\none -> clone Map:!))
+    (o: '( { } )', (\none -> clone Map!))
     (o: '( { OptTerminator MapItems OptTerminator } )', (\none -> clone Map: $4))
   ]
 
@@ -253,7 +254,7 @@ bnf = ({
   ]
 
   Arguments = [
-    (o: '!', (\none -> none))
+    (o: '()', (\none -> none))
     (o: 'Arg', (\none -> clone Arguments: $1))
     (o: 'Arguments Comma Arg', (\none -> clone Arguments: $1, $3))
   ]

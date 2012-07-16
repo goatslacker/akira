@@ -20,7 +20,7 @@ curryr = \fn {
 
   if fn.length < 1 then fn else c: none
 }
-show = \i -> i.to-string:!
+show = \i -> i.to-string!
 
 export ({
   apply, consts, id, flip, partial
