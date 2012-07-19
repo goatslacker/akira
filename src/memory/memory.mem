@@ -41,7 +41,18 @@ gen-ast = \name, code -> {
 
 transpile = \name, code -> code | gen-ast: name | escodegen.generate
 
-memory = \cb, filepath, fn = transpile -> get-files: (\name, code -> code | fn: name | cb: name), filepath
+memory = \cb, filepath, fn = transpile -> {
+  on-file = \name, code -> {
+    try {
+      result = code | fn: name | cb: name
+    } catch {
+      util.error: 'Filename: ' ++ name
+      raise err
+    }
+    result
+  }
+  get-files: on-file, filepath
+}
 
 run = \name, code -> {
   try {
