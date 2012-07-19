@@ -2,7 +2,7 @@ jison = require: 'jison'
 
 unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
 
-getMatch = \action {
+getMatch = \action -> {
   x = unwrap.exec: action
   if x then x.2 else '({{action}}())'
 }
@@ -10,7 +10,7 @@ getMatch = \action {
 addYY = \str -> str.replace: /new /g, 'new yy.'
 addLine = \str -> 'yy.L(yylineno, ' ++ (str.replace: ';', '') ++ ');'
 
-o = \pattern, action {
+o = \pattern, action -> {
   pattern-string = pattern.replace: /\s{2,}/g, ' '
   if not action
     then [pattern-string, '$$ = $1']
@@ -27,13 +27,13 @@ bnf = ({
   ]
 
   Program = [
-    (o: 'Terminator Expressions', (\none -> $2))
+    (o: 'Terminator Expressions', (\-> $2))
     (o: 'Expressions')
   ]
 
   Expressions = [
-    (o: 'Body', (\none -> yy.Nodes.wrap: $1))
-    (o: 'Expressions TERMINATOR Body', (\none -> $1.push: $3))
+    (o: 'Body', (\-> yy.Nodes.wrap: $1))
+    (o: 'Expressions TERMINATOR Body', (\-> $1.push: $3))
     (o: 'Expressions TERMINATOR')
   ]
 
@@ -48,24 +48,24 @@ bnf = ({
   ]
 
   Identifier = [
-    (o: 'IDENTIFIER', (\none -> clone Identifier: $1))
+    (o: 'IDENTIFIER', (\-> clone Identifier: $1))
   ]
 
   IdentifierNoUtils = [
-    (o: 'IDENTIFIER', (\none -> clone Identifier: $1, true))
+    (o: 'IDENTIFIER', (\-> clone Identifier: $1, true))
   ]
 
   Prototype = [
-    (o: 'PROTOTYPE', (\none -> clone Identifier: $1))
+    (o: 'PROTOTYPE', (\-> clone Identifier: $1))
   ]
 
   Rest = [
-    (o: '. . . IDENTIFIER', (\none -> clone Identifier: $4, false, true))
+    (o: '. . . IDENTIFIER', (\-> clone Identifier: $4, false, true))
   ]
 
   Body = [
     (o: 'Expression')
-    (o: '{ OptTerminator Expressions }', (\none -> $3))
+    (o: '{ OptTerminator Expressions }', (\-> $3))
   ]
 
   Expression = [
@@ -86,7 +86,7 @@ bnf = ({
     (o: 'Cloning')
     (o: 'Comprehensions')
     (o: 'Prototype')
-    (o: 'IMPORT STR', (\none -> clone Import: $2))
+    (o: 'IMPORT STR', (\-> clone Import: $2))
   ]
 
   Value = [
@@ -97,7 +97,7 @@ bnf = ({
     (o: 'Access')
     (o: 'Type')
     (o: '@')
-    (o: '( Assignable )', (\none -> $2))
+    (o: '( Assignable )', (\-> $2))
   ]
 
   Values = [
@@ -106,81 +106,81 @@ bnf = ({
   ]
 
   Type = [
-    (o: 'TYPE', (\none -> clone Identifier: $1))
+    (o: 'TYPE', (\-> clone Identifier: $1))
   ]
 
   Literal = [
     (o: 'Identifier')
     (o: 'AlphaNumeric')
-    (o: 'NONE', (\none -> clone Literal: none))
-    (o: 'BOOL', (\none -> clone Literal: ($1 == 'true')))
-    (o: 'REGEXP', (\none -> clone Literal: $1))
+    (o: 'NONE', (\-> clone Literal: none))
+    (o: 'BOOL', (\-> clone Literal: ($1 == 'true')))
+    (o: 'REGEXP', (\-> clone Literal: $1))
   ]
 
   AlphaNumeric = [
-    (o: 'NUM', (\none -> clone Literal: (Number: $1)))
+    (o: 'NUM', (\-> clone Literal: (Number: $1)))
     (o: 'Strings')
   ]
 
   Strings = [
-    (o: 'STR', (\none -> clone Literal: (String: $1)))
+    (o: 'STR', (\-> clone Literal: (String: $1)))
   ]
 
   Assignment = [
-    (o: 'Identifier = Assignable', (\none -> clone Assignment: $1, $3))
-    (o: 'Access = Assignable', (\none -> clone Assignment: $1, $3))
-    (o: 'Lists = Assignable', (\none -> clone Assignment: $1, $3))
-    (o: 'Maps = Assignable', (\none -> clone Assignment: $1, $3))
+    (o: 'Identifier = Assignable', (\-> clone Assignment: $1, $3))
+    (o: 'Access = Assignable', (\-> clone Assignment: $1, $3))
+    (o: 'Lists = Assignable', (\-> clone Assignment: $1, $3))
+    (o: 'Maps = Assignable', (\-> clone Assignment: $1, $3))
   ]
 
   Objects = [
-    (o: 'OBJECT Identifier OptClones Maps', (\none -> clone Objects: $2, $3, $4))
+    (o: 'OBJECT Identifier OptClones Maps', (\-> clone Objects: $2, $3, $4))
   ]
 
   OptClones = [
-    (o: '', (\none -> none))
-    (o: 'CLONES Identifier', (\none -> $2))
+    (o: '', (\-> none))
+    (o: 'CLONES Identifier', (\-> $2))
   ]
 
   Modules = [
-    (o: 'EXPORT Assignable', (\none -> clone Export: $2))
+    (o: 'EXPORT Assignable', (\-> clone Export: $2))
   ]
 
   Cloning = [
-    (o: 'CLONE Invocation', (\none -> clone Construction: $2))
+    (o: 'CLONE Invocation', (\-> clone Construction: $2))
   ]
 
   Pipeline = [
-    (o: 'Value | Values', (\none -> clone Pipeline: $1, $3))
-    (o: 'Invocation | Values', (\none -> clone Pipeline: $1, $3))
-    (o: 'Pipeline | Values', (\none -> clone Pipeline: $1, $3))
+    (o: 'Value | Values', (\-> clone Pipeline: $1, $3))
+    (o: 'Invocation | Values', (\-> clone Pipeline: $1, $3))
+    (o: 'Pipeline | Values', (\-> clone Pipeline: $1, $3))
   ]
 
   Invocation = [
-    (o: 'Value : Arguments', (\none -> clone Call: $1, $3))
-    (o: 'Value !', (\none -> clone Call: $1))
+    (o: 'Value : Arguments', (\-> clone Call: $1, $3))
+    (o: 'Value !', (\-> clone Call: $1))
   ]
 
   Declaration = [
-    (o: '\ Parameters LAMBDA Expression', (\none -> clone Declaration: none, $2, $4))
-    (o: '\ Parameters Body', (\none -> clone Declaration: none, $2, $3))
+    (o: '\ Parameters LAMBDA Body', (\-> clone Declaration: none, $2, $4))
+    (o: '\ LAMBDA Body', (\-> clone Declaration: none, none, $3))
   ]
 
   Pattern = [
-    (o: 'Value LAMBDA Body TERMINATOR', (\none -> [$1, $3] ))
+    (o: 'Value LAMBDA Body TERMINATOR', (\-> [$1, $3] ))
   ]
 
   Patterns = [
-    (o: 'Pattern', (\none -> clone Arguments: $1))
-    (o: 'Patterns Pattern', (\none -> clone Arguments: $1, $2))
+    (o: 'Pattern', (\-> clone Arguments: $1))
+    (o: 'Patterns Pattern', (\-> clone Arguments: $1, $2))
   ]
 
   Default = [
-    (o: 'ELSE LAMBDA Body TERMINATOR', (\none -> clone Arguments: [$1, $3]))
+    (o: 'ELSE LAMBDA Body TERMINATOR', (\-> clone Arguments: [$1, $3]))
   ]
 
   PatternMatching = [
-    (o: '\ Parameters TERMINATOR Patterns Default', (\none -> clone Declaration: none, $2, (clone Pattern: $2, $4, $5)))
+    (o: '\ Parameters TERMINATOR Patterns Default', (\-> clone Declaration: none, $2, (clone Pattern: $2, $4, $5)))
   ]
 
   Comma = [
@@ -188,8 +188,8 @@ bnf = ({
   ]
 
   Comprehensions = [
-    (o: 'NUM . . Numbers ComprehensionBy ComprehensionFunction', (\none -> clone Comprehension: $1, $4, $5, $6))
-    (o: 'Identifier . . Numbers ComprehensionBy ComprehensionFunction', (\none -> clone Comprehension: $1, $4, $5, $6))
+    (o: 'NUM . . Numbers ComprehensionBy ComprehensionFunction', (\-> clone Comprehension: $1, $4, $5, $6))
+    (o: 'Identifier . . Numbers ComprehensionBy ComprehensionFunction', (\-> clone Comprehension: $1, $4, $5, $6))
   ]
 
   Numbers = [
@@ -198,53 +198,53 @@ bnf = ({
   ]
 
   ComprehensionFunction = [
-    (o: '', (\none -> none))
-    (o: ', Declaration', (\none -> $2))
+    (o: '', (\-> none))
+    (o: ', Declaration', (\-> $2))
   ]
 
   ComprehensionBy = [
-    (o: '', (\none -> clone Literal: 1))
+    (o: '', (\-> clone Literal: 1))
     (o: 'Numbers')
   ]
 
   Lists = [
-    (o: '[ ]', (\none -> clone List!))
-    (o: '[ OptTerminator ListArgs OptTerminator ]', (\none -> clone List: $3))
+    (o: '[ ]', (\-> clone List!))
+    (o: '[ OptTerminator ListArgs OptTerminator ]', (\-> clone List: $3))
   ]
 
   ListArgs = [
-    (o: 'Arg', (\none -> clone Arguments: $1))
-    (o: 'ListArgs Comma Arg', (\none -> clone Arguments: $1, $3))
-    (o: 'ListArgs Terminator Arg', (\none -> clone Arguments: $1, $3))
+    (o: 'Arg', (\-> clone Arguments: $1))
+    (o: 'ListArgs Comma Arg', (\-> clone Arguments: $1, $3))
+    (o: 'ListArgs Terminator Arg', (\-> clone Arguments: $1, $3))
   ]
 
   KeyValue = [
-    (o: 'IdentifierNoUtils', (\none -> clone Assignment: $1, $1))
-    (o: 'IdentifierNoUtils = Value', (\none -> clone Assignment: $1, $3))
+    (o: 'IdentifierNoUtils', (\-> clone Assignment: $1, $1))
+    (o: 'IdentifierNoUtils = Value', (\-> clone Assignment: $1, $3))
   ]
 
   MapItems = [
-    (o: 'KeyValue', (\none -> clone Arguments: $1))
-    (o: 'MapItems Comma KeyValue', (\none -> clone Arguments: $1, $3))
-    (o: 'MapItems Terminator KeyValue', (\none -> clone Arguments: $1, $3))
+    (o: 'KeyValue', (\-> clone Arguments: $1))
+    (o: 'MapItems Comma KeyValue', (\-> clone Arguments: $1, $3))
+    (o: 'MapItems Terminator KeyValue', (\-> clone Arguments: $1, $3))
   ]
 
   Maps = [
-    (o: '( { } )', (\none -> clone Map!))
-    (o: '( { OptTerminator MapItems OptTerminator } )', (\none -> clone Map: $4))
+    (o: '( { } )', (\-> clone Map!))
+    (o: '( { OptTerminator MapItems OptTerminator } )', (\-> clone Map: $4))
   ]
 
   Access = [
-    (o: 'Identifier Accessor', (\none -> clone Access: $1, $2))
-    (o: '@ Accessor', (\none -> clone Access: $1, $2))
-    (o: 'Prototype Accessor', (\none -> clone Access: $1, $2))
-    (o: 'Type Accessor', (\none -> clone Access: $1, $2))
-    (o: 'Access Accessor', (\none -> clone Access: $1, $2))
+    (o: 'Identifier Accessor', (\-> clone Access: $1, $2))
+    (o: '@ Accessor', (\-> clone Access: $1, $2))
+    (o: 'Prototype Accessor', (\-> clone Access: $1, $2))
+    (o: 'Type Accessor', (\-> clone Access: $1, $2))
+    (o: 'Access Accessor', (\-> clone Access: $1, $2))
   ]
 
   Accessor = [
-    (o: '. IdentifierNoUtils', (\none -> $2))
-    (o: '. AlphaNumeric', (\none -> $2))
+    (o: '. IdentifierNoUtils', (\-> $2))
+    (o: '. AlphaNumeric', (\-> $2))
   ]
 
   Arg = [
@@ -254,56 +254,55 @@ bnf = ({
   ]
 
   Arguments = [
-    (o: '()', (\none -> none))
-    (o: 'Arg', (\none -> clone Arguments: $1))
-    (o: 'Arguments Comma Arg', (\none -> clone Arguments: $1, $3))
+    (o: '()', (\-> none))
+    (o: 'Arg', (\-> clone Arguments: $1))
+    (o: 'Arguments Comma Arg', (\-> clone Arguments: $1, $3))
   ]
 
   Param = [
     (o: 'IdentifierNoUtils')
-    (o: 'IdentifierNoUtils = Value', (\none -> clone Assignment: $1, $3))
+    (o: 'IdentifierNoUtils = Value', (\-> clone Assignment: $1, $3))
     (o: 'Rest')
     (o: 'Lists')
   ]
 
   Parameters = [
-    (o: 'NONE', (\none -> none))
-    (o: 'Param', (\none -> clone Arguments: $1))
-    (o: 'Parameters , Param', (\none -> clone Arguments: $1, $3))
+    (o: 'Param', (\-> clone Arguments: $1))
+    (o: 'Parameters , Param', (\-> clone Arguments: $1, $3))
   ]
 
   Exceptions = [
-    (o: 'TRY Body OptTerminator CATCH Body', (\none -> clone Exception: $2, $5))
-    (o: 'RAISE Value ErrorType', (\none -> clone Exception: $1, $2, $3))
+    (o: 'TRY Body OptTerminator CATCH Body', (\-> clone Exception: $2, $5))
+    (o: 'RAISE Value ErrorType', (\-> clone Exception: $1, $2, $3))
   ]
 
   ErrorType = [
-    (o: '', (\none -> none))
+    (o: '', (\-> none))
     (o: 'Identifier')
   ]
 
   If = [
-    (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body', (\none -> clone If: $2, $5, $8))
+    (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body', (\-> clone If: $2, $5, $8))
   ]
 
   MathOperators = [
-    (o: '+', (\none -> clone Identifier: '_add'))
-    (o: '-', (\none -> clone Identifier: '_sub'))
-    (o: '*', (\none -> clone Identifier: '_mul'))
-    (o: '/', (\none -> clone Identifier: '_div'))
-    (o: '( MathOperators NUM )', (\none -> clone Call: (clone Call: (clone Identifier: 'curryr'), (clone Arguments: $2)), (clone Arguments: $3)))
+    (o: '+', (\-> clone Identifier: '_add'))
+    (o: '-', (\-> clone Identifier: '_sub'))
+    (o: '*', (\-> clone Identifier: '_mul'))
+    (o: '/', (\-> clone Identifier: '_div'))
+    (o: '( MathOperators NUM )', (\-> clone Call: (clone Call: (clone Identifier: 'curryr'), (clone Arguments: $2)), (clone Arguments: $3)))
   ]
 
   Operation = [
-    (o: 'Value COMPARE Value', (\none -> clone Compare: $1, $2, $3))
-    (o: 'Value LOGIC Value', (\none -> clone Compare: $1, $2, $3))
-    (o: 'Value LEFT_OPERATORS Value', (\none -> clone Operation: $1, $2, $3))
-    (o: 'Value RIGHT_OPERATORS Value', (\none -> clone Operation: $1, $2, $3))
-    (o: 'NOT Value', (\none -> clone Compare: $2, $1))
-    (o: 'Value + Value', (\none -> clone Operation: $1, '+', $3))
-    (o: 'Value - Value', (\none -> clone Operation: $1, '-', $3))
-    (o: 'Value * Value', (\none -> clone Operation: $1, '*', $3))
-    (o: 'Value / Value', (\none -> clone Operation: $1, '/', $3))
+    (o: 'Value COMPARE Value', (\-> clone Compare: $1, $2, $3))
+    (o: 'Value LOGIC Value', (\-> clone Compare: $1, $2, $3))
+    (o: 'Value LEFT_OPERATORS Value', (\-> clone Operation: $1, $2, $3))
+    (o: 'Value RIGHT_OPERATORS Value', (\-> clone Operation: $1, $2, $3))
+    (o: 'NOT Value', (\-> clone Compare: $2, $1))
+    (o: 'Value + Value', (\-> clone Operation: $1, '+', $3))
+    (o: 'Value - Value', (\-> clone Operation: $1, '-', $3))
+    (o: 'Value * Value', (\-> clone Operation: $1, '*', $3))
+    (o: 'Value / Value', (\-> clone Operation: $1, '/', $3))
   ]
 })
 
@@ -339,14 +338,14 @@ grammar = ({
 
 parser = clone Parser: grammar
 lexer = ({
-  lex = (\none {
+  lex = (\-> {
     ref = this.tokens !! this.pos || ['']
     this.pos = this.pos + 1
     this.yytext = ref !! 1
     this.yylineno = ref !! 2
     ref !! 0
   })
-  set-input = (\tokens {
+  set-input = (\tokens -> {
     this.tokens = tokens
     this.pos = 0
   })

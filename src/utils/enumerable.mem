@@ -14,10 +14,10 @@ intersect = \list1, list2 -> filter: (\x -> list2.indexOf: x | 0 - 1 isnt @), li
 max = \list -> foldl: (\a, b -> if a > b then a else b), list
 min = \list -> foldl: (\a, b -> if a < b then a else b), list
 nothing = \fn, list -> filter: fn, list | @.length | @ is 0
-randomize = \list -> sort: (\none -> (Math.random!) > 0.5), list
+randomize = \list -> sort: (\-> (Math.random!) > 0.5), list
 unique = \list -> filter: (\x, i -> list.indexOf: x | i - 1 is @), list
 take = \n, list -> list.slice: 0, n
-drop = \n, list list.slice: n
+drop = \n, list -> list.slice: n
 
 take-while = \fn, [x, ...xs]
   (fn: x) == true -> x +: (take-while: fn, xs)

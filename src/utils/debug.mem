@@ -5,14 +5,14 @@ lt = \a, b -> a < b
 gte = \a, b -> a >= b
 lte = \a, b -> a <= b
 
-assert = \a, b {
+assert = \a, b -> {
   assert.successes = []
   assert.failures = []
 
   if a == b then (assert.successes.push: [a, b]) else (assert.failures.push: [a, b])
 }
 
-assert-deep = \a, b {
+assert-deep = \a, b -> {
   len = filter: (\x, i -> x is b !! i - 1), a | @.length
   assert: len, b.length
 }

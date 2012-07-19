@@ -33,14 +33,13 @@ return-identifier = \type, item
   'KEYWORDS' -> [(item.toUpperCase!), item]
   else -> [type, item]
 
-parse-identifier = \t, chunk {
+parse-identifier = \t, chunk -> {
   item = extract: t, chunk
   token = identifiers | Object.keys | filter: (\x -> identifiers !! x | @.indexOf: item.2 | @ >= 0), @ | last
-
   return-identifier: token || t, item.2
 }
 
-parse-regular-expressions = \t, chunk {
+parse-regular-expressions = \t, chunk -> {
   item = extract: t, chunk
   regexp = clone RegExp: item.3, item.4
   ['REGEXP', regexp]
@@ -58,7 +57,7 @@ get-token = \t, chunk, n
   'TERMINATOR' -> ' '
   else -> [chunk.1, chunk.1]
 
-process-chunk = \code, n {
+process-chunk = \code, n -> {
   type = get-type: code
   token = get-token: type, code, n
   if Array.isArray: token
@@ -77,7 +76,7 @@ incr-line = \type, line
   'TERMINATOR' -> line + 1
   else -> line
 
-return-tokens = \code, n {
+return-tokens = \code, n -> {
   chunk = code.substr: n.index, code.length
 
   if chunk
