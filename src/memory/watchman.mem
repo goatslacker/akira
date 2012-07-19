@@ -1,0 +1,6 @@
+nodewatch = require: 'nodewatch'
+({ get-file-contents }) = require: './fisy'
+
+watch = \filename -> nodewatch.add: filename | @.on-change: (\-> get-file-contents: filename | compile | write: @, filename)
+
+export watch

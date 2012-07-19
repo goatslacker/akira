@@ -1,0 +1,59 @@
+vm = require: 'vm'
+util = require: 'util'
+escodegen = require: 'escodegen'
+
+({ get-files }) = require: './fisy'
+
+lexer = require: '../lexer'
+parser = require: '../grammar'
+parser.yy <+ (require: '../nodes')
+
+lex = \name, code -> lexer: code
+
+parse = \name, code -> code | lex: name | parser.parse
+
+gen-ast = \name, code -> {
+  parsed = parse: name, code
+  context = ({})
+  body = parsed.compile: context, name
+  ({
+    type = 'Program'
+    body = [
+      ({
+        type = 'ExpressionStatement'
+        expression = ({
+          type = 'CallExpression'
+          callee = ({
+            type = 'FunctionExpression'
+            id = none
+            params = [({ type = 'Identifier', name = '$$export' })]
+            body = ({
+              type = 'BlockStatement'
+              body = (parsed.get-utils: context) ++ (parsed.add-vars: context, false) ++ body
+            })
+          })
+          arguments = []
+        })
+      })
+    ]
+  })
+}
+
+transpile = \name, code -> code | gen-ast: name | escodegen.generate
+
+memory = \cb, filepath, fn = transpile -> get-files: (\name, code -> code | fn: name | cb: name), filepath
+
+run = \name, code -> {
+  try {
+    result = vm.run-in-new-context: code, ({ console = console })
+  } catch {
+    util.error: name
+    util.error: err.stack
+# hide behind a log level
+#    util.debug: code
+  }
+  result
+}
+
+
+export ({ lex, gen-ast, run, memory })
