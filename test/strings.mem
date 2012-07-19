@@ -17,7 +17,7 @@ condense: '      foo bar ' | assert: 'foobar'
 repeat: 3, str | assert: 'hellohellohello'
 'hi' * 3 | assert: 'hihihi'
 
-(\none {
+(\-> {
   b = 'hello-world'
   c = b.replace: /-([a-z])/g, (\i -> i.2.toUpperCase!)
   assert: c, 'helloWorld'

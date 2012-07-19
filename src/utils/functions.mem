@@ -4,16 +4,16 @@ id = \a -> a
 flip = \f, a, b -> f: b, a
 partial = \f, ...args -> \...xargs -> f.apply: f, args ++ xargs
 partialr = \f, ...args -> \...xargs -> f.apply: f, xargs ++ args
-curry = \fn {
-  c = \args = [] -> \arg {
+curry = \fn -> {
+  c = \args = [] -> \arg -> {
     xargs = args ++ arg
     if xargs.length < fn.length then c: xargs else fn.apply: fn, xargs
   }
 
   if fn.length < 1 then fn else c: none
 }
-curryr = \fn {
-  c = \args = [] -> \arg {
+curryr = \fn -> {
+  c = \args = [] -> \arg -> {
     xargs = arg +: args
     if xargs.length < fn.length then c: xargs else fn.apply: fn, xargs
   }

@@ -1,16 +1,16 @@
 # I have to make a Animal, Cat example...
 object Animal ({
-  speak = (\none -> 'my name is ' ++ this.name)
+  speak = (\-> 'my name is ' ++ this.name)
   walk = (\direction -> true)
-  sleep = (\none -> 'ZzZzZ...')
+  sleep = (\-> 'ZzZzZ...')
   setName = (\name -> this.name = name)
   alive = true
   eyes = 2
 })
 
 object Cat clones Animal ({
-  speak = (\none -> 'meow i am ' ++ this.name)
-  sleep = (\none -> 'Purr ' ++ (prototype.sleep!))
+  speak = (\-> 'meow i am ' ++ this.name)
+  sleep = (\-> 'Purr ' ++ (prototype.sleep!))
   legs = 4
 })
 
