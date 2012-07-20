@@ -1,0 +1,86 @@
+vm = require: 'vm'
+util = require: 'util'
+escodegen = require: 'escodegen'
+
+({ get-files }) = require: './fisy'
+({ mark }) = require: './bench'
+
+lexer = require: '../lexer'
+parser = require: '../grammar'
+parser.yy <+ (require: '../nodes')
+transform = \name, parsed -> {
+  context = ({})
+  body = parsed.compile: context, name
+  ({
+    type = 'Program'
+    body = [
+      ({
+        type = 'ExpressionStatement'
+        expression = ({
+          type = 'CallExpression'
+          callee = ({
+            type = 'FunctionExpression'
+            id = none
+            params = [({ type = 'Identifier', name = '$$export' })]
+            body = ({
+              type = 'BlockStatement'
+              body = (parsed.get-utils: context) ++ (parsed.add-vars: context, false) ++ body
+            })
+          })
+          arguments = []
+        })
+      })
+    ]
+  })
+}
+
+
+lex = \name, code -> lexer: code
+parse = \name, code -> code | lex: name | parser.parse
+gen-ast = \name, code -> parse: name, code | transform: name
+
+transpile = \name, code -> code | gen-ast: name | escodegen.generate
+
+benchmark = \name, code -> {
+  ({ a = time, tokens = result }) = mark: (\-> lexer: code)
+  ({ b = time, tree = result }) = mark: (\-> parser.parse: tokens)
+  ({ c = time, parseapi = result }) = mark: (\-> transform: name, tree)
+  ({ d = time }) = mark: (\-> escodegen.generate: parseapi)
+
+  ({
+    name = name
+    Lexer = a + 'ms'
+    Parser = b + 'ms'
+    Transform = c + 'ms'
+    Compile = d + 'ms'
+    Total = (a + b + c + d) + 'ms'
+  })
+}
+
+memory = \cb, filepath, fn = transpile -> {
+  on-file = \name, code -> {
+    try {
+      result = code | fn: name | cb: name
+    } catch {
+      util.error: 'Filename: ' ++ name
+      raise err
+    }
+    result
+  }
+  get-files: on-file, filepath
+}
+
+run = \name, code -> {
+  try {
+    result = vm.run-in-new-context: code, ({ console = console })
+  } catch {
+    util.error: name
+    util.error: err.stack
+# hide behind a log level
+#    util.debug: code
+  }
+  result
+}
+
+
+export ({ lex, parse, gen-ast, transpile, run, memory, benchmark })

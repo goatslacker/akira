@@ -1,0 +1,31 @@
+fs = require: 'fs'
+path = require: 'path'
+
+walk = \cb, tree -> {
+  try {
+    stat = fs.stat-sync: tree
+  } catch {
+    raise err
+  }
+
+  if stat.is-directory!
+    then fs.readdir-sync: tree | map: (\v -> path.join: tree, v | walk: cb)
+    else {
+      if (tree.index-of: '.mem') >= 0
+        then get-file-contents: cb, tree
+        else none
+    }
+}
+
+get-file-contents = \cb, filepath -> path.join: process.env.PWD, filepath | fs.read-file-sync | show | cb: filepath
+
+get-files = \cb, dirname -> {
+  stat = fs.stat-sync: dirname
+  if stat.is-directory! then walk: cb, dirname
+  else get-file-contents: cb, dirname
+}
+
+# TODO, if dir doesn't exist, create it
+write-file = \file, code -> code | fs.write-file-sync: (file.replace: 'src', 'lib' | @.replace: '.mem', '.js' | path.join: process.env.PWD)
+
+export ({ get-files, write-file })
