@@ -2,13 +2,13 @@ a = 1
 b = 2
 assert: a, 1
 assert: b, 2
-(\none {
+(\-> {
   # local a, no shadowing
   a = 3
   assert: a, 3
 }): none
 
-(\none {
+(\-> {
   # although we can reference a
   b = a - 1
   assert: b, 0
