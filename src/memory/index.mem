@@ -1,7 +1,7 @@
 util = require: 'util'
 me = require: '../../package.json'
 
-({ memory, run, lex, gen-ast }) = require: './memory'
+({ memory, run, lex, gen-ast, benchmark }) = require: './memory'
 ({ write-file, get-files }) = require: './fisy'
 
 wrap = \name, code -> write-file: name, 'module.exports = ' ++ code
@@ -9,7 +9,8 @@ wrap = \name, code -> write-file: name, 'module.exports = ' ++ code
 output = \name, code -> util.puts: code
 analyse = \name, body -> body | util.inspect: @, false, 50 | output: none
 
-export MEM = \action, filename
+export MEM = \action, filename = 'src/'
+  'bench' -> memory: analyse, filename, benchmark
   'compile' -> memory: wrap, filename
   'output' -> memory: output, filename
   'test' -> memory: run, 'test/tests.mem'

@@ -1,0 +1,11 @@
+util = require: 'util'
+
+mark = \fn -> {
+  start = Date.now!
+  result = fn!
+  end = Date.now!
+  time = end - start
+  ({ time, result })
+}
+
+export ({ mark })

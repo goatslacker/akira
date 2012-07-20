@@ -3,17 +3,12 @@ util = require: 'util'
 escodegen = require: 'escodegen'
 
 ({ get-files }) = require: './fisy'
+({ mark }) = require: './bench'
 
 lexer = require: '../lexer'
 parser = require: '../grammar'
 parser.yy <+ (require: '../nodes')
-
-lex = \name, code -> lexer: code
-
-parse = \name, code -> code | lex: name | parser.parse
-
-gen-ast = \name, code -> {
-  parsed = parse: name, code
+transform = \name, parsed -> {
   context = ({})
   body = parsed.compile: context, name
   ({
@@ -39,7 +34,28 @@ gen-ast = \name, code -> {
   })
 }
 
+
+lex = \name, code -> lexer: code
+parse = \name, code -> code | lex: name | parser.parse
+gen-ast = \name, code -> parse: name, code | transform: name
+
 transpile = \name, code -> code | gen-ast: name | escodegen.generate
+
+benchmark = \name, code -> {
+  ({ a = time, tokens = result }) = mark: (\-> lexer: code)
+  ({ b = time, tree = result }) = mark: (\-> parser.parse: tokens)
+  ({ c = time, parseapi = result }) = mark: (\-> transform: name, tree)
+  ({ d = time }) = mark: (\-> escodegen.generate: parseapi)
+
+  ({
+    name = name
+    Lexer = a + 'ms'
+    Parser = b + 'ms'
+    Transform = c + 'ms'
+    Compile = d + 'ms'
+    Total = (a + b + c + d) + 'ms'
+  })
+}
 
 memory = \cb, filepath, fn = transpile -> {
   on-file = \name, code -> {
@@ -67,4 +83,4 @@ run = \name, code -> {
 }
 
 
-export ({ lex, gen-ast, run, memory })
+export ({ lex, parse, gen-ast, transpile, run, memory, benchmark })
