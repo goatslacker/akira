@@ -82,5 +82,6 @@ run = \name, code -> {
   result
 }
 
+# escapes = \code -> code.replace: /\\\\/, '\'
 
 export ({ lex, parse, gen-ast, transpile, run, memory, benchmark })
