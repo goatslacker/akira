@@ -1,33 +1,33 @@
-numbers = \n
-  'one' -> 1
-  'two' -> 2
-  'three' -> 3
-  else -> 4
+numbers = \n ->
+  'one' ? 1
+  'two' ? 2
+  'three' ? 3
+  else ? 4
 
 assert: 4, (numbers: 'four')
 assert: 1, (numbers: 'one')
 
-gtTen = \n
-  n < 10 -> true
-  n > 10 -> false
-  else -> none
+gtTen = \n ->
+  n < 10 ? true
+  n > 10 ? false
+  else ? none
 
 assert: false, (gtTen: 11)
 assert: true, (gtTen: 2)
 
 starts-with = \noun, prefix -> prefix == noun.1 + noun.2
 
-spanish-gender-of-noun = \noun
-  (starts-with: noun, 'el') -> 'male'
-  (starts-with: noun, 'la') -> 'female'
-  else -> none
+spanish-gender-of-noun = \noun ->
+  (starts-with: noun, 'el') ? 'male'
+  (starts-with: noun, 'la') ? 'female'
+  else ? none
 
 assert: 'female', (spanish-gender-of-noun: 'la casa')
 assert: 'male', (spanish-gender-of-noun: 'el carro')
 
-sort-even-odd = \[x, ...xs]
-  not x -> []
-  else -> {
+sort-even-odd = \[x, ...xs] ->
+  not x ? []
+  else ? {
     if (odd: x)
       then (sort-even-odd: xs) ++ [x]
       else x +: (sort-even-odd: xs)
@@ -51,9 +51,9 @@ ls | tail | assert-deep: [2, 3, 4, 5]
 ls | head | assert: 1
 ls | last | assert: 5
 
-add-two = \n = 0
-  n is 0 -> 0
-  else -> n + 2
+add-two = \n = 0 ->
+  n is 0 ? 0
+  else ? n + 2
 
 add-two: 0 | assert: 0
 add-two: 2 | assert: 4

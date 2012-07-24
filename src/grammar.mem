@@ -167,7 +167,7 @@ bnf = ({
   ]
 
   Pattern = [
-    (o: 'Value LAMBDA Body TERMINATOR', (\-> [$1, $3] ))
+    (o: 'Value ? Body TERMINATOR', (\-> [$1, $3] ))
   ]
 
   Patterns = [
@@ -176,11 +176,11 @@ bnf = ({
   ]
 
   Default = [
-    (o: 'ELSE LAMBDA Body TERMINATOR', (\-> clone Arguments: [$1, $3]))
+    (o: 'ELSE ? Body TERMINATOR', (\-> clone Arguments: [$1, $3]))
   ]
 
   PatternMatching = [
-    (o: '\ Parameters TERMINATOR Patterns Default', (\-> clone Declaration: none, $2, (clone Pattern: $2, $4, $5)))
+    (o: '\ Parameters LAMBDA TERMINATOR Patterns Default', (\-> clone Declaration: $3, $2, (clone Pattern: $2, $5, $6)))
   ]
 
   Comma = [
