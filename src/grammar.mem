@@ -180,7 +180,7 @@ bnf = ({
   ]
 
   PatternMatching = [
-    (o: '\ Parameters LAMBDA TERMINATOR Patterns Default', (\-> clone Declaration: $3, $2, (clone Pattern: $2, $5, $6)))
+    (o: '\ Parameters LAMBDA TERMINATOR Patterns Default', (\-> clone Declaration: none, $2, (clone Pattern: $2, $5, $6)))
   ]
 
   Comma = [

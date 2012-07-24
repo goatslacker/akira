@@ -19,13 +19,13 @@ unique = \list -> filter: (\x, i -> list.indexOf: x | i - 1 is @), list
 take = \n, list -> list.slice: 0, n
 drop = \n, list -> list.slice: n
 
-take-while = \fn, [x, ...xs]
-  (fn: x) == true -> x +: (take-while: fn, xs)
-  else -> []
+take-while = \fn, [x, ...xs] ->
+  (fn: x) == true ? x +: (take-while: fn, xs)
+  else ? []
 
-take-until = \fn, [x, ...xs]
-  (fn: x) == true -> [x]
-  else -> x +: (take-until: fn, xs)
+take-until = \fn, [x, ...xs] ->
+  (fn: x) == true ? [x]
+  else ? x +: (take-until: fn, xs)
 
 export ({
   head, init, tail, last, at, get, length

@@ -29,9 +29,9 @@ extract = \key, chunk -> rx !! key | @.exec: chunk
 
 parse-alphanumeric = \t, chunk -> extract: t, chunk | @.2
 
-return-identifier = \type, item
-  'KEYWORDS' -> [(item.toUpperCase!), item]
-  else -> [type, item]
+return-identifier = \type, item ->
+  'KEYWORDS' ? [(item.toUpperCase!), item]
+  else ? [type, item]
 
 parse-identifier = \t, chunk -> {
   item = extract: t, chunk
@@ -45,17 +45,17 @@ parse-regular-expressions = \t, chunk -> {
   ['REGEXP', regexp]
 }
 
-get-token = \t, chunk, n
-  'IDENTIFIER' -> parse-identifier: t, chunk
-  'NUM' -> parse-alphanumeric: t, chunk
-  'STR' -> parse-alphanumeric: t, chunk
-  'OPERATION' -> parse-identifier: t, chunk
-  'LAMBDA' -> '->'
-  'REGEX' -> parse-regular-expressions: t, chunk
-  'COMMENTS' -> parse-alphanumeric: t, chunk
-  'WHITESPACE' -> ' '
-  'TERMINATOR' -> ' '
-  else -> [chunk.1, chunk.1]
+get-token = \t, chunk, n ->
+  'IDENTIFIER' ? parse-identifier: t, chunk
+  'NUM' ? parse-alphanumeric: t, chunk
+  'STR' ? parse-alphanumeric: t, chunk
+  'OPERATION' ? parse-identifier: t, chunk
+  'LAMBDA' ? '->'
+  'REGEX' ? parse-regular-expressions: t, chunk
+  'COMMENTS' ? parse-alphanumeric: t, chunk
+  'WHITESPACE' ? ' '
+  'TERMINATOR' ? ' '
+  else ? [chunk.1, chunk.1]
 
 process-chunk = \code, n -> {
   type = get-type: code
@@ -68,13 +68,13 @@ process-chunk = \code, n -> {
     else [type, token, n.line]
 }
 
-get-length = \token, i
-  'STR' -> i + 2
-  else -> i
+get-length = \token, i ->
+  'STR' ? i + 2
+  else ? i
 
-incr-line = \type, line
-  'TERMINATOR' -> line + 1
-  else -> line
+incr-line = \type, line ->
+  'TERMINATOR' ? line + 1
+  else ? line
 
 return-tokens = \code, n -> {
   chunk = code.substr: n.index, code.length
