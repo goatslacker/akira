@@ -23,7 +23,10 @@ identifiers = ({
 
 ignore = ['COMMENTS', 'WHITESPACE']
 
-get-type = \a -> rx | Object.keys | filter: (\x -> rx !! x | @.test: a), @ | last
+get-type = \a -> rx |
+  Object.keys |
+  filter: (\x -> rx !! x | @.test: a), @ |
+  last
 
 extract = \key, chunk -> rx !! key | @.exec: chunk
 
@@ -35,7 +38,10 @@ return-identifier = \type, item ->
 
 parse-identifier = \t, chunk -> {
   item = extract: t, chunk
-  token = identifiers | Object.keys | filter: (\x -> identifiers !! x | @.indexOf: item.2 | @ >= 0), @ | last
+  token = identifiers |
+    Object.keys |
+    filter: (\x -> identifiers !! x | @.indexOf: item.2 | @ >= 0), @ |
+    last
   return-identifier: token || t, item.2
 }
 
@@ -84,7 +90,10 @@ return-tokens = \code, n -> {
       token = process-chunk: chunk, n
       tokens = token +: []
       n2 = ({
-        index = (token.2.toString! | @.length | n.index + @ | get-length: token.1)
+        index = (token.2.toString! |
+          @.length |
+          n.index + @ |
+          get-length: token.1)
         line = (incr-line: token.1, n.line)
       })
       tokens ++ (return-tokens: code, n2)
@@ -94,4 +103,5 @@ return-tokens = \code, n -> {
 
 filter-whitespace = \token -> ignore.indexOf: token.1 | 0 > @
 
-export tokenize = \code -> return-tokens: code, ({ index = 0, line = 0 }) | filter: filter-whitespace, @
+export tokenize = \code -> return-tokens: code, ({ index = 0, line = 0 }) |
+  filter: filter-whitespace, @
