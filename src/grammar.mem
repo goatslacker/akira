@@ -231,7 +231,7 @@ bnf = ({
 
   Maps = [
     (o: '( { } )', (\-> clone Map!))
-    (o: '( { OptTerminator MapItems OptTerminator } )', (\-> clone Map: $4))
+    (o: '( { OptTerminator MapItems OptTerminator } )', (\-> clone Map: ({ obj = $4 })))
   ]
 
   Access = [

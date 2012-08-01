@@ -1,0 +1,26 @@
+Base = require: './base'
+
+object Map ({
+  init = (\obj -> this.obj = obj)
+  compile = (\context -> {
+    properties = if this.obj
+      then this.obj.args.map: (\arg -> {
+        key = Base.compile-value: arg.id, context
+        value = Base.compile-value: arg.val, context
+
+        ({
+          type = 'Property'
+          key
+          value
+        })
+      })
+      else []
+
+    ({
+      type = 'ObjectExpression'
+      properties
+    })
+  })
+})
+
+export Map
