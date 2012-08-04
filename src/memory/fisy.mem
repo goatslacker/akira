@@ -17,7 +17,10 @@ walk = \cb, tree -> {
     }
 }
 
-get-file-contents = \cb, filepath -> path.join: process.env.PWD, filepath | fs.read-file-sync | show | cb: filepath
+get-file-contents = \cb, filepath -> path.join: process.env.PWD, filepath |
+  fs.read-file-sync |
+  show |
+  cb: filepath
 
 get-files = \cb, dirname -> {
   stat = fs.stat-sync: dirname
@@ -26,6 +29,9 @@ get-files = \cb, dirname -> {
 }
 
 # TODO, if dir doesn't exist, create it
-write-file = \file, code -> code | fs.write-file-sync: (file.replace: 'src', 'lib' | @.replace: '.mem', '.js' | path.join: process.env.PWD)
+write-file = \file, code -> code |
+  fs.write-file-sync: (file.replace: 'src', 'lib' |
+    @.replace: '.mem', '.js' |
+    path.join: process.env.PWD)
 
 export ({ get-files, write-file })

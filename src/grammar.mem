@@ -180,7 +180,8 @@ bnf = ({
   ]
 
   PatternMatching = [
-    (o: '\ Parameters LAMBDA TERMINATOR Patterns Default', (\-> clone Declaration: none, $2, (clone Pattern: $2, $5, $6)))
+    (o: '\ Parameters LAMBDA TERMINATOR Patterns Default',
+      (\-> clone Declaration: none, $2, (clone Pattern: $2, $5, $6)))
   ]
 
   Comma = [
@@ -188,8 +189,10 @@ bnf = ({
   ]
 
   Comprehensions = [
-    (o: 'NUM . . Numbers ComprehensionBy ComprehensionFunction', (\-> clone Comprehension: $1, $4, $5, $6))
-    (o: 'Identifier . . Numbers ComprehensionBy ComprehensionFunction', (\-> clone Comprehension: $1, $4, $5, $6))
+    (o: 'NUM . . Numbers ComprehensionBy ComprehensionFunction',
+      (\-> clone Comprehension: $1, $4, $5, $6))
+    (o: 'Identifier . . Numbers ComprehensionBy ComprehensionFunction',
+      (\-> clone Comprehension: $1, $4, $5, $6))
   ]
 
   Numbers = [
@@ -231,7 +234,8 @@ bnf = ({
 
   Maps = [
     (o: '( { } )', (\-> clone Map!))
-    (o: '( { OptTerminator MapItems OptTerminator } )', (\-> clone Map: ({ obj = $4 })))
+    (o: '( { OptTerminator MapItems OptTerminator } )',
+      (\-> clone Map: ({ obj = $4 })))
   ]
 
   Access = [
@@ -282,7 +286,8 @@ bnf = ({
   ]
 
   If = [
-    (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body', (\-> clone If: $2, $5, $8))
+    (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body',
+      (\-> clone If: $2, $5, $8))
   ]
 
   MathOperators = [
@@ -290,7 +295,9 @@ bnf = ({
     (o: '-', (\-> clone Identifier: '_sub'))
     (o: '*', (\-> clone Identifier: '_mul'))
     (o: '/', (\-> clone Identifier: '_div'))
-    (o: '( MathOperators NUM )', (\-> clone Call: (clone Call: (clone Identifier: 'curryr'), (clone Arguments: $2)), (clone Arguments: $3)))
+    (o: '( MathOperators NUM )',
+      (\-> clone Call: (clone Call: (clone Identifier: 'curryr'),
+        (clone Arguments: $2)), (clone Arguments: $3)))
   ]
 
   Operation = [

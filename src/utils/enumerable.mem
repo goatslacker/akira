@@ -10,7 +10,8 @@ concat = \...args -> foldl: (\a, b -> a ++ b), args
 count = \fn, list -> filter: fn, list | @.length
 average = \list -> foldl: (\a, b -> a + b), list | @ / list.length
 compact = \list -> filter: (\x -> not not x), list
-intersect = \list1, list2 -> filter: (\x -> list2.indexOf: x | 0 - 1 isnt @), list1
+intersect = \list1, list2 -> filter: (\x -> list2.indexOf: x | 0 - 1 isnt @),
+  list1
 max = \list -> foldl: (\a, b -> if a > b then a else b), list
 min = \list -> foldl: (\a, b -> if a < b then a else b), list
 nothing = \fn, list -> filter: fn, list | @.length | @ is 0

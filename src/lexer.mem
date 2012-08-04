@@ -11,7 +11,8 @@ rx = ({
 })
 
 identifiers = ({
-  KEYWORDS = ['if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none', 'raise', 'object', 'clones', 'clone', 'prototype']
+  KEYWORDS = ['if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none',
+    'raise', 'object', 'clones', 'clone', 'prototype']
   TYPE = ['Function', 'Number', 'String', 'Array', 'Object', 'Null']
   COMPARE = ['===', '!==', '==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
   LEFT_OPERATORS = ['++', '!!', '<+']
