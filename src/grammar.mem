@@ -306,9 +306,18 @@ bnf = ({
     (o: '( LEFT_OPERATORS Value )',
       (\-> clone Declaration: none, (clone Arguments: 'it'),
         (clone Operation: 'it', $2, $3)))
-    (o: '( MathOperators Value )',
+    (o: '( + Value )',
       (\-> clone Declaration: none, (clone Arguments: 'it'),
-        (clone Call: $2, (clone Arguments: 'it', $3))))
+        (clone Operation: 'it', $2, $3)))
+    (o: '( - Value )',
+      (\-> clone Declaration: none, (clone Arguments: 'it'),
+        (clone Operation: 'it', $2, $3)))
+    (o: '( * Value )',
+      (\-> clone Declaration: none, (clone Arguments: 'it'),
+        (clone Operation: 'it', $2, $3)))
+    (o: '( / Value )',
+      (\-> clone Declaration: none, (clone Arguments: 'it'),
+        (clone Operation: 'it', $2, $3)))
   ]
 
   Operation = [
