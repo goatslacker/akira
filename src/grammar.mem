@@ -298,7 +298,8 @@ bnf = ({
   ]
 
   SpecialFunctions = [
-    (o: '( MathOperators NUM )',
+    (o: '( MathOperators )', (\-> $2)),
+    (o: '( MathOperators Value )',
       (\-> clone Call: (clone Call: (clone Identifier: 'curryr'),
         (clone Arguments: $2)), (clone Arguments: $3)))
   ]
