@@ -11,6 +11,7 @@ analyse = \name, body -> body | util.inspect: @, false, 50 | output: none
 
 export MEM = \action, filename = 'src/' ->
   'bench' ? memory: analyse, filename, benchmark
+  'debug' ? memory: (\-> none), filename
   'compile' ? memory: wrap, filename
   'output' ? memory: output, filename
   'test' ? memory: run, 'test/tests.mem'
