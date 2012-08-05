@@ -97,6 +97,7 @@ bnf = ({
     (o: 'Access')
     (o: 'Type')
     (o: '@')
+    (o: 'SpecialFunctions')
     (o: '( Assignable )', (\-> $2))
   ]
 
@@ -253,7 +254,6 @@ bnf = ({
 
   Arg = [
     (o: 'Value')
-    (o: 'MathOperators')
     (o: 'Rest')
   ]
 
@@ -295,7 +295,11 @@ bnf = ({
     (o: '-', (\-> clone Identifier: '_sub'))
     (o: '*', (\-> clone Identifier: '_mul'))
     (o: '/', (\-> clone Identifier: '_div'))
-    (o: '( MathOperators NUM )',
+  ]
+
+  SpecialFunctions = [
+    (o: '( MathOperators )', (\-> $2)),
+    (o: '( MathOperators Value )',
       (\-> clone Call: (clone Call: (clone Identifier: 'curryr'),
         (clone Arguments: $2)), (clone Arguments: $3)))
   ]
