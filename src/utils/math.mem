@@ -1,12 +1,8 @@
 square = \x -> x * x
-sum = \...args -> foldl: (\a, b -> a + b), args
-sub = \...args -> foldl: (\a, b -> a - b), args
-prod = \...args -> foldl: (\a, b -> a * b), args
-div = \...args -> foldl: (\a, b -> a / b), args
-_add = \a, b -> a + b
-_sub = \a, b -> a - b
-_mul = \a, b -> a * b
-_div = \a, b -> a / b
+sum = \a, b -> a + b
+sub = \a, b -> a - b
+prod = \a, b -> a * b
+div = \a, b -> a / b
 even = \n -> mod: n, 2 | (== 0)
 odd = \n -> not (even: n)
 abs = \n -> Math.abs: n
@@ -14,6 +10,5 @@ sqrt = \n -> Math.sqrt: n
 
 export ({
   square, sum, sub, prod, div
-  _add, _sub, _mul, _div
   even, odd, abs, sqrt
 })

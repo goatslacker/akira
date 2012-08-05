@@ -289,10 +289,10 @@ bnf = ({
   ]
 
   MathOperators = [
-    (o: '+', (\-> clone Identifier: '_add'))
-    (o: '-', (\-> clone Identifier: '_sub'))
-    (o: '*', (\-> clone Identifier: '_mul'))
-    (o: '/', (\-> clone Identifier: '_div'))
+    (o: '+', (\-> clone Identifier: 'sum'))
+    (o: '-', (\-> clone Identifier: 'sub'))
+    (o: '*', (\-> clone Identifier: 'prod'))
+    (o: '/', (\-> clone Identifier: 'div'))
   ]
 
   SpecialFunctions = [

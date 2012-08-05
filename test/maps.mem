@@ -1,5 +1,5 @@
 # test function
-map-eq = \a, b -> filter: (\x, i -> x isnt b !! i), a | @.length | assert: 0
+map-eq = \a, b -> filter: (\x, i -> x isnt b !! i), a | (.length) | assert: 0
 
 # setting maps
 obj = ({ hello = 1, world = 2 })
