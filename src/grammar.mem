@@ -295,9 +295,9 @@ bnf = ({
     (o: '-', (\-> clone Identifier: '_sub'))
     (o: '*', (\-> clone Identifier: '_mul'))
     (o: '/', (\-> clone Identifier: '_div'))
-    (o: 'COMPARE', (\-> clone Call: '_compare',
+    (o: 'COMPARE', (\-> clone Call: (clone Identifier: '_compare'),
       (clone Arguments: (clone Literal: (String: $1)))))
-    (o: 'LEFT_OPERATORS', (\-> clone Call: '_operatel',
+    (o: 'LEFT_OPERATORS', (\-> clone Call: (clone Identifier: '_operatel'),
       (clone Arguments: (clone Literal: (String: $1)))))
   ]
 
