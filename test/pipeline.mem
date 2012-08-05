@@ -1,3 +1,18 @@
 add-memory = \r, v -> r ++ ' is ' ++ v
 
 id: 'awesome' | add-memory: 'memory' | assert: 'memory is awesome'
+
+2 | (+ 1) | assert: 3
+
+list = [1, 2]
+list2 = [1, 2, 3]
+
+list | (.length) | (+ 2) | assert: 4
+
+list | filter: (> 1) | assert-deep: [2]
+
+list2 | map: (- 2) | map: Math.abs | foldl: (+) | assert: 2
+
+list | (!! 0) | assert: 1
+
+list2 | map: (- 1) | foldl: (+) | (- 3) | assert: 0
