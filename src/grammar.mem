@@ -97,6 +97,7 @@ bnf = ({
     (o: 'Access')
     (o: 'Type')
     (o: '@')
+    (o: 'MathOperators')
     (o: '( Assignable )', (\-> $2))
   ]
 
@@ -253,7 +254,6 @@ bnf = ({
 
   Arg = [
     (o: 'Value')
-    (o: 'MathOperators')
     (o: 'Rest')
   ]
 
