@@ -16,6 +16,12 @@ _compare = \op -> \a, b ->
   op is '==' ? a == b
   else       ? raise 'Invalid comparison' TypeError
 
+_operatel = \op -> \a, b ->
+  op is '!!' ? a !! b
+  op is '++' ? a ++ b
+  op is '<+' ? a <+ b
+  else       ? raise 'Invalid operator' TypeError
+
 even = \n -> mod: n, 2 | @ is 0
 odd = \n -> not (even: n)
 abs = \n -> Math.abs: n
@@ -23,6 +29,7 @@ sqrt = \n -> Math.sqrt: n
 
 export ({
   square, sum, sub, prod, div
-  _add, _sub, _mul, _div, even
-  odd, abs, sqrt
+  _add, _sub, _mul, _div
+  _compare, _operatel
+  even, odd, abs, sqrt
 })

@@ -297,6 +297,8 @@ bnf = ({
     (o: '/', (\-> clone Identifier: '_div'))
     (o: 'COMPARE', (\-> clone Call: '_compare',
       (clone Arguments: (clone Literal: (String: $1)))))
+    (o: 'LEFT_OPERATORS', (\-> clone Call: '_operatel',
+      (clone Arguments: (clone Literal: (String: $1)))))
   ]
 
   SpecialFunctions = [
