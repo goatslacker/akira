@@ -295,6 +295,8 @@ bnf = ({
     (o: '-', (\-> clone Identifier: '_sub'))
     (o: '*', (\-> clone Identifier: '_mul'))
     (o: '/', (\-> clone Identifier: '_div'))
+    (o: 'COMPARE', (\-> clone Call: '_compare',
+      (clone Arguments: (clone Literal: (String: $1)))))
   ]
 
   SpecialFunctions = [
