@@ -7,16 +7,16 @@ get = \obj, prop -> obj !! prop
 length = \of -> of.length
 join = \by, list -> list.join: by
 concat = \...args -> foldl: (\a, b -> a ++ b), args
-count = \fn, list -> filter: fn, list | @.length
-average = \list -> foldl: (\a, b -> a + b), list | @ / list.length
+count = \fn, list -> filter: fn, list | (.length)
+average = \list -> foldl: (\a, b -> a + b), list | (/ list.length)
 compact = \list -> filter: (\x -> not not x), list
-intersect = \list1, list2 -> filter: (\x -> list2.indexOf: x | 0 - 1 isnt @),
+intersect = \list1, list2 -> filter: (\x -> list2.indexOf: x | (!= 0 - 1)),
   list1
 max = \list -> foldl: (\a, b -> if a > b then a else b), list
 min = \list -> foldl: (\a, b -> if a < b then a else b), list
-nothing = \fn, list -> filter: fn, list | @.length | @ is 0
+nothing = \fn, list -> filter: fn, list | (.length) | (== 0)
 randomize = \list -> sort: (\-> (Math.random!) > 0.5), list
-unique = \list -> filter: (\x, i -> list.indexOf: x | i - 1 is @), list
+unique = \list -> filter: (\x, i -> list.indexOf: x | (== i - 1)), list
 take = \n, list -> list.slice: 0, n
 drop = \n, list -> list.slice: n
 

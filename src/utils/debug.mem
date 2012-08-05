@@ -13,7 +13,7 @@ assert = \a, b -> {
 }
 
 assert-deep = \a, b -> {
-  len = filter: (\x, i -> x is b !! i - 1), a | @.length
+  len = filter: (\x, i -> x is b !! i - 1), a | (.length)
   assert: len, b.length
 }
 

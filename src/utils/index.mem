@@ -2,7 +2,7 @@ modules = ({})
 path = require: 'path'
 
 include = \m -> {
-  functions = path.join: __dirname, m | require: @
+  functions = path.join: __dirname, m | require
   modules <+ functions
 }
 

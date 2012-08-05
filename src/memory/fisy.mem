@@ -31,7 +31,7 @@ get-files = \cb, dirname -> {
 # TODO, if dir doesn't exist, create it
 write-file = \file, code -> code |
   fs.write-file-sync: (file.replace: 'src', 'lib' |
-    @.replace: '.mem', '.js' |
+    (\fname -> fname.replace: '.mem', '.js') |
     path.join: process.env.PWD)
 
 export ({ get-files, write-file })
