@@ -295,14 +295,12 @@ bnf = ({
     (o: '-', (\-> clone Identifier: '_sub'))
     (o: '*', (\-> clone Identifier: '_mul'))
     (o: '/', (\-> clone Identifier: '_div'))
-    (o: 'COMPARE', (\-> clone Call: (clone Identifier: '_compare'),
-      (clone Arguments: (clone Literal: (String: $1)))))
-    (o: 'LEFT_OPERATORS', (\-> clone Call: (clone Identifier: '_operatel'),
-      (clone Arguments: (clone Literal: (String: $1)))))
   ]
 
   SpecialFunctions = [
     (o: '( MathOperators )', (\-> $2)),
+    (o: '( COMPARE Value )', (\-> clone Compare: '@', $2, $3))
+    (o: '( LEFT_OPERATORS Value )', (\-> clone Operation: '@', $2, $3))
     (o: '( MathOperators Value )',
       (\-> clone Call: (clone Call: (clone Identifier: 'curryr'),
         (clone Arguments: $2)), (clone Arguments: $3)))
