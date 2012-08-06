@@ -92,14 +92,14 @@ return-tokens = \code, n -> {
     then {
       token = process-chunk: chunk, n
       tokens = token +: []
-      n2 = ({
-        index = (token.2.toString! |
-          (.length) |
-          (+ n.index) |
-          get-length: token.1)
-        line = (incr-line: token.1, n.line)
-      })
-      tokens ++ (return-tokens: code, n2)
+      tokens ++ (return-tokens: code,
+        ({
+          index = (token.2.toString! |
+            (.length) |
+            (+ n.index) |
+            get-length: token.1)
+          line = (incr-line: token.1, n.line)
+        }))
     }
     else []
 }
