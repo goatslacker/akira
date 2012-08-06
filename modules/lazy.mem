@@ -1,15 +1,15 @@
-head = \f -> f: 1
+head = \f -> f: 1 | (!! 0)
 last = \f -> f: none | (\[...xs, x] -> x)
-every = \f -> f: none
+all = \f -> f: none
 take = \n, f -> f: n
 
-filter = \f, list {
-  iter = \n, i, [x, ...xs]
-    not x -> []
-    (f: x) is true -> if i < n then [x] ++ (iter: n, i + 1, xs) else []
-    else -> iter: n, i, xs
+filter = \f, list -> {
+  iter = \n, i, [x, ...xs] ->
+    not x ? []
+    (f: x) is true ? if i < n then [x] ++ (iter: n, i + 1, xs) else []
+    else ? iter: n, i, xs
 
   \n ->  iter: n || list.length, 0, list
 }
 
-export ({ head, last, every, take, filter })
+export ({ head, last, all, take, filter })
