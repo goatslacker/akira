@@ -295,32 +295,36 @@ bnf = ({
     (o: '/', (\-> clone Identifier: 'div'))
   ]
 
+  SugaryFunctions = [
+    (o: 'MathOperators', (\-> $1))
+    (o: 'Accessor',
+      (\-> clone Declaration: none, (clone Arguments: 'it'),
+        (clone Access: 'it', $1)))
+    (o: 'Accessor : Value',
+      (\-> clone Declaration: none, (clone Arguments: 'it'),
+        (clone Call: (clone Access: 'it', $1), $3)))
+    (o: 'COMPARE Value',
+      (\-> clone Declaration: none, (clone Arguments: 'it'),
+        (clone Compare: 'it', $1, $2)))
+    (o: 'LEFT_OPERATORS Value',
+      (\-> clone Declaration: none, (clone Arguments: 'it'),
+        (clone Operation: 'it', $1, $2)))
+    (o: '+ Value',
+      (\-> clone Declaration: none, (clone Arguments: 'it'),
+        (clone Operation: 'it', $1, $2)))
+    (o: '- Value',
+      (\-> clone Declaration: none, (clone Arguments: 'it'),
+        (clone Operation: 'it', $1, $2)))
+    (o: '* Value',
+      (\-> clone Declaration: none, (clone Arguments: 'it'),
+        (clone Operation: 'it', $1, $2)))
+    (o: '/ Value',
+      (\-> clone Declaration: none, (clone Arguments: 'it'),
+        (clone Operation: 'it', $1, $2)))
+  ]
+
   SpecialFunctions = [
-    (o: '( MathOperators )', (\-> $2))
-    (o: '( Accessor )',
-      (\-> clone Declaration: none, (clone Arguments: 'it'),
-        (clone Access: 'it', $2)))
-    (o: '( Accessor : Value )',
-      (\-> clone Declaration: none, (clone Arguments: 'it'),
-        (clone Call: (clone Access: 'it', $2), $4)))
-    (o: '( COMPARE Value )',
-      (\-> clone Declaration: none, (clone Arguments: 'it'),
-        (clone Compare: 'it', $2, $3)))
-    (o: '( LEFT_OPERATORS Value )',
-      (\-> clone Declaration: none, (clone Arguments: 'it'),
-        (clone Operation: 'it', $2, $3)))
-    (o: '( + Value )',
-      (\-> clone Declaration: none, (clone Arguments: 'it'),
-        (clone Operation: 'it', $2, $3)))
-    (o: '( - Value )',
-      (\-> clone Declaration: none, (clone Arguments: 'it'),
-        (clone Operation: 'it', $2, $3)))
-    (o: '( * Value )',
-      (\-> clone Declaration: none, (clone Arguments: 'it'),
-        (clone Operation: 'it', $2, $3)))
-    (o: '( / Value )',
-      (\-> clone Declaration: none, (clone Arguments: 'it'),
-        (clone Operation: 'it', $2, $3)))
+    (o: '( SugaryFunctions )', (\-> $2))
   ]
 
   Operation = [
