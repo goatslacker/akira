@@ -1,3 +1,5 @@
+#({ head, filter, every }) = import 'lazy.mem'
+
 rx = ({
   IDENTIFIER = /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
   NUM = /^((\d+\.)?\d+)+/
@@ -26,8 +28,8 @@ ignore = ['COMMENTS', 'WHITESPACE']
 
 get-type = \a -> rx |
   Object.keys |
-  filter: (\x -> rx !! x | (.test: a)) |
-  last
+  (.filter: (\x -> rx !! x | (.test: a))) |
+  (!! 0)
 
 extract = \key, chunk -> rx !! key | (.exec: chunk)
 
@@ -41,8 +43,8 @@ parse-identifier = \t, chunk -> {
   item = extract: t, chunk
   token = identifiers |
     Object.keys |
-    filter: (\x -> identifiers !! x | (.indexOf: item.2) | (>= 0)) |
-    last
+    (.filter: (\x -> identifiers !! x | (.indexOf: item.2) | (>= 0))) |
+    (!! 0)
   return-identifier: token || t, item.2
 }
 
@@ -105,4 +107,4 @@ return-tokens = \code, n -> {
 filter-whitespace = \token -> ignore.indexOf: token.1 | (< 0)
 
 export tokenize = \code -> return-tokens: code, ({ index = 0, line = 0 }) |
-  filter: filter-whitespace
+  (.filter: filter-whitespace)
