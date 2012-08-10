@@ -85,23 +85,14 @@ incr-line = \type, line ->
   'TERMINATOR' ? line + 1
   else ? line
 
-return-tokens = \code, n -> {
-  chunk = code.substr: n.index, code.length
-
-  if chunk
-    then {
-      token = process-chunk: chunk, n
-      token +: (return-tokens: code,
-        ({
-          index = (token.2.toString! |
-            (.length) |
-            (+ n.index) |
-            get-length: token.1)
-          line = (incr-line: token.1, n.line)
-        }))
-    }
-    else []
-}
+return-tokens = \code, n ->
+  not code ? []
+  else ? {
+    token = process-chunk: code, n
+    index = token.2.toString! | (.length) | get-length: token.1
+    token +: (return-tokens: (code.substr: index, code.length),
+      ({ line = (incr-line: token.1, n.line) }))
+  }
 
 filter-whitespace = \token -> ignore.indexOf: token.1 | (< 0)
 
