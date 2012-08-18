@@ -12,7 +12,7 @@ rx = clone LazyObject: ({
   WHITESPACE = /^ /
 })
 
-identifiers = ({
+identifiers = clone LazyObject: ({
   KEYWORDS = ['if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none',
     'raise', 'object', 'clones', 'clone', 'prototype']
   TYPE = ['Function', 'Number', 'String', 'Array', 'Object', 'Null']
@@ -41,9 +41,8 @@ return-identifier = \type, item ->
 parse-identifier = \t, chunk -> {
   item = extract: t, chunk
   token = identifiers |
-    Object.keys |
     (.filter: (\x -> identifiers !! x | (.indexOf: item.2) | (>= 0))) |
-    (!! 0)
+    (.head: none)
   return-identifier: token || t, item.2
 }
 
