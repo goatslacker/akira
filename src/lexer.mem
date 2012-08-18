@@ -24,7 +24,7 @@ identifiers = clone LazyObject: ({
   BOOL = ['true', 'false']
 })
 
-ignore = ['COMMENTS', 'WHITESPACE']
+ignore = ({ 'COMMENTS', 'WHITESPACE' })
 
 get-type = \a -> rx |
   (.filter: (\x -> rx !! x | (.test: a))) |
@@ -93,7 +93,7 @@ return-tokens = \tokens, code, n ->
       ({ line = (incr-line: token.1, n.line) })
   }
 
-filter-whitespace = \token -> ignore.indexOf: token.1 | (< 0)
+filter-whitespace = \token -> not (ignore !! token.1)
 
 export tokenize = \code -> return-tokens: [], code, ({ index = 0, line = 0 }) |
   (.filter: filter-whitespace)
