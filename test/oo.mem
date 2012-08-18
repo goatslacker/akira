@@ -4,7 +4,7 @@ object Animal ({
   walk = (\direction -> true)
   sleep = (\-> 'ZzZzZ...')
   setName = (\name -> this.name = name)
-  alive = true
+  'alive' = true
   eyes = 2
 })
 

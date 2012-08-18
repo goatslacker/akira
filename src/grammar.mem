@@ -221,9 +221,14 @@ bnf = ({
     (o: 'ListArgs Terminator Arg', (\-> clone Arguments: $1, $3))
   ]
 
+  Key = [
+    'IdentifierNoUtils',
+    'Strings'
+  ]
+
   KeyValue = [
-    (o: 'IdentifierNoUtils', (\-> clone Assignment: $1, $1))
-    (o: 'IdentifierNoUtils = Value', (\-> clone Assignment: $1, $3))
+    (o: 'Key', (\-> clone Assignment: $1, $1))
+    (o: 'Key = Value', (\-> clone Assignment: $1, $3))
   ]
 
   MapItems = [
