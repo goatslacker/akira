@@ -1,6 +1,6 @@
-#({ head, filter, every }) = import 'lazy.mem'
+LazyObject = import 'lazy-object.js'
 
-rx = ({
+rx = clone LazyObject: ({
   IDENTIFIER = /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
   NUM = /^((\d+\.)?\d+)+/
   STR = /^'(.*?)'/
@@ -27,9 +27,8 @@ identifiers = ({
 ignore = ['COMMENTS', 'WHITESPACE']
 
 get-type = \a -> rx |
-  Object.keys |
   (.filter: (\x -> rx !! x | (.test: a))) |
-  (!! 0)
+  (.head: none)
 
 extract = \key, chunk -> rx !! key | (.exec: chunk)
 
