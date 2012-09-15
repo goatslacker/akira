@@ -73,6 +73,7 @@ bnf = ({
     (o: 'Assignable')
     (o: 'Exceptions')
     (o: 'Objects')
+    (o: 'Recur')
   ]
 
   Assignable = [
@@ -286,6 +287,11 @@ bnf = ({
   ErrorType = [
     (o: '', (\-> none))
     (o: 'Identifier')
+  ]
+
+  Recur = [
+    (o: 'RECUR Arguments', (\-> clone Recur: $2))
+    (o: '( RECUR Arguments )', (\-> clone Recur: $3))
   ]
 
   If = [
