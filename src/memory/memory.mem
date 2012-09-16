@@ -64,7 +64,8 @@ memory = \cb, filepath, fn = transpile -> {
       result = code | fn: name | cb: name
     } catch {
       util.error: 'Filename: ' ++ name
-      raise err
+      util.error: err.stack
+      process.exit: 1
     }
     result
   }
