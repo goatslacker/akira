@@ -290,8 +290,8 @@ bnf = ({
   ]
 
   Recur = [
-    (o: 'RECUR Arguments', (\-> clone Recur: $2))
-    (o: '( RECUR Arguments )', (\-> clone Recur: $3))
+    (o: 'RECUR OptTerminator Arguments', (\-> clone Recur: $3))
+    (o: '( RECUR OptTerminator Arguments )', (\-> clone Recur: $4))
   ]
 
   If = [
