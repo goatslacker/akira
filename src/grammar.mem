@@ -34,6 +34,7 @@ bnf = ({
   Expressions = [
     (o: 'Body', (\-> yy.Nodes.wrap: $1))
     (o: 'Expressions TERMINATOR Body', (\-> $1.push: $3))
+    (o: 'Expressions ; Body', (\-> $1.push: $3))
     (o: 'Expressions TERMINATOR')
   ]
 
