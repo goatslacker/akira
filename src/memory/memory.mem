@@ -24,8 +24,8 @@ transform = \name, parsed -> {
             params = [({ type = 'Identifier', name = '$$export' })]
             body = ({
               type = 'BlockStatement'
-              body = (parsed.get-utils: context) ++ (parsed.add-vars: context,
-                false) ++ body
+              body = (parsed.add-vars: context, false) ++
+                (parsed.analyse: body, context)
             })
           })
           arguments = []

@@ -20,6 +20,7 @@ import 'test/destructors.mem'
 import 'test/oo.mem'
 import 'test/interpolate.mem'
 import 'test/recur.mem'
+import 'test/prelude.mem'
 fact = import 'test/exporting.mem'
 
 # export fact test

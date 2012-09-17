@@ -52,16 +52,12 @@ bnf = ({
     (o: 'IDENTIFIER', (\-> clone Identifier: $1))
   ]
 
-  IdentifierNoUtils = [
-    (o: 'IDENTIFIER', (\-> clone Identifier: $1, true))
-  ]
-
   Prototype = [
     (o: 'PROTOTYPE', (\-> clone Identifier: $1))
   ]
 
   Rest = [
-    (o: '. . . IDENTIFIER', (\-> clone Identifier: $4, false, true))
+    (o: '. . . IDENTIFIER', (\-> clone Identifier: $4, true))
   ]
 
   Body = [
@@ -224,7 +220,7 @@ bnf = ({
   ]
 
   Key = [
-    'IdentifierNoUtils',
+    'Identifier',
     'Strings'
   ]
 
@@ -253,7 +249,7 @@ bnf = ({
   ]
 
   Accessor = [
-    (o: '. IdentifierNoUtils', (\-> $2))
+    (o: '. Identifier', (\-> $2))
     (o: '. AlphaNumeric', (\-> $2))
   ]
 
@@ -269,8 +265,8 @@ bnf = ({
   ]
 
   Param = [
-    (o: 'IdentifierNoUtils')
-    (o: 'IdentifierNoUtils = Value', (\-> clone Assignment: $1, $3))
+    (o: 'Identifier')
+    (o: 'Identifier = Value', (\-> clone Assignment: $1, $3))
     (o: 'Rest')
     (o: 'Lists')
   ]

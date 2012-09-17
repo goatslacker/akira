@@ -1,0 +1,41 @@
+# NOTE: this file isn't sandboxed, all tests run at the same time.
+
+is-true = \n -> assert: n, true
+
+banana = ({ })
+
+({ words = 15 })
+banana.show
+count-alias = count
+({ concat-key = concat })
+div = 2
+plus-nine = \randomize -> 9 + randomize
+mul = \-> 0
+({ take-while })
+id: unique
+closed-function = \x -> {
+  gte = 2
+  # will include gte
+  nothing: (\x -> gte > x), [1, 2, 3]
+}
+closed-function2 = \x -> {
+  intersect = 1
+  id: intersect
+}
+intersect-fn = intersect
+closed-function3 = \x -> lte = false
+
+
+words is undefined | is-true
+show is undefined | is-true
+count is Function | is-true
+concat is Function | is-true
+div is 2 | is-true
+randomize is undefined | is-true
+mul! | assert: 0
+take-while is Function | is-true
+unique is Function | is-true
+nothing is Function | is-true
+gte is Function | is-true
+intersect is Function | is-true
+lte is undefined | is-true
