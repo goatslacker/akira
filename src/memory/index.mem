@@ -1,8 +1,8 @@
 util = require: 'util'
 me = require: '../../package.json'
 
-({ memory, run, lex, gen-ast, benchmark }) = require: './memory'
-({ write-file, get-files }) = require: './fisy'
+({ memory, run, lex, gen-ast, benchmark }) = import './memory.mem'
+({ write-file, get-files }) = import './fisy.mem'
 
 wrap = \name, code -> write-file: name, 'module.exports = ' ++ code
 
