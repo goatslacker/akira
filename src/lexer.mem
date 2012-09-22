@@ -14,7 +14,7 @@ rx = clone LazyObject: ({
 
 identifiers = clone LazyObject: ({
   KEYWORDS = ['if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none',
-    'raise', 'object', 'clones', 'clone', 'prototype', 'recur']
+    'raise', 'object', 'clones', 'clone', 'prototype', 'recur', 'macro']
   TYPE = ['Function', 'Number', 'String', 'Array', 'Object', 'Null']
   COMPARE = ['==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
   LEFT_OPERATORS = ['++', '!!', '<+']

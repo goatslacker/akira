@@ -71,6 +71,7 @@ bnf = ({
     (o: 'Exceptions')
     (o: 'Objects')
     (o: 'Recur')
+    (o: 'DefMacro')
   ]
 
   Assignable = [
@@ -84,6 +85,7 @@ bnf = ({
     (o: 'Cloning')
     (o: 'Comprehensions')
     (o: 'Prototype')
+    (o: 'Macro')
     (o: 'IMPORT STR', (\-> clone Import: $2))
   ]
 
@@ -294,6 +296,14 @@ bnf = ({
   If = [
     (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body',
       (\-> clone If: $2, $5, $8))
+  ]
+
+  DefMacro = [
+    (o: 'MACRO Identifier Declaration', (\-> clone Macro: true, $2, $3))
+  ]
+
+  Macro = [
+    (o: 'Identifier Arguments', (\-> clone Macro: false, $1, $2))
   ]
 
   MathOperators = [
