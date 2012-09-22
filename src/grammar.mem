@@ -66,7 +66,7 @@ bnf = ({
   ]
 
   Expression = [
-    (o: 'Modules')
+    (o: 'Exporting')
     (o: 'Assignable')
     (o: 'Exceptions')
     (o: 'Objects')
@@ -140,7 +140,7 @@ bnf = ({
     (o: 'CLONES Identifier', (\-> $2))
   ]
 
-  Modules = [
+  Exporting = [
     (o: 'EXPORT Assignable', (\-> clone Export: $2))
   ]
 
