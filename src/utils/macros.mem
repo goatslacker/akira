@@ -1,0 +1,8 @@
+macro mod \a, b -> {
+  ({
+    type = 'BinaryExpression'
+    operator = '%'
+    left = a
+    right = b
+  })
+}
