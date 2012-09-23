@@ -6,8 +6,8 @@ gte = \a, b -> a >= b
 lte = \a, b -> a <= b
 
 assert = \a, b -> {
-  assert.successes = []
-  assert.failures = []
+  assert.successes = assert.successes || []
+  assert.failures = assert.failures || []
 
   if a == b then (assert.successes.push: [a, b]) else (assert.failures.push: [a, b])
 }
