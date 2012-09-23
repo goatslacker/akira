@@ -24,13 +24,9 @@ take-while = \fn, [x, ...xs] ->
   (fn: x) == true ? x +: (take-while: fn, xs)
   else ? []
 
-take-until = \fn, [x, ...xs] ->
-  (fn: x) == true ? [x]
-  else ? x +: (take-until: fn, xs)
-
 export ({
   head, init, tail, last, at, get, length
   join, concat, count, average, compact
   intersect, max, min, nothing, randomize
-  unique, take, drop, take-while, take-until
+  unique, take, drop, take-while
 })
