@@ -12,14 +12,14 @@ analyse = \name, body -> body |
   output: none
 
 export MEM = \action, filename = 'src/' ->
-  'bench' ? memory: analyse, filename, benchmark
-  'debug' ? memory: (\-> none), filename
+  'bench'   ? memory: analyse, filename, benchmark
+  'debug'   ? memory: (\-> none), filename
   'compile' ? memory: wrap, filename
-  'output' ? memory: output, filename
-  'test' ? memory: run, 'test/tests.mem'
-  'run' ? memory: run, filename
-  'tokens' ? memory: analyse, filename, lex
-  'ast' ? memory: analyse, filename, gen-ast
+  'output'  ? memory: output, filename
+  'test'    ? memory: run, 'test/tests.mem'
+  'run'     ? memory: run, filename
+  'tokens'  ? memory: analyse, filename, lex
+  'ast'     ? memory: analyse, filename, gen-ast
   'version' ? 'memory ' ++ me.version | output: none
-  'help' ? require: './help'
-  else ? none
+  'help'    ? require: './help'
+  else      ? none
