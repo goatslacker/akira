@@ -4,7 +4,7 @@ rx = clone LazyObject: ({
   IDENTIFIER = /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
   NUM = /^((\d+\.)?\d+)+/
   STR = /^'(.*?)'/
-  LAMBDA = /^([-|*]>)/
+  LAMBDA = /^->/
   OPERATION = /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
   TERMINATOR = /^\n/
   REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
@@ -57,7 +57,7 @@ get-token = \t, chunk, n ->
   'NUM' ? parse-alphanumeric: t, chunk
   'STR' ? parse-alphanumeric: t, chunk
   'OPERATION' ? parse-identifier: t, chunk
-  'LAMBDA' ? parse-alphanumeric: t, chunk
+  'LAMBDA' ? '->'
   'REGEX' ? parse-regular-expressions: t, chunk
   'COMMENTS' ? parse-alphanumeric: t, chunk
   'WHITESPACE' ? ' '
@@ -83,7 +83,7 @@ incr-line = \type, line ->
   'TERMINATOR' ? line + 1
   else ? line
 
-return-tokens = \code, n, tokens = [] *>
+return-tokens = \code, n, tokens = [] ->
   not code ? tokens
   else ? {
     token = process-chunk: code, n

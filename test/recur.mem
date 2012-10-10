@@ -1,11 +1,11 @@
-fib = \x, p = 0, n = 1 *>
+fib = \x, p = 0, n = 1 ->
   1 ? n
   else ? recur x - 1, n, p + n
 
 fib: 8 | assert: 21
 
 
-fact = \n, sum = 1 *>
+fact = \n, sum = 1 ->
   0 ? sum
   else ? recur n - 1, sum * n
 
