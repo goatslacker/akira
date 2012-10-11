@@ -101,23 +101,3 @@ condense = \str -> str.replace: /\ /g, ''
 lines = \fn, str -> str.split: '\n' | map: fn
 repeat = \times, str -> (clone Array: (times + 1)) | (\arr -> arr.join: str)
 words = \fn, str -> str.split: ' ' | map: fn
-
-
-dependencies = ({
-  chars = ['map']
-  words = ['map']
-  lines = ['map']
-  even = ['mod']
-  odd = ['even', 'mod']
-  concat = ['foldl']
-  count = ['filter']
-  average = ['foldl']
-  compact = ['filter']
-  intersect = ['filter']
-  max = ['foldl']
-  min = ['foldl']
-  nothing = ['filter']
-  randomize = ['sort']
-  unique = ['filter']
-  assert-deep = ['assert', 'filter']
-})
