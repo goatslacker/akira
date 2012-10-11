@@ -17,7 +17,7 @@ identifiers = clone LazyObject: ({
     'raise', 'object', 'clones', 'clone', 'prototype', 'recur', 'macro']
   TYPE = ['Function', 'Number', 'String', 'Array', 'Object', 'Null']
   COMPARE = ['==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
-  LEFT_OPERATORS = ['++', '!!', '<+']
+  LEFT_OPERATORS = ['++', '!!']
   RIGHT_OPERATORS = ['=>', '+:']
   NOT = ['not']
   LOGIC = ['and', 'or', '&&', '||']
