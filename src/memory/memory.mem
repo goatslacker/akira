@@ -11,6 +11,7 @@ parser.yy = (require: '../lang/nodes')
 transform = \name, parsed -> {
   context = ({})
   body = parsed.compile: context, name
+  parsed.flag-core-methods: body
   ({
     type = 'Program'
     body = [
@@ -25,7 +26,9 @@ transform = \name, parsed -> {
             body = ({
               type = 'BlockStatement'
               body = (parsed.add-vars: context, false) ++
-                (parsed.add-deps!) ++ (parsed.analyse: body, context)
+                (parsed.add-core!) ++
+                (parsed.add-deps!) ++
+                body
             })
           })
           arguments = []
