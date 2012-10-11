@@ -18,10 +18,10 @@ assert-deep = \a, b -> {
 }
 
 # do +1's
-filter = \fn, list = list.filter: fn
-map = \fn, list = list.map: fn
-foldl = \fn, list = list.reduce: fn
-foldr = \fn, list = list.reduce-right: fn
+filter = \fn, list -> list.filter: fn
+map = \fn, list -> list.map: fn
+foldl = \fn, list -> list.reduce: fn
+foldr = \fn, list -> list.reduce-right: fn
 
 head = \[x] -> x
 init = \[...xs, x] -> xs
@@ -87,7 +87,7 @@ sum = \a, b -> a + b
 sub = \a, b -> a - b
 prod = \a, b -> a * b
 div = \a, b -> a / b
-even = \n -> mod: n, 2 | (== 0)
+even = \n -> (mod n, 2) | (== 0)
 odd = \n -> not (even: n)
 abs = \n -> Math.abs: n
 sqrt = \n -> Math.sqrt: n
