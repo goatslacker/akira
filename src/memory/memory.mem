@@ -5,9 +5,9 @@ escodegen = require: 'escodegen'
 ({ get-files }) = import './fisy.mem'
 ({ mark }) = import './bench.mem'
 
-lexer = require: '../lexer'
-parser = require: '../grammar'
-parser.yy = (require: '../nodes')
+lexer = require: '../lang/lexer'
+parser = require: '../lang/grammar'
+parser.yy = (require: '../lang/nodes')
 transform = \name, parsed -> {
   context = ({})
   body = parsed.compile: context, name

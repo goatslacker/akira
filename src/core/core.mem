@@ -1,0 +1,123 @@
+eq = \a, b -> a is b
+neq = \a, b -> a isnt b
+gt = \a, b -> a > b
+lt = \a, b -> a < b
+gte = \a, b -> a >= b
+lte = \a, b -> a <= b
+
+assert = \a, b -> {
+  assert.successes = assert.successes || []
+  assert.failures = assert.failures || []
+
+  if a == b then (assert.successes.push: [a, b]) else (assert.failures.push: [a, b])
+}
+
+assert-deep = \a, b -> {
+  len = filter: (\x, i -> x is b !! i - 1), a | (.length)
+  assert: len, b.length
+}
+
+# do +1's
+filter = \fn, list = list.filter: fn
+map = \fn, list = list.map: fn
+foldl = \fn, list = list.reduce: fn
+foldr = \fn, list = list.reduce-right: fn
+
+head = \[x] -> x
+init = \[...xs, x] -> xs
+tail = \[x, ...xs] -> xs
+last = \[...xs, x] -> x
+at = \index, list -> list !! index - 1
+get = \obj, prop -> obj !! prop
+length = \of -> of.length
+join = \by, list -> list.join: by
+concat = \...args -> foldl: (\a, b -> a ++ b), args
+count = \fn, list -> filter: fn, list | (.length)
+average = \list -> foldl: (\a, b -> a + b), list | (/ list.length)
+compact = \list -> filter: (\x -> not not x), list
+intersect = \list1, list2 -> filter: (\x -> list2.indexOf: x | (!= 0 - 1)),
+  list1
+max = \list -> foldl: (\a, b -> if a > b then a else b), list
+min = \list -> foldl: (\a, b -> if a < b then a else b), list
+nothing = \fn, list -> filter: fn, list | (.length) | (== 0)
+randomize = \list -> sort: (\-> (Math.random!) > 0.5), list
+unique = \list -> filter: (\x, i -> list.indexOf: x | (== i - 1)), list
+take = \n, list -> list.slice: 0, n
+drop = \n, list -> list.slice: n
+
+take-while = \fn, [x, ...xs] ->
+  (fn: x) == true ? x +: (take-while: fn, xs)
+  else ? []
+
+apply = \f, ...args -> f.apply: f, args
+consts = \a -> a
+id = \a -> a
+flip = \f, a, b -> f: b, a
+partial = \f, ...args -> \...xargs -> f.apply: f, args ++ xargs
+partialr = \f, ...args -> \...xargs -> f.apply: f, xargs ++ args
+curry = \fn -> {
+  c = \args = [] -> \arg -> {
+    xargs = args ++ arg
+    if xargs.length < fn.length then c: xargs else fn.apply: fn, xargs
+  }
+
+  if fn.length < 1 then fn else c: none
+}
+curryr = \fn -> {
+  c = \args = [] -> \arg -> {
+    xargs = arg +: args
+    if xargs.length < fn.length then c: xargs else fn.apply: fn, xargs
+  }
+
+  if fn.length < 1 then fn else c: none
+}
+show = \i -> i.to-string!
+
+macro mod \a, b -> {
+  ({
+    type = 'BinaryExpression'
+    operator = '%'
+    left = a
+    right = b
+  })
+}
+
+square = \x -> x * x
+sum = \a, b -> a + b
+sub = \a, b -> a - b
+prod = \a, b -> a * b
+div = \a, b -> a / b
+even = \n -> mod: n, 2 | (== 0)
+odd = \n -> not (even: n)
+abs = \n -> Math.abs: n
+sqrt = \n -> Math.sqrt: n
+
+camelize = \str -> str.replace: /(-|_)+([a-zA-Z0-9$_])/g,
+  (\i -> i.2.to-upper-case!)
+uppercase = \str -> str.to-upper-case!
+capitalize = \str -> (str.1.to-upper-case!) ++ (str.slice: 1)
+chars = \fn, str -> str.split: '' | map: fn
+condense = \str -> str.replace: /\ /g, ''
+lines = \fn, str -> str.split: '\n' | map: fn
+repeat = \times, str -> (clone Array: (times + 1)) | (\arr -> arr.join: str)
+words = \fn, str -> str.split: ' ' | map: fn
+
+
+dependencies = ({
+  chars = ['map']
+  words = ['map']
+  lines = ['map']
+  even = ['mod']
+  odd = ['even', 'mod']
+  concat = ['foldl']
+  count = ['filter']
+  average = ['foldl']
+  compact = ['filter']
+  intersect = ['filter']
+  max = ['foldl']
+  min = ['foldl']
+  nothing = ['filter']
+  randomize = ['sort']
+  unique = ['filter']
+  assert-deep = ['assert', 'filter']
+})
