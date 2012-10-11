@@ -17,7 +17,7 @@ assert-deep = \a, b -> {
   assert: len, b.length
 }
 
-# do +1's
+-- do +1's
 filter = \fn, list -> list.filter: fn
 map = \fn, list -> list.map: fn
 foldl = \fn, list -> list.reduce: fn
@@ -74,12 +74,12 @@ curryr = \fn -> {
 show = \i -> i.to-string!
 
 macro mod \a, b -> {
-  ({
+  #{
     type = 'BinaryExpression'
     operator = '%'
     left = a
     right = b
-  })
+  }
 }
 
 square = \x -> x * x

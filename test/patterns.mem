@@ -35,7 +35,7 @@ sort-even-odd = \[x, ...xs] ->
 
 [1,2,3,4,5,6] | sort-even-odd | assert-deep: [2, 4, 6, 5, 3, 1]
 
-# implementations of our util functions in memory
+-- implementations of our util functions in memory
 init = \[...a, b] -> a
 tail = \[a, ...b] -> b
 head = \[a, ...b] -> a

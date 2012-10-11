@@ -20,7 +20,7 @@ o = \pattern, action -> {
     }
 }
 
-bnf = ({
+bnf = #{
   Root = [
     ['', 'return $$ = new yy.Nodes;']
     ['Program', 'return $$ = $1']
@@ -238,9 +238,9 @@ bnf = ({
   ]
 
   Maps = [
-    (o: '( { } )', (\-> clone Map!))
-    (o: '( { OptTerminator MapItems OptTerminator } )',
-      (\-> clone Map: ({ obj = $4 })))
+    (o: '# { }', (\-> clone Map!))
+    (o: '# { OptTerminator MapItems OptTerminator }',
+      (\-> clone Map: #{ obj = $4 }))
   ]
 
   Access = [
@@ -356,7 +356,7 @@ bnf = ({
     (o: 'Value * OptTerminator Value', (\-> clone Operation: $1, '*', $4))
     (o: 'Value / OptTerminator Value', (\-> clone Operation: $1, '/', $4))
   ]
-})
+}
 
 
 tokens = [
@@ -381,15 +381,15 @@ operators = [
 ]
 
 Parser = jison.Parser
-grammar = ({
+grammar = #{
   tokens = tokens
   bnf = bnf
   operators = operators
   startSymbol = 'Root'
-})
+}
 
 parser = clone Parser: grammar
-lexer = ({
+lexer = #{
   lex = (\-> {
     ref = this.tokens !! this.pos || ['']
     this.pos = this.pos + 1
@@ -401,7 +401,7 @@ lexer = ({
     this.tokens = tokens
     this.pos = 0
   })
-})
+}
 parser.lexer = lexer
 
 export parser

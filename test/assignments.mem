@@ -3,13 +3,13 @@ b = 2
 assert: a, 1
 assert: b, 2
 (\-> {
-  # local a, no shadowing
+  -- local a, no shadowing
   a = 3
   assert: a, 3
 }): none
 
 (\-> {
-  # although we can reference a
+  -- although we can reference a
   b = a - 1
   assert: b, 0
 }): none
@@ -26,12 +26,12 @@ assert: e, f
 assert: f, g
 assert: g, 1
 
-# assigning
+-- assigning
 a1 = 1
 assert: a1, 1
 a2 = [1]
 assert-deep: a2, [1]
-a3 = ({ a = 1 })
+a3 = #{ a = 1 }
 assert: a3.a, 1
 a4 = 2 * 4
 assert: a4, 8

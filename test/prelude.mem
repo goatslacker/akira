@@ -1,21 +1,21 @@
-# NOTE: this file isn't sandboxed, all tests run at the same time.
+-- NOTE: this file isn't sandboxed, all tests run at the same time.
 
 is-true = \n -> assert: n, true
 
-banana = ({ })
+banana = #{}
 
-({ words = 15 })
+#{ words = 15 }
 banana.show
 count-alias = count
-({ concat-key = concat })
+#{ concat-key = concat }
 div = 2
 plus-nine = \randomize -> 9 + randomize
 mul = \-> 0
-({ take-while })
+#{ take-while }
 id: unique
 closed-function = \x -> {
   gte = 2
-  # will include gte
+  -- will include gte
   nothing: (\x -> gte > x), [1, 2, 3]
 }
 closed-function2 = \x -> {

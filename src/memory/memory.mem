@@ -2,40 +2,40 @@ vm = require: 'vm'
 util = require: 'util'
 escodegen = require: 'escodegen'
 
-({ get-files }) = import './fisy.mem'
-({ mark }) = import './bench.mem'
+#{ get-files } = import './fisy.mem'
+#{ mark } = import './bench.mem'
 
 lexer = require: '../lang/lexer'
 parser = require: '../lang/grammar'
 parser.yy = (require: '../lang/nodes')
 transform = \name, parsed -> {
-  context = ({})
+  context = #{}
   body = parsed.compile: context, name
   parsed.flag-core-methods: body
-  ({
+  #{
     type = 'Program'
     body = [
-      ({
+      #{
         type = 'ExpressionStatement'
-        expression = ({
+        expression = #{
           type = 'CallExpression'
-          callee = ({
+          callee = #{
             type = 'FunctionExpression'
             id = none
-            params = [({ type = 'Identifier', name = '$$export' })]
-            body = ({
+            params = [#{ type = 'Identifier', name = '$$export' }]
+            body = #{
               type = 'BlockStatement'
               body = (parsed.add-vars: context, false) ++
                 (parsed.add-core!) ++
                 (parsed.add-deps!) ++
                 body
-            })
-          })
+            }
+          }
           arguments = []
-        })
-      })
+        }
+      }
     ]
-  })
+  }
 }
 
 
@@ -46,19 +46,19 @@ gen-ast = \name, code -> parse: name, code | transform: name
 transpile = \name, code -> code | gen-ast: name | escodegen.generate
 
 benchmark = \name, code -> {
-  ({ a = time, tokens = result }) = mark: (\-> lexer: code)
-  ({ b = time, tree = result }) = mark: (\-> parser.parse: tokens)
-  ({ c = time, parseapi = result }) = mark: (\-> transform: name, tree)
-  ({ d = time }) = mark: (\-> escodegen.generate: parseapi)
+  #{ a = time, tokens = result } = mark: (\-> lexer: code)
+  #{ b = time, tree = result } = mark: (\-> parser.parse: tokens)
+  #{ c = time, parseapi = result } = mark: (\-> transform: name, tree)
+  #{ d = time } = mark: (\-> escodegen.generate: parseapi)
 
-  ({
+  #{
     name = name
     Lexer = a + 'ms'
     Parser = b + 'ms'
     Transform = c + 'ms'
     Compile = d + 'ms'
     Total = (a + b + c + d) + 'ms'
-  })
+  }
 }
 
 memory = \cb, filepath, fn = transpile -> {
@@ -77,16 +77,16 @@ memory = \cb, filepath, fn = transpile -> {
 
 run = \name, code -> {
   try {
-    result = vm.run-in-new-context: code, ({ console = console })
+    result = vm.run-in-new-context: code, #{ console = console }
   } catch {
     util.error: name
     util.error: err.stack
-# hide behind a log level
-#    util.debug: code
+-- hide behind a log level
+--    util.debug: code
   }
   result
 }
 
-# escapes = \code -> code.replace: /\\\\/, '\'
+-- escapes = \code -> code.replace: /\\\\/, '\'
 
-export ({ lex, parse, gen-ast, transpile, run, memory, benchmark })
+export #{ lex, parse, gen-ast, transpile, run, memory, benchmark }

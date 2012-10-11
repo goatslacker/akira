@@ -1,4 +1,4 @@
-export ({
+export #{
   chars = ['map']
   words = ['map']
   lines = ['map']
@@ -15,4 +15,4 @@ export ({
   randomize = ['sort']
   unique = ['filter']
   assert-deep = ['assert', 'filter']
-})
+}

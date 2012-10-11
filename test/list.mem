@@ -5,14 +5,14 @@ array = [
 ]
 
 
-# IIFE
+-- IIFE
 (\-> {
-# Testing foldr, expressions in arguments, anonymous functions
+-- Testing foldr, expressions in arguments, anonymous functions
   lastEl = \a -> foldl: (\a, b -> flip: consts, a, b), a
   lastEl: array | (\a -> assert: a, 3 )
 }): none
 
-# Partial application
+-- Partial application
 (\-> {
   mapper = partial: map, square
   assertArray = \a -> assert-deep: a, [1, 4, 9]

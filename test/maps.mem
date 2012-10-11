@@ -1,18 +1,18 @@
-# test function
+-- test function
 map-eq = \a, b -> filter: (\x, i -> x isnt b !! i), a | (.length) | assert: 0
 
-# setting maps
-obj = ({ hello = 1, world = 2 })
-map-eq: obj, ({ hello = 1, world = 2 })
+-- setting maps
+obj = #{ hello = 1, world = 2 }
+map-eq: obj, #{ hello = 1, world = 2 }
 
-# retrieving properties
+-- retrieving properties
 assert: (get: obj, 'hello'), 1
 
-# calling functions
-tup = ({
+-- calling functions
+tup = #{
   my-function = id
   my-number = 3
-})
+}
 
 assert: (call: tup, 'myFunction', 2), 2
 assert: tup.my-number, 3

@@ -5,7 +5,7 @@ mark = \fn -> {
   result = fn!
   end = Date.now!
   time = end - start
-  ({ time, result })
+  #{ time, result }
 }
 
-export ({ mark })
+export #{ mark }

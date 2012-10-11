@@ -2,7 +2,7 @@ path = require: 'path'
 
 r = \m -> m.to-lower-case! | path.join: __dirname | require
 
-export ({
+export #{
   Access = (r: 'access')
   Arguments = (r: 'arguments')
   Assignment = (r: 'assignment')
@@ -27,4 +27,4 @@ export ({
   Pattern = (r: 'pattern')
   Pipeline = (r: 'pipeline')
   Recur = (r: 'recur')
-})
+}

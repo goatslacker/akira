@@ -1,6 +1,6 @@
 LazyObject = import 'lazy-object.js'
 
-rx = clone LazyObject: ({
+rx = clone LazyObject: #{
   IDENTIFIER = /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
   NUM = /^((\d+\.)?\d+)+/
   STR = /^'(.*?)'/
@@ -8,11 +8,11 @@ rx = clone LazyObject: ({
   OPERATION = /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
   TERMINATOR = /^\n/
   REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
-  COMMENTS = /^(#.*)/
+  COMMENTS = /^(--.*)/
   WHITESPACE = /^ /
-})
+}
 
-identifiers = clone LazyObject: ({
+identifiers = clone LazyObject: #{
   KEYWORDS = ['if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none',
     'raise', 'object', 'clones', 'clone', 'prototype', 'recur', 'macro']
   TYPE = ['Function', 'Number', 'String', 'Array', 'Object', 'Null']
@@ -22,9 +22,9 @@ identifiers = clone LazyObject: ({
   NOT = ['not']
   LOGIC = ['and', 'or', '&&', '||']
   BOOL = ['true', 'false']
-})
+}
 
-ignore = ({ 'COMMENTS', 'WHITESPACE' })
+ignore = #{ 'COMMENTS', 'WHITESPACE' }
 
 get-type = \a -> rx |
   (.filter: (\x -> rx !! x | (.test: a))) |
@@ -92,11 +92,11 @@ return-tokens = \code, n, tokens = [] ->
 
     recur
       (code.substr: index, code.length),
-      ({ line = (incr-line: token.1, n.line) }),
+      #{ line = (incr-line: token.1, n.line) },
       tokens
   }
 
 filter-whitespace = \token -> not (ignore !! token.1)
 
-export tokenize = \code -> return-tokens: code, ({ index = 0, line = 0 }) |
+export tokenize = \code -> return-tokens: code, #{ index = 0, line = 0 } |
   (.filter: filter-whitespace)

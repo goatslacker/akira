@@ -1,20 +1,20 @@
-# I have to make a Animal, Cat example...
-object Animal ({
+-- I have to make a Animal, Cat example...
+object Animal #{
   speak = (\-> 'my name is ' ++ this.name)
   walk = (\direction -> true)
   sleep = (\-> 'ZzZzZ...')
   setName = (\name -> this.name = name)
   'alive' = true
   eyes = 2
-})
+}
 
-object Cat clones Animal ({
+object Cat clones Animal #{
   speak = (\-> 'meow i am ' ++ this.name)
   sleep = (\-> 'Purr ' ++ (prototype.sleep!))
   legs = 4
-})
+}
 
-cat = clone Cat: ({ name = 'Luna' })
+cat = clone Cat: #{ name = 'Luna' }
 
 cat.speak! | assert: 'meow i am Luna'
 cat.alive | assert: true

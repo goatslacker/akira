@@ -1,5 +1,5 @@
 nodewatch = require: 'nodewatch'
-({ get-file-contents }) = import './fisy.mem'
+#{ get-file-contents } = import './fisy.mem'
 
 watch = \filename -> nodewatch.add: filename |
   (\f -> f.on-change: (\-> get-file-contents: filename |

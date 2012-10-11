@@ -1,7 +1,7 @@
-# Runtime tests for Memory
+-- Runtime tests for Memory
 start = Date.now!
 
-# import test
+-- import test
 import 'test/assignments.mem'
 import 'test/exceptions.mem'
 import 'test/if.mem'
@@ -23,10 +23,10 @@ import 'test/recur.mem'
 import 'test/prelude.mem'
 fact = import 'test/exporting.mem'
 
-# export fact test
+-- export fact test
 assert: 24, (fact: 4)
 
-# Done.
+-- Done.
 end = Date.now!
 
 print: 'Done!'
