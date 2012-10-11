@@ -7,7 +7,7 @@ escodegen = require: 'escodegen'
 
 lexer = require: '../lexer'
 parser = require: '../grammar'
-parser.yy <+ (require: '../nodes')
+parser.yy = (require: '../nodes')
 transform = \name, parsed -> {
   context = ({})
   body = parsed.compile: context, name
