@@ -25,8 +25,8 @@ Inspired by Functional Programming.
 
     -- Objects
     cat = #{
-      name =: 'Luna'
-      age =: 2
+      name = 'Luna'
+      age = 2
     }
 
     -- Lists
@@ -51,7 +51,7 @@ Inspired by Functional Programming.
     1 | sum: 2 | (== 3)   -- sum(2, 1) == 3
 
     -- function expressions with a body
-    fib = \n {
+    fib = \n -> {
       if n < 2
         then n
         else (fib: n - 1) + (fib: n - 2)
@@ -77,7 +77,9 @@ Inspired by Functional Programming.
     -- splits up the list into x = head(list) and rest = tail(list)
     sort-even-odd = \[x, rest] ->
       rest.length is 0 ? [x]
-      otherwise ? if (odd: x) then (sort-even-odd: rest) ++ [x] else x +: (sort-even-odd: rest)
+      otherwise ? if (odd: x)
+                    then (sort-even-odd: rest) ++ [x]
+                    else x +: (sort-even-odd: rest)
 
     -- More guards in action
     starts-with = \noun, prefix -> prefix == noun.1 + noun.2
