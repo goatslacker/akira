@@ -2,13 +2,13 @@ a = 1
 b = 2
 assert: a, 1
 assert: b, 2
-(\-> {
+(fn [] {
   -- local a, no shadowing
   a = 3
   assert: a, 3
 }): none
 
-(\-> {
+(fn [] {
   -- although we can reference a
   b = a - 1
   assert: b, 0
@@ -35,7 +35,7 @@ a3 = #{ a = 1 }
 assert: a3.a, 1
 a4 = 2 * 4
 assert: a4, 8
-a5 = (\x -> x)
+a5 = (fn [x] x)
 a5: 4 | assert: 4
 a6 = (if true then 1 else 2)
 assert: a6, 1
@@ -44,7 +44,7 @@ assert: a7, 12
 a8 = 6 | a5
 assert: a8, 6
 
-h = \x -> x
+h = fn [x] x
 assert: (h: 5), 5
 
 i = h: 4

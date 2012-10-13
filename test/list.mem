@@ -6,16 +6,16 @@ array = [
 
 
 -- IIFE
-(\-> {
+(fn [] {
 -- Testing foldr, expressions in arguments, anonymous functions
-  lastEl = \a -> foldl: (\a, b -> flip: consts, a, b), a
-  lastEl: array | (\a -> assert: a, 3 )
+  lastEl = fn [a] foldl: (fn [a b] flip: consts, a, b), a
+  lastEl: array | (fn [a] assert: a, 3 )
 }): none
 
 -- Partial application
-(\-> {
+(fn [] {
   mapper = partial: map, square
-  assertArray = \a -> assert-deep: a, [1, 4, 9]
+  assertArray = fn [a] assert-deep: a, [1, 4, 9]
 
   array | map: square | assertArray
   array | mapper | assertArray

@@ -2,7 +2,7 @@ continue = 1
 assert: continue, 1
 for = 2
 assert: for, 2
-f = \while -> while
+f = fn [while] while
 f: 3 | assert: 3
 value-of = 1
 assert: value-of, 1

@@ -1,4 +1,4 @@
-numbers = \n ->
+numbers = fn [n]
   'one' ? 1
   'two' ? 2
   'three' ? 3
@@ -7,7 +7,7 @@ numbers = \n ->
 assert: 4, (numbers: 'four')
 assert: 1, (numbers: 'one')
 
-gtTen = \n ->
+gtTen = fn [n]
   n < 10 ? true
   n > 10 ? false
   else ? none
@@ -15,9 +15,9 @@ gtTen = \n ->
 assert: false, (gtTen: 11)
 assert: true, (gtTen: 2)
 
-starts-with = \noun, prefix -> prefix == noun.1 + noun.2
+starts-with = fn [noun, prefix] prefix == noun.1 + noun.2
 
-spanish-gender-of-noun = \noun ->
+spanish-gender-of-noun = fn [noun]
   (starts-with: noun, 'el') ? 'male'
   (starts-with: noun, 'la') ? 'female'
   else ? none
@@ -25,7 +25,7 @@ spanish-gender-of-noun = \noun ->
 assert: 'female', (spanish-gender-of-noun: 'la casa')
 assert: 'male', (spanish-gender-of-noun: 'el carro')
 
-sort-even-odd = \[x, ...xs] ->
+sort-even-odd = fn [[x, ...xs]]
   not x ? []
   else ? {
     if (odd: x)
@@ -36,11 +36,11 @@ sort-even-odd = \[x, ...xs] ->
 [1,2,3,4,5,6] | sort-even-odd | assert-deep: [2, 4, 6, 5, 3, 1]
 
 -- implementations of our util functions in memory
-init = \[...a, b] -> a
-tail = \[a, ...b] -> b
-head = \[a, ...b] -> a
-last = \[...a, b] -> b
-get-middle = \[a, ...b, c] -> b
+init = fn [[...a, b]] a
+tail = fn [[a, ...b]] b
+head = fn [[a, ...b]] a
+last = fn [[...a, b]] b
+get-middle = fn [[a, ...b, c]] b
 
 
 ls = [1, 2, 3, 4, 5]
@@ -51,7 +51,7 @@ ls | tail | assert-deep: [2, 3, 4, 5]
 ls | head | assert: 1
 ls | last | assert: 5
 
-add-two = \n = 0 ->
+add-two = fn [(n = 0)]
   n is 0 ? 0
   else ? n + 2
 

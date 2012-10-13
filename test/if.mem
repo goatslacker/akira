@@ -1,4 +1,4 @@
-foo = \x -> {
+foo = fn [x] {
   if x
     then {
       if not x then true else {false}

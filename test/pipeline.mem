@@ -1,4 +1,4 @@
-add-memory = \r, v -> r ++ ' is ' ++ v
+add-memory = fn [r v] r ++ ' is ' ++ v
 
 id: 'awesome' | add-memory: 'memory' | assert: 'memory is awesome'
 

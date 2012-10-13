@@ -2,15 +2,15 @@ jison = require: 'jison'
 
 unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
 
-getMatch = \action -> {
+getMatch = fn [action] {
   x = unwrap.exec: action
   if x then x.2 else '({{action}}())'
 }
 
-addYY = \str -> str.replace: /new /g, 'new yy.'
-addLine = \str -> 'yy.L(yylineno, ' ++ (str.replace: ';', '') ++ ');'
+addYY = fn [str] str.replace: /new /g, 'new yy.'
+addLine = fn [str] 'yy.L(yylineno, ' ++ (str.replace: ';', '') ++ ');'
 
-o = \pattern, action -> {
+o = fn [pattern action] {
   pattern-string = pattern.replace: /\s{2,}/g, ' '
   if not action
     then [pattern-string, '$$ = $1']
@@ -27,14 +27,14 @@ bnf = #{
   ]
 
   Program = [
-    (o: 'Terminator Expressions', (\-> $2))
+    (o: 'Terminator Expressions', (fn [] $2))
     (o: 'Expressions')
   ]
 
   Expressions = [
-    (o: 'Body', (\-> yy.Nodes.wrap: $1))
-    (o: 'Expressions TERMINATOR Body', (\-> $1.push: $3))
-    (o: 'Expressions ; Body', (\-> $1.push: $3))
+    (o: 'Body', (fn [] yy.Nodes.wrap: $1))
+    (o: 'Expressions TERMINATOR Body', (fn [] $1.push: $3))
+    (o: 'Expressions ; Body', (fn [] $1.push: $3))
     (o: 'Expressions TERMINATOR')
   ]
 
@@ -49,20 +49,20 @@ bnf = #{
   ]
 
   Identifier = [
-    (o: 'IDENTIFIER', (\-> clone Identifier: $1))
+    (o: 'IDENTIFIER', (fn [] clone Identifier: $1))
   ]
 
   Prototype = [
-    (o: 'PROTOTYPE', (\-> clone Identifier: $1))
+    (o: 'PROTOTYPE', (fn [] clone Identifier: $1))
   ]
 
   Rest = [
-    (o: '. . . IDENTIFIER', (\-> clone Identifier: $4, true))
+    (o: '. . . IDENTIFIER', (fn [] clone Identifier: $4, true))
   ]
 
   Body = [
     (o: 'Expression')
-    (o: '{ OptTerminator Expressions }', (\-> $3))
+    (o: '{ OptTerminator Expressions }', (fn [] $3))
   ]
 
   Expression = [
@@ -86,7 +86,7 @@ bnf = #{
     (o: 'Comprehensions')
     (o: 'Prototype')
     (o: 'Macro')
-    (o: 'IMPORT STR', (\-> clone Import: $2))
+    (o: 'IMPORT STR', (fn [] clone Import: $2))
   ]
 
   Value = [
@@ -97,7 +97,7 @@ bnf = #{
     (o: 'Access')
     (o: 'Type')
     (o: 'SpecialFunctions')
-    (o: '( Assignable )', (\-> $2))
+    (o: '( Assignable )', (fn [] $2))
   ]
 
   Values = [
@@ -106,82 +106,82 @@ bnf = #{
   ]
 
   Type = [
-    (o: 'TYPE', (\-> clone Identifier: $1))
+    (o: 'TYPE', (fn [] clone Identifier: $1))
   ]
 
   Literal = [
     (o: 'Identifier')
     (o: 'AlphaNumeric')
-    (o: 'NONE', (\-> clone Literal: none))
-    (o: 'BOOL', (\-> clone Literal: ($1 == 'true')))
-    (o: 'REGEXP', (\-> clone Literal: $1))
+    (o: 'NONE', (fn [] clone Literal: none))
+    (o: 'BOOL', (fn [] clone Literal: ($1 == 'true')))
+    (o: 'REGEXP', (fn [] clone Literal: $1))
   ]
 
   AlphaNumeric = [
-    (o: 'NUM', (\-> clone Literal: (Number: $1)))
+    (o: 'NUM', (fn [] clone Literal: (Number: $1)))
     (o: 'Strings')
   ]
 
   Strings = [
-    (o: 'STR', (\-> clone Literal: (String: $1)))
+    (o: 'STR', (fn [] clone Literal: (String: $1)))
   ]
 
   Assignment = [
-    (o: 'Identifier = Assignable', (\-> clone Assignment: $1, $3))
-    (o: 'Access = Assignable', (\-> clone Assignment: $1, $3))
-    (o: 'Lists = Assignable', (\-> clone Assignment: $1, $3))
-    (o: 'Maps = Assignable', (\-> clone Assignment: $1, $3))
+    (o: 'Identifier = Assignable', (fn [] clone Assignment: $1, $3))
+    (o: 'Access = Assignable', (fn [] clone Assignment: $1, $3))
+    (o: 'Lists = Assignable', (fn [] clone Assignment: $1, $3))
+    (o: 'Maps = Assignable', (fn [] clone Assignment: $1, $3))
   ]
 
   Objects = [
-    (o: 'OBJECT Identifier OptClones Maps', (\-> clone Objects: $2, $3, $4))
+    (o: 'OBJECT Identifier OptClones Maps', (fn [] clone Objects: $2, $3, $4))
   ]
 
   OptClones = [
-    (o: '', (\-> none))
-    (o: 'CLONES Identifier', (\-> $2))
+    (o: '', (fn [] none))
+    (o: 'CLONES Identifier', (fn [] $2))
   ]
 
   Exporting = [
-    (o: 'EXPORT Assignable', (\-> clone Export: $2))
+    (o: 'EXPORT Assignable', (fn [] clone Export: $2))
   ]
 
   Cloning = [
-    (o: 'CLONE Invocation', (\-> clone Construction: $2))
+    (o: 'CLONE Invocation', (fn [] clone Construction: $2))
   ]
 
   Pipeline = [
-    (o: 'Value | OptTerminator Values', (\-> clone Pipeline: $1, $4))
-    (o: 'Invocation | OptTerminator Values', (\-> clone Pipeline: $1, $4))
-    (o: 'Pipeline | OptTerminator Values', (\-> clone Pipeline: $1, $4))
+    (o: 'Value | OptTerminator Values', (fn [] clone Pipeline: $1, $4))
+    (o: 'Invocation | OptTerminator Values', (fn [] clone Pipeline: $1, $4))
+    (o: 'Pipeline | OptTerminator Values', (fn [] clone Pipeline: $1, $4))
   ]
 
   Invocation = [
-    (o: 'Value : Arguments', (\-> clone Call: $1, $3))
-    (o: 'Value !', (\-> clone Call: $1))
+    (o: 'Value : Arguments', (fn [] clone Call: $1, $3))
+    (o: 'Value !', (fn [] clone Call: $1))
   ]
 
   Declaration = [
-    (o: '\ Parameters LAMBDA Body', (\-> clone Declaration: $3, $2, $4))
-    (o: '\ LAMBDA Body', (\-> clone Declaration: $2, none, $3))
+    (o: 'FN [ Parameters ] Body', (fn [] clone Declaration: none, $3, $5))
+    (o: 'FN [ ] Body', (fn [] clone Declaration: none, none, $4))
   ]
 
   Pattern = [
-    (o: 'Value ? Body TERMINATOR', (\-> [$1, $3] ))
+    (o: 'Value ? Body TERMINATOR', (fn [] [$1, $3] ))
   ]
 
   Patterns = [
-    (o: 'Pattern', (\-> clone Arguments: $1))
-    (o: 'Patterns Pattern', (\-> clone Arguments: $1, $2))
+    (o: 'Pattern', (fn [] clone Arguments: $1))
+    (o: 'Patterns Pattern', (fn [] clone Arguments: $1, $2))
   ]
 
   Default = [
-    (o: 'ELSE ? Body TERMINATOR', (\-> clone Arguments: [$1, $3]))
+    (o: 'ELSE ? Body TERMINATOR', (fn [] clone Arguments: [$1, $3]))
   ]
 
   PatternMatching = [
-    (o: '\ Parameters LAMBDA TERMINATOR Patterns Default',
-      (\-> clone Declaration: $3, $2, (clone Pattern: $2, $5, $6)))
+    (o: 'FN [ Parameters ] TERMINATOR Patterns Default',
+      (fn [] clone Declaration: none, $3, (clone Pattern: $3, $6, $7)))
   ]
 
   Comma = [
@@ -190,9 +190,9 @@ bnf = #{
 
   Comprehensions = [
     (o: 'NUM . . Numbers ComprehensionBy ComprehensionFunction',
-      (\-> clone Comprehension: $1, $4, $5, $6))
+      (fn [] clone Comprehension: $1, $4, $5, $6))
     (o: 'Identifier . . Numbers ComprehensionBy ComprehensionFunction',
-      (\-> clone Comprehension: $1, $4, $5, $6))
+      (fn [] clone Comprehension: $1, $4, $5, $6))
   ]
 
   Numbers = [
@@ -201,24 +201,24 @@ bnf = #{
   ]
 
   ComprehensionFunction = [
-    (o: '', (\-> none))
-    (o: ', Declaration', (\-> $2))
+    (o: '', (fn [] none))
+    (o: ', Declaration', (fn [] $2))
   ]
 
   ComprehensionBy = [
-    (o: '', (\-> clone Literal: 1))
+    (o: '', (fn [] clone Literal: 1))
     (o: 'Numbers')
   ]
 
   Lists = [
-    (o: '[ ]', (\-> clone List!))
-    (o: '[ OptTerminator ListArgs OptTerminator ]', (\-> clone List: $3))
+    (o: '[ ]', (fn [] clone List!))
+    (o: '[ OptTerminator ListArgs OptTerminator ]', (fn [] clone List: $3))
   ]
 
   ListArgs = [
-    (o: 'Arg', (\-> clone Arguments: $1))
-    (o: 'ListArgs Comma Arg', (\-> clone Arguments: $1, $3))
-    (o: 'ListArgs Terminator Arg', (\-> clone Arguments: $1, $3))
+    (o: 'Arg', (fn [] clone Arguments: $1))
+    (o: 'ListArgs Comma Arg', (fn [] clone Arguments: $1, $3))
+    (o: 'ListArgs Terminator Arg', (fn [] clone Arguments: $1, $3))
   ]
 
   Key = [
@@ -227,32 +227,32 @@ bnf = #{
   ]
 
   KeyValue = [
-    (o: 'Key', (\-> clone Assignment: $1, $1))
-    (o: 'Key = Value', (\-> clone Assignment: $1, $3))
+    (o: 'Key', (fn [] clone Assignment: $1, $1))
+    (o: 'Key = Value', (fn [] clone Assignment: $1, $3))
   ]
 
   MapItems = [
-    (o: 'KeyValue', (\-> clone Arguments: $1))
-    (o: 'MapItems Comma KeyValue', (\-> clone Arguments: $1, $3))
-    (o: 'MapItems Terminator KeyValue', (\-> clone Arguments: $1, $3))
+    (o: 'KeyValue', (fn [] clone Arguments: $1))
+    (o: 'MapItems Comma KeyValue', (fn [] clone Arguments: $1, $3))
+    (o: 'MapItems Terminator KeyValue', (fn [] clone Arguments: $1, $3))
   ]
 
   Maps = [
-    (o: '# { }', (\-> clone Map!))
+    (o: '# { }', (fn [] clone Map!))
     (o: '# { OptTerminator MapItems OptTerminator }',
-      (\-> clone Map: #{ obj = $4 }))
+      (fn [] clone Map: #{ obj = $4 }))
   ]
 
   Access = [
-    (o: 'Identifier Accessor', (\-> clone Access: $1, $2))
-    (o: 'Prototype Accessor', (\-> clone Access: $1, $2))
-    (o: 'Type Accessor', (\-> clone Access: $1, $2))
-    (o: 'Access Accessor', (\-> clone Access: $1, $2))
+    (o: 'Identifier Accessor', (fn [] clone Access: $1, $2))
+    (o: 'Prototype Accessor', (fn [] clone Access: $1, $2))
+    (o: 'Type Accessor', (fn [] clone Access: $1, $2))
+    (o: 'Access Accessor', (fn [] clone Access: $1, $2))
   ]
 
   Accessor = [
-    (o: '. Identifier', (\-> $2))
-    (o: '. AlphaNumeric', (\-> $2))
+    (o: '. Identifier', (fn [] $2))
+    (o: '. AlphaNumeric', (fn [] $2))
   ]
 
   Arg = [
@@ -261,100 +261,106 @@ bnf = #{
   ]
 
   Arguments = [
-    (o: '()', (\-> none))
-    (o: 'Arg', (\-> clone Arguments: $1))
-    (o: 'Arguments Comma Arg', (\-> clone Arguments: $1, $3))
+    (o: '()', (fn [] none))
+    (o: 'Arg', (fn [] clone Arguments: $1))
+    (o: 'Arguments Comma Arg', (fn [] clone Arguments: $1, $3))
   ]
 
   Param = [
     (o: 'Identifier')
-    (o: 'Identifier = Value', (\-> clone Assignment: $1, $3))
+    (o: '( Identifier = Value )', (fn [] clone Assignment: $2, $4))
     (o: 'Rest')
     (o: 'Lists')
   ]
 
+  OptComma = [
+    (o: '')
+    (o: 'TERMINATOR')
+    (o: ',')
+  ]
+
   Parameters = [
-    (o: 'Param', (\-> clone Arguments: $1))
-    (o: 'Parameters , Param', (\-> clone Arguments: $1, $3))
+    (o: 'Param', (fn [] clone Arguments: $1))
+    (o: 'Parameters OptComma Param', (fn [] clone Arguments: $1, $3))
   ]
 
   Exceptions = [
-    (o: 'TRY Body OptTerminator CATCH Body', (\-> clone Exception: $2, $5))
-    (o: 'RAISE Value ErrorType', (\-> clone Exception: $1, $2, $3))
+    (o: 'TRY Body OptTerminator CATCH Body', (fn [] clone Exception: $2, $5))
+    (o: 'RAISE Value ErrorType', (fn [] clone Exception: $1, $2, $3))
   ]
 
   ErrorType = [
-    (o: '', (\-> none))
+    (o: '', (fn [] none))
     (o: 'Identifier')
   ]
 
   Recur = [
-    (o: 'RECUR OptTerminator Arguments', (\-> clone Recur: $3))
-    (o: '( RECUR OptTerminator Arguments )', (\-> clone Recur: $4))
+    (o: 'RECUR OptTerminator Arguments', (fn [] clone Recur: $3))
+    (o: '( RECUR OptTerminator Arguments )', (fn [] clone Recur: $4))
   ]
 
   If = [
     (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body',
-      (\-> clone If: $2, $5, $8))
+      (fn [] clone If: $2, $5, $8))
   ]
 
   DefMacro = [
-    (o: 'MACRO Identifier Declaration', (\-> clone Macro: true, $2, $3))
+    (o: 'MACRO Identifier Declaration', (fn [] clone Macro: true, $2, $3))
   ]
 
   Macro = [
-    (o: 'Identifier Arguments', (\-> clone Macro: false, $1, $2))
+    (o: 'Identifier Arguments', (fn [] clone Macro: false, $1, $2))
   ]
 
   MathOperators = [
-    (o: '+', (\-> clone Identifier: 'sum'))
-    (o: '-', (\-> clone Identifier: 'sub'))
-    (o: '*', (\-> clone Identifier: 'prod'))
-    (o: '/', (\-> clone Identifier: 'div'))
+    (o: '+', (fn [] clone Identifier: 'sum'))
+    (o: '-', (fn [] clone Identifier: 'sub'))
+    (o: '*', (fn [] clone Identifier: 'prod'))
+    (o: '/', (fn [] clone Identifier: 'div'))
   ]
 
   SugaryFunctions = [
-    (o: 'MathOperators', (\-> $1))
+    (o: 'MathOperators', (fn [] $1))
     (o: 'Accessor',
-      (\-> clone Declaration: '->', (clone Arguments: 'it'),
+      (fn [] clone Declaration: '->', (clone Arguments: 'it'),
         (clone Access: 'it', $1)))
     (o: 'Accessor : Value',
-      (\-> clone Declaration: '->', (clone Arguments: 'it'),
+      (fn [] clone Declaration: '->', (clone Arguments: 'it'),
         (clone Call: (clone Access: 'it', $1), $3)))
     (o: 'COMPARE Value',
-      (\-> clone Declaration: '->', (clone Arguments: 'it'),
+      (fn [] clone Declaration: '->', (clone Arguments: 'it'),
         (clone Compare: 'it', $1, $2)))
     (o: 'LEFT_OPERATORS Value',
-      (\-> clone Declaration: '->', (clone Arguments: 'it'),
+      (fn [] clone Declaration: '->', (clone Arguments: 'it'),
         (clone Operation: 'it', $1, $2)))
     (o: '+ Value',
-      (\-> clone Declaration: '->', (clone Arguments: 'it'),
+      (fn [] clone Declaration: '->', (clone Arguments: 'it'),
         (clone Operation: 'it', $1, $2)))
     (o: '- Value',
-      (\-> clone Declaration: '->', (clone Arguments: 'it'),
+      (fn [] clone Declaration: '->', (clone Arguments: 'it'),
         (clone Operation: 'it', $1, $2)))
     (o: '* Value',
-      (\-> clone Declaration: '->', (clone Arguments: 'it'),
+      (fn [] clone Declaration: '->', (clone Arguments: 'it'),
         (clone Operation: 'it', $1, $2)))
     (o: '/ Value',
-      (\-> clone Declaration: '->', (clone Arguments: 'it'),
+      (fn [] clone Declaration: '->', (clone Arguments: 'it'),
         (clone Operation: 'it', $1, $2)))
   ]
 
   SpecialFunctions = [
-    (o: '( SugaryFunctions )', (\-> $2))
+    (o: '( SugaryFunctions )', (fn [] $2))
   ]
 
   Operation = [
-    (o: 'Value COMPARE OptTerminator Value', (\-> clone Compare: $1, $2, $4))
-    (o: 'Value LOGIC OptTerminator Value', (\-> clone Compare: $1, $2, $4))
-    (o: 'Value LEFT_OPERATORS OptTerminator Value', (\-> clone Operation: $1, $2, $4))
-    (o: 'Value RIGHT_OPERATORS OptTerminator Value', (\-> clone Operation: $1, $2, $4))
-    (o: 'NOT Value', (\-> clone Compare: $2, $1))
-    (o: 'Value + OptTerminator Value', (\-> clone Operation: $1, '+', $4))
-    (o: 'Value - OptTerminator Value', (\-> clone Operation: $1, '-', $4))
-    (o: 'Value * OptTerminator Value', (\-> clone Operation: $1, '*', $4))
-    (o: 'Value / OptTerminator Value', (\-> clone Operation: $1, '/', $4))
+    (o: 'Value COMPARE OptTerminator Value', (fn [] clone Compare: $1, $2, $4))
+    (o: 'Value LOGIC OptTerminator Value', (fn [] clone Compare: $1, $2, $4))
+    (o: 'Value LEFT_OPERATORS OptTerminator Value', (fn [] clone Operation: $1, $2, $4))
+    (o: 'Value RIGHT_OPERATORS OptTerminator Value', (fn [] clone Operation: $1, $2, $4))
+    (o: 'NOT Value', (fn [] clone Compare: $2, $1))
+    (o: 'Value + OptTerminator Value', (fn [] clone Operation: $1, '+', $4))
+    (o: 'Value - OptTerminator Value', (fn [] clone Operation: $1, '-', $4))
+    (o: 'Value * OptTerminator Value', (fn [] clone Operation: $1, '*', $4))
+    (o: 'Value / OptTerminator Value', (fn [] clone Operation: $1, '/', $4))
   ]
 }
 
@@ -390,14 +396,14 @@ grammar = #{
 
 parser = clone Parser: grammar
 lexer = #{
-  lex = (\-> {
+  lex = (fn [] {
     ref = this.tokens !! this.pos || ['']
     this.pos = this.pos + 1
     this.yytext = ref !! 1
     this.yylineno = ref !! 2
     ref !! 0
   })
-  set-input = (\tokens -> {
+  set-input = (fn [tokens] {
     this.tokens = tokens
     this.pos = 0
   })
