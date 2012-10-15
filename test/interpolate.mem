@@ -11,7 +11,7 @@ assert: b, 'world is awesome'
 assert: c, 'hai world'
 assert: d, 'hai world2'
 
-obj = #{ where = 'where' }
+obj = #{ @where 'where' }
 mind = ['mind']
 mind2 = 'mind'
 

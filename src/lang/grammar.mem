@@ -20,52 +20,54 @@ o = fn [pattern action] {
     }
 }
 
+start-symbol = 'Root'
+
 bnf = #{
-  Root = [
+  @Root [
     ['', 'return $$ = new yy.Nodes;']
     ['Program', 'return $$ = $1']
   ]
 
-  Program = [
+  @Program [
     (o: 'Terminator Expressions', (fn [] $2))
     (o: 'Expressions')
   ]
 
-  Expressions = [
+  @Expressions [
     (o: 'Body', (fn [] yy.Nodes.wrap: $1))
     (o: 'Expressions TERMINATOR Body', (fn [] $1.push: $3))
     (o: 'Expressions ; Body', (fn [] $1.push: $3))
     (o: 'Expressions TERMINATOR')
   ]
 
-  Terminator = [
+  @Terminator [
     (o: 'TERMINATOR')
     (o: 'Terminator TERMINATOR')
   ]
 
-  OptTerminator = [
+  @OptTerminator [
     (o: '')
     (o: 'Terminator')
   ]
 
-  Identifier = [
+  @Identifier [
     (o: 'IDENTIFIER', (fn [] clone Identifier: $1))
   ]
 
-  Prototype = [
+  @Prototype [
     (o: 'PROTOTYPE', (fn [] clone Identifier: $1))
   ]
 
-  Rest = [
+  @Rest [
     (o: '. . . IDENTIFIER', (fn [] clone Identifier: $4, true))
   ]
 
-  Body = [
+  @Body [
     (o: 'Expression')
     (o: '{ OptTerminator Expressions }', (fn [] $3))
   ]
 
-  Expression = [
+  @Expression [
     (o: 'Exporting')
     (o: 'Assignable')
     (o: 'Exceptions')
@@ -74,7 +76,7 @@ bnf = #{
     (o: 'DefMacro')
   ]
 
-  Assignable = [
+  @Assignable [
     (o: 'Value')
     (o: 'If')
     (o: 'Assignment')
@@ -89,7 +91,7 @@ bnf = #{
     (o: 'IMPORT STR', (fn [] clone Import: $2))
   ]
 
-  Value = [
+  @Value [
     (o: 'Literal')
     (o: 'Lists')
     (o: 'Maps')
@@ -100,226 +102,225 @@ bnf = #{
     (o: '( Assignable )', (fn [] $2))
   ]
 
-  Values = [
+  @Values [
     (o: 'Value')
     (o: 'Invocation')
   ]
 
-  Type = [
+  @Type [
     (o: 'TYPE', (fn [] clone Identifier: $1))
   ]
 
-  Literal = [
+  @Literal [
     (o: 'Identifier')
     (o: 'AlphaNumeric')
     (o: 'NONE', (fn [] clone Literal: none))
-    (o: 'BOOL', (fn [] clone Literal: ($1 == 'true')))
+    (o: 'BOOL', (fn [] clone Literal: ($1 is 'true')))
     (o: 'REGEXP', (fn [] clone Literal: $1))
   ]
 
-  AlphaNumeric = [
+  @AlphaNumeric [
     (o: 'NUM', (fn [] clone Literal: (Number: $1)))
     (o: 'Strings')
   ]
 
-  Strings = [
+  @Strings [
     (o: 'STR', (fn [] clone Literal: (String: $1)))
   ]
 
-  Assignment = [
+  @Assignment [
     (o: 'Identifier = Assignable', (fn [] clone Assignment: $1, $3))
     (o: 'Access = Assignable', (fn [] clone Assignment: $1, $3))
     (o: 'Lists = Assignable', (fn [] clone Assignment: $1, $3))
     (o: 'Maps = Assignable', (fn [] clone Assignment: $1, $3))
   ]
 
-  Objects = [
+  @Objects [
     (o: 'OBJECT Identifier OptClones Maps', (fn [] clone Objects: $2, $3, $4))
   ]
 
-  OptClones = [
+  @OptClones [
     (o: '', (fn [] none))
     (o: 'CLONES Identifier', (fn [] $2))
   ]
 
-  Exporting = [
+  @Exporting [
     (o: 'EXPORT Assignable', (fn [] clone Export: $2))
   ]
 
-  Cloning = [
+  @Cloning [
     (o: 'CLONE Invocation', (fn [] clone Construction: $2))
   ]
 
-  Pipeline = [
+  @Pipeline [
     (o: 'Value | OptTerminator Values', (fn [] clone Pipeline: $1, $4))
     (o: 'Invocation | OptTerminator Values', (fn [] clone Pipeline: $1, $4))
     (o: 'Pipeline | OptTerminator Values', (fn [] clone Pipeline: $1, $4))
   ]
 
-  Invocation = [
+  @Invocation [
     (o: 'Value : Arguments', (fn [] clone Call: $1, $3))
     (o: 'Value !', (fn [] clone Call: $1))
   ]
 
-  Declaration = [
+  @Declaration [
     (o: 'FN [ Parameters ] Body', (fn [] clone Declaration: none, $3, $5))
     (o: 'FN [ ] Body', (fn [] clone Declaration: none, none, $4))
   ]
 
-  Pattern = [
+  @Pattern [
     (o: 'Value ? Body TERMINATOR', (fn [] [$1, $3] ))
   ]
 
-  Patterns = [
+  @Patterns [
     (o: 'Pattern', (fn [] clone Arguments: $1))
     (o: 'Patterns Pattern', (fn [] clone Arguments: $1, $2))
   ]
 
-  Default = [
+  @Default [
     (o: 'ELSE ? Body TERMINATOR', (fn [] clone Arguments: [$1, $3]))
   ]
 
-  PatternMatching = [
+  @PatternMatching [
     (o: 'FN [ Parameters ] TERMINATOR Patterns Default',
       (fn [] clone Declaration: none, $3, (clone Pattern: $3, $6, $7)))
   ]
 
-  Comma = [
+  @Comma [
     (o: ', OptTerminator')
   ]
 
-  Comprehensions = [
+  @Comprehensions [
     (o: 'NUM . . Numbers ComprehensionBy ComprehensionFunction',
       (fn [] clone Comprehension: $1, $4, $5, $6))
     (o: 'Identifier . . Numbers ComprehensionBy ComprehensionFunction',
       (fn [] clone Comprehension: $1, $4, $5, $6))
   ]
 
-  Numbers = [
+  @Numbers [
     (o: 'NUM')
     (o: 'Identifier')
   ]
 
-  ComprehensionFunction = [
+  @ComprehensionFunction [
     (o: '', (fn [] none))
     (o: ', Declaration', (fn [] $2))
   ]
 
-  ComprehensionBy = [
+  @ComprehensionBy [
     (o: '', (fn [] clone Literal: 1))
     (o: 'Numbers')
   ]
 
-  Lists = [
+  @Lists [
     (o: '[ ]', (fn [] clone List!))
     (o: '[ OptTerminator ListArgs OptTerminator ]', (fn [] clone List: $3))
   ]
 
-  ListArgs = [
+  @ListArgs [
     (o: 'Arg', (fn [] clone Arguments: $1))
     (o: 'ListArgs Comma Arg', (fn [] clone Arguments: $1, $3))
     (o: 'ListArgs Terminator Arg', (fn [] clone Arguments: $1, $3))
   ]
 
-  Key = [
-    'Identifier',
-    'Strings'
+  @Key [
+    (o: 'KEY', (fn [] clone Identifier: $1))
   ]
 
-  KeyValue = [
-    (o: 'Key', (fn [] clone Assignment: $1, $1))
-    (o: 'Key = Value', (fn [] clone Assignment: $1, $3))
+  @KeyValue [
+    (o: 'Key', (fn [] clone Assignment: $1, none))
+    (o: 'Key Value', (fn [] clone Assignment: $1, $2))
   ]
 
-  MapItems = [
+  @MapItems [
     (o: 'KeyValue', (fn [] clone Arguments: $1))
     (o: 'MapItems Comma KeyValue', (fn [] clone Arguments: $1, $3))
     (o: 'MapItems Terminator KeyValue', (fn [] clone Arguments: $1, $3))
   ]
 
-  Maps = [
+  @Maps [
     (o: '# { }', (fn [] clone Map!))
     (o: '# { OptTerminator MapItems OptTerminator }',
-      (fn [] clone Map: #{ obj = $4 }))
+      (fn [] clone Map: #{ @obj $4 }))
   ]
 
-  Access = [
+  @Access [
     (o: 'Identifier Accessor', (fn [] clone Access: $1, $2))
     (o: 'Prototype Accessor', (fn [] clone Access: $1, $2))
     (o: 'Type Accessor', (fn [] clone Access: $1, $2))
     (o: 'Access Accessor', (fn [] clone Access: $1, $2))
   ]
 
-  Accessor = [
+  @Accessor [
     (o: '. Identifier', (fn [] $2))
     (o: '. AlphaNumeric', (fn [] $2))
   ]
 
-  Arg = [
+  @Arg [
     (o: 'Value')
     (o: 'Rest')
   ]
 
-  Arguments = [
+  @Arguments [
     (o: '()', (fn [] none))
     (o: 'Arg', (fn [] clone Arguments: $1))
     (o: 'Arguments Comma Arg', (fn [] clone Arguments: $1, $3))
   ]
 
-  Param = [
+  @Param [
     (o: 'Identifier')
     (o: '( Identifier = Value )', (fn [] clone Assignment: $2, $4))
     (o: 'Rest')
     (o: 'Lists')
   ]
 
-  OptComma = [
+  @OptComma [
     (o: '')
     (o: 'TERMINATOR')
     (o: ',')
   ]
 
-  Parameters = [
+  @Parameters [
     (o: 'Param', (fn [] clone Arguments: $1))
     (o: 'Parameters OptComma Param', (fn [] clone Arguments: $1, $3))
   ]
 
-  Exceptions = [
+  @Exceptions [
     (o: 'TRY Body OptTerminator CATCH Body', (fn [] clone Exception: $2, $5))
     (o: 'RAISE Value ErrorType', (fn [] clone Exception: $1, $2, $3))
   ]
 
-  ErrorType = [
+  @ErrorType [
     (o: '', (fn [] none))
     (o: 'Identifier')
   ]
 
-  Recur = [
+  @Recur [
     (o: 'RECUR OptTerminator Arguments', (fn [] clone Recur: $3))
     (o: '( RECUR OptTerminator Arguments )', (fn [] clone Recur: $4))
   ]
 
-  If = [
+  @If [
     (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body',
       (fn [] clone If: $2, $5, $8))
   ]
 
-  DefMacro = [
+  @DefMacro [
     (o: 'MACRO Identifier Declaration', (fn [] clone Macro: true, $2, $3))
   ]
 
-  Macro = [
+  @Macro [
     (o: 'Identifier Arguments', (fn [] clone Macro: false, $1, $2))
   ]
 
-  MathOperators = [
+  @MathOperators [
     (o: '+', (fn [] clone Identifier: 'sum'))
     (o: '-', (fn [] clone Identifier: 'sub'))
     (o: '*', (fn [] clone Identifier: 'prod'))
     (o: '/', (fn [] clone Identifier: 'div'))
   ]
 
-  SugaryFunctions = [
+  @SugaryFunctions [
     (o: 'MathOperators', (fn [] $1))
     (o: 'Accessor',
       (fn [] clone Declaration: '->', (clone Arguments: 'it'),
@@ -347,11 +348,11 @@ bnf = #{
         (clone Operation: 'it', $1, $2)))
   ]
 
-  SpecialFunctions = [
+  @SpecialFunctions [
     (o: '( SugaryFunctions )', (fn [] $2))
   ]
 
-  Operation = [
+  @Operation [
     (o: 'Value COMPARE OptTerminator Value', (fn [] clone Compare: $1, $2, $4))
     (o: 'Value LOGIC OptTerminator Value', (fn [] clone Compare: $1, $2, $4))
     (o: 'Value LEFT_OPERATORS OptTerminator Value', (fn [] clone Operation: $1, $2, $4))
@@ -367,7 +368,7 @@ bnf = #{
 
 tokens = [
   'ASSERT', 'IF', 'THEN', 'ELSE',
-  'LAMBDA',
+  'FN', 'KEY', 'LAMBDA',
   'IDENTIFIER', 'BOOL', 'NUM', 'STR',
   'LOGIC', 'COMPARE',
   'TERMINATOR'
@@ -386,28 +387,20 @@ operators = [
   ['left', '*', '/']
 ]
 
-Parser = jison.Parser
-grammar = #{
-  tokens = tokens
-  bnf = bnf
-  operators = operators
-  startSymbol = 'Root'
-}
-
-parser = clone Parser: grammar
-lexer = #{
-  lex = (fn [] {
+parser = clone jison.Parser: #{ @tokens, @bnf, @operators, @start-symbol }
+parser.lexer = #{
+  @lex (fn [] {
     ref = this.tokens !! this.pos || ['']
     this.pos = this.pos + 1
     this.yytext = ref !! 1
     this.yylineno = ref !! 2
     ref !! 0
   })
-  set-input = (fn [tokens] {
+
+  @set-input (fn [tokens] {
     this.tokens = tokens
     this.pos = 0
   })
 }
-parser.lexer = lexer
 
 export parser

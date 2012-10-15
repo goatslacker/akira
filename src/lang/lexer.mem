@@ -1,30 +1,31 @@
 LazyObject = import 'lazy-object.js'
 
 rx = clone LazyObject: #{
-  IDENTIFIER = /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
-  NUM = /^((\d+\.)?\d+)+/
-  STR = /^'(.*?)'/
-  LAMBDA = /^->/
-  OPERATION = /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
-  TERMINATOR = /^\n/
-  REGEX = /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
-  COMMENTS = /^(--.*)/
-  WHITESPACE = /^ /
+  @IDENTIFIER /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
+  @KEY /^(@[a-zA-Z_$][0-9a-zA-Z_\-]*)/
+  @NUM /^((\d+\.)?\d+)+/
+  @STR /^'(.*?)'/
+  @LAMBDA /^->/
+  @OPERATION /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
+  @TERMINATOR /^\n/
+  @REGEX /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
+  @COMMENTS /^(--.*)/
+  @WHITESPACE /^ /
 }
 
 identifiers = clone LazyObject: #{
-  KEYWORDS = ['if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none',
+  @KEYWORDS ['if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none',
     'fn', 'raise', 'object', 'clones', 'clone', 'prototype', 'recur', 'macro']
-  TYPE = ['Function', 'Number', 'String', 'Array', 'Object', 'Null']
-  COMPARE = ['==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
-  LEFT_OPERATORS = ['++', '!!']
-  RIGHT_OPERATORS = ['=>', '+:']
-  NOT = ['not']
-  LOGIC = ['and', 'or', '&&', '||']
-  BOOL = ['true', 'false']
+  @TYPE ['Function', 'Number', 'String', 'Array', 'Object', 'Null']
+  @COMPARE ['==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
+  @LEFT_OPERATORS ['++', '!!']
+  @RIGHT_OPERATORS ['=>', '+:']
+  @NOT ['not']
+  @LOGIC ['and', 'or', '&&', '||']
+  @BOOL ['true', 'false']
 }
 
-ignore = #{ 'COMMENTS', 'WHITESPACE' }
+ignore = #{ @COMMENTS, @WHITESPACE }
 
 get-type = fn [a] rx |
   (.filter: (fn [x] rx !! x | (.test: a))) |
@@ -54,6 +55,7 @@ parse-regular-expressions = fn [t chunk] {
 
 get-token = fn [t chunk n]
   'IDENTIFIER' ? parse-identifier: t, chunk
+  'KEY' ? parse-identifier: t, chunk
   'NUM' ? parse-alphanumeric: t, chunk
   'STR' ? parse-alphanumeric: t, chunk
   'OPERATION' ? parse-identifier: t, chunk
@@ -92,11 +94,11 @@ return-tokens = fn [code n (tokens = [])]
 
     recur
       (code.substr: index, code.length),
-      #{ line = (incr-line: token.1, n.line) },
+      #{ @line (incr-line: token.1, n.line) },
       tokens
   }
 
 filter-whitespace = fn [token] not (ignore !! token.1)
 
-export tokenize = fn [code] return-tokens: code, #{ index = 0, line = 0 } |
+export tokenize = fn [code] return-tokens: code, #{ @index 0, @line 0 } |
   (.filter: filter-whitespace)

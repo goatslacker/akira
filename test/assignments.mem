@@ -31,7 +31,7 @@ a1 = 1
 assert: a1, 1
 a2 = [1]
 assert-deep: a2, [1]
-a3 = #{ a = 1 }
+a3 = #{ @a 1 }
 assert: a3.a, 1
 a4 = 2 * 4
 assert: a4, 8

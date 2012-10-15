@@ -7,15 +7,15 @@ assert: d, 3
 [e] = [0]
 assert: e, 0
 
-#{f, g} = #{ f = 1, g = 4 }
+#{@f, @g} = #{ @f 1, @g 4 }
 assert: f, 1
 assert: g, 4
-#{h} = if false then #{ h = 1 } else #{ h = 2 }
+#{@h} = if false then #{ @h 1 } else #{ @h 2 }
 assert: h, 2
 
 i = 3
-#{j} = #{j = i}
+#{@j} = #{@j i}
 assert: j, 3
 
-#{k = l} = #{l = 6}
+#{@k l} = #{@l 6}
 assert: k, 6

@@ -1,20 +1,20 @@
 -- I have to make a Animal, Cat example...
 object Animal #{
-  speak = (fn [] 'my name is ' ++ this.name)
-  walk = (fn [direction] true)
-  sleep = (fn [] 'ZzZzZ...')
-  setName = (fn [name] this.name = name)
-  'alive' = true
-  eyes = 2
+  @speak (fn [] 'my name is ' ++ this.name)
+  @walk (fn [direction] true)
+  @sleep (fn [] 'ZzZzZ...')
+  @setName (fn [name] this.name = name)
+  @alive true
+  @eyes 2
 }
 
 object Cat clones Animal #{
-  speak = (fn [] 'meow i am ' ++ this.name)
-  sleep = (fn [] 'Purr ' ++ (prototype.sleep!))
-  legs = 4
+  @speak (fn [] 'meow i am ' ++ this.name)
+  @sleep (fn [] 'Purr ' ++ (prototype.sleep!))
+  @legs 4
 }
 
-cat = clone Cat: #{ name = 'Luna' }
+cat = clone Cat: #{ @name 'Luna' }
 
 cat.speak! | assert: 'meow i am Luna'
 cat.alive | assert: true

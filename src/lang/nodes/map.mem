@@ -1,25 +1,21 @@
 Base = require: './base'
 
 object Map #{
-  init = (fn [obj] this.obj = obj)
-  compile = (fn [context] {
+  @init (fn [obj] this.obj = obj)
+  @compile (fn [context] {
     properties = if this.obj
       then this.obj.args.map: (fn [arg] {
         key = Base.compile-value: arg.id, context
-        value = Base.compile-value: arg.val, context
-
-        #{
-          type = 'Property'
-          key
-          value
-        }
+        value = if arg.val is none
+          then if context !! arg.id.name
+            then key
+            else #{ @type 'Literal', @value arg.id.name }
+          else Base.compile-value: arg.val, context
+        #{ @type 'Property', @key, @value }
       })
       else []
 
-    #{
-      type = 'ObjectExpression'
-      properties
-    }
+    #{ @type 'ObjectExpression', @properties }
   })
 }
 
