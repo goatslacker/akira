@@ -2,16 +2,16 @@
 
 is-true = fn [n] assert: n, true
 
-banana = #{}
+banana = {}
 
-#{ @words 15 }
+{ @words 15 }
 banana.show
 count-alias = count
-#{ @concat-key concat }
+{ @concat-key concat }
 div = 2
 plus-nine = fn [randomize] 9 + randomize
 mul = fn [] 0
-#{ @take-while }
+{ @take-while }
 id: unique
 closed-function = fn [x] {
   gte = 2

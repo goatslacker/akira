@@ -2,7 +2,7 @@ path = require: 'path'
 
 r = fn [m] m.to-lower-case! | path.join: __dirname | require
 
-export #{
+export {
   @Access         (r: 'access')
   @Arguments      (r: 'arguments')
   @Assignment     (r: 'assignment')

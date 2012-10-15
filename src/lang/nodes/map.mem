@@ -1,6 +1,6 @@
 Base = require: './base'
 
-object Map #{
+object Map {
   @init (fn [obj] this.obj = obj)
   @compile (fn [context] {
     properties = if this.obj
@@ -9,13 +9,13 @@ object Map #{
         value = if arg.val is none
           then if context !! arg.id.name
             then key
-            else #{ @type 'Literal', @value arg.id.name }
+            else { @type 'Literal' @value arg.id.name }
           else Base.compile-value: arg.val, context
-        #{ @type 'Property', @key, @value }
+        { @type 'Property' @key @value }
       })
       else []
 
-    #{ @type 'ObjectExpression', @properties }
+    { @type 'ObjectExpression' @properties }
   })
 }
 
