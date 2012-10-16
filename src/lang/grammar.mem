@@ -94,6 +94,8 @@ bnf = {
     (o: 'Prototype')
     (o: 'Macro')
     (o: 'IMPORT STR' (fn [] new Import $2))
+    (o: '` OptTerminator Expression' (fn [] new Evaluate $3))
+--     (o: '~ OptTerminator Expression' (fn [] new Evaluate $3 true))
   ]
 
   @Value [

@@ -13,6 +13,7 @@ export {
   @Declaration    (r: 'declaration')
   @Exception      (r: 'exception')
   @Export         (r: 'export')
+  @Evaluate       (r: 'evaluate')
   @If             (r: 'if')
   @Identifier     (r: 'identifier')
   @Import         (r: 'import')
