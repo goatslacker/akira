@@ -1,7 +1,7 @@
 LazyObject = import 'lazy-object.js'
 
 rx = clone LazyObject: {
-  @IDENTIFIER /^([a-zA-Z_$][0-9a-zA-Z_\-]*)/
+  @IDENTIFIER /^([a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
   @KEY /^(@[a-zA-Z_$][0-9a-zA-Z_\-]*)/
   @NUM /^((\d+\.)?\d+)+/
   @STR /^'(.*?)'/
