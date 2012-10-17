@@ -85,13 +85,16 @@ incr-line = fn [type line]
   'TERMINATOR' ? line + 1
   else ? line
 
+get-next-index = fn [token] {
+  @index (token.2.toString! | (.length) | get-length: token.1)
+  @token token
+}
+
 return-tokens = fn [code n (tokens = [])]
   not code ? tokens
   else ? {
-    token = process-chunk: code, n
-    index = token.2.toString! | (.length) | get-length: token.1
+    {@index @token} = process-chunk: code, n | get-next-index
     tokens.push: token
-
     recur
       (code.substr: index, code.length),
       { @line (incr-line: token.1, n.line) },
