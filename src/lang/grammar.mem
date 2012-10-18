@@ -59,7 +59,7 @@ bnf = {
   ]
 
   @Rest [
-    (o: '. . . IDENTIFIER', (fn [] clone Identifier: $4, true))
+    (o: '& IDENTIFIER', (fn [] clone Identifier: $2, true))
   ]
 
   @Body [
@@ -225,8 +225,7 @@ bnf = {
 
   @ListArgs [
     (o: 'ListArg', (fn [] clone Arguments: $1))
-    (o: 'ListArgs Comma ListArg', (fn [] clone Arguments: $1, $3))
-    (o: 'ListArgs Terminator ListArg', (fn [] clone Arguments: $1, $3))
+    (o: 'ListArgs OptComma ListArg', (fn [] clone Arguments: $1, $3))
   ]
 
   @Key [
