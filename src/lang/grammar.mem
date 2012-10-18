@@ -2,20 +2,20 @@ jison = require: 'jison'
 
 unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
 
-getMatch = fn [action] {
+get-match = fn [action] {
   x = unwrap.exec: action
   if x then x.2 else '({{action}}())'
 }
 
 addYY = fn [str] str.replace: /new /g, 'new yy.'
-addLine = fn [str] 'yy.L(yylineno, ' ++ (str.replace: ';', '') ++ ');'
+add-line = fn [str] 'yy.L(yylineno, ' ++ (str.replace: ';', '') ++ ');'
 
 o = fn [pattern action] {
   pattern-string = pattern.replace: /\s{2,}/g, ' '
   if not action
     then [pattern-string, '$$ = $1']
     else {
-      newaction = action | getMatch | addYY | addLine
+      newaction = action | get-match | addYY | add-line
       [pattern-string, '$$ = {{newaction}}']
     }
 }
@@ -218,10 +218,15 @@ bnf = {
     (o: '[ OptTerminator ListArgs OptTerminator ]', (fn [] clone List: $3))
   ]
 
+  @ListArg [
+    (o: 'Value')
+    (o: 'Rest')
+  ]
+
   @ListArgs [
-    (o: 'Value', (fn [] clone Arguments: $1))
-    (o: 'ListArgs Comma Value', (fn [] clone Arguments: $1, $3))
-    (o: 'ListArgs OptTerminator Value', (fn [] clone Arguments: $1, $3))
+    (o: 'ListArg', (fn [] clone Arguments: $1))
+    (o: 'ListArgs Comma ListArg', (fn [] clone Arguments: $1, $3))
+    (o: 'ListArgs Terminator ListArg', (fn [] clone Arguments: $1, $3))
   ]
 
   @Key [
