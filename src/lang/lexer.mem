@@ -1,6 +1,4 @@
-LazyObject = import 'lazy-object.js'
-
-rx = clone LazyObject: {
+rx = {
   @IDENTIFIER /^([a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
   @KEY /^(@[a-zA-Z_$][0-9a-zA-Z_\-]*)/
   @NUM /^((\d+\.)?\d+)+/
@@ -13,9 +11,9 @@ rx = clone LazyObject: {
   @WHITESPACE /^ /
 }
 
-identifiers = clone LazyObject: {
+identifiers = {
   @KEYWORDS ['if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none'
-    'fn' 'raise' 'object' 'clones' 'clone' 'prototype' 'recur' 'macro']
+    'fn' 'raise' 'prototype' 'recur' 'macro']
   @TYPE ['Function' 'Number' 'String' 'Array' 'Object' 'Null']
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
   @LEFT_OPERATORS ['++' '!!']
@@ -27,9 +25,9 @@ identifiers = clone LazyObject: {
 
 ignore = { @COMMENTS @WHITESPACE }
 
-get-type = fn [a] rx |
+get-type = fn [a] Object.keys: rx |
   (.filter: (fn [x] rx !! x | (.test: a))) |
-  (.head: none)
+  (!! 0)
 
 extract = fn [key chunk] rx !! key | (.exec: chunk)
 
@@ -41,15 +39,15 @@ return-identifier = fn [type item]
 
 parse-identifier = fn [t chunk] {
   item = extract: t chunk
-  token = identifiers |
+  token = Object.keys: identifiers |
     (.filter: (fn [x] identifiers !! x | (.indexOf: item.2) | (>= 0))) |
-    (.head: none)
+    (!! 0)
   return-identifier: token || t item.2
 }
 
 parse-regular-expressions = fn [t chunk] {
   item = extract: t chunk
-  regexp = clone RegExp: item.3 item.4
+  regexp = RegExp: item.3 item.4
   ['REGEXP' regexp]
 }
 
