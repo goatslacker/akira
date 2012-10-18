@@ -14,15 +14,15 @@ rx = clone LazyObject: {
 }
 
 identifiers = clone LazyObject: {
-  @KEYWORDS ['if', 'then', 'else', 'import', 'export', 'try', 'catch', 'none',
-    'fn', 'raise', 'object', 'clones', 'clone', 'prototype', 'recur', 'macro']
-  @TYPE ['Function', 'Number', 'String', 'Array', 'Object', 'Null']
-  @COMPARE ['==', '!=', '>', '>=', '<', '<=', 'is', 'isnt']
-  @LEFT_OPERATORS ['++', '!!']
-  @RIGHT_OPERATORS ['=>', '+:']
+  @KEYWORDS ['if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none'
+    'fn' 'raise' 'object' 'clones' 'clone' 'prototype' 'recur' 'macro']
+  @TYPE ['Function' 'Number' 'String' 'Array' 'Object' 'Null']
+  @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
+  @LEFT_OPERATORS ['++' '!!']
+  @RIGHT_OPERATORS ['=>' '+:']
   @NOT ['not']
-  @LOGIC ['and', 'or', '&&', '||']
-  @BOOL ['true', 'false']
+  @LOGIC ['and' 'or' '&&' '||']
+  @BOOL ['true' 'false']
 }
 
 ignore = { @COMMENTS @WHITESPACE }
@@ -33,48 +33,48 @@ get-type = fn [a] rx |
 
 extract = fn [key chunk] rx !! key | (.exec: chunk)
 
-parse-alphanumeric = fn [t chunk] extract: t, chunk | (!! 1)
+parse-alphanumeric = fn [t chunk] extract: t chunk | (!! 1)
 
 return-identifier = fn [type item]
-  'KEYWORDS' ? [(item.toUpperCase!), item]
-  else ? [type, item]
+  'KEYWORDS' ? [(item.toUpperCase!) item]
+  else ? [type item]
 
 parse-identifier = fn [t chunk] {
-  item = extract: t, chunk
+  item = extract: t chunk
   token = identifiers |
     (.filter: (fn [x] identifiers !! x | (.indexOf: item.2) | (>= 0))) |
     (.head: none)
-  return-identifier: token || t, item.2
+  return-identifier: token || t item.2
 }
 
 parse-regular-expressions = fn [t chunk] {
-  item = extract: t, chunk
-  regexp = clone RegExp: item.3, item.4
-  ['REGEXP', regexp]
+  item = extract: t chunk
+  regexp = clone RegExp: item.3 item.4
+  ['REGEXP' regexp]
 }
 
 get-token = fn [t chunk n]
-  'IDENTIFIER' ? parse-identifier: t, chunk
-  'KEY' ? parse-identifier: t, chunk
-  'NUM' ? parse-alphanumeric: t, chunk
-  'STR' ? parse-alphanumeric: t, chunk
-  'OPERATION' ? parse-identifier: t, chunk
+  'IDENTIFIER' ? parse-identifier: t chunk
+  'KEY' ? parse-identifier: t chunk
+  'NUM' ? parse-alphanumeric: t chunk
+  'STR' ? parse-alphanumeric: t chunk
+  'OPERATION' ? parse-identifier: t chunk
   'LAMBDA' ? 'FN'
-  'REGEX' ? parse-regular-expressions: t, chunk
-  'COMMENTS' ? parse-alphanumeric: t, chunk
+  'REGEX' ? parse-regular-expressions: t chunk
+  'COMMENTS' ? parse-alphanumeric: t chunk
   'WHITESPACE' ? ' '
   'TERMINATOR' ? ' '
-  else ? [chunk.1, chunk.1]
+  else ? [chunk.1 chunk.1]
 
 process-chunk = fn [code n] {
   type = get-type: code
-  token = get-token: type, code, n
+  token = get-token: type code n
   if Array.isArray: token
     then {
       token.push: n.line
       token
     }
-    else [type, token, n.line]
+    else [type token n.line]
 }
 
 get-length = fn [token i]
@@ -93,15 +93,15 @@ get-next-index = fn [token] {
 return-tokens = fn [code n (tokens = [])]
   not code ? tokens
   else ? {
-    {@index @token} = process-chunk: code, n | get-next-index
+    {@index @token} = process-chunk: code n | get-next-index
     tokens.push: token
     recur
-      (code.substr: index, code.length),
-      { @line (incr-line: token.1, n.line) },
+      (code.substr: index code.length),
+      { @line (incr-line: token.1 n.line) },
       tokens
   }
 
 filter-whitespace = fn [token] not (ignore !! token.1)
 
-export tokenize = fn [code] return-tokens: code, { @index 0 @line 0 } |
+export tokenize = fn [code] return-tokens: code { @index 0 @line 0 } |
   (.filter: filter-whitespace)

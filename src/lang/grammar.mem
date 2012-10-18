@@ -188,6 +188,7 @@ bnf = {
   ]
 
   @Comma [
+    (o: '')
     (o: ', OptTerminator')
   ]
 
@@ -265,7 +266,6 @@ bnf = {
   ]
 
   @Arguments [
-    (o: '()', (fn [] none))
     (o: 'Value', (fn [] clone Arguments: $1))
     (o: 'Arguments Comma Value', (fn [] clone Arguments: $1, $3))
   ]
