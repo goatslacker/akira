@@ -103,6 +103,7 @@ bnf = {
     (o: 'Access')
     (o: 'Type')
     (o: 'SpecialFunctions')
+    (o: '& NUM' (fn [] 'arguments[{{$2}}]'))
     (o: '( Assignable )' (fn [] $2))
   ]
 
