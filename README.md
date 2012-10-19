@@ -1,41 +1,43 @@
 memory
 ======
 
-A very impractical but fun language which compiles to JavaScript.
-
-Inspired by Functional Programming.
+Functional language that transpiles to JavaScript.
 
 ## Syntax
 
 ### Literals
 
-    -- string
+    -- String
     'i am a string'
 
-    -- number
+    -- Number
     2.0
     3
 
-    -- boolean
+    -- Boolean
     true
     false
 
-    -- null
+    -- Null
     none
 
-    -- Objects
-    cat = #{
-      name = 'Luna'
-      age = 2
+    -- Maps
+    cat = {
+      @name 'Luna'
+      @age 2
     }
 
     -- Lists
     [1, 2, 3, 4]
+    [1 2 3 4]
     ['h', 'e', 'l', 'l', 'o']
+
+    -- Regular Expressions
+    /[A-Z]+/g
 
 ### Functions
 
-    sum = \a, b -> a + b
+    sum = fn [a b] a + b
 
     -- invoking sum...
     sum: 1, 2
@@ -51,43 +53,36 @@ Inspired by Functional Programming.
     1 | sum: 2 | (== 3)   -- sum(2, 1) == 3
 
     -- function expressions with a body
-    fib = \n -> {
+    fib = fn [n] {
       if n < 2
         then n
         else (fib: n - 1) + (fib: n - 2)
     }
 
     -- IIFE
-    (\-> {
+    (fn [] {
       number-of-balloons = 99
     }): none
 
     -- Anonymous functions
-    \x -> x * x
+    fn [x] x * x
 
     -- we can pass those as args
-    call-function = \fn, arg -> fn: arg
-    call-function: (\x -> x * x), 9      -- 81
+    call-function = fn [f arg] f: arg
+    call-function: (fn [x] x * x), 9      -- 81
 
     -- There's also Pattern Matching and Guards
-    fact = \n ->
+    fact = fn [n]
       1 ? 1
-      n ? n * (fact: n - 1)
+      else ? n * (fact: n - 1)
 
-    -- splits up the list into x = head(list) and rest = tail(list)
-    sort-even-odd = \[x, rest] ->
-      rest.length is 0 ? [x]
-      otherwise ? if (odd: x)
-                    then (sort-even-odd: rest) ++ [x]
-                    else x +: (sort-even-odd: rest)
+    -- splits up the list into x = head(list) and xs = tail(list)
+    sort-even-odd = fn [[x, & xs]]
+      not x ? []
+      odd: x ? (sort-even-odd: xs) ++ [x]
+      else ? x +: (sort-even-odd: xs)
 
-    -- More guards in action
-    starts-with = \noun, prefix -> prefix == noun.1 + noun.2
-
-    spanish-gender-of-noun = \noun ->
-      (starts-with: noun, 'el') ? 'male'
-      (starts-with: noun, 'la') ? 'female'
-
+      [1 2 3 4 5 6] | sort-even-odd | assert-deep: [2 4 6 5 3 1]
 
 ## License
 
