@@ -288,15 +288,23 @@ bnf = {
     (o: 'Identifier Arguments' (fn [] new Macro false $1 $2))
   ]
 
-  @MathOperators [
+  @Operators [
     (o: '+' (fn [] new Identifier 'sum'))
     (o: '-' (fn [] new Identifier 'sub'))
     (o: '*' (fn [] new Identifier 'prod'))
     (o: '/' (fn [] new Identifier 'div'))
+    (o: '==' (fn [] new Identifier 'eq'))
+    (o: '!=' (fn [] new Identifier 'neq'))
+    (o: '>' (fn [] new Identifier 'gt'))
+    (o: '<' (fn [] new Identifier 'lt'))
+    (o: '>=' (fn [] new Identifier 'gte'))
+    (o: '<=' (fn [] new Identifier 'lte'))
+    (o: '&&' (fn [] new Identifier 'and'))
+    (o: '||' (fn [] new Identifier 'or'))
   ]
 
   @SugaryFunctions [
-    (o: 'MathOperators' (fn [] $1))
+    (o: 'Operators' (fn [] $1))
     (o: 'Accessor',
       (fn [] new Declaration '->' (new Arguments 'it'),
         (new Access 'it' $1)))
