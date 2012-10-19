@@ -3,6 +3,7 @@ rx = {
   @KEY /^(@[a-zA-Z_$][0-9a-zA-Z_\-]*)/
   @NUM /^((\d+\.)?\d+)+/
   @STR /^'(.*?)'/
+  @ARGS /^&([0-9]+)/
   @LAMBDA /^->/
   @OPERATION /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
   @TERMINATOR /^\n/
@@ -56,6 +57,7 @@ get-token = fn [t chunk n]
   'LAMBDA' ? 'FN'
   'REGEX' ? parse-regular-expressions: t chunk
   'COMMENTS' ? parse-alphanumeric: t chunk
+  'ARGS' ? [t (extract: t chunk | (!! 1))]
   'WHITESPACE' ? ' '
   'TERMINATOR' ? ' '
   else ? [chunk.1 chunk.1]
@@ -73,6 +75,7 @@ process-chunk = fn [code n] {
 
 get-length = fn [token i]
   'STR' ? i + 2
+  'ARGS' ? i + 1
   else ? i
 
 incr-line = fn [type line]
