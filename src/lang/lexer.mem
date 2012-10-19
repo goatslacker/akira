@@ -25,9 +25,7 @@ identifiers = {
 
 ignore = { @COMMENTS @WHITESPACE }
 
-get-type = fn [a] Object.keys: rx |
-  (.filter: (fn [x] rx !! x | (.test: a))) |
-  (!! 0)
+get-type = fn [a] rx | (find: (fn [x] x.test: a))
 
 extract = fn [key chunk] rx !! key | (.exec: chunk)
 
@@ -39,9 +37,7 @@ return-identifier = fn [type item]
 
 parse-identifier = fn [t chunk] {
   item = extract: t chunk
-  token = Object.keys: identifiers |
-    (.filter: (fn [x] identifiers !! x | (.indexOf: item.2) | (>= 0))) |
-    (!! 0)
+  token = identifiers | (find: (fn [x] x.indexOf: item.2 | (>= 0)))
   return-identifier: token || t item.2
 }
 
