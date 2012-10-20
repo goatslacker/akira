@@ -5,7 +5,7 @@ rx = {
   @STR /^'(.*?)'/
   @ARGS /^&([0-9]+)/
   @LAMBDA /^->/
-  @OPERATION /^(<\+|<=|>=|>|<|=>|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
+  @OPERATION /^(<\+|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
   @TERMINATOR /^\n/
   @REGEX /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
   @COMMENTS /^(--.*)/
@@ -18,7 +18,7 @@ identifiers = {
   @TYPE ['Function' 'Number' 'String' 'Array' 'Object' 'Null']
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
   @LEFT_OPERATORS ['++' '!!']
-  @RIGHT_OPERATORS ['=>' '+:']
+  @RIGHT_OPERATORS ['+:']
   @NOT ['not']
   @LOGIC ['and' 'or' '&&' '||']
   @BOOL ['true' 'false']
