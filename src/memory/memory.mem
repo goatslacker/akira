@@ -35,9 +35,9 @@ transform = fn [name parsed (f = to-ast)]
   parsed is none ? to-ast: ''
   else ? {
     context = {}
-    body = parsed.compile: context, name
+    body = parsed.compile: context name
     parsed.flag-core-methods: body
-    f: (parsed.add-vars: context, false) ++ (parsed.add-core!) ++
+    f: (parsed.add-vars: context false) ++ (parsed.add-core!) ++
       (parsed.add-deps!) ++ body
   }
 

@@ -8,7 +8,7 @@ array = [
 -- IIFE
 (fn [] {
 -- Testing foldr, expressions in arguments, anonymous functions
-  lastEl = fn [a] foldl: (fn [a b] flip: consts, a, b), a
+  lastEl = fn [a] foldl: (fn [a b] flip: id, a, b), a
   lastEl: array | (fn [a] assert: a, 3 )
 }): none
 

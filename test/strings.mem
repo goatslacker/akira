@@ -14,7 +14,6 @@ chars: uppercase, str | join: '' | assert: 'HELLO'
 
 condense: '      foo bar ' | assert: 'foobar'
 
-repeat: 3, str | assert: 'hellohellohello'
 'hi' * 3 | assert: 'hihihi'
 
 (fn [] {

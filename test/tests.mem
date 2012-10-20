@@ -29,16 +29,4 @@ assert: 24, (fact: 4)
 end = Date.now!
 
 print: 'Done!'
-
-if assert.successes
-  then print: 'OK {{assert.successes.length}} tests'
-  else none
-
-if assert.failures.length
-  then {
-    print: 'FAIL {{assert.failures.length}} tests'
-    print: assert.failures
-  }
-  else none
-
 print: 'Time {{end - start}}ms'

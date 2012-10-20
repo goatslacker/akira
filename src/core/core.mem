@@ -1,103 +1,260 @@
-eq = fn [a b] a is b
-neq = fn [a b] a isnt b
-gt = fn [a b] a > b
-lt = fn [a b] a < b
-gte = fn [a b] a >= b
-lte = fn [a b] a <= b
-
-assert = fn [a b] {
-  assert.successes = assert.successes || []
-  assert.failures = assert.failures || []
-
-  if a == b then (assert.successes.push: [a, b]) else (assert.failures.push: [a, b])
+macro bin-expr fn [op a b] {
+  @type 'BinaryExpression'
+  @operator op.value
+  @left a
+  @right b
 }
 
-assert-deep = fn [a b] {
-  len = filter: (fn [x, i] x is b !! i - 1), a | (.length)
-  assert: len, b.length
-}
-
--- do +1's
-filter = fn [f list] list.filter: f
-map = fn [f list] list.map: f
-foldl = fn [f list] list.reduce: f
-foldr = fn [f list] list.reduce-right: f
-
-head = fn [[x]] x
-init = fn [[...xs, x]] xs
-tail = fn [[x, ...xs]] xs
-last = fn [[...xs, x]] x
-at = fn [index list] list !! index - 1
-get = fn [obj prop] obj !! prop
-length = fn [of] of.length
-join = fn [by list] list.join: by
-concat = fn [...args] foldl: (fn [a b] a ++ b), args
-count = fn [f list] filter: f, list | (.length)
-average = fn [list] foldl: (fn [a b] a + b), list | (/ list.length)
-compact = fn [list] filter: (fn [x] not not x), list
-intersect = fn [list1, list2] filter: (fn [x] list2.indexOf: x | (!= 0 - 1)),
-  list1
-max = fn [list] foldl: (fn [a b] if a > b then a else b), list
-min = fn [list] foldl: (fn [a b] if a < b then a else b), list
-nothing = fn [f list] filter: f, list | (.length) | (== 0)
-randomize = fn [list] sort: (fn [] (Math.random!) > 0.5), list
-unique = fn [list] filter: (fn [x, i] list.indexOf: x | (== i - 1)), list
-take = fn [n list] list.slice: 0, n
-drop = fn [n list] list.slice: n
-
-take-while = fn [f [x, ...xs]]
-  (f: x) == true ? x +: (take-while: f, xs)
-  else ? []
-
-apply = fn [f ...args] f.apply: f, args
-consts = fn [a] a
-id = fn [a] a
-flip = fn [f a b] f: b, a
-partial = fn [f ...args] fn [...xargs] f.apply: f, args ++ xargs
-partialr = fn [f ...args] fn [...xargs] f.apply: f, xargs ++ args
-curry = fn [f] {
-  c = fn [(args = [])] fn [arg] {
-    xargs = args ++ arg
-    if xargs.length < f.length then c: xargs else f.apply: f, xargs
+macro each fn [sym name ifstmt] {
+  @type 'ForInStatement'
+  @left sym
+  @right name
+  @body {
+    @type 'BlockStatement'
+    @body [{
+      @type 'IfStatement'
+      @test ifstmt.test
+      @consequent {
+        @type 'BlockStatement'
+        @body [{
+          @type 'ReturnStatement'
+          @argument sym
+        }]
+      }
+      @alternate none
+    }]
   }
-
-  if f.length < 1 then f else c: none
-}
-curryr = fn [f] {
-  c = fn [(args = [])] fn [arg] {
-    xargs = arg +: args
-    if xargs.length < f.length then c: xargs else f.apply: f, xargs
-  }
-
-  if f.length < 1 then f else c: none
-}
-show = fn [i] i.to-string!
-
-macro mod fn [a b] {
-  #{
-    type = 'BinaryExpression'
-    operator = '%'
-    left = a
-    right = b
-  }
+  @each false
 }
 
-square = fn [x] x * x
-sum = fn [a b] a + b
-sub = fn [a b] a - b
-prod = fn [a b] a * b
-div = fn [a b] a / b
-even = fn [n] (mod n, 2) | (== 0)
-odd = fn [n] not (even: n)
-abs = fn [n] Math.abs: n
-sqrt = fn [n] Math.sqrt: n
+export {
+  -- logic and comparisons
+  @eq (`
+    eq = fn [a b] a == b)
 
-camelize = fn [str] str.replace: /(-|_)+([a-zA-Z0-9$_])/g,
-  (fn [i] i.2.to-upper-case!)
-uppercase = fn [str] str.to-upper-case!
-capitalize = fn [str] (str.1.to-upper-case!) ++ (str.slice: 1)
-chars = fn [f, str] str.split: '' | map: f
-condense = fn [str] str.replace: /\ /g, ''
-lines = fn [f str] str.split: '\n' | map: f
-repeat = fn [times str] (clone Array: (times + 1)) | (fn [arr] arr.join: str)
-words = fn [f str] str.split: ' ' | map: f
+  @neq (`
+    neq = fn [a b] a != b)
+
+  @gt (`
+    gt = fn [a b] a > b)
+
+  @lt (`
+    lt = fn [a b] a < b)
+
+  @gte (`
+    gte = fn [a b] a >= b)
+
+  @lte (`
+    lte = fn [a b] a <= b)
+
+  @and (`
+    and = fn [a b] a && b)
+
+  @or (`
+    or = fn [a b] a || b)
+
+  -- enumerable
+  @head (`
+    head = fn [[x]] x)
+
+  @init (`
+    init = fn [[& xs x]] xs)
+
+  @tail (`
+    tail = fn [[x & xs]] xs)
+
+  @last (`
+    last = fn [[& xs x]] x)
+
+  @get (`
+    get = fn [obj prop] obj !! prop)
+
+  @length (`
+    length = fn [of] of.length)
+
+  @join (`
+    join = fn [by list] list.join: by)
+
+  @concat (`
+    concat = fn [& args] foldl: (fn [a b] a ++ b) args)
+
+  @count (`
+    count = fn [list f]
+      not f ? list.length
+      else ? filter: f list | (.length)
+  )
+
+  @average (`
+    average = fn [list] foldl: (fn [a b] a + b) list | (/ list.length))
+
+  @compact (`
+    compact = fn [list] filter: (fn [x] not not x) list)
+
+  @assert (`
+    assert = fn [a b]
+      a != b ? raise [a b]
+      else ? none
+  )
+
+  @assert-deep (`
+    assert-deep = fn [a b] filter: (fn [x i] assert: x (b !! i)) a)
+
+  @find (`
+    find = fn [f ds] each i ds (if (f: ds !! i) is true then 0 else 0))
+
+  @call (`
+    call = fn [obj prop & args] (obj !! prop) | (.apply: obj, args))
+
+  @filter (`
+    filter = fn [f list] Array.prototype.filter.call: list f)
+
+  @map (`
+    map = fn [f list] Array.prototype.map.call: list f)
+
+  @foldl (`
+    foldl = fn [f list] Array.prototype.reduce.call: list f)
+
+  @foldr (`
+    foldr = fn [f list] Array.prototype.reduce-right.call: list f)
+
+  @intersect (`
+    intersect = fn [list1 list2] filter: (fn [x] list2.indexOf: x | (!= 0 - 1)) list1)
+
+  @max (`
+    max = fn [list] foldl: (fn [a b] if a > b then a else b) list)
+
+  @min (`
+    min = fn [list] foldl: (fn [a b] if a < b then a else b) list)
+
+  @nothing (`
+    nothing = fn [f list] filter: f list | (.length) | (== 0))
+
+  @randomize (`
+    randomize = fn [list] sort: (fn [] (Math.random!) > 0.5) list)
+
+  @unique (`
+    unique = fn [list] filter: (fn [x i] list.indexOf: x | (== i)) list)
+
+  @take (`
+    take = fn [n list] list.slice: 0 n)
+
+  @drop (`
+    drop = fn [n list] list.slice: n)
+
+  @take-while (`
+    take-while = fn [f [x & xs]]
+      (f: x) == true ? x +: (take-while: f xs)
+      else ? []
+  )
+
+  @apply (`
+    apply = fn [f & args] f.apply: f args)
+
+  @id (`
+    id = fn [a] a)
+
+  @flip (`
+    flip = fn [f a b] f: b a)
+
+  @partial (`
+    partial = fn [f & args] fn [& xargs] f.apply: f, args ++ xargs)
+
+  @partialr (`
+    partialr = fn [f & args] fn [& xargs] f.apply: f, xargs ++ args)
+
+  -- curry = fn [f] {
+  --   c = fn [(args = [])] fn [arg] {
+  --     xargs = args ++ arg
+  --     if xargs.length < f.length then c: xargs else f.apply: f, xargs
+  --   }
+  --
+  --   if f.length < 1 then f else c: none
+  -- }
+  -- curryr = fn [f] {
+  --   c = fn [(args = [])] fn [arg] {
+  --     xargs = arg +: args
+  --     if xargs.length < f.length then c: xargs else f.apply: f, xargs
+  --   }
+  --
+  --   if f.length < 1 then f else c: none
+  -- }
+
+  @show (`
+    show = fn [i] i.to-string!)
+
+  @mod (`
+    mod = fn [a b] bin-expr '%' a b)
+
+  @bit-and (`
+    bit-and = fn [a b] bin-expr '&' a b)
+
+  @bit-or (`
+    bit-or = fn [a b] bin-expr '|' a b)
+
+  @bit-xor (`
+    bit-xor = fn [a b] bin-expr '^' a b)
+
+  @bit-shiftl (`
+    bit-shiftl = fn [a b] bin-expr '<<' a b)
+
+  @bit-shiftr (`
+    bit-shiftr = fn [a b] bin-expr '>>' a b)
+
+  @bit-ushiftr (`
+    bit-ushiftr = fn [a b] bin-expr '>>>' a b)
+
+  @square (`
+    square = fn [x] x * x)
+
+  @sum (`
+    sum = fn [a b] a + b)
+
+  @sub (`
+    sub = fn [a b] a - b)
+
+  @prod (`
+    prod = fn [a b] a * b)
+
+  @div (`
+    div = fn [a b] a / b)
+
+  @even (`
+    even = fn [n] (bin-expr '%' n 2) | (== 0))
+
+  @odd (`
+    odd = fn [n] (bin-expr '%' n 2) | (!= 0))
+
+  @abs (`
+    abs = fn [n] Math.abs: n)
+
+  @sqrt (`
+    sqrt = fn [n] Math.sqrt: n)
+
+  @pow (`
+    pow = fn [a b] Math.pow: a b)
+
+  @camelize (`
+    camelize = fn [str] str.replace: /(-|_)+([a-zA-Z0-9$_])/g,
+      (fn [i] i.2.to-upper-case!))
+
+  @uppercase (`
+    uppercase = fn [str] str.to-upper-case!)
+
+  @capitalize (`
+    capitalize = fn [str] (str.1.to-upper-case!) ++ (str.slice: 1))
+
+  @chars (`
+    chars = fn [f str] str.split: '' | map: f)
+
+  @condense (`
+    condense = fn [str] str.replace: /\ /g '')
+
+  @lines (`
+    lines = fn [f str] str.split: '\n' | map: f)
+
+  @words (`
+    words = fn [f str] str.split: ' ' | map: f)
+
+  @print (`
+    print = fn [& args] console.log.apply: console args)
+}
