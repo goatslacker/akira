@@ -294,14 +294,9 @@ bnf = {
     (o: '-' (fn [] new Identifier 'sub'))
     (o: '*' (fn [] new Identifier 'prod'))
     (o: '/' (fn [] new Identifier 'div'))
-    (o: '==' (fn [] new Identifier 'eq'))
-    (o: '!=' (fn [] new Identifier 'neq'))
-    (o: '>' (fn [] new Identifier 'gt'))
-    (o: '<' (fn [] new Identifier 'lt'))
-    (o: '>=' (fn [] new Identifier 'gte'))
-    (o: '<=' (fn [] new Identifier 'lte'))
-    (o: '&&' (fn [] new Identifier 'and'))
-    (o: '||' (fn [] new Identifier 'or'))
+    (o: 'COMPARE' (fn [] new Compare $1))
+    (o: 'LOGIC' (fn [] new Compare $1))
+
   ]
 
   @SugaryFunctions [

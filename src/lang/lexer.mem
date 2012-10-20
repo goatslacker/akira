@@ -20,7 +20,7 @@ identifiers = {
   @LEFT_OPERATORS ['++' '!!']
   @RIGHT_OPERATORS ['+:']
   @NOT ['not']
-  @LOGIC ['and' 'or' '&&' '||']
+  @LOGIC ['&&' '||']
   @BOOL ['true' 'false']
 }
 
