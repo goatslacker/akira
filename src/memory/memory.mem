@@ -2,69 +2,71 @@ vm = require: 'vm'
 util = require: 'util'
 escodegen = require: 'escodegen'
 
-#{ get-files } = import './fisy.mem'
-#{ mark } = import './bench.mem'
+{ @get-files } = import './fisy.mem'
+{ @mark } = import './bench.mem'
 
 lexer = require: '../lang/lexer'
 parser = require: '../lang/grammar'
 parser.yy = (require: '../lang/nodes')
-transform = \name, parsed -> {
-  context = #{}
-  body = parsed.compile: context, name
-  parsed.flag-core-methods: body
-  #{
-    type = 'Program'
-    body = [
-      #{
-        type = 'ExpressionStatement'
-        expression = #{
-          type = 'CallExpression'
-          callee = #{
-            type = 'FunctionExpression'
-            id = none
-            params = [#{ type = 'Identifier', name = '$$export' }]
-            body = #{
-              type = 'BlockStatement'
-              body = (parsed.add-vars: context, false) ++
-                (parsed.add-core!) ++
-                (parsed.add-deps!) ++
-                body
-            }
+
+to-ast = fn [body] {
+  @type 'Program'
+  @body [
+    {
+      @type 'ExpressionStatement'
+      @expression {
+        @type 'CallExpression'
+        @callee {
+          @type 'FunctionExpression'
+          @id none
+          @params [{ @type 'Identifier', @name '$$export' }]
+          @body {
+            @type 'BlockStatement'
+            @body body
           }
-          arguments = []
         }
+        @arguments []
       }
-    ]
+    }
+  ]
+}
+
+transform = fn [name parsed]
+  parsed is none ? to-ast: ''
+  else ? {
+    context = {}
+    body = parsed.compile: context, name
+    parsed.flag-core-methods: body
+    to-ast: (parsed.add-vars: context, false) ++ (parsed.add-core!) ++
+      (parsed.add-deps!) ++ body
+  }
+
+lex = fn [name code] lexer: code
+parse = fn [name code] code | lex: name | parser.parse
+gen-ast = fn [name code] parse: name code | transform: name
+
+transpile = fn [name code] code | gen-ast: name | escodegen.generate
+
+benchmark = fn [name code] {
+  { @a time, @tokens result } = mark: (fn [] lexer: code)
+  { @b time, @tree result } = mark: (fn [] parser.parse: tokens)
+  { @c time, @parseapi result } = mark: (fn [] transform: name tree)
+  { @d time } = mark: (fn [] escodegen.generate: parseapi)
+
+  {
+    @name name
+    @Lexer a ++ 'ms'
+    @Parser b ++ 'ms'
+    @Transform c ++ 'ms'
+    @Compile d ++ 'ms'
+    @Total (a + b + c + d) ++ 'ms'
   }
 }
 
-
-lex = \name, code -> lexer: code
-parse = \name, code -> code | lex: name | parser.parse
-gen-ast = \name, code -> parse: name, code | transform: name
-
-transpile = \name, code -> code | gen-ast: name | escodegen.generate
-
-benchmark = \name, code -> {
-  #{ a = time, tokens = result } = mark: (\-> lexer: code)
-  #{ b = time, tree = result } = mark: (\-> parser.parse: tokens)
-  #{ c = time, parseapi = result } = mark: (\-> transform: name, tree)
-  #{ d = time } = mark: (\-> escodegen.generate: parseapi)
-
-  #{
-    name = name
-    Lexer = a + 'ms'
-    Parser = b + 'ms'
-    Transform = c + 'ms'
-    Compile = d + 'ms'
-    Total = (a + b + c + d) + 'ms'
-  }
-}
-
-memory = \cb, filepath, fn = transpile -> {
-  on-file = \name, code -> {
+memory = fn [cb filepath (f = transpile)] {
+  on-file = fn [name code] {
     try {
-      result = code | fn: name | cb: name
+      result = code | f: name | cb: name
     } catch {
       util.error: 'Filename: ' ++ name
       util.error: err.stack
@@ -72,21 +74,17 @@ memory = \cb, filepath, fn = transpile -> {
     }
     result
   }
-  get-files: on-file, filepath
+  get-files: on-file filepath
 }
 
-run = \name, code -> {
+run = fn [name code] {
   try {
-    result = vm.run-in-new-context: code, #{ console = console }
+    result = vm.run-in-new-context: code { @console console }
   } catch {
     util.error: name
     util.error: err.stack
--- hide behind a log level
---    util.debug: code
   }
   result
 }
 
--- escapes = \code -> code.replace: /\\\\/, '\'
-
-export #{ lex, parse, gen-ast, transpile, run, memory, benchmark }
+export { @lex @parse @gen-ast @transpile @run @memory @benchmark }

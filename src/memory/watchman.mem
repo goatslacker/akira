@@ -1,9 +1,9 @@
 nodewatch = require: 'nodewatch'
-#{ get-file-contents } = import './fisy.mem'
+{ @get-file-contents } = import './fisy.mem'
 
-watch = \filename -> nodewatch.add: filename |
-  (\f -> f.on-change: (\-> get-file-contents: filename |
+watch = fn [filename] nodewatch.add: filename |
+  (fn [f] f.on-change: (fn [] get-file-contents: filename |
     compile |
-    (\data -> write: data, filename)))
+    (fn [data] write: data, filename)))
 
 export watch

@@ -36,6 +36,7 @@ bnf = {
 
   @Program [
     (o: 'Terminator Expressions' (fn [] $2))
+    (o: 'Terminator' (fn [] none))
     (o: 'Expressions')
   ]
 

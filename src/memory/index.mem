@@ -1,25 +1,25 @@
 util = require: 'util'
 me = require: '../../package.json'
 
-#{ memory, run, lex, gen-ast, benchmark } = import './memory.mem'
-#{ write-file, get-files } = import './fisy.mem'
+{ @memory @run @lex @gen-ast @benchmark } = import './memory.mem'
+{ @write-file @get-files } = import './fisy.mem'
 
-wrap = \name, code -> write-file: name, 'module.exports = ' ++ code
+wrap = fn [name code] write-file: name ('module.exports = ' ++ code)
 
-output = \name, code -> util.puts: code
-analyse = \name, body -> body |
-  (\data -> util.inspect: data, false, 50) |
+output = fn [name code] util.puts: code
+analyse = fn [name body] body |
+  (fn [data] util.inspect: data false 50) |
   output: none
 
-export MEM = \action, filename = 'src/' ->
-  'bench'   ? memory: analyse, filename, benchmark
-  'debug'   ? memory: (\-> none), filename
-  'compile' ? memory: wrap, filename
-  'output'  ? memory: output, filename
-  'test'    ? memory: run, 'test/tests.mem'
-  'run'     ? memory: run, filename
-  'tokens'  ? memory: analyse, filename, lex
-  'ast'     ? memory: analyse, filename, gen-ast
+export MEM = fn [action (filename = 'src/')]
+  'bench'   ? memory: analyse filename benchmark
+  'debug'   ? memory: (fn [] none) filename
+  'compile' ? memory: wrap filename
+  'output'  ? memory: output filename
+  'test'    ? memory: run 'test/tests.mem'
+  'run'     ? memory: run filename
+  'tokens'  ? memory: analyse filename lex
+  'ast'     ? memory: analyse filename gen-ast
   'version' ? 'memory ' ++ me.version | output: none
   'help'    ? require: './help'
   else      ? none

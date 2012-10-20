@@ -1,7 +1,7 @@
 fs = require: 'fs'
 path = require: 'path'
 
-walk = \cb, tree -> {
+walk = fn [cb tree] {
   try {
     stat = fs.stat-sync: tree
   } catch {
@@ -9,29 +9,29 @@ walk = \cb, tree -> {
   }
 
   if stat.is-directory!
-    then fs.readdir-sync: tree | map: (\v -> path.join: tree, v | walk: cb)
+    then fs.readdir-sync: tree | map: (fn [v] path.join: tree v | walk: cb)
     else {
       if (tree.index-of: '.mem') >= 0
-        then get-file-contents: cb, tree
+        then get-file-contents: cb tree
         else none
     }
 }
 
-get-file-contents = \cb, filepath -> path.join: process.env.PWD, filepath |
+get-file-contents = fn [cb filepath] path.join: process.env.PWD, filepath |
   fs.read-file-sync |
   show |
   cb: filepath
 
-get-files = \cb, dirname -> {
+get-files = fn [cb dirname] {
   stat = fs.stat-sync: dirname
-  if stat.is-directory! then walk: cb, dirname
-  else get-file-contents: cb, dirname
+  if stat.is-directory! then walk: cb dirname
+  else get-file-contents: cb dirname
 }
 
 -- TODO, if dir doesn't exist, create it
-write-file = \file, code -> code |
-  fs.write-file-sync: (file.replace: 'src', 'lib' |
-    (\fname -> fname.replace: '.mem', '.js') |
+write-file = fn [file code] code |
+  fs.write-file-sync: (file.replace: 'src' 'lib' |
+    (fn [name] name.replace: '.mem' '.js') |
     path.join: process.env.PWD)
 
-export #{ get-files, write-file }
+export { @get-files @write-file }
