@@ -294,6 +294,7 @@ bnf = {
     (o: '+' (fn [] new Identifier 'sum'))
     (o: '-' (fn [] new Identifier 'sub'))
     (o: '*' (fn [] new Identifier 'prod'))
+    (o: '* *' (fn [] new Identifier 'pow'))
     (o: '/' (fn [] new Identifier 'div'))
     (o: 'COMPARE' (fn [] new Compare $1))
     (o: 'LOGIC' (fn [] new Compare $1))
@@ -323,6 +324,9 @@ bnf = {
     (o: '* Value',
       (fn [] new Declaration '->' (new Arguments 'it'),
         (new Operation 'it' $1 $2)))
+    (o: '* * Value',
+      (fn [] new Declaration '->' (new Arguments 'it'),
+        (new Operation 'it' '**' $3)))
     (o: '/ Value',
       (fn [] new Declaration '->' (new Arguments 'it'),
         (new Operation 'it' $1 $2)))
@@ -343,6 +347,7 @@ bnf = {
     (o: 'Value + OptTerminator Value' (fn [] new Operation $1 '+' $4))
     (o: 'Value - OptTerminator Value' (fn [] new Operation $1 '-' $4))
     (o: 'Value * OptTerminator Value' (fn [] new Operation $1 '*' $4))
+    (o: 'Value * * OptTerminator Value' (fn [] new Operation $1 '**' $5))
     (o: 'Value / OptTerminator Value' (fn [] new Operation $1 '/' $4))
   ]
 }
@@ -366,7 +371,7 @@ operators = [
   ['left' 'COMPARE']
   ['left' 'LEFT_OPERATORS']
   ['left' '+' '-']
-  ['left' '*' '/']
+  ['left' '*' '**' '/']
 ]
 
 parser = new jison.Parser { @tokens @bnf @operators @start-symbol }
