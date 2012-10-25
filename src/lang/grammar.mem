@@ -147,6 +147,7 @@ bnf = {
 
   @Cloning [
     (o: 'Maps Value' (fn [] new Cloning $2 $1))
+    (o: 'Lists Value' (fn [] new Cloning $2 $1))
   ]
 
   @Pipeline [
