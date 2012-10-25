@@ -3,6 +3,7 @@ me = require: '../../package.json'
 
 { @memory @run @lex @gen-ast @benchmark } = import './memory.mem'
 { @write-file @get-files } = import './fisy.mem'
+start-repl = import './repl.mem'
 
 wrap = fn [name code] write-file: name ('module.exports = ' ++ code)
 
@@ -22,4 +23,4 @@ export MEM = fn [action (filename = 'src/')]
   'ast'     ? memory: analyse filename gen-ast
   'version' ? 'memory ' ++ me.version | output: none
   'help'    ? require: './help'
-  else      ? none
+  else      ? start-repl!

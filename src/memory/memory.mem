@@ -31,13 +31,13 @@ to-ast = fn [body] {
   ]
 }
 
-transform = fn [name parsed]
+transform = fn [name parsed (f = to-ast)]
   parsed is none ? to-ast: ''
   else ? {
     context = {}
     body = parsed.compile: context, name
     parsed.flag-core-methods: body
-    to-ast: (parsed.add-vars: context, false) ++ (parsed.add-core!) ++
+    f: (parsed.add-vars: context, false) ++ (parsed.add-core!) ++
       (parsed.add-deps!) ++ body
   }
 
@@ -87,4 +87,5 @@ run = fn [name code] {
   result
 }
 
-export { @lex @parse @gen-ast @transpile @run @memory @benchmark }
+export { @lex @parse @gen-ast @transpile @run
+  @memory @benchmark @transform @escodegen }
