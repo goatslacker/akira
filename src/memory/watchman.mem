@@ -1,9 +1,6 @@
 nodewatch = require: 'nodewatch'
-{ @get-file-contents } = import './fisy.mem'
 
-watch = fn [filename] nodewatch.add: filename |
-  (fn [f] f.on-change: (fn [] get-file-contents: filename |
-    compile |
-    (fn [data] write: data, filename)))
+watch = fn [filename callback] nodewatch.add: filename |
+  (fn [f] f.on-change: callback)
 
 export watch
