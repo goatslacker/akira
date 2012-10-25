@@ -55,11 +55,11 @@ benchmark = fn [name code] {
 
   {
     @name name
-    @Lexer a ++ 'ms'
-    @Parser b ++ 'ms'
-    @Transform c ++ 'ms'
-    @Compile d ++ 'ms'
-    @Total (a + b + c + d) ++ 'ms'
+    @Lexer a + 'ms'
+    @Parser b + 'ms'
+    @Transform c + 'ms'
+    @Compile d + 'ms'
+    @Total (a + b + c + d) + 'ms'
   }
 }
 
