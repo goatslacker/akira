@@ -36,7 +36,7 @@ macro each fn [sym name ifstmt] {
 }
 
 export {
-  -- logic and comparisons
+
   @eq (`
     eq = fn [a b] a == b)
 
@@ -61,7 +61,6 @@ export {
   @or (`
     or = fn [a b] a || b)
 
-  -- enumerable
   @head (`
     head = fn [[x]] x)
 
@@ -240,6 +239,15 @@ export {
 
   @pow (`
     pow = fn [a b] Math.pow: a b)
+
+  @str? (`
+    str? = fn [x] x is String)
+
+  @map? (`
+    map? = fn [x] x is Object)
+
+  @none? (`
+    none? = fn [x] x is none)
 
   @camelize (`
     camelize = fn [str] str.replace: /(-|_)+([a-zA-Z0-9$_])/g,
