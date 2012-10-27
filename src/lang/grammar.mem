@@ -307,7 +307,7 @@ bnf = {
     (o: 'Accessor',
       (fn [] new Declaration '->' (new Arguments 'it'),
         (new Access 'it' $1)))
-    (o: 'Accessor : Value',
+    (o: 'Accessor : Arguments',
       (fn [] new Declaration '->' (new Arguments 'it'),
         (new Call (new Access 'it' $1) $3)))
     (o: 'COMPARE Value',
