@@ -35,6 +35,16 @@ macro each fn [sym name ifstmt] {
   @each false
 }
 
+macro single-if fn [cond body] {
+  @type 'IfStatement'
+  @test cond
+  @consequent {
+    @type 'BlockStatement'
+    @body [body]
+  }
+  @alternate none
+}
+
 export {
 
   @eq (`
@@ -185,6 +195,9 @@ export {
   --
   --   if f.length < 1 then f else c: none
   -- }
+
+  @when (`
+   when = fn [is-true callback] single-if is-true (callback!))
 
   @show (`
     show = fn [i] i.to-string!)
