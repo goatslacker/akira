@@ -7,7 +7,15 @@ macro bin-expr fn [op a b] {
 
 macro each fn [sym name ifstmt] {
   @type 'ForInStatement'
-  @left sym
+  @left {
+    @type 'VariableDeclaration'
+    @declarations [{
+      @type 'VariableDeclarator'
+      @id sym
+      @init none
+    }]
+    @kind 'var'
+  }
   @right name
   @body {
     @type 'BlockStatement'
