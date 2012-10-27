@@ -246,6 +246,9 @@ export {
   @map? (`
     map? = fn [x] x is Object)
 
+  @vector? (`
+    vector? = fn [x] x is Array)
+
   @none? (`
     none? = fn [x] x is none)
 
