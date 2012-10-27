@@ -100,7 +100,7 @@ bnf = {
 
   @Value [
     (o: 'Literal')
-    (o: 'Lists')
+    (o: 'Vectors')
     (o: 'Maps')
     (o: 'Operation')
     (o: 'Access')
@@ -139,7 +139,7 @@ bnf = {
   @Assignment [
     (o: 'Identifier = Assignable' (fn [] new Assignment $1 $3))
     (o: 'Access = Assignable' (fn [] new Assignment $1 $3))
-    (o: 'Lists = Assignable' (fn [] new Assignment $1 $3))
+    (o: 'Vectors = Assignable' (fn [] new Assignment $1 $3))
     (o: 'Maps = Assignable' (fn [] new Assignment $1 $3))
   ]
 
@@ -149,7 +149,7 @@ bnf = {
 
   @Cloning [
     (o: 'Maps Value' (fn [] new Cloning $2 $1))
-    (o: 'Lists Value' (fn [] new Cloning $2 $1))
+    (o: 'Vectors Value' (fn [] new Cloning $2 $1))
   ]
 
   @Pipeline [
@@ -196,19 +196,19 @@ bnf = {
     (o: 'Identifier')
   ]
 
-  @Lists [
-    (o: '[ ]' (fn [] new List))
-    (o: '[ OptTerminator ListArgs OptTerminator ]' (fn [] new List $3))
+  @Vectors [
+    (o: '[ ]' (fn [] new Vector))
+    (o: '[ OptTerminator VectorArgs OptTerminator ]' (fn [] new Vector $3))
   ]
 
-  @ListArg [
+  @VectorArg [
     (o: 'Value')
     (o: 'Rest')
   ]
 
-  @ListArgs [
-    (o: 'ListArg' (fn [] new Arguments $1))
-    (o: 'ListArgs OptComma ListArg' (fn [] new Arguments $1 $3))
+  @VectorArgs [
+    (o: 'VectorArg' (fn [] new Arguments $1))
+    (o: 'VectorArgs OptComma VectorArg' (fn [] new Arguments $1 $3))
   ]
 
   @Key [
@@ -252,7 +252,7 @@ bnf = {
     (o: 'Identifier')
     (o: '( Identifier = Value )' (fn [] new Assignment $2 $4))
     (o: 'Rest')
-    (o: 'Lists')
+    (o: 'Vectors')
   ]
 
   @OptComma [

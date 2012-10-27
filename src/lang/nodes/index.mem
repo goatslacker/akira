@@ -19,7 +19,6 @@ export {
   @Import         (r: 'import')
   @L              (r: 'line')
   @Literal        (r: 'literal')
-  @List           (r: 'list')
   @Macro          (r: 'macro')
   @Map            (r: 'map')
   @Nodes          (r: 'nodes')
@@ -27,4 +26,5 @@ export {
   @Pattern        (r: 'pattern')
   @Pipeline       (r: 'pipeline')
   @Recur          (r: 'recur')
+  @Vector         (r: 'vector')
 }

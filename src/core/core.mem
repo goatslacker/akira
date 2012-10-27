@@ -80,22 +80,22 @@ export {
     length = fn [of] of.length)
 
   @join (`
-    join = fn [by list] list.join: by)
+    join = fn [by vec] vec.join: by)
 
   @concat (`
     concat = fn [& args] foldl: (fn [a b] a ++ b) args)
 
   @count (`
-    count = fn [list f]
-      not f ? list.length
-      else ? filter: f list | (.length)
+    count = fn [vec f]
+      not f ? vec.length
+      else ? filter: f vec | (.length)
   )
 
   @average (`
-    average = fn [list] foldl: (fn [a b] a + b) list | (/ list.length))
+    average = fn [vec] foldl: (fn [a b] a + b) vec | (/ vec.length))
 
   @compact (`
-    compact = fn [list] filter: (fn [x] not not x) list)
+    compact = fn [vec] filter: (fn [x] not not x) vec)
 
   @assert (`
     assert = fn [a b]
@@ -113,40 +113,40 @@ export {
     call = fn [obj prop & args] (obj !! prop) | (.apply: obj, args))
 
   @filter (`
-    filter = fn [f list] Array.prototype.filter.call: list f)
+    filter = fn [f vec] Array.prototype.filter.call: vec f)
 
   @map (`
-    map = fn [f list] Array.prototype.map.call: list f)
+    map = fn [f vec] Array.prototype.map.call: vec f)
 
   @foldl (`
-    foldl = fn [f list] Array.prototype.reduce.call: list f)
+    foldl = fn [f vec] Array.prototype.reduce.call: vec f)
 
   @foldr (`
-    foldr = fn [f list] Array.prototype.reduce-right.call: list f)
+    foldr = fn [f vec] Array.prototype.reduce-right.call: vec f)
 
   @intersect (`
-    intersect = fn [list1 list2] filter: (fn [x] list2.indexOf: x | (!= 0 - 1)) list1)
+    intersect = fn [vec1 vec2] filter: (fn [x] vec2.indexOf: x | (!= 0 - 1)) vec1)
 
   @max (`
-    max = fn [list] foldl: (fn [a b] if a > b then a else b) list)
+    max = fn [vec] foldl: (fn [a b] if a > b then a else b) vec)
 
   @min (`
-    min = fn [list] foldl: (fn [a b] if a < b then a else b) list)
+    min = fn [vec] foldl: (fn [a b] if a < b then a else b) vec)
 
   @nothing (`
-    nothing = fn [f list] filter: f list | (.length) | (== 0))
+    nothing = fn [f vec] filter: f vec | (.length) | (== 0))
 
   @randomize (`
-    randomize = fn [list] sort: (fn [] (Math.random!) > 0.5) list)
+    randomize = fn [vec] sort: (fn [] (Math.random!) > 0.5) vec)
 
   @unique (`
-    unique = fn [list] filter: (fn [x i] list.indexOf: x | (== i)) list)
+    unique = fn [vec] filter: (fn [x i] vec.indexOf: x | (== i)) vec)
 
   @take (`
-    take = fn [n list] list.slice: 0 n)
+    take = fn [n vec] vec.slice: 0 n)
 
   @drop (`
-    drop = fn [n list] list.slice: n)
+    drop = fn [n vec] vec.slice: n)
 
   @take-while (`
     take-while = fn [f [x & xs]]
