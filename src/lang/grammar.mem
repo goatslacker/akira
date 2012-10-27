@@ -62,7 +62,7 @@ bnf = {
   ]
 
   @Prototype [
-    (o: 'PROTOTYPE' (fn [] new Identifier $1))
+    (o: 'PROTOTYPE' (fn [] new Identifier '__prototype'))
   ]
 
   @Rest [
@@ -238,6 +238,7 @@ bnf = {
   @Accessor [
     (o: '. Identifier' (fn [] $2))
     (o: '. AlphaNumeric' (fn [] $2))
+    (o: '. PROTOTYPE' (fn [] $2))
   ]
 
   @Arguments [
