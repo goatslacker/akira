@@ -122,6 +122,18 @@ export {
   @call (`
     call = fn [obj prop & args] (obj !! prop) | (.apply: obj, args))
 
+  @keys (`
+    keys = Object.keys)
+
+  @values (`
+    values = fn [x] map: (fn [k] x !! k) (keys: x))
+
+  @key (`
+    key = fn [v x] find: (== v) x)
+
+  @value (`
+    value = fn [k x] x !! k)
+
   @filter (`
     filter = fn [f vec] Array.prototype.filter.call: vec f)
 
@@ -252,6 +264,27 @@ export {
 
   @pow (`
     pow = fn [a b] Math.pow: a b)
+
+  @inc (`
+    inc = fn [x] x + 1)
+
+  @dec (`
+    dec = fn [x] x - 1)
+
+  @false? (`
+    false? = fn [x] x is false)
+
+  @true? (`
+    true? = fn [x] x is true)
+
+  @pos? (`
+    pos? = fn [x] x > 0)
+
+  @neg? (`
+    neg? = fn [x] x < 0)
+
+  @zero? (`
+    zero? = fn [x] x is 0)
 
   @str? (`
     str? = fn [x] x is String)
