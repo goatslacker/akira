@@ -25,7 +25,7 @@ spanish-gender-of-noun = fn [noun]
 assert: 'female', (spanish-gender-of-noun: 'la casa')
 assert: 'male', (spanish-gender-of-noun: 'el carro')
 
-sort-even-odd = fn [[x, & xs]]
+sort-even-odd = fn [[x & xs]]
   not x ? []
   else ? {
     if (odd: x)
@@ -33,21 +33,21 @@ sort-even-odd = fn [[x, & xs]]
       else x +: (sort-even-odd: xs)
   }
 
-[1,2,3,4,5,6] | sort-even-odd | assert-deep: [2, 4, 6, 5, 3, 1]
+[1 2 3 4 5 6] | sort-even-odd | assert-deep: [2 4 6 5 3 1]
 
 -- implementations of our util functions
-init = fn [[& a, b]] a
-tail = fn [[a, & b]] b
-head = fn [[a, & b]] a
-last = fn [[& a, b]] b
-get-middle = fn [[a, & b, c]] b
+init = fn [[& a b]] a
+tail = fn [[a & b]] b
+head = fn [[a & b]] a
+last = fn [[& a b]] b
+get-middle = fn [[a & b c]] b
 
 
-ls = [1, 2, 3, 4, 5]
+ls = [1 2 3 4 5]
 
-ls | get-middle | assert-deep: [2, 3, 4]
-ls | init | assert-deep: [1, 2, 3, 4]
-ls | tail | assert-deep: [2, 3, 4, 5]
+ls | get-middle | assert-deep: [2 3 4]
+ls | init | assert-deep: [1 2 3 4]
+ls | tail | assert-deep: [2 3 4 5]
 ls | head | assert: 1
 ls | last | assert: 5
 

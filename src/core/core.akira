@@ -147,7 +147,7 @@ export {
     foldr = fn [f vec] Array.prototype.reduce-right.call: vec f)
 
   @intersect (`
-    intersect = fn [vec1 vec2] filter: (fn [x] vec2.indexOf: x | (!= 0 - 1)) vec1)
+    intersect = fn [vec1 vec2] filter: (fn [x] vec2.indexOf: x | (!= -1)) vec1)
 
   @max (`
     max = fn [vec] foldl: (fn [a b] if a > b then a else b) vec)

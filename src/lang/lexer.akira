@@ -1,7 +1,7 @@
 rx = {
   @IDENTIFIER /^([a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
   @KEY /^(@[a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
-  @NUM /^((\d+\.)?\d+)+/
+  @NUM /^(-?([0-9]+[\.e])?[0-9]+,?)+/
   @STR /^'(.*?)'/
   @ARGS /^&([0-9]+)/
   @LAMBDA /^->/
@@ -30,7 +30,7 @@ get-type = fn [a] rx | (find: (fn [x] x.test: a))
 
 extract = fn [key chunk] rx !! key | (.exec: chunk)
 
-parse-alphanumeric = fn [t chunk] extract: t chunk | (!! 1)
+parse-alphanumeric = fn [t chunk (n = 1)] extract: t chunk | (!! n)
 
 return-identifier = fn [type item]
   'KEYWORDS' ? [(item.toUpperCase!) item]
@@ -51,7 +51,7 @@ parse-regular-expressions = fn [t chunk] {
 get-token = fn [t chunk n]
   'IDENTIFIER' ? parse-identifier: t chunk
   'KEY' ? parse-identifier: t chunk
-  'NUM' ? parse-alphanumeric: t chunk
+  'NUM' ? parse-alphanumeric: t chunk 0
   'STR' ? parse-alphanumeric: t chunk
   'OPERATION' ? parse-identifier: t chunk
   'LAMBDA' ? 'FN'

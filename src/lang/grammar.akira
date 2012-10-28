@@ -128,7 +128,7 @@ bnf = {
   ]
 
   @AlphaNumeric [
-    (o: 'NUM' (fn [] new Literal (Number: $1)))
+    (o: 'NUM' (fn [] new Literal (Number: ($1.replace: /,/g, ''))))
     (o: 'Strings')
   ]
 
@@ -189,11 +189,6 @@ bnf = {
   @Comma [
     (o: '')
     (o: ', OptTerminator')
-  ]
-
-  @Numbers [
-    (o: 'NUM')
-    (o: 'Identifier')
   ]
 
   @Vectors [

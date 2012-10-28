@@ -1,7 +1,7 @@
 a = 1
-b = 2
-assert: a, 1
-assert: b, 2
+b = 2,000
+assert: a 1
+assert: b 2,000
 (fn [] {
   -- local a, no shadowing
   a = 3
@@ -14,7 +14,7 @@ assert: b, 2
   assert: b, 0
 }): none
 
-assert: 3, a + b
+assert: 2,001 a + b
 
 c = if true then 1 else 2
 d = if 1 then true else if 2 then true else false
@@ -27,8 +27,8 @@ assert: f, g
 assert: g, 1
 
 -- assigning
-a1 = 1
-assert: a1, 1
+a1 = -5
+assert: a1, -5
 a2 = [1]
 assert-deep: a2, [1]
 a3 = { @a 1 }
@@ -36,7 +36,7 @@ assert: a3.a, 1
 a4 = 2 * 4
 assert: a4, 8
 a5 = (fn [x] x)
-a5: 4 | assert: 4
+a5: 1,337 | assert: 1337
 a6 = (if true then 1 else 2)
 assert: a6, 1
 a7 = a5: 12
@@ -47,5 +47,5 @@ assert: a8, 6
 h = fn [x] x
 assert: (h: 5), 5
 
-i = h: 4
-assert: i, 4
+i = h: 1e9
+assert: i, 1e9

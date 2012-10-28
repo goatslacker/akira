@@ -42,12 +42,12 @@ true?: true | is-true
 
 -- pos?
 pos?: 3 | is-true
-pos?: 0 - 1 | is-false
+pos?: -1 | is-false
 pos?: 0 | is-false
 
 -- neg?
 neg?: 3 | is-false
-neg?: 0 - 1 | is-true
+neg?: -1 | is-true
 neg?: 0 | is-false
 
 -- zero?
