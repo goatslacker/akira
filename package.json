@@ -2,7 +2,7 @@
   "name": "akira",
   "author": "Josh Perez <josh@goatslacker.com>",
   "version": "0.0.1",
-  "description": "tiny language that compiles to javascript",
+  "description": "toy functional language that transpiles to JavaScript",
 
   "scripts": {
     "start": "bin/akira compile src/lang && node lib/lang/grammar.js",
@@ -12,7 +12,7 @@
 
   "repository": {
     "type": "git",
-    "url": "https://github.com/goatslacker/rini.git"
+    "url": "https://github.com/goatslacker/akira.git"
   },
 
   "dependencies": {
