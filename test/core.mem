@@ -1,0 +1,70 @@
+curried-assert = curry: assert
+is-false = curried-assert: false
+is-true = curried-assert: true
+
+-- curry
+curried-flip = curry: flip
+silly-id = curried-flip: id 1
+silly-id: 2 | assert: 2
+
+curried-sum = curry: sum
+add-one = curried-sum: 1
+2 | add-one | assert: 3
+
+
+obj = { @foo 1, @bar 2, @baz 3 }
+
+-- keys
+obj | keys | assert-deep: ['foo' 'bar' 'baz']
+
+-- values
+obj | values | assert-deep: [1 2 3]
+
+-- key
+obj | key: 2 | assert: 'bar'
+
+-- value
+obj | value: 'foo' | assert: 1
+
+-- inc
+inc: 1 | assert: 2
+
+-- dec
+dec: 2 | assert: 1
+
+-- false?
+false?: false | is-true
+false?: true | is-false
+
+-- true?
+true?: false | is-false
+true?: true | is-true
+
+-- pos?
+pos?: 3 | is-true
+pos?: 0 - 1 | is-false
+pos?: 0 | is-false
+
+-- neg?
+neg?: 3 | is-false
+neg?: 0 - 1 | is-true
+neg?: 0 | is-false
+
+-- zero?
+zero?: 0 | is-true
+
+-- vector?
+obj | vector? | is-false
+[1 2 3] | vector? | is-true
+2 | vector? | is-false
+
+-- map?
+obj | map? | is-true
+[1 2 3] | map? | is-false
+
+-- str?
+'hello' | str? | is-true
+2 | str? | is-false
+
+-- when
+when: true (fn [] 1) | assert: 1
