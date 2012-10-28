@@ -191,14 +191,16 @@ export {
   @partialr (`
     partialr = fn [f & args] fn [& xargs] f.apply: f, xargs ++ args)
 
-  -- curry = fn [f] {
-  --   c = fn [(args = [])] fn [arg] {
-  --     xargs = args ++ arg
-  --     if xargs.length < f.length then c: xargs else f.apply: f, xargs
-  --   }
-  --
-  --   if f.length < 1 then f else c: none
-  -- }
+  @curry (`
+    curry = fn [f] {
+      l = f.length
+      c = fn [args] fn [arg] {
+        xargs = args ++ arg
+        if xargs.length < l then c: xargs else f.apply: f, xargs
+      }
+      if l < 1 then f else c: []
+    })
+
   -- curryr = fn [f] {
   --   c = fn [(args = [])] fn [arg] {
   --     xargs = arg +: args
