@@ -91,7 +91,6 @@ bnf = {
     (o: 'Invocation')
     (o: 'Pipeline')
     (o: 'Cloning')
-    (o: 'Prototype')
     (o: 'Macro')
     (o: 'IMPORT STR' (fn [] new Import $2))
     (o: '` OptTerminator Expression' (fn [] new Evaluate $3))
@@ -99,18 +98,23 @@ bnf = {
   ]
 
   @Value [
+    (o: 'Values')
+    (o: 'Operation')
+  ]
+
+  @Values [
     (o: 'Literal')
     (o: 'Vectors')
     (o: 'Maps')
-    (o: 'Operation')
     (o: 'Access')
     (o: 'Type')
     (o: 'SpecialFunctions')
+    (o: 'Prototype')
     (o: 'ARGS' (fn [] 'arguments[{{$1}}]'))
     (o: '( Assignable )' (fn [] $2))
   ]
 
-  @Values [
+  @CallableValue [
     (o: 'Value')
     (o: 'Invocation')
   ]
@@ -153,9 +157,9 @@ bnf = {
   ]
 
   @Pipeline [
-    (o: 'Value | OptTerminator Values' (fn [] new Pipeline $1 $4))
-    (o: 'Invocation | OptTerminator Values' (fn [] new Pipeline $1 $4))
-    (o: 'Pipeline | OptTerminator Values' (fn [] new Pipeline $1 $4))
+    (o: 'Value | OptTerminator CallableValue' (fn [] new Pipeline $1 $4))
+    (o: 'Invocation | OptTerminator CallableValue' (fn [] new Pipeline $1 $4))
+    (o: 'Pipeline | OptTerminator CallableValue' (fn [] new Pipeline $1 $4))
   ]
 
   @Invocation [
@@ -226,10 +230,7 @@ bnf = {
   ]
 
   @Access [
-    (o: 'Identifier Accessor' (fn [] new Access $1 $2))
-    (o: 'Prototype Accessor' (fn [] new Access $1 $2))
-    (o: 'Type Accessor' (fn [] new Access $1 $2))
-    (o: 'Access Accessor' (fn [] new Access $1 $2))
+    (o: 'Values Accessor' (fn [] new Access $1 $2))
   ]
 
   @Accessor [
@@ -276,7 +277,7 @@ bnf = {
   ]
 
   @If [
-    (o: 'IF Values OptTerminator THEN Body OptTerminator ELSE Body',
+    (o: 'IF CallableValue OptTerminator THEN Body OptTerminator ELSE Body',
       (fn [] new If $2 $5 $8))
   ]
 
