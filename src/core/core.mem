@@ -194,7 +194,7 @@ export {
   @curry (`
     curry = fn [f] {
       l = f.length
-      c = fn [args] fn [arg] {
+      c = fn [args] fn [& arg] {
         xargs = args ++ arg
         if xargs.length < l then c: xargs else f.apply: f, xargs
       }
