@@ -99,6 +99,7 @@ bnf = {
 
   @Value [
     (o: 'Values')
+    (o: 'Access')
     (o: 'Operation')
   ]
 
@@ -106,10 +107,8 @@ bnf = {
     (o: 'Literal')
     (o: 'Vectors')
     (o: 'Maps')
-    (o: 'Access')
     (o: 'Type')
     (o: 'SpecialFunctions')
-    (o: 'Prototype')
     (o: 'ARGS' (fn [] 'arguments[{{$1}}]'))
     (o: '( Assignable )' (fn [] $2))
   ]
@@ -126,6 +125,7 @@ bnf = {
   @Literal [
     (o: 'Identifier')
     (o: 'AlphaNumeric')
+    (o: 'Prototype')
     (o: 'NONE' (fn [] new Literal none))
     (o: 'BOOL' (fn [] new Literal ($1 is 'true')))
     (o: 'REGEXP' (fn [] new Literal $1))
@@ -231,12 +231,11 @@ bnf = {
 
   @Access [
     (o: 'Values Accessor' (fn [] new Access $1 $2))
+    (o: 'Access Accessor' (fn [] new Access $1 $2))
   ]
 
   @Accessor [
-    (o: '. Identifier' (fn [] $2))
-    (o: '. AlphaNumeric' (fn [] $2))
-    (o: '. PROTOTYPE' (fn [] $2))
+    (o: '. Literal' (fn [] $2))
   ]
 
   @Arguments [
