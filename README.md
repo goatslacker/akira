@@ -1,4 +1,4 @@
-memory
+akira
 ======
 
 Functional language that transpiles to JavaScript.

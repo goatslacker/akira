@@ -1,13 +1,13 @@
 {
-  "name": "memory",
+  "name": "akira",
   "author": "Josh Perez <josh@goatslacker.com>",
   "version": "0.0.1",
   "description": "tiny language that compiles to javascript",
 
   "scripts": {
-    "start": "bin/memory compile src/lang && node lib/lang/grammar.js",
+    "start": "bin/akira compile src/lang && node lib/lang/grammar.js",
     "stop": "git co lib/lang/grammar.js",
-    "test": "bin/memory test"
+    "test": "bin/akira test"
   },
 
   "repository": {
@@ -25,7 +25,7 @@
     "nodewatch": "*"
   },
 
-  "bin": { "memory": "./bin/memory" },
+  "bin": { "akira": "./bin/akira" },
 
   "engines": {
     "node": ">= 0.4.0"

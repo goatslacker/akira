@@ -11,7 +11,7 @@ walk = fn [cb tree] {
   if stat.is-directory!
     then fs.readdir-sync: tree | map: (fn [v] path.join: tree v | walk: cb)
     else {
-      if (tree.index-of: '.mem') >= 0
+      if (tree.index-of: '.akira') >= 0
         then get-file-contents: cb tree
         else none
     }
@@ -31,7 +31,7 @@ get-files = fn [cb dirname] {
 -- TODO, if dir doesn't exist, create it
 write-file = fn [file code] code |
   fs.write-file-sync: (file.replace: 'src' 'lib' |
-    (fn [name] name.replace: '.mem' '.js') |
+    (fn [name] name.replace: '.akira' '.js') |
     path.join: process.env.PWD)
 
 export { @get-files @write-file }

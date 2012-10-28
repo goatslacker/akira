@@ -2,7 +2,7 @@ context = { @console console }
 vm = require: 'vm'
 util = require: 'util'
 
-{ @parse @transform @escodegen } = import './memory.mem'
+{ @parse @transform @escodegen } = import './compiler.akira'
 
 xform = fn [data] transform: 'repl' data (fn [ast] {
   @type 'Program'
@@ -11,7 +11,7 @@ xform = fn [data] transform: 'repl' data (fn [ast] {
 
 to-code = fn [name code] parse: 'repl' code | xform | escodegen.generate
 
-prompt = fn [] process.stdout.write: 'memory> '
+prompt = fn [] process.stdout.write: 'akira> '
 
 inspect = fn [value] util.inspect: value false 35
 

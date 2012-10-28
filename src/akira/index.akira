@@ -1,0 +1,28 @@
+util = require: 'util'
+me = require: '../../package.json'
+
+{ @akira @run @lex @gen-ast @benchmark } = import './compiler.akira'
+{ @write-file @get-files } = import './fisy.akira'
+start-repl = import './repl.akira'
+watch = import './watchman.akira'
+
+wrap = fn [name code] write-file: name ('module.exports = ' ++ code)
+
+output = fn [name code] util.puts: code
+analyse = fn [name body] body |
+  (fn [data] util.inspect: data false 50) |
+  output: none
+
+export MEM = fn [action (filename = 'src/')]
+  'bench'   ? akira: analyse filename benchmark
+  'debug'   ? akira: (fn [] none) filename
+  'compile' ? akira: wrap filename
+  'output'  ? akira: output filename
+  'test'    ? akira: run 'test/tests.akira'
+  'run'     ? akira: run filename
+  'tokens'  ? akira: analyse filename lex
+  'ast'     ? akira: analyse filename gen-ast
+  'version' ? 'akira ' ++ me.version | output: none
+  'watch'   ? watch: filename (fn [] akira: wrap filename)
+  'help'    ? require: './help'
+  else      ? start-repl!

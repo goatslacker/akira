@@ -2,8 +2,8 @@ vm = require: 'vm'
 util = require: 'util'
 escodegen = require: 'escodegen'
 
-{ @get-files } = import './fisy.mem'
-{ @mark } = import './bench.mem'
+{ @get-files } = import './fisy.akira'
+{ @mark } = import './bench.akira'
 
 lexer = require: '../lang/lexer'
 parser = require: '../lang/grammar'
@@ -63,7 +63,7 @@ benchmark = fn [name code] {
   }
 }
 
-memory = fn [cb filepath (f = transpile)] {
+akira = fn [cb filepath (f = transpile)] {
   on-file = fn [name code] {
     try {
       result = code | f: name | cb: name
@@ -88,4 +88,4 @@ run = fn [name code] {
 }
 
 export { @lex @parse @gen-ast @transpile @run
-  @memory @benchmark @transform @escodegen }
+  @akira @benchmark @transform @escodegen }

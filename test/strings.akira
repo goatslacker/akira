@@ -6,7 +6,7 @@ capitalize: str | assert: 'Hello'
 
 camelize: 'hello-world' | assert: 'helloWorld'
 camelize: 'hello_world' | assert: 'helloWorld'
-camelize: 'hello_world-i_am_Memory' | assert: 'helloWorldIAmMemory'
+camelize: 'hello_world-i_am_Akira' | assert: 'helloWorldIAmAkira'
 
 uppercase: str | assert: 'HELLO'
 
