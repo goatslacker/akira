@@ -14,14 +14,20 @@ analyse = fn [name body] body |
   (fn [data] util.inspect: data false 50) |
   output: none
 
-export MEM = fn [action [filename x]]
-  'compile' ? akira: (fn [name code] exports: name code filename x) filename
-  'output'  ? akira: output filename
-  'run'     ? akira: run filename
-  'tokens'  ? akira: analyse filename lex
-  'ast'     ? akira: analyse filename gen-ast
+load-makefile = fn [key opts] fn [name code] {
+  make = run: name code { @module { @exports {} } }
+  (make !! key): opts
+}
+
+export MEM = fn [action [a b & c]]
+  'compile' ? akira: (fn [name code] exports: name code a b) a
+  'output'  ? akira: output a
+  'run'     ? akira: run a
+  'tokens'  ? akira: analyse a lex
+  'ast'     ? akira: analyse a gen-ast
   'version' ? 'akira ' ++ me.version | output: none
-  'watch'   ? watch: filename (fn [] akira: wrap filename)
+  'watch'   ? watch: a (fn [] akira: wrap a)
+  'make'    ? akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
   'help'    ? require: './help'
   else      ? start-repl!
 

@@ -77,9 +77,10 @@ akira = fn [cb filepath (f = transpile)] {
   get-files: on-file filepath
 }
 
-run = fn [name code] {
+run = fn [name code (custom-context = {})] {
+  context = { @console console } custom-context
   try {
-    result = vm.run-in-new-context: code { @console console }
+    result = vm.run-in-new-context: code context
   } catch {
     util.error: name
     util.error: err.stack
