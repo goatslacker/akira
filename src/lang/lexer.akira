@@ -49,13 +49,13 @@ parse-regular-expressions = fn [t chunk] {
 }
 
 get-token = fn [t chunk n]
-  'IDENTIFIER' ? parse-identifier: t chunk
-  'KEY' ? parse-identifier: t chunk
+  'IDENTIFIER' ? parse-identifier &!
+  'KEY' ? parse-identifier &!
   'NUM' ? parse-alphanumeric: t chunk 0
   'STR' ? parse-alphanumeric: t chunk
-  'OPERATION' ? parse-identifier: t chunk
+  'OPERATION' ? parse-identifier &!
   'LAMBDA' ? 'FN'
-  'REGEX' ? parse-regular-expressions: t chunk
+  'REGEX' ? parse-regular-expressions &!
   'COMMENTS' ? parse-alphanumeric: t chunk
   'ARGS' ? [t (extract: t chunk | (!! 1))]
   'WHITESPACE' ? ' '
