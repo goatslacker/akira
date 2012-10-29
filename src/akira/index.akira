@@ -6,18 +6,22 @@ me = require: '../../package.json'
 start-repl = import './repl.akira'
 watch = import './watchman.akira'
 
-exports = fn [name code from to] write-file: name,
-  ('module.exports = ' ++ code), from, to
+exports = fn [name code from to]
+  write-file: name ('module.exports = ' ++ code) from to
 
-output = fn [name code] util.puts: code
-analyse = fn [name body] body |
+output = fn [name code]
+  util.puts: code
+
+analyse = fn [name body]
+  body |
   (fn [data] util.inspect: data false 50) |
   output: none
 
-load-makefile = fn [key opts] fn [name code] {
-  make = run: name ('module.exports = ' ++ code)
-  (make !! key): opts
-}
+load-makefile = fn [key opts]
+  fn [name code] {
+    make = run: name ('module.exports = ' ++ code)
+    (make !! key): opts
+  }
 
 export MEM = fn [action [a b & c]]
   'compile' ? akira: (fn [name code] exports: name code a b) a

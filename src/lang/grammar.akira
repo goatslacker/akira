@@ -168,9 +168,14 @@ bnf = {
     (o: 'Value & !' (fn [] new Call $1, 'apply'))
   ]
 
+  @TBody [
+    (o: 'TERMINATOR Body' (fn [] $2))
+    (o: 'Body')
+  ]
+
   @Declaration [
-    (o: 'FN [ Parameters ] Body' (fn [] new Declaration none $3 $5))
-    (o: 'FN [ ] Body' (fn [] new Declaration none none $4))
+    (o: 'FN [ Parameters ] TBody' (fn [] new Declaration none $3 $5))
+    (o: 'FN [ ] TBody' (fn [] new Declaration none none $4))
   ]
 
   @Pattern [
