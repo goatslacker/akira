@@ -20,25 +20,25 @@ load-makefile = fn [key opts]
     (make !! key): opts
   }
 
-output = fn [filename]
-  akira: (fn [name code] util.puts: code) filename
-
-cli = fn [action [a b & c]]
-  'compile' ? akira: (fn [name code] exports: name code a b) a
-  'output'  ? output: a
-  'run'     ? akira: run a
-  'tokens'  ? akira: analyse a lex
-  'ast'     ? akira: analyse a gen-ast
-  'version' ? 'akira ' ++ me.version | output: none
-  'watch'   ? watch: a (fn [] akira: wrap a)
-  'make'    ? akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
-  'help'    ? require: './help'
-  else      ? start-repl!
-
-
 export {
-  @cli
-  @output
+  @cli (fn [action [a b & c]]
+    'compile' ? akira: (fn [name code] exports: name code a b) a
+    'output'  ? this.output: a
+    'run'     ? this.run: a
+    'tokens'  ? akira: analyse a lex
+    'ast'     ? akira: analyse a gen-ast
+    'version' ? 'akira ' ++ me.version | output: none
+    'watch'   ? watch: a (fn [] akira: wrap a)
+    'make'    ? akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
+    'help'    ? require: './help'
+    else      ? start-repl!
+  )
+
+  @output (fn [filename]
+    akira: (fn [name code] util.puts: code) filename)
+
+  @run (fn [filename]
+    akira: run filename)
 }
 
     --  'bench'   ? akira: analyse filename benchmark
