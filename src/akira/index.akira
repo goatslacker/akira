@@ -9,9 +9,6 @@ watch = import './watchman.akira'
 exports = fn [name code from to]
   write-file: name ('module.exports = ' ++ code) from to
 
-output = fn [name code]
-  util.puts: code
-
 analyse = fn [name body]
   body |
   (fn [data] util.inspect: data false 50) |
@@ -23,9 +20,12 @@ load-makefile = fn [key opts]
     (make !! key): opts
   }
 
-export MEM = fn [action [a b & c]]
+output = fn [filename]
+  akira: (fn [name code] util.puts: code) filename
+
+cli = fn [action [a b & c]]
   'compile' ? akira: (fn [name code] exports: name code a b) a
-  'output'  ? akira: output a
+  'output'  ? output: a
   'run'     ? akira: run a
   'tokens'  ? akira: analyse a lex
   'ast'     ? akira: analyse a gen-ast
@@ -34,6 +34,12 @@ export MEM = fn [action [a b & c]]
   'make'    ? akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
   'help'    ? require: './help'
   else      ? start-repl!
+
+
+export {
+  @cli
+  @output
+}
 
     --  'bench'   ? akira: analyse filename benchmark
     --  'debug'   ? akira: (fn [] none) filename
