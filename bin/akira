@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../lib/akira/')(process.argv[2], process.argv[3]);
+require('../lib/akira/')(process.argv[2], process.argv.slice(3));

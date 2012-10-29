@@ -13,7 +13,7 @@ to-code = fn [name code] parse: 'repl' code | xform | escodegen.generate
 
 prompt = fn [] process.stdout.write: 'akira> '
 
-inspect = fn [value] util.inspect: value false 35
+inspect = fn [val] util.inspect: val false 35
 
 read-eval-print-loop = fn [data] {
   try {

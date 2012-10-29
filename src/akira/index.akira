@@ -6,19 +6,17 @@ me = require: '../../package.json'
 start-repl = import './repl.akira'
 watch = import './watchman.akira'
 
-wrap = fn [name code] write-file: name ('module.exports = ' ++ code)
+exports = fn [name code from to] write-file: name,
+  ('module.exports = ' ++ code), from, to
 
 output = fn [name code] util.puts: code
 analyse = fn [name body] body |
   (fn [data] util.inspect: data false 50) |
   output: none
 
-export MEM = fn [action (filename = 'src/')]
-  'bench'   ? akira: analyse filename benchmark
-  'debug'   ? akira: (fn [] none) filename
-  'compile' ? akira: wrap filename
+export MEM = fn [action [filename x]]
+  'compile' ? akira: (fn [name code] exports: name code filename x) filename
   'output'  ? akira: output filename
-  'test'    ? akira: run 'test/tests.akira'
   'run'     ? akira: run filename
   'tokens'  ? akira: analyse filename lex
   'ast'     ? akira: analyse filename gen-ast
@@ -26,3 +24,7 @@ export MEM = fn [action (filename = 'src/')]
   'watch'   ? watch: filename (fn [] akira: wrap filename)
   'help'    ? require: './help'
   else      ? start-repl!
+
+    --  'bench'   ? akira: analyse filename benchmark
+    --  'debug'   ? akira: (fn [] none) filename
+    --  'test'    ? akira: run 'test/tests.akira'

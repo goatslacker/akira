@@ -28,10 +28,12 @@ get-files = fn [cb dirname] {
   else get-file-contents: cb dirname
 }
 
--- TODO, if dir doesn't exist, create it
-write-file = fn [file code] code |
-  fs.write-file-sync: (file.replace: 'src' 'lib' |
-    (fn [name] name.replace: '.akira' '.js') |
-    path.join: process.env.PWD)
+write-file = fn [file code from (to = (path.dirname: file))] {
+  filename = (path.relative: from file) || (path.basename: file)
+
+  code |
+    fs.write-file-sync: (filename.replace: '.akira' '.js' |
+      path.join: to)
+}
 
 export { @get-files @write-file }
