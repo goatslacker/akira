@@ -15,7 +15,7 @@ analyse = fn [name body] body |
   output: none
 
 load-makefile = fn [key opts] fn [name code] {
-  make = run: name code { @module { @exports {} } }
+  make = run: name ('module.exports = ' ++ code)
   (make !! key): opts
 }
 

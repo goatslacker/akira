@@ -1,6 +1,6 @@
-vm = require: 'vm'
 util = require: 'util'
 escodegen = require: 'escodegen'
+dune = require: 'dune'
 
 { @get-files } = import './fisy.akira'
 { @mark } = import './bench.akira'
@@ -19,7 +19,7 @@ to-ast = fn [body] {
         @callee {
           @type 'FunctionExpression'
           @id none
-          @params [{ @type 'Identifier', @name '$$export' }]
+          @params []
           @body {
             @type 'BlockStatement'
             @body body
@@ -77,10 +77,9 @@ akira = fn [cb filepath (f = transpile)] {
   get-files: on-file filepath
 }
 
-run = fn [name code (custom-context = {})] {
-  context = { @console console } custom-context
+run = fn [name code] {
   try {
-    result = vm.run-in-new-context: code context
+    result = dune.string: code name
   } catch {
     util.error: name
     util.error: err.stack
