@@ -113,10 +113,8 @@ export {
   @compact (`
     compact = fn [vec] filter: (fn [x] not not x) vec)
 
-  @assert [
-    (`assertions = [])
+  @assert (`assertions = []) ++
     (`assert = fn [a b] assertions.push: a == b)
-  ]
 
   @assert-deep (`
     assert-deep = fn [a b]
