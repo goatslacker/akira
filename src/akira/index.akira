@@ -9,6 +9,9 @@ watch = import './watchman.akira'
 exports = fn [name code from to]
   write-file: name ('module.exports = ' ++ code) from to
 
+output = fn [name code]
+  util.puts: code
+
 analyse = fn [name body]
   body |
   (fn [data] util.inspect: data false 50) |
@@ -35,7 +38,7 @@ export {
   )
 
   @output (fn [filename]
-    akira: (fn [name code] util.puts: code) filename)
+    akira: output filename)
 
   @run (fn [filename]
     akira: run filename)
