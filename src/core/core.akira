@@ -101,20 +101,26 @@ export {
       else ? filter: f vec | (.length)
   )
 
+  @zip-with (`
+    zip-with = fn [f [a & as] [b & bs]]
+      (not a) || (not b) ? []
+      else ? (f: a b) +: (zip-with: f as bs)
+  )
+
   @average (`
     average = fn [vec] foldl: (fn [a b] a + b) vec | (/ vec.length))
 
   @compact (`
     compact = fn [vec] filter: (fn [x] not not x) vec)
 
-  @assert (`
-    assert = fn [a b]
-      a != b ? raise [a b]
-      else ? none
-  )
+  @assert [
+    (`assertions = [])
+    (`assert = fn [a b] assertions.push: a == b)
+  ]
 
   @assert-deep (`
-    assert-deep = fn [a b] filter: (fn [x i] assert: x (b !! i)) a)
+    assert-deep = fn [a b]
+      zip-with: (==) a b | foldl: (&&) | assert: true)
 
   @find (`
     find = fn [f ds] each i ds (if (f: ds !! i) is true then 0 else 0))
