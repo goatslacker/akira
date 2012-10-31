@@ -77,9 +77,9 @@ akira = fn [cb filepath (f = transpile)] {
   get-files: on-file filepath
 }
 
-run = fn [name code] {
+run = fn [name code context] {
   try {
-    result = dune.string: code name
+    result = dune.string: code name context
   } catch {
     util.error: name
     util.error: err.stack

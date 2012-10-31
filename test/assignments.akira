@@ -1,51 +1,51 @@
 a = 1
 b = 2,000
-assert: a 1
-assert: b 2,000
+ok: a 1
+ok: b 2,000
 (fn [] {
   -- local a, no shadowing
   a = 3
-  assert: a, 3
+  ok: a, 3
 }): none
 
 (fn [] {
   -- although we can reference a
   b = a - 1
-  assert: b, 0
+  ok: b, 0
 }): none
 
-assert: 2,001 a + b
+ok: 2,001 a + b
 
 c = if true then 1 else 2
 d = if 1 then true else if 2 then true else false
 e = f = g = 1
 
-assert: c, 1
-assert: d, true
-assert: e, f
-assert: f, g
-assert: g, 1
+ok: c, 1
+ok: d, true
+ok: e, f
+ok: f, g
+ok: g, 1
 
 -- assigning
 a1 = -5
-assert: a1, -5
+ok: a1, -5
 a2 = [1]
-assert-deep: a2, [1]
+ok-deep: a2, [1]
 a3 = { @a 1 }
-assert: a3.a, 1
+ok: a3.a, 1
 a4 = 2 * 4
-assert: a4, 8
+ok: a4, 8
 a5 = (fn [x] x)
-a5: 1,337 | assert: 1337
+a5: 1,337 | ok: 1337
 a6 = (if true then 1 else 2)
-assert: a6, 1
+ok: a6, 1
 a7 = a5: 12
-assert: a7, 12
+ok: a7, 12
 a8 = 6 | a5
-assert: a8, 6
+ok: a8, 6
 
 h = fn [x] x
-assert: (h: 5), 5
+ok: (h: 5), 5
 
 i = h: 1e9
-assert: i, 1e9
+ok: i, 1e9

@@ -1,6 +1,6 @@
 my-arr = [1, 2, 3]
 
-assert: 5, 2 + (last: my-arr)
+ok: 5, 2 + (last: my-arr)
 
 foo = fn [i, (x = 2)] i + x
-foo: 2 | assert: 4
+foo: 2 | ok: 4

@@ -16,11 +16,11 @@ Cat = {
 cat = { @name 'Luna' } Cat
 wasabi = { @name 'Wasabi' } Cat
 
-cat.speak! | assert: 'meow i am Luna'
-cat.alive | assert: true
-cat.eyes | assert: 2
-cat.legs | assert: 4
-cat.walk! | assert: true
-cat.sleep! | assert: 'Purr ZzZzZ...'
+cat.speak! | ok: 'meow i am Luna'
+cat.alive | ok: true
+cat.eyes | ok: 2
+cat.legs | ok: 4
+cat.walk! | ok: true
+cat.sleep! | ok: 'Purr ZzZzZ...'
 
-wasabi.speak! | assert: 'meow i am Wasabi'
+wasabi.speak! | ok: 'meow i am Wasabi'

@@ -1,5 +1,5 @@
 rx = /[A-Z]/
 
 h = rx.exec: 'HELLO WORLD'
-assert: 'H', h.1
-assert: 'H', h !! 0
+ok: 'H', h.1
+ok: 'H', h !! 0

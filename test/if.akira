@@ -10,9 +10,9 @@ foo = fn [x] {
 foo-true = foo: true
 foo-false = foo: false
 
-assert: foo-true, false
-assert: foo-false, true
+ok: foo-true, false
+ok: foo-false, true
 
 a = if false then true else if true then true else false
-assert: a, true
+ok: a, true
 

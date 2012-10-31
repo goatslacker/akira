@@ -1,36 +1,36 @@
-curried-assert = curry: assert
-is-false = curried-assert: false
-is-true = curried-assert: true
+curried-ok = curry: ok
+is-false = curried-ok: false
+is-true = curried-ok: true
 
 -- curry
 curried-flip = curry: flip
 silly-id = curried-flip: id 1
-silly-id: 2 | assert: 2
+silly-id: 2 | ok: 2
 
 curried-sum = curry: sum
 add-one = curried-sum: 1
-2 | add-one | assert: 3
+2 | add-one | ok: 3
 
 
 obj = { @foo 1, @bar 2, @baz 3 }
 
 -- keys
-obj | keys | assert-deep: ['foo' 'bar' 'baz']
+obj | keys | ok-deep: ['foo' 'bar' 'baz']
 
 -- values
-obj | values | assert-deep: [1 2 3]
+obj | values | ok-deep: [1 2 3]
 
 -- key
-obj | key: 2 | assert: 'bar'
+obj | key: 2 | ok: 'bar'
 
 -- value
-obj | value: 'foo' | assert: 1
+obj | value: 'foo' | ok: 1
 
 -- inc
-inc: 1 | assert: 2
+inc: 1 | ok: 2
 
 -- dec
-dec: 2 | assert: 1
+dec: 2 | ok: 1
 
 -- false?
 false?: false | is-true
@@ -67,4 +67,4 @@ obj | map? | is-true
 2 | str? | is-false
 
 -- when
-when: true (fn [] 1) | assert: 1
+when: true (fn [] 1) | ok: 1

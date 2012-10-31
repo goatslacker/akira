@@ -40,8 +40,8 @@ export {
   @output (fn [filename]
     akira: output filename)
 
-  @run (fn [filename]
-    akira: run filename)
+  @run (fn [filename context]
+    akira: (fn [name code] run: name code context) filename)
 }
 
     --  'bench'   ? akira: analyse filename benchmark

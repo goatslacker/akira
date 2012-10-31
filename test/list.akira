@@ -9,33 +9,33 @@ array = [
 (fn [] {
 -- Testing foldr, expressions in arguments, anonymous functions
   lastEl = fn [a] foldl: (fn [a b] flip: id, a, b), a
-  lastEl: array | (fn [a] assert: a, 3 )
+  lastEl: array | (fn [a] ok: a, 3 )
 }): none
 
 -- Partial application
 (fn [] {
   mapper = partial: map, square
-  assertArray = fn [a] assert-deep: a, [1, 4, 9]
+  okArray = fn [a] ok-deep: a, [1, 4, 9]
 
-  array | map: square | assertArray
-  array | mapper | assertArray
+  array | map: square | okArray
+  array | mapper | okArray
 }): none
 
-array.map: square | assert-deep: [1, 4, 9]
+array.map: square | ok-deep: [1, 4, 9]
 
-assert: array.2, 2
+ok: array.2, 2
 
-head: array | assert: 1
-init: array | assert-deep: [1, 2]
-tail: array | assert-deep: [2, 3]
-last: array | assert: 3
+head: array | ok: 1
+init: array | ok-deep: [1, 2]
+tail: array | ok-deep: [2, 3]
+last: array | ok: 3
 
-average: array | assert: 2
-min: array | assert: 1
-max: array | assert: 3
-unique: [1, 1, 2, 1, 3, 2] | assert-deep: array
+average: array | ok: 2
+min: array | ok: 1
+max: array | ok: 3
+unique: [1, 1, 2, 1, 3, 2] | ok-deep: array
 
-array !! 0 | assert: 1
-array ++ [4] | assert-deep: [1, 2, 3, 4]
-0 +: array | assert-deep: [0, 1, 2, 3]
-assert-deep: array, [1, 2, 3]
+array !! 0 | ok: 1
+array ++ [4] | ok-deep: [1, 2, 3, 4]
+0 +: array | ok-deep: [0, 1, 2, 3]
+ok-deep: array, [1, 2, 3]

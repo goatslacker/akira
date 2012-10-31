@@ -6,10 +6,10 @@ b = '{{world}} {{iz}} awesome'
 c = 'hai {{world}}'
 d = '{{c}}2'
 
-assert: a, 'hello world what is up'
-assert: b, 'world is awesome'
-assert: c, 'hai world'
-assert: d, 'hai world2'
+ok: a, 'hello world what is up'
+ok: b, 'world is awesome'
+ok: c, 'hai world'
+ok: d, 'hai world2'
 
 obj = { @where }
 mind = ['mind']
@@ -20,18 +20,18 @@ f = '{{obj.where}} is my {{mind[0]}}'
 g = '{{obj.where}} is my {{mind2}}'
 h = '{{mind[0]}} your own {{world}}'
 
-assert: e, 'where is my mind'
-assert: f, 'where is my mind'
-assert: g, 'where is my mind'
-assert: h, 'mind your own world'
+ok: e, 'where is my mind'
+ok: f, 'where is my mind'
+ok: g, 'where is my mind'
+ok: h, 'mind your own world'
 
 i = if true then '{{iz}}{{world}}' else 'not{{world}}'
-assert: i, 'isworld'
+ok: i, 'isworld'
 
-assert: '{{2-2}}', '0'
-assert: '{{1 + 1}}', '2'
-assert: '{{12 * 10}}', '120'
-assert: '{{32 /4}}', '8'
+ok: '{{2-2}}', '0'
+ok: '{{1 + 1}}', '2'
+ok: '{{12 * 10}}', '120'
+ok: '{{32 /4}}', '8'
 
 j = 6
-assert: '{{j* j}}', '36'
+ok: '{{j* j}}', '36'

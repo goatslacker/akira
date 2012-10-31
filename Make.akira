@@ -1,0 +1,43 @@
+fs = require: 'fs'
+path = require: 'path'
+akira = require: (path.join: process.env.PWD 'lib/akira/index.js')
+
+test-results = fn [x name len]
+  true ? {
+    print: '√ {{name}} {{len}}'
+    true
+  }
+  else ? {
+    print: 'x {{name}}'
+    false
+  }
+
+test-file = fn [name] {
+  assertions = []
+  ok  = fn [a b] assertions.push: a == b
+  ok-deep = fn [a b]
+    zip-with: (==) a b | foldl: (&&) | ok: true
+
+  akira.run: ('test/' ++ name) { @ok @ok-deep }
+
+  test-results: (foldl: (&&) assertions),
+    (name.replace: '.akira' ''),
+    assertions.length
+}
+
+test = fn [] {
+  start = Date.now!
+  results = fs.readdir-sync: 'test' | map: test-file | foldl: (&&)
+  end = Date.now!
+
+  print: ''
+
+  if results == true
+    then print: 'OK!'
+    else print: 'Fail'
+  print: 'Time {{end - start}}ms'
+}
+
+export {
+  @test
+}

@@ -4,19 +4,19 @@ try {
  b = 1
 }
 
-assert: a, 1
-assert: b, undefined
+ok: a, 1
+ok: b, undefined
 
 try {
   raise 'Ah!'
 } catch {
   c = 3
 }
-assert: c, 3
+ok: c, 3
 
 try f = 2
 catch raise err
-assert: f, 2
+ok: f, 2
 
 try k = 1 catch g = 2
-assert: k, 1
+ok: k, 1

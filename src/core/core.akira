@@ -103,7 +103,7 @@ export {
 
   @zip-with (`
     zip-with = fn [f [a & as] [b & bs]]
-      (not a) || (not b) ? []
+      (a is undefined) || (b is undefined) ? []
       else ? (f: a b) +: (zip-with: f as bs)
   )
 
@@ -113,8 +113,15 @@ export {
   @compact (`
     compact = fn [vec] filter: (fn [x] not not x) vec)
 
-  @assert (`assertions = []) ++
-    (`assert = fn [a b] assertions.push: a == b)
+  @assert (`
+    assert = fn [a b] {
+      if a != b
+        then {
+          raise 'Expected {{a}} == {{b}}'
+          false
+        }
+        else true
+    })
 
   @assert-deep (`
     assert-deep = fn [a b]
