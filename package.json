@@ -7,7 +7,7 @@
   "scripts": {
     "start": "bin/akira compile src/lang lib/lang && node lib/lang/grammar.js",
     "stop": "git co lib/lang/grammar.js",
-    "test": "bin/akira test"
+    "test": "bin/akira make test"
   },
 
   "repository": {
