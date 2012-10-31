@@ -2,6 +2,13 @@ fs = require: 'fs'
 path = require: 'path'
 akira = require: (path.join: process.env.PWD 'lib/akira/index.js')
 
+time = fn [f] {
+  start = Date.now!
+  f!
+  end = Date.now!
+  print: 'Time {{end - start}}ms'
+}
+
 test-results = fn [x name len]
   true ? {
     print: '√ {{name}} {{len}}'
@@ -25,19 +32,24 @@ test-file = fn [name] {
     assertions.length
 }
 
-test = fn [] {
-  start = Date.now!
-  results = fs.readdir-sync: 'test' | map: test-file | foldl: (&&)
-  end = Date.now!
+test = fn []
+  time: (fn [] {
+    results = fs.readdir-sync: 'test' | map: test-file | foldl: (&&)
 
-  print: ''
+    print: ''
 
-  if results == true
-    then print: 'OK!'
-    else print: 'Fail'
-  print: 'Time {{end - start}}ms'
-}
+    if results == true
+      then print: 'OK!'
+      else print: 'Fail'
+  })
+
+build = fn []
+  time: (fn [] {
+    akira.compile: 'src/lang' 'lib/lang'
+    print: 'Built.'
+  })
 
 export {
   @test
+  @build
 }

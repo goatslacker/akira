@@ -25,7 +25,7 @@ load-makefile = fn [key opts]
 
 export {
   @cli (fn [action [a b & c]]
-    'compile' ? akira: (fn [name code] exports: name code a b) a
+    'compile' ? this.compile: a b
     'output'  ? this.output: a
     'run'     ? this.run: a
     'tokens'  ? akira: analyse a lex
@@ -36,6 +36,9 @@ export {
     'help'    ? require: './help'
     else      ? start-repl!
   )
+
+  @compile (fn [from target]
+    akira: (fn [name code] exports: name code from target) from)
 
   @output (fn [filename]
     akira: output filename)
