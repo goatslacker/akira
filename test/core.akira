@@ -68,3 +68,12 @@ obj | map? | is-true
 
 -- when
 when: true (fn [] 1) | ok: 1
+
+-- pow
+map: (** 2) [1 2 3] | ok-deep: [1 4 9]
+
+-- sum
+ok: 2, (sum: 1 1)
+
+-- prod
+ok: 4, (prod: 2 2)
