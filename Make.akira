@@ -34,6 +34,7 @@ test-file = fn [name] {
 
 test = fn []
   time: (fn [] {
+    print: 'Running tests...'
     results = fs.readdir-sync: 'test' | map: test-file | foldl: (&&)
 
     print: ''
@@ -45,11 +46,37 @@ test = fn []
 
 build = fn []
   time: (fn [] {
+    print: 'Building parser...'
     akira.compile: 'src/lang' 'lib/lang'
     print: 'Built.'
   })
 
+build-core = fn []
+  time: (fn [] {
+    print: 'Building core...'
+    akira.compile: 'src/core/core.akira' 'lib/core'
+    print: 'Done.'
+  })
+
+build-akira = fn []
+  time: (fn [] {
+    print: 'Building akira...'
+    akira.compile: 'src/akira/index.akira' 'lib/akira'
+    print: 'Done.'
+  })
+
+build-all = fn [] {
+  build!
+  build-core!
+  build-akira!
+  build!
+  test!
+}
+
 export {
   @test
   @build
+  @build-all
+  @build-core
+  @build-akira
 }
