@@ -20,8 +20,11 @@ analyse = fn [name body]
 
 load-makefile = fn [key opts]
   fn [name code] {
+    cmd = key |
+      (.replace: /[-+|:]([a-zA-Z0-9$_])/g (fn [i] i.2.to-upper-case!))
+
     make = run: name ('module.exports = ' ++ code)
-    (make !! key): opts
+    (make !! cmd): opts
   }
 
 export {
