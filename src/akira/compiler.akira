@@ -3,7 +3,6 @@ escodegen = require: 'escodegen'
 dune = require: 'dune'
 
 { @get-files } = import './fisy.akira'
-{ @mark } = import './bench.akira'
 
 lexer = require: '../lang/lexer'
 parser = require: '../lang/grammar'
@@ -47,22 +46,6 @@ gen-ast = fn [name code] parse: name code | transform: name
 
 transpile = fn [name code] code | gen-ast: name | escodegen.generate
 
-benchmark = fn [name code] {
-  { @a time, @tokens result } = mark: (fn [] lexer: code)
-  { @b time, @tree result } = mark: (fn [] parser.parse: tokens)
-  { @c time, @parseapi result } = mark: (fn [] transform: name tree)
-  { @d time } = mark: (fn [] escodegen.generate: parseapi)
-
-  {
-    @name name
-    @Lexer a + 'ms'
-    @Parser b + 'ms'
-    @Transform c + 'ms'
-    @Compile d + 'ms'
-    @Total (a + b + c + d) + 'ms'
-  }
-}
-
 akira = fn [cb filepath (f = transpile)] {
   on-file = fn [name code] {
     try {
@@ -88,4 +71,4 @@ run = fn [name code context] {
 }
 
 export { @lex @parse @gen-ast @transpile @run
-  @akira @benchmark @transform @escodegen }
+  @akira @transform @escodegen }
