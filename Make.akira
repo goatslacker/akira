@@ -2,6 +2,8 @@ fs = require: 'fs'
 path = require: 'path'
 akira = require: (path.join: process.env.PWD 'lib/akira/index.js')
 
+z-str = fn [] ''
+
 time = fn [f] {
   start = Date.now!
   f!
@@ -65,13 +67,8 @@ build-akira = fn []
     print: 'Done.'
   })
 
-build-all = fn [] {
-  build!
-  build-core!
-  build-akira!
-  build!
-  test!
-}
+build-all = fn []
+  [build build-core build-akira build test] | map: (fn [f] f! | z-str | print)
 
 export {
   @test
