@@ -3,6 +3,7 @@ me = require: '../../package.json'
 
 { @akira @run @lex @gen-ast @benchmark } = import './compiler.akira'
 { @write-file @get-files } = import './fisy.akira'
+help = import './help.akira'
 start-repl = import './repl.akira'
 watch = import './watchman.akira'
 
@@ -25,16 +26,17 @@ load-makefile = fn [key opts]
 
 export {
   @cli (fn [action [a b & c]]
-    'compile' ? this.compile: a b
-    'output'  ? this.output: a
-    'run'     ? this.run: a
-    'tokens'  ? akira: analyse a lex
-    'ast'     ? akira: analyse a gen-ast
-    'version' ? 'akira ' ++ me.version | output: none
-    'watch'   ? watch: a (fn [] akira: wrap a)
-    'make'    ? akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
-    'help'    ? require: './help'
-    else      ? start-repl!
+    'compile'   ? this.compile: a b
+    'output'    ? this.output: a
+    'run'       ? this.run: a
+    'tokens'    ? akira: analyse a lex
+    'ast'       ? akira: analyse a gen-ast
+    'version'   ? 'akira ' ++ me.version | output: none
+    'watch'     ? watch: a (fn [] akira: (fn [name code]
+      exports: name code a b) a)
+    'make'      ? akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
+    not action  ? start-repl!
+    else        ? help!
   )
 
   @compile (fn [from target]
@@ -46,7 +48,3 @@ export {
   @run (fn [filename context]
     akira: (fn [name code] run: name code context) filename)
 }
-
-    --  'bench'   ? akira: analyse filename benchmark
-    --  'debug'   ? akira: (fn [] none) filename
-    --  'test'    ? akira: run 'test/tests.akira'

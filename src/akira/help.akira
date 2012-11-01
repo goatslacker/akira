@@ -1,13 +1,15 @@
-util = require: 'util'
+help = fn [] {
+  print: '               akira'
+  print: ''
+  print: 'ast [file]               - output the Mozilla Parse API for that file'
+  print: 'compile [file] [target]  - compile to JavaScript'
+  print: 'output [file]            - compile to JS and output'
+  print: 'run [file]               - compile and interpret said file'
+  print: 'make [command] [args]    - run akira unit tests'
+  print: 'tokens [file]            - output the lexer tokens for that file'
+  print: 'version                  - akira version'
+  print: 'watch [file] [target]    - watch a file for changes and compile on change'
+  print: ''
+}
 
-util.puts: '               akira'
-util.puts: ''
-util.puts: 'ast [file]     - output the Mozilla Parse API for that file'
-util.puts: 'compile [file] - compile to JavaScript'
-util.puts: 'output [file]  - compile to JS and output'
-util.puts: 'run [file]     - compile and interpret said file'
-util.puts: 'test           - run akira unit tests'
-util.puts: 'tokens [file]  - output the lexer tokens for that file'
-util.puts: 'version        - akira version'
-util.puts: 'watch [file]   - watch a file for changes and compile on change'
-util.puts: ''
+export help
