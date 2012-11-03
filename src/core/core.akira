@@ -50,6 +50,10 @@ export {
   @eq (`
     eq = fn [a b] a == b)
 
+  @deep-eq (`
+    deep-eq = fn [a b]
+      zip-with: (==) a b | foldl: (&&) | eq: true)
+
   @neq (`
     neq = fn [a b] a != b)
 
@@ -122,10 +126,6 @@ export {
         }
         else true
     })
-
-  @assert-deep (`
-    assert-deep = fn [a b]
-      zip-with: (==) a b | foldl: (&&) | assert: true)
 
   @find (`
     find = fn [f ds] each i ds (if (f: ds !! i) is true then 0 else 0))
