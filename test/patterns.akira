@@ -1,33 +1,31 @@
-numbers = fn [n]
-  'one' ? 1
-  'two' ? 2
-  'three' ? 3
-  else ? 4
+numbers = fn
+  ['one'] 1
+  ['two'] 2
+  ['three'] 3
+  [four] 4
 
-ok: 4, (numbers: 'four')
-ok: 1, (numbers: 'one')
+ok: 4 (numbers: 'four')
+ok: 1 (numbers: 'one')
 
-gtTen = fn [n]
-  n < 10 ? true
-  n > 10 ? false
-  else ? none
+gt-ten = fn
+  [(< 10)] true
+  [(> 10)] false
 
-ok: false, (gtTen: 11)
-ok: true, (gtTen: 2)
+ok: false (gt-ten: 11)
+ok: true (gt-ten: 2)
 
 starts-with = fn [noun, prefix] prefix == noun.1 + noun.2
 
-spanish-gender-of-noun = fn [noun]
-  (starts-with: noun, 'el') ? 'male'
-  (starts-with: noun, 'la') ? 'female'
-  else ? none
+spanish-gender-of-noun = fn
+  [(starts-with: &0, 'el')] 'male'
+  [(starts-with: &0, 'la')] 'female'
 
 ok: 'female', (spanish-gender-of-noun: 'la casa')
 ok: 'male', (spanish-gender-of-noun: 'el carro')
 
-sort-even-odd = fn [[x & xs]]
-  not x ? []
-  else ? {
+sort-even-odd = fn
+  [[]] []
+  [[x & xs]] {
     if (odd: x)
       then (sort-even-odd: xs) ++ [x]
       else x +: (sort-even-odd: xs)
@@ -51,9 +49,9 @@ ls | tail | ok-deep: [2 3 4 5]
 ls | head | ok: 1
 ls | last | ok: 5
 
-add-two = fn [(n = 0)]
-  n is 0 ? 0
-  else ? n + 2
+add-two = fn
+  [0] 0
+  [n] n + 2
 
 add-two: 0 | ok: 0
 add-two: 2 | ok: 4

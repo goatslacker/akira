@@ -11,15 +11,9 @@ time = fn [f] {
   print: 'Time {{end - start}}ms'
 }
 
-test-results = fn [x name len]
-  true ? {
-    print: '√ {{name}} {{len}}'
-    true
-  }
-  else ? {
-    print: 'x {{name}}'
-    false
-  }
+test-results = fn
+  [true name len] (print: '√ {{name}} {{len}}') || true
+  [false name len] (print: 'x {{name}}') && false
 
 test-file = fn [name] {
   assertions = []
