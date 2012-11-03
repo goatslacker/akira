@@ -52,7 +52,10 @@ export {
 
   @deep-eq (`
     deep-eq = fn [a b]
-      zip-with: (==) a b | foldl: (&&) | eq: true)
+      (a.length isnt b.length) ? false
+      (a.length is b.length && a.length is 0) ? true
+      else ? zip-with: (==) a b | foldl: (&&) | eq: true
+  )
 
   @neq (`
     neq = fn [a b] a != b)
