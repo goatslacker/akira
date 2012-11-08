@@ -32,9 +32,9 @@ extract = fn [key chunk] rx !! key | (.exec: chunk)
 
 parse-alphanumeric = fn [t chunk (n = 1)] extract: t chunk | (!! n)
 
-return-identifier = fn [type item]
-  'KEYWORDS' ? [(item.toUpperCase!) item]
-  else ? [type item]
+return-identifier = fn
+  ['KEYWORDS' item] [(item.toUpperCase!) item]
+  [type item] [type item]
 
 parse-identifier = fn [t chunk] {
   item = extract: t chunk
@@ -48,23 +48,23 @@ parse-regular-expressions = fn [t chunk] {
   ['REGEXP' regexp]
 }
 
-get-token = fn [t chunk n]
-  'IDENTIFIER' ? parse-identifier &!
-  'KEY' ? parse-identifier &!
-  'NUM' ? parse-alphanumeric: t chunk 0
-  'STR' ? parse-alphanumeric: t chunk
-  'OPERATION' ? parse-identifier &!
-  'LAMBDA' ? 'FN'
-  'REGEX' ? parse-regular-expressions &!
-  'COMMENTS' ? parse-alphanumeric: t chunk
-  'ARGS' ? [t (extract: t chunk | (!! 1))]
-  'WHITESPACE' ? ' '
-  'TERMINATOR' ? ' '
-  else ? [chunk.1 chunk.1]
+get-token = fn
+  ['IDENTIFIER' chunk] parse-identifier &!
+  ['KEY' chunk] parse-identifier &!
+  ['NUM' chunk] parse-alphanumeric: t chunk 0
+  ['STR' chunk] parse-alphanumeric: t chunk
+  ['OPERATION' chunk] parse-identifier &!
+  ['LAMBDA' _] 'FN'
+  ['REGEX' chunk] parse-regular-expressions &!
+  ['COMMENTS' chunk] parse-alphanumeric: t chunk
+  ['ARGS' chunk] [t (extract: t chunk | (!! 1))]
+  ['WHITESPACE' _] ' '
+  ['TERMINATOR' _] ' '
+  [t chunk] [chunk.1 chunk.1]
 
 process-chunk = fn [code n] {
   type = get-type: code
-  token = get-token: type code n
+  token = get-token: type code
   if Array.isArray: token
     then {
       token.push: n.line
@@ -73,23 +73,24 @@ process-chunk = fn [code n] {
     else [type token n.line]
 }
 
-get-length = fn [token i]
-  'STR' ? i + 2
-  'ARGS' ? i + 1
-  else ? i
+get-length = fn
+  ['STR' i] i + 2
+  ['ARGS' i] i + 1
+  [else] i
 
-incr-line = fn [type line]
-  'TERMINATOR' ? line + 1
-  else ? line
+incr-line = fn
+  ['TERMINATOR' line] line + 1
+  [else] line
 
 get-next-index = fn [token] {
   @index (token.2.toString! | (.length) | get-length: token.1)
   @token token
 }
 
-return-tokens = fn [code n (tokens = [])]
-  not code ? tokens
-  else ? {
+return-tokens = fn
+  [code n] return-tokens: code n []
+  ['' _ tokens] tokens
+  [else] {
     {@index @token} = process-chunk: code n | get-next-index
     tokens.push: token
     recur

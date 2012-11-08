@@ -35,9 +35,9 @@ macro each fn [sym name ifstmt] {
   @each false
 }
 
-macro single-if fn [cond body] {
+macro single-if fn [test body] {
   @type 'IfStatement'
-  @test cond
+  @test test
   @consequent {
     @type 'BlockStatement'
     @body [body]
@@ -52,10 +52,11 @@ export {
 
   @deep-eq (`
     deep-eq = fn [a b]
-      (a.length isnt b.length) ? false
-      (a.length is b.length && a.length is 0) ? true
-      else ? zip-with: (==) a b | foldl: (&&) | eq: true
-  )
+      if a.length isnt b.length
+        then false
+        else if a.length is 0
+          then false
+          else zip-with: (==) a b | foldl: (&&) | eq: true)
 
   @neq (`
     neq = fn [a b] a != b)
@@ -100,18 +101,24 @@ export {
     join = fn [by vec] vec.join: by)
 
   @concat (`
-    concat = fn [& args] foldl: (fn [a b] a ++ b) args)
+    concat = fn
+      [a] a
+      [a b] a ++ b
+      [a b c] a ++ b ++ c
+      [& a] foldl: (fn [a b] a ++ b) a
+  )
 
   @count (`
-    count = fn [vec f]
-      not f ? vec.length
-      else ? filter: f vec | (.length)
+    count = fn
+      [vec] vec.length
+      [vec f] filter: f vec | (.length)
   )
 
   @zip-with (`
     zip-with = fn [f [a & as] [b & bs]]
-      (a is undefined) || (b is undefined) ? []
-      else ? (f: a b) +: (zip-with: f as bs)
+      cond
+        (a is undefined) || (b is undefined) ? []
+        else ? (f: a b) +: (zip-with: f as bs)
   )
 
   @average (`
@@ -149,16 +156,20 @@ export {
     value = fn [k x] x !! k)
 
   @filter (`
-    filter = fn [f vec] Array.prototype.filter.call: vec f)
+    filter = fn [f vec]
+      Array.prototype.filter.call: vec (fn [x] f: x))
 
   @map (`
-    map = fn [f vec] Array.prototype.map.call: vec f)
+    map = fn [f vec]
+      Array.prototype.map.call: vec (fn [x] f: x))
 
   @foldl (`
-    foldl = fn [f vec] Array.prototype.reduce.call: vec f)
+    foldl = fn [f vec]
+      Array.prototype.reduce.call: vec (fn [a b] f: a b))
 
   @foldr (`
-    foldr = fn [f vec] Array.prototype.reduce-right.call: vec f)
+    foldr = fn [f vec]
+      Array.prototype.reduce-right.call: vec (fn [a b] f: a b))
 
   @intersect (`
     intersect = fn [vec1 vec2] filter: (fn [x] vec2.indexOf: x | (!= -1)) vec1)
@@ -175,9 +186,6 @@ export {
   @randomize (`
     randomize = fn [vec] sort: (fn [] (Math.random!) > 0.5) vec)
 
-  @unique (`
-    unique = fn [vec] filter: (fn [x i] vec.indexOf: x | (== i)) vec)
-
   @take (`
     take = fn [n vec] vec.slice: 0 n)
 
@@ -186,8 +194,9 @@ export {
 
   @take-while (`
     take-while = fn [f [x & xs]]
-      (f: x) == true ? x +: (take-while: f xs)
-      else ? []
+      cond
+        (f: x) is true ? x +: (take-while: f xs)
+        else ? []
   )
 
   @apply (`

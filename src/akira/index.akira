@@ -28,18 +28,20 @@ load-makefile = fn [key opts]
   }
 
 export {
-  @cli (fn [action [a b & c]]
-    'compile'   ? this.compile: a b
-    'output'    ? this.output: a
-    'run'       ? this.run: a
-    'tokens'    ? akira: analyse a lex
-    'ast'       ? akira: analyse a gen-ast
-    'version'   ? 'akira ' ++ me.version | output: none
-    'watch'     ? watch: a (fn [] akira: (fn [name code]
+  @cli (fn
+    [] start-repl!
+    ['compile' [a b]] this.compile: a b
+    ['output' [a]] this.output: a
+    ['run' [a]] this.run: a
+    ['tokens' [a]] akira: analyse a lex
+    ['ast' [a]] akira: analyse a gen-ast
+    ['version'] 'akira ' ++ me.version | output: none
+    ['watch' [a b]] watch: a (fn [] akira: (fn [name code]
       exports: name code a b) a)
-    'make'      ? akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
-    not action  ? start-repl!
-    else        ? help!
+    ['make' [a b & c]] akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
+    [else] if (not &0)
+      then start-repl!
+      else help!
   )
 
   @compile (fn [from target]

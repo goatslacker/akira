@@ -1,12 +1,14 @@
-fib = fn [x (p = 0) (n = 1)]
-  1 ? n
-  else ? recur x - 1, n, p + n
+fib = fn
+  [x] fib: x 0 1
+  [1 p n] n
+  [else] recur x - 1, n, p + n
 
 fib: 8 | ok: 21
 
 
-fact = fn [n (sum = 1)]
-  0 ? sum
-  else ? recur n - 1, sum * n
+fact = fn
+  [n] fact: n 1
+  [0 sum] sum
+  [else] recur n - 1, sum * n
 
 fact: 4 | ok: 24

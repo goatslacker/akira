@@ -197,7 +197,9 @@ bnf = {
   ]
 
   @Pattern [
-    (o: 'Value ? Body TERMINATOR' (fn [] [$1 $3] ))
+    (o: '[ ] Body TERMINATOR' (fn [] [none $3] ))
+    (o: '[ VectorArgs ] Body TERMINATOR' (fn [] [$2 $4] ))
+    (o: '[ ELSE ] Body TERMINATOR' (fn [] [$2 $4] ))
   ]
 
   @Patterns [
@@ -205,13 +207,8 @@ bnf = {
     (o: 'Patterns Pattern' (fn [] new Arguments $1 $2))
   ]
 
-  @Default [
-    (o: 'ELSE ? Body TERMINATOR' (fn [] new Arguments [$1 $3]))
-  ]
-
   @PatternMatching [
-    (o: 'FN [ Parameters ] TERMINATOR Patterns Default',
-      (fn [] new Declaration none $3 (new Pattern $3 $6 $7)))
+    (o: 'FN TERMINATOR Patterns' (fn [] new Pattern $3))
   ]
 
   @Comma [
