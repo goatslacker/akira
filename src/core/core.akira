@@ -118,8 +118,7 @@ export {
     zip-with = fn [f [a & as] [b & bs]]
       cond
         (a is undefined) || (b is undefined) ? []
-        else ? (f: a b) +: (zip-with: f as bs)
-  )
+        else ? (f: a b) +: (zip-with: f as bs))
 
   @average (`
     average = fn [vec] foldl: (fn [a b] a + b) vec | (/ vec.length))
@@ -196,8 +195,7 @@ export {
     take-while = fn [f [x & xs]]
       cond
         (f: x) is true ? x +: (take-while: f xs)
-        else ? []
-  )
+        else ? [])
 
   @apply (`
     apply = fn [f & args] f.apply: f args)
