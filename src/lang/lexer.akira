@@ -48,19 +48,20 @@ parse-regular-expressions = fn [t chunk] {
   ['REGEXP' regexp]
 }
 
-get-token = fn
-  ['IDENTIFIER' _] parse-identifier &!
-  ['KEY' _] parse-identifier &!
-  ['NUM' _] parse-alphanumeric: t chunk 0
-  ['STR' _] parse-alphanumeric: t chunk
-  ['OPERATION' _] parse-identifier &!
-  ['LAMBDA' _] 'FN'
-  ['REGEX' _] parse-regular-expressions &!
-  ['COMMENTS' _] parse-alphanumeric: t chunk
-  ['ARGS' _] [t (extract: t chunk | (!! 1))]
-  ['WHITESPACE' _] ' '
-  ['TERMINATOR' _] ' '
-  [t chunk] [chunk.1 chunk.1]
+get-token = fn [type chunk]
+  cond
+    type is 'IDENTIFIER' ||
+    type is 'KEY' ||
+    type is 'OPERATION' ? parse-identifier &!
+    type is 'NUM' ? parse-alphanumeric: type chunk 0
+    type is 'STR' ||
+    type is 'COMMENTS' ? parse-alphanumeric &!
+    type is 'LAMBDA' ? 'FN'
+    type is 'REGEX' ? parse-regular-expressions &!
+    type is 'ARGS' ? [type (extract: type chunk | (!! 1))]
+    type is 'WHITESPACE' ||
+    type is 'TERMINATOR' ? ' '
+    else ? [chunk.1 chunk.1]
 
 process-chunk = fn [code n] {
   type = get-type: code
