@@ -49,15 +49,15 @@ parse-regular-expressions = fn [t chunk] {
 }
 
 get-token = fn
-  ['IDENTIFIER' chunk] parse-identifier &!
-  ['KEY' chunk] parse-identifier &!
-  ['NUM' chunk] parse-alphanumeric: t chunk 0
-  ['STR' chunk] parse-alphanumeric: t chunk
-  ['OPERATION' chunk] parse-identifier &!
+  ['IDENTIFIER' _] parse-identifier &!
+  ['KEY' _] parse-identifier &!
+  ['NUM' _] parse-alphanumeric: t chunk 0
+  ['STR' _] parse-alphanumeric: t chunk
+  ['OPERATION' _] parse-identifier &!
   ['LAMBDA' _] 'FN'
-  ['REGEX' chunk] parse-regular-expressions &!
-  ['COMMENTS' chunk] parse-alphanumeric: t chunk
-  ['ARGS' chunk] [t (extract: t chunk | (!! 1))]
+  ['REGEX' _] parse-regular-expressions &!
+  ['COMMENTS' _] parse-alphanumeric: t chunk
+  ['ARGS' _] [t (extract: t chunk | (!! 1))]
   ['WHITESPACE' _] ' '
   ['TERMINATOR' _] ' '
   [t chunk] [chunk.1 chunk.1]
