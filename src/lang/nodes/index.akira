@@ -9,6 +9,7 @@ export {
   @Call           (r: 'call')
   @Cloning        (r: 'cloning')
   @Compare        (r: 'compare')
+  @Cond           (r: 'cond')
   @Declaration    (r: 'declaration')
   @Exception      (r: 'exception')
   @Export         (r: 'export')

@@ -88,6 +88,7 @@ bnf = {
     (o: 'Assignment')
     (o: 'Declaration')
     (o: 'PatternMatching')
+    (o: 'Cond')
     (o: 'Invocation')
     (o: 'Pipeline')
     (o: 'Cloning')
@@ -176,6 +177,23 @@ bnf = {
   @Declaration [
     (o: 'FN [ Parameters ] TBody' (fn [] new Declaration none $3 $5))
     (o: 'FN [ ] TBody' (fn [] new Declaration none none $4))
+  ]
+
+  @Conditional [
+    (o: 'Value ? Body TERMINATOR' (fn [] [$1 $3]))
+  ]
+
+  @Conditionals [
+    (o: 'Conditional' (fn [] new Arguments $1))
+    (o: 'Conditionals Conditional' (fn [] new Arguments $1 $2))
+  ]
+
+  @CondElse [
+    (o: 'ELSE ? Body TERMINATOR' (fn [] [$1 $3]))
+  ]
+
+  @Cond [
+    (o: 'COND TERMINATOR Conditionals CondElse' (fn [] new Cond $3 $4))
   ]
 
   @Pattern [
