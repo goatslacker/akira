@@ -164,11 +164,15 @@ export {
 
   @foldl (`
     foldl = fn [f vec]
-      Array.prototype.reduce.call: vec (fn [a b] f: a b))
+      if vec.length is 0
+        then []
+        else Array.prototype.reduce.call: vec (fn [a b] f: a b))
 
   @foldr (`
     foldr = fn [f vec]
-      Array.prototype.reduce-right.call: vec (fn [a b] f: a b))
+      if vec.length is 0
+        then []
+        else Array.prototype.reduce-right.call: vec (fn [a b] f: a b))
 
   @intersect (`
     intersect = fn [vec1 vec2] filter: (fn [x] vec2.indexOf: x | (!= -1)) vec1)
