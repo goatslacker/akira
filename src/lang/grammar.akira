@@ -112,7 +112,7 @@ bnf = {
     (o: 'Prototype')
     (o: 'SpecialFunctions')
     (o: 'ARGS' (fn [] 'arguments[{{$1}}]'))
-    (o: '( Assignable )' (fn [] $2))
+    (o: '( OptTerminator Assignable OptTerminator )' (fn [] $3))
   ]
 
   @CallableValue [
