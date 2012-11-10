@@ -1,3 +1,4 @@
+repl = require: 'repl'
 context = { @console console }
 vm = require: 'vm'
 util = require: 'util'
@@ -9,34 +10,25 @@ xform = fn [data] transform: 'repl' data (fn [ast] {
   @body ast
 })
 
-to-code = fn [name code] parse: 'repl' code | xform | escodegen.generate
-
-prompt = fn [] process.stdout.write: 'akira> '
+to-code = fn [name code] parse: name code | xform | escodegen.generate
 
 inspect = fn [val] util.inspect: val false 35
 
-read-eval-print-loop = fn [data] {
+read-eval-print-loop = fn [data _ filename cb] {
   try {
-    code = to-code: 'repl' data
-    vm.run-in-new-context: code context |
-      inspect |
-      util.puts
-
-    util.puts: ''
+    code = to-code: filename data
+    vm.run-in-new-context: code context | inspect | cb
   } catch {
     util.error: err.stack
   }
 
-  prompt!
+  true
 }
 
-start-repl = fn [] {
-
-  stdin = process.open-stdin!
-  stdin.set-encoding: 'utf-8'
-  stdin.on: 'data' read-eval-print-loop
-
-  prompt!
-}
-
-export start-repl
+export fn []
+  repl.start: {
+    @prompt 'akira> '
+    @input process.stdin
+    @output process.stdout
+    @eval read-eval-print-loop
+  }
