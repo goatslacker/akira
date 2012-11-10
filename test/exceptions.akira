@@ -4,19 +4,19 @@ try {
  b = 1
 }
 
-ok: a, 1
-ok: b, undefined
+ok: a 1
+ok: b undefined
 
 try {
   raise 'Ah!'
 } catch {
   c = 3
 }
-ok: c, 3
+ok: c 3
 
 try f = 2
 catch raise err
-ok: f, 2
+ok: f 2
 
 try k = 1 catch g = 2
-ok: k, 1
+ok: k 1

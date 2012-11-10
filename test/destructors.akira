@@ -1,21 +1,21 @@
-[a, b] = [1, 2]
-ok: a, 1
-ok: b, 2
-[c, d] = if true then if false then [0, 1] else [2, 3] else [4, 5]
-ok: c, 2
-ok: d, 3
+[a b] = [1 2]
+ok: a 1
+ok: b 2
+[c d] = if true then if false then [0 1] else [2 3] else [4 5]
+ok: c 2
+ok: d 3
 [e] = [0]
-ok: e, 0
+ok: e 0
 
-{@f, @g} = { @f 1, @g 4 }
-ok: f, 1
-ok: g, 4
+{@f @g} = { @f 1 @g 4 }
+ok: f 1
+ok: g 4
 {@h} = if false then { @h 1 } else { @h 2 }
-ok: h, 2
+ok: h 2
 
 i = 3
 {@j} = {@j i}
-ok: j, 3
+ok: j 3
 
 {@k l} = {@l 6}
-ok: k, 6
+ok: k 6

@@ -12,7 +12,7 @@ add-one = curried-sum: 1
 2 | add-one | ok: 3
 
 
-obj = { @foo 1, @bar 2, @baz 3 }
+obj = { @foo 1 @bar 2 @baz 3 }
 
 -- keys
 obj | keys | ok-deep: ['foo' 'bar' 'baz']
@@ -73,7 +73,7 @@ when: true (fn [] 1) | ok: 1
 map: (** 2) [1 2 3] | ok-deep: [1 4 9]
 
 -- sum
-ok: 2, (sum: 1 1)
+ok: 2 (sum: 1 1)
 
 -- prod
-ok: 4, (prod: 2 2)
+ok: 4 (prod: 2 2)

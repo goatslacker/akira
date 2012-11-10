@@ -14,14 +14,14 @@ gt-ten = fn
 ok: false (gt-ten: 11)
 ok: true (gt-ten: 2)
 
-starts-with = fn [noun, prefix] prefix == noun.1 + noun.2
+starts-with = fn [noun prefix] prefix == noun.1 + noun.2
 
 spanish-gender-of-noun = fn
-  [(starts-with: &0, 'el')] 'male'
-  [(starts-with: &0, 'la')] 'female'
+  [(starts-with: &0 'el')] 'male'
+  [(starts-with: &0 'la')] 'female'
 
-ok: 'female', (spanish-gender-of-noun: 'la casa')
-ok: 'male', (spanish-gender-of-noun: 'el carro')
+ok: 'female' (spanish-gender-of-noun: 'la casa')
+ok: 'male' (spanish-gender-of-noun: 'el carro')
 
 sort-even-odd = fn
   [[]] []

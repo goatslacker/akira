@@ -4,8 +4,8 @@ id: 'awesome' | add-akira: 'akira' | ok: 'akira is awesome'
 
 2 | (+ 1) | ok: 3
 
-list = [1, 2]
-list2 = [1, 2, 3]
+list = [1 2]
+list2 = [1 2 3]
 
 list | (.length) | (+ 2) | ok: 4
 

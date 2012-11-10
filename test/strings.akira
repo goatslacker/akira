@@ -1,6 +1,6 @@
 str = 'hello'
 hi = str.split: '' | foldl: sum
-ok: hi, str
+ok: hi str
 
 capitalize: str | ok: 'Hello'
 
@@ -10,7 +10,7 @@ camelize: 'hello_world-i_am_Akira' | ok: 'helloWorldIAmAkira'
 
 uppercase: str | ok: 'HELLO'
 
-chars: uppercase, str | join: '' | ok: 'HELLO'
+chars: uppercase str | join: '' | ok: 'HELLO'
 
 condense: '      foo bar ' | ok: 'foobar'
 
@@ -18,6 +18,6 @@ condense: '      foo bar ' | ok: 'foobar'
 
 (fn [] {
   b = 'hello-world'
-  c = b.replace: /-([a-z])/g, (fn [i] i.2.toUpperCase!)
-  ok: c, 'helloWorld'
+  c = b.replace: /-([a-z])/g (fn [i] i.2.toUpperCase!)
+  ok: c 'helloWorld'
 }): none

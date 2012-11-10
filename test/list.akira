@@ -8,26 +8,26 @@ array = [
 -- IIFE
 (fn [] {
 -- Testing foldr, expressions in arguments, anonymous functions
-  lastEl = fn [a] foldl: (fn [a b] flip: id, a, b), a
-  lastEl: array | (fn [a] ok: a, 3 )
+  lastEl = fn [a] foldl: (fn [a b] flip: id a b) a
+  lastEl: array | (fn [a] ok: a 3 )
 }): none
 
 -- Partial application
 (fn [] {
-  mapper = partial: map, square
-  okArray = fn [a] ok-deep: a, [1, 4, 9]
+  mapper = partial: map square
+  okArray = fn [a] ok-deep: a [1 4 9]
 
   array | map: square | okArray
   array | mapper | okArray
 }): none
 
-array.map: square | ok-deep: [1, 4, 9]
+array.map: square | ok-deep: [1 4 9]
 
-ok: array.2, 2
+ok: array.2 2
 
 head: array | ok: 1
-init: array | ok-deep: [1, 2]
-tail: array | ok-deep: [2, 3]
+init: array | ok-deep: [1 2]
+tail: array | ok-deep: [2 3]
 last: array | ok: 3
 
 average: array | ok: 2
@@ -35,6 +35,6 @@ min: array | ok: 1
 max: array | ok: 3
 
 array !! 0 | ok: 1
-array ++ [4] | ok-deep: [1, 2, 3, 4]
-0 +: array | ok-deep: [0, 1, 2, 3]
-ok-deep: array, [1, 2, 3]
+array ++ [4] | ok-deep: [1 2 3 4]
+0 +: array | ok-deep: [0 1 2 3]
+ok-deep: array [1 2 3]

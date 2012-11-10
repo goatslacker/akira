@@ -1,12 +1,12 @@
 -- test function
-map-eq = fn [a b] filter: (fn [x i] x isnt b !! i), a | (.length) | ok: 0
+map-eq = fn [a b] filter: (fn [x i] x isnt b !! i) a | (.length) | ok: 0
 
 -- setting maps
-obj = { @hello 1, @world 2 }
-map-eq: obj, { @hello 1, @world 2 }
+obj = { @hello 1 @world 2 }
+map-eq: obj { @hello 1 @world 2 }
 
 -- retrieving properties
-ok: (get: obj, 'hello'), 1
+ok: (get: obj 'hello') 1
 
 -- calling functions
 tup = {
@@ -14,7 +14,7 @@ tup = {
   @my-number 3
 }
 
-ok: (call: tup, 'myFunction', 2), 2
-ok: tup.my-number, 3
-ok: (tup.myFunction: 2), 2
-ok: (tup.my-function: 'a'), 'a'
+ok: (call: tup 'myFunction' 2) 2
+ok: tup.my-number 3
+ok: (tup.myFunction: 2) 2
+ok: (tup.my-function: 'a') 'a'
