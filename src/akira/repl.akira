@@ -14,16 +14,13 @@ to-code = fn [name code] parse: name code | xform | escodegen.generate
 
 inspect = fn [val] util.inspect: val false 35
 
-read-eval-print-loop = fn [data _ filename cb] {
+read-eval-print-loop = fn [data _ filename cb]
   try {
     code = to-code: filename data
     vm.run-in-new-context: code context | inspect | cb
   } catch {
     util.error: err.stack
   }
-
-  true
-}
 
 export fn []
   repl.start: {
