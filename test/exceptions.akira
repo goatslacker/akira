@@ -20,3 +20,6 @@ ok: f 2
 
 try k = 1 catch g = 2
 ok: k 1
+
+j = fn [x] try { 1 } catch { none }
+j: 0 | ok: 1

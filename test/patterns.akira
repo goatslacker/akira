@@ -55,3 +55,61 @@ add-two = fn
 
 add-two: 0 | ok: 0
 add-two: 2 | ok: 4
+
+ljfdg = fn
+  [a] 1
+  [a b] 2
+  [a b c] 3
+  [else] 4
+
+ljfdg: 0 0 | ok: 2
+ljfdg: 0 0 0 | ok: 3
+ljfdg! | ok: 4
+
+
+gorje = fn
+  [_ 3 c] 0
+  [a _ 4] 1
+  [2 b _] 2
+
+gorje: 0 3 0 | ok: 0
+gorje: 2 0 0 | ok: 2
+
+oiejf = fn
+  [1 b 3] 1
+  [2 4 c] 2
+  [else] 3
+
+oiejf: 1 0 3 | ok: 1
+oiejf! | ok: 3
+
+fjoes = fn
+  [[a b 3 4 5]] 1
+  [[a b c d e]] c
+  [else] 0
+
+fjoes: [1 2 3 4 5] | ok: 1
+--fjoes: [0 1 2 3 4] | ok: 2
+
+ajoleif = fn
+  [x b] b&!
+
+ajoleif: 6 (fn [x b] x) | ok: 6
+
+jfo = fn
+  [2 a & b] 1
+  [else] 2
+
+jfo: 6 | ok: 2
+
+jfoe = fn
+  [[a _]] 1
+  [[a] b] 2
+
+jfoe: [3 6] | ok: 1
+jfoe: [2] 2 | ok: 2
+
+vcxv = fn
+  [{ @d }] 3
+
+vcxv: { @d 3 } | ok: 3
