@@ -89,7 +89,7 @@ fjoes = fn
   [else] 0
 
 fjoes: [1 2 3 4 5] | ok: 1
---fjoes: [0 1 2 3 4] | ok: 2
+fjoes: [0 1 2 3 4] | ok: 2
 
 ajoleif = fn
   [x b] b&!
