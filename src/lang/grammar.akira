@@ -317,7 +317,7 @@ bnf = {
     (o: '* *' (fn [] new Identifier 'pow'))
     (o: '/' (fn [] new Identifier 'div'))
     (o: 'COMPARE' (fn [] new Compare $1))
-    (o: 'LOGIC' (fn [] new Compare $1))
+    (o: 'LOGIC' (fn [] new Logic $1))
 
   ]
 
@@ -358,7 +358,7 @@ bnf = {
 
   @Operation [
     (o: 'Value COMPARE OptTerminator Value' (fn [] new Compare $1 $2 $4))
-    (o: 'Value LOGIC OptTerminator Value' (fn [] new Compare $1 $2 $4))
+    (o: 'Value LOGIC OptTerminator Value' (fn [] new Logic $1 $2 $4))
     (o: 'Value LEFT_OPERATORS OptTerminator Value',
       (fn [] new Operation $1 $2 $4))
     (o: 'Value RIGHT_OPERATORS OptTerminator Value',

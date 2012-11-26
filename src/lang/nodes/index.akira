@@ -19,6 +19,7 @@ export {
   @Import         (r: 'import')
   @L              (r: 'line')
   @Literal        (r: 'literal')
+  @Logic          (r: 'logic')
   @Macro          (r: 'macro')
   @Map            (r: 'map')
   @Nodes          (r: 'nodes')
