@@ -298,12 +298,6 @@ export {
   @dec (`
     dec = fn [x] x - 1)
 
-  @min (`
-    min = Math.min)
-
-  @max (`
-    max = Math.max)
-
   @false? (`
     false? = fn [x] x is false)
 
