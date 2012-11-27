@@ -1,0 +1,9 @@
+CallExpression = fn
+  [callee, none] CallExpression: callee []
+  [callee, args] {
+    @type 'CallExpression'
+    @callee callee
+    @arguments args
+  }
+
+export CallExpression

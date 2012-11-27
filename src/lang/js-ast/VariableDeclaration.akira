@@ -1,0 +1,9 @@
+VariableDeclaration = fn [declarations]
+  { @type 'VariableDeclaration'
+    @declarations (map: (fn [declaration]
+      { @type 'VariableDeclarator'
+        @id declaration
+        @init none }) declarations)
+    @kind 'var' }
+
+export VariableDeclaration
