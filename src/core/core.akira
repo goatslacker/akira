@@ -5,7 +5,7 @@ macro bin-expr fn [op a b] {
   @right b
 }
 
-macro each fn [sym name ifstmt] {
+macro each fn [sym name test] {
   @type 'ForInStatement'
   @left {
     @type 'VariableDeclaration'
@@ -21,7 +21,7 @@ macro each fn [sym name ifstmt] {
     @type 'BlockStatement'
     @body [{
       @type 'IfStatement'
-      @test ifstmt.test
+      @test test
       @consequent {
         @type 'BlockStatement'
         @body [{
@@ -137,7 +137,7 @@ export {
     })
 
   @find (`
-    find = fn [f ds] each i ds (if (f: ds !! i) is true then 0 else 0))
+    find = fn [f ds] each i ds ((f: ds !! i) is true))
 
   @call (`
     call = fn [obj prop & args] (obj !! prop) | (.apply: obj, args))
