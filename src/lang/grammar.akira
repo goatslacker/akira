@@ -35,16 +35,16 @@ bnf = {
   ]
 
   @Program [
-    (o: 'Terminator Expressions' (fn [] $2))
+    (o: 'Terminator Statements' (fn [] $2))
     (o: 'Terminator' (fn [] none))
-    (o: 'Expressions')
+    (o: 'Statements')
   ]
 
-  @Expressions [
+  @Statements [
     (o: 'Body' (fn [] yy.Nodes.wrap: $1))
-    (o: 'Expressions TERMINATOR Body' (fn [] $1.push: $3))
-    (o: 'Expressions ; Body' (fn [] $1.push: $3))
-    (o: 'Expressions TERMINATOR')
+    (o: 'Statements TERMINATOR Body' (fn [] $1.push: $3))
+    (o: 'Statements ; Body' (fn [] $1.push: $3))
+    (o: 'Statements TERMINATOR')
   ]
 
   @Terminator [
@@ -70,19 +70,19 @@ bnf = {
   ]
 
   @Body [
-    (o: 'Expression')
-    (o: '{ OptTerminator Expressions }' (fn [] $3))
+    (o: 'Statement')
+    (o: '{ OptTerminator Statements }' (fn [] $3))
   ]
 
-  @Expression [
+  @Statement [
     (o: 'Exporting')
-    (o: 'Assignable')
+    (o: 'Expression')
     (o: 'Exceptions')
     (o: 'Recur')
     (o: 'DefMacro')
   ]
 
-  @Assignable [
+  @Expression [
     (o: 'Value')
     (o: 'If')
     (o: 'Assignment')
@@ -94,8 +94,8 @@ bnf = {
     (o: 'Cloning')
     (o: 'Macro')
     (o: 'IMPORT STR' (fn [] new Import $2))
-    (o: '` OptTerminator Expression' (fn [] new Evaluate $3))
---     (o: '~ OptTerminator Expression' (fn [] new Evaluate $3 true))
+    (o: '` OptTerminator Statement' (fn [] new Evaluate $3))
+--     (o: '~ OptTerminator Statement' (fn [] new Evaluate $3 true))
   ]
 
   @Value [
@@ -112,7 +112,7 @@ bnf = {
     (o: 'Prototype')
     (o: 'SpecialFunctions')
     (o: 'ARGS' (fn [] 'arguments[{{$1}}]'))
-    (o: '( OptTerminator Assignable OptTerminator )' (fn [] $3))
+    (o: '( OptTerminator Expression OptTerminator )' (fn [] $3))
   ]
 
   @CallableValue [
@@ -142,14 +142,14 @@ bnf = {
   ]
 
   @Assignment [
-    (o: 'Identifier = Assignable' (fn [] new Assignment $1 $3))
-    (o: 'Access = Assignable' (fn [] new Assignment $1 $3))
-    (o: 'Vectors = Assignable' (fn [] new Assignment $1 $3))
-    (o: 'Maps = Assignable' (fn [] new Assignment $1 $3))
+    (o: 'Identifier = Expression' (fn [] new Assignment $1 $3))
+    (o: 'Access = Expression' (fn [] new Assignment $1 $3))
+    (o: 'Vectors = Expression' (fn [] new Assignment $1 $3))
+    (o: 'Maps = Expression' (fn [] new Assignment $1 $3))
   ]
 
   @Exporting [
-    (o: 'EXPORT Assignable' (fn [] new Export $2))
+    (o: 'EXPORT Expression' (fn [] new Export $2))
   ]
 
   @Cloning [
