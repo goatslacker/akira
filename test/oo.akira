@@ -24,3 +24,11 @@ cat.walk! | ok: true
 cat.sleep! | ok: 'Purr ZzZzZ...'
 
 wasabi.speak! | ok: 'meow i am Wasabi'
+
+([1 2 3] 4 5 6) | ok-deep: [1 2 3 4 5 6]
+([1 2 3] [4]) | ok-deep: [1 2 3 4]
+
+a = { @a 1 } { @b 2 } { @c 3 }
+ok: a.a 1
+ok: a.b 2
+ok: a.c 3
