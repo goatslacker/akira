@@ -7,14 +7,14 @@ Animal = {
   @eyes 2
 }
 
-Cat = {
+Cat = Animal {
   @speak (fn [] 'meow i am ' ++ this.name)
   @sleep (fn [] 'Purr ' ++ (prototype.sleep!))
   @legs 4
-} Animal
+}
 
-cat = { @name 'Luna' } Cat
-wasabi = { @name 'Wasabi' } Cat
+cat = Cat { @name 'Luna' }
+wasabi = Cat { @name 'Wasabi' }
 
 cat.speak! | ok: 'meow i am Luna'
 cat.alive | ok: true

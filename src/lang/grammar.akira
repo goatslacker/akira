@@ -94,8 +94,6 @@ bnf = {
     (o: 'Cloning')
     (o: 'Macro')
     (o: 'IMPORT STR' (fn [] new Import $2))
-    (o: '` OptTerminator Statement' (fn [] new Evaluate $3))
-    (o: '~ OptTerminator Statement' (fn [] new Evaluate $3 true))
   ]
 
   @Value [
@@ -153,8 +151,11 @@ bnf = {
   ]
 
   @Cloning [
-    (o: 'Maps Value' (fn [] new Cloning $2 $1))
-    (o: 'Vectors Value' (fn [] new Cloning $2 $1))
+    -- Identifier Arguments also handles @Macro
+    (o: 'Identifier Arguments' (fn [] new Cloning $2 $1))
+    (o: 'Maps Arguments' (fn [] new Cloning $2 $1))
+    (o: 'Vectors Arguments' (fn [] new Cloning $2 $1))
+--    (o: 'Clonable Arguments' (fn [] new Cloning $2 $1))
   ]
 
   @Pipeline [
@@ -303,11 +304,12 @@ bnf = {
   ]
 
   @DefMacro [
-    (o: 'MACRO Identifier Declaration' (fn [] new Macro true $2 $3))
+    (o: 'MACRO Identifier Declaration' (fn [] new Macro $2 $3))
   ]
 
   @Macro [
-    (o: 'Identifier Arguments' (fn [] new Macro false $1 $2))
+    (o: '` OptTerminator Statement' (fn [] new Evaluate $3))
+    (o: '~ OptTerminator Statement' (fn [] new Evaluate $3 true))
   ]
 
   @Operators [
