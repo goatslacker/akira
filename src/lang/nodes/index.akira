@@ -27,5 +27,6 @@ export {
   @Pattern        (r: 'pattern')
   @Pipeline       (r: 'pipeline')
   @Recur          (r: 'recur')
+  @TypeSignature  (r: 'typesignature')
   @Vector         (r: 'vector')
 }

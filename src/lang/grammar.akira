@@ -80,6 +80,7 @@ bnf = {
     (o: 'Exceptions')
     (o: 'Recur')
     (o: 'DefMacro')
+    (o: 'TypeSignature')
   ]
 
   @Expression [
@@ -155,7 +156,6 @@ bnf = {
     (o: 'Identifier Arguments' (fn [] new Cloning $2 $1))
     (o: 'Maps Arguments' (fn [] new Cloning $2 $1))
     (o: 'Vectors Arguments' (fn [] new Cloning $2 $1))
---    (o: 'Clonable Arguments' (fn [] new Cloning $2 $1))
   ]
 
   @Pipeline [
@@ -305,6 +305,21 @@ bnf = {
 
   @DefMacro [
     (o: 'MACRO Identifier Declaration' (fn [] new Macro $2 $3))
+  ]
+
+  @TypeParamsMaybe [
+    (o: '')
+    (o: 'TypeParams')
+  ]
+
+  @TypeParams [
+    (o: 'Type' (fn [] new Arguments $1))
+    (o: 'TypeParams Comma Type' (fn [] new Arguments $1 $3))
+  ]
+
+  @TypeSignature [
+    (o: 'Identifier LAMBDA TypeParamsMaybe / Type',
+      (fn [] new TypeSignature $1 $3 $5))
   ]
 
   @Macro [
