@@ -61,8 +61,16 @@ build-akira = fn []
     print: 'Done.'
   })
 
+build-ast = fn []
+  time: (fn [] {
+    print: 'Building JS ast...'
+    akira.compile: 'src/ast' 'node_modules/ast'
+    print: 'Done.'
+  })
+
 build-all = fn []
-  [build build-core build-akira build test] | map: (fn [f] f! | z-str | print)
+  [build build-core build-ast build-akira build test] |
+    map: (fn [f] f! | z-str | print)
 
 export {
   @test
