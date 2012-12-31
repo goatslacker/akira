@@ -1,8 +1,5 @@
 TODO
 sample
-esprima.js
-speed.js
-node_modules
 npm-debug.log
 lib-cov
 *.seed
@@ -17,5 +14,4 @@ pids
 logs
 results
 
-node_modules
 npm-debug.log
