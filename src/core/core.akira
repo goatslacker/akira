@@ -313,14 +313,20 @@ export {
   @zero? (`
     zero? = fn [x] x is 0)
 
+  @num? (`
+    num? = fn [x] x is Number)
+
   @str? (`
     str? = fn [x] x is String)
 
   @map? (`
-    map? = fn [x] x is Object)
+    map? = fn [x] x is Map)
 
   @vector? (`
-    vector? = fn [x] x is Array)
+    vector? = fn [x] x is Vector)
+
+  @bool? (`
+    bool? = fn [x] x is true || x is false)
 
   @none? (`
     none? = fn [x] x is none)
