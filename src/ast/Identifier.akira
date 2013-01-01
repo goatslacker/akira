@@ -1,0 +1,7 @@
+Identifier = fn [name (core = false) (rest = false)]
+  { @type 'Identifier'
+    @name name
+    @__core core
+    @__rest rest }
+
+export Identifier
