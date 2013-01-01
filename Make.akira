@@ -78,4 +78,5 @@ export {
   @build-all
   @build-core
   @build-akira
+  @build-ast
 }
