@@ -1,4 +1,4 @@
-FunctionExpression = fn [id params body opts]
+FunctionExpression = fn [id (params = []) body opts]
  { @type 'FunctionExpression'
    @id id
    @params params
