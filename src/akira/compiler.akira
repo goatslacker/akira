@@ -36,9 +36,12 @@ transform = fn [name parsed (f = to-ast)]
     else ? {
       context = {}
       body = parsed.compile: context name
+      dependencies = parsed.add-deps: context
       parsed.flag-core-methods: body
-      f: (parsed.add-vars: context false) ++ (parsed.add-core!) ++
-        (parsed.add-deps!) ++ body
+      f: (parsed.add-vars: context) ++
+        (parsed.add-core!) ++
+        dependencies ++
+        body
     }
 
 lex = fn [name code] lexer: code
