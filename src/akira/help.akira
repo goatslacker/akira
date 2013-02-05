@@ -1,15 +1,19 @@
-help = fn [] {
-  print: '               akira'
-  print: ''
-  print: 'ast [file]               - output the Mozilla Parse API for that file'
-  print: 'compile [file] [target]  - compile to JavaScript'
-  print: 'output [file]            - compile to JS and output'
-  print: 'run [file]               - compile and interpret said file'
-  print: 'make [command] [args]    - run akira unit tests'
-  print: 'tokens [file]            - output the lexer tokens for that file'
-  print: 'version                  - akira version'
-  print: 'watch [file] [target]    - watch a file for changes and compile on change'
-  print: ''
-}
+text = [
+   ''
+   'ast [file]               - output the Mozilla Parse API for that file'
+   'compile [file] [target]  - compile to JavaScript'
+   'make [command] [args]    - run akira unit tests'
+   'output [file]            - compile to JS and output'
+   'repl                     - start the repl'
+   'run [file]               - compile and interpret said file'
+   'tokens [file]            - output the lexer tokens for that file'
+   'version                  - akira version'
+   'watch [file] [target]    - watch a file for changes and compile on change'
+   ''
+]
+
+help = fn
+  [invalid] print: ['ERR: Invalid command: {{invalid}}'] ++ text
+  [else] print: text
 
 export help

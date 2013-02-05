@@ -29,7 +29,6 @@ load-makefile = fn [key opts]
 
 export {
   @cli (fn
-    [] start-repl!
     ['compile' [a b]] this.compile: a b
     ['output' [a]] this.output: a
     ['run' [a]] this.run: a
@@ -39,9 +38,9 @@ export {
     ['watch' [a b]] watch: a (fn [] akira: (fn [name code]
       exports: name code a b) a)
     ['make' [a b & c]] akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
-    [else] if (not &0)
-      then start-repl!
-      else help!
+    ['repl' []] start-repl!
+    ['help' []] help!
+    [else] help: &0
   )
 
   @compile (fn [from target]
