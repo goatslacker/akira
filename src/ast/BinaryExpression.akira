@@ -1,7 +1,8 @@
-BinaryExpression = fn [op left right]
+BinaryExpression = fn [op left right] {
   { @type 'BinaryExpression'
     @operator op
     @left left
     @right right }
+}
 
 export BinaryExpression

@@ -1,15 +1,17 @@
-variable-declarator = fn [id (init = none)]
+variable-declarator = fn [id (init = none)] {
   { @type 'VariableDeclarator'
     @id id
     @init init }
+}
 
 create-var = fn
   [[name init]] variable-declarator: name init
   [declaration] variable-declarator: declaration
 
-VariableDeclaration = fn [declarations]
+VariableDeclaration = fn [declarations] {
   { @type 'VariableDeclaration'
     @declarations (map: create-var declarations)
     @kind 'var' }
+}
 
 export VariableDeclaration

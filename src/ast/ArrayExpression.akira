@@ -1,5 +1,6 @@
-ArrayExpression = fn [(elements = [])]
+ArrayExpression = fn [(elements = [])] {
   { @type 'ArrayExpression'
     @elements elements }
+}
 
 export ArrayExpression

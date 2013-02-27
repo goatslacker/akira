@@ -9,7 +9,7 @@ walk = fn [cb tree] {
   }
 
   if stat.is-directory!
-    then fs.readdir-sync: tree | map: (fn [v] path.join: tree v | walk: cb)
+    then fs.readdir-sync: tree | map: fn [v] { path.join: tree v | walk: cb }
     else {
       if (tree.index-of: '.akira') >= 0
         then get-file-contents: cb tree
@@ -17,10 +17,12 @@ walk = fn [cb tree] {
     }
 }
 
-get-file-contents = fn [cb filepath] path.join: process.env.PWD, filepath |
-  fs.read-file-sync |
-  show |
-  cb: filepath
+get-file-contents = fn [cb filepath] {
+  path.join: process.env.PWD, filepath |
+    fs.read-file-sync |
+    show |
+    cb: filepath
+}
 
 get-files = fn [cb dirname] {
   stat = fs.stat-sync: dirname

@@ -7,25 +7,29 @@ help = import './help.akira'
 start-repl = import './repl.akira'
 watch = import './watchman.akira'
 
-exports = fn [name code from to]
+exports = fn [name code from to] {
   write-file: name ('module.exports = ' ++ code) from to
+}
 
-output = fn [name code]
+output = fn [name code] {
   util.puts: code
+}
 
-analyse = fn [name body]
+analyse = fn [name body] {
   body |
-  (fn [data] util.inspect: data false 50) |
+  fn [data] { util.inspect: data false 50 } |
   output: none
+}
 
-load-makefile = fn [key opts]
+load-makefile = fn [key opts] {
   fn [name code] {
     cmd = key |
-      (.replace: /[-+|:]([a-zA-Z0-9$_])/g (fn [i] i.2.to-upper-case!))
+      (.replace: /[-+|:]([a-zA-Z0-9$_])/g fn [i] { i.2.to-upper-case! })
 
     make = run: name ('module.exports = ' ++ code)
     (make !! cmd): opts
   }
+}
 
 export {
   @cli (fn
@@ -35,20 +39,20 @@ export {
     ['tokens' [a]] akira: analyse a lex
     ['ast' [a]] akira: analyse a gen-ast
     ['version'] 'akira ' ++ me.version | output: none
-    ['watch' [a b]] watch: a (fn [] akira: (fn [name code]
-      exports: name code a b) a)
+    ['watch' [a b]] watch: a -> (akira: fn [name code] {
+      exports: name code a b } a)
     ['make' [a b & c]] akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
     ['repl' []] start-repl!
     ['help' []] help!
     [else] help: &0
-  )
+    )
 
-  @compile (fn [from target]
-    akira: (fn [name code] exports: name code from target) from)
+  @compile fn [from target] {
+    akira: fn [name code] { exports: name code from target } from }
 
-  @output (fn [filename]
-    akira: output filename)
+  @output fn [filename] {
+    akira: output filename }
 
-  @run (fn [filename context]
-    akira: (fn [name code] run: name code context) filename)
+  @run fn [filename context] {
+    akira: fn [name code] { run: name code context } filename }
 }

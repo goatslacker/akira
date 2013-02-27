@@ -3,9 +3,9 @@ jison = require: 'jison'
 unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
 
 macro new fn [name & args] {
-  @type 'NewExpression'
+  { @type 'NewExpression'
   @callee name
-  @arguments args
+  @arguments args }
 }
 
 get-match = fn [action] {
@@ -13,8 +13,8 @@ get-match = fn [action] {
   if x then x.2 else '({{action}}())'
 }
 
-addYY = fn [str] str.replace: /new /g, 'new yy.'
-add-line = fn [str] 'yy.L(yylineno, ' ++ (str.replace: ';', '') ++ ');'
+addYY = fn [str] { str.replace: /new /g, 'new yy.' }
+add-line = fn [str] { 'yy.L(yylineno, ' ++ (str.replace: ';', '') ++ ');' }
 
 o = fn [pattern action] {
   pattern-string = pattern.replace: /\s{2,}/g, ' '
@@ -35,15 +35,15 @@ bnf = {
   ]
 
   @Program [
-    (o: 'Terminator Statements' (fn [] $2))
-    (o: 'Terminator' (fn [] none))
+    (o: 'Terminator Statements' (= $2))
+    (o: 'Terminator' (= none))
     (o: 'Statements')
   ]
 
   @Statements [
-    (o: 'Body' (fn [] yy.Nodes.wrap: $1))
-    (o: 'Statements TERMINATOR Body' (fn [] $1.push: $3))
-    (o: 'Statements ; Body' (fn [] $1.push: $3))
+    (o: 'Body' -> (yy.Nodes.wrap: $1))
+    (o: 'Statements TERMINATOR Body' -> ($1.push: $3))
+    (o: 'Statements ; Body' -> ($1.push: $3))
     (o: 'Statements TERMINATOR')
   ]
 
@@ -58,20 +58,24 @@ bnf = {
   ]
 
   @Identifier [
-    (o: 'IDENTIFIER' (fn [] new Identifier $1))
+    (o: 'IDENTIFIER' -> (new Identifier $1))
   ]
 
   @Prototype [
-    (o: 'PROTOTYPE' (fn [] new Identifier '__prototype'))
+    (o: 'PROTOTYPE' -> (new Identifier '__prototype'))
   ]
 
   @Rest [
-    (o: '& IDENTIFIER' (fn [] new Identifier $2 true))
+    (o: '& IDENTIFIER' -> (new Identifier $2 true))
+  ]
+
+  @TBody [
+    (o: '{ OptTerminator Statements }' -> ($3))
   ]
 
   @Body [
+    (o: 'TBody')
     (o: 'Statement')
-    (o: '{ OptTerminator Statements }' (fn [] $3))
   ]
 
   @Statement [
@@ -87,19 +91,19 @@ bnf = {
     (o: 'Value')
     (o: 'If')
     (o: 'Assignment')
-    (o: 'Declaration')
     (o: 'PatternMatching')
     (o: 'Cond')
     (o: 'Invocation')
     (o: 'Pipeline')
     (o: 'Cloning')
     (o: 'Macro')
-    (o: 'IMPORT STR' (fn [] new Import $2))
+    (o: 'IMPORT STR' -> (new Import $2))
   ]
 
   @Value [
     (o: 'Values')
     (o: 'AnonymousFunction')
+    (o: 'Declaration')
     (o: 'Access')
     (o: 'Operation')
   ]
@@ -111,8 +115,8 @@ bnf = {
     (o: 'Type')
     (o: 'Prototype')
     (o: 'SpecialFunctions')
-    (o: 'ARGS' (fn [] 'arguments[{{$1}}]'))
-    (o: '( OptTerminator Expression OptTerminator )' (fn [] $3))
+    (o: 'ARGS' -> ('arguments[{{$1}}]'))
+    (o: '( OptTerminator Expression OptTerminator )' -> ($3))
   ]
 
   @CallableValue [
@@ -121,100 +125,95 @@ bnf = {
   ]
 
   @Type [
-    (o: 'TYPE' (fn [] new Identifier $1))
+    (o: 'TYPE' -> (new Identifier $1))
   ]
 
   @Literal [
     (o: 'Identifier')
     (o: 'AlphaNumeric')
-    (o: 'NONE' (fn [] new Literal none))
-    (o: 'BOOL' (fn [] new Literal ($1 is 'true')))
-    (o: 'REGEXP' (fn [] new Literal $1))
+    (o: 'NONE' -> (new Literal none))
+    (o: 'BOOL' -> (new Literal ($1 is 'true')))
+    (o: 'REGEXP' -> (new Literal $1))
   ]
 
   @AlphaNumeric [
-    (o: 'NUM' (fn [] new Literal (Number: ($1.replace: /,/g, ''))))
+    (o: 'NUM' -> (new Literal (Number: ($1.replace: /,/g, ''))))
     (o: 'Strings')
   ]
 
   @Strings [
-    (o: 'STR' (fn [] new Literal (String: $1)))
+    (o: 'STR' -> (new Literal (String: $1)))
   ]
 
   @Assignment [
-    (o: 'Identifier = Expression' (fn [] new Assignment $1 $3))
-    (o: 'Access = Expression' (fn [] new Assignment $1 $3))
-    (o: 'Vectors = Expression' (fn [] new Assignment $1 $3))
-    (o: 'Maps = Expression' (fn [] new Assignment $1 $3))
+    (o: 'Identifier = Expression' -> (new Assignment $1 $3))
+    (o: 'Access = Expression' -> (new Assignment $1 $3))
+    (o: 'Vectors = Expression' -> (new Assignment $1 $3))
+    (o: 'Maps = Expression' -> (new Assignment $1 $3))
   ]
 
   @Exporting [
-    (o: 'EXPORT Expression' (fn [] new Export $2))
+    (o: 'EXPORT Expression' -> (new Export $2))
   ]
 
   @Cloning [
     -- Identifier Arguments also handles @Macro
-    (o: 'Identifier Arguments' (fn [] new Cloning $2 $1))
-    (o: 'Maps Arguments' (fn [] new Cloning $2 $1))
-    (o: 'Vectors Arguments' (fn [] new Cloning $2 $1))
+    (o: 'Identifier Arguments' -> (new Cloning $2 $1))
+    (o: 'Maps Arguments' -> (new Cloning $2 $1))
+    (o: 'Vectors Arguments' -> (new Cloning $2 $1))
   ]
 
   @Pipeline [
-    (o: 'Value | OptTerminator CallableValue' (fn [] new Pipeline $1 $4))
-    (o: 'Invocation | OptTerminator CallableValue' (fn [] new Pipeline $1 $4))
-    (o: 'Pipeline | OptTerminator CallableValue' (fn [] new Pipeline $1 $4))
+    (o: 'Value | OptTerminator CallableValue' -> (new Pipeline $1 $4))
+    (o: 'Invocation | OptTerminator CallableValue' -> (new Pipeline $1 $4))
+    (o: 'Pipeline | OptTerminator CallableValue' -> (new Pipeline $1 $4))
   ]
 
   @Invocation [
-    (o: 'Value : Arguments' (fn [] new Call $1 $3))
-    (o: 'Value !' (fn [] new Call $1))
-    (o: 'Value & !' (fn [] new Call $1, 'apply'))
-  ]
-
-  @TBody [
-    (o: 'TERMINATOR Body' (fn [] $2))
-    (o: 'Body')
+    (o: 'Value : Arguments' -> (new Call $1 $3))
+    (o: 'Value !' -> (new Call $1))
+    (o: 'Value & !' -> (new Call $1, 'apply'))
   ]
 
   @Declaration [
-    (o: 'FN [ Parameters ] TBody' (fn [] new Declaration none $3 $5))
-    (o: 'FN [ ] TBody' (fn [] new Declaration none none $4))
+    (o: 'FN [ Parameters ] TBody' -> (new Declaration none $3 $5))
+    (o: 'FN [ ] TBody' -> (new Declaration none none $4))
   ]
 
   @AnonymousFunction [
-    (o: 'LAMBDA ( Expression )' (fn [] new Declaration none none $3))
+    (o: 'LAMBDA ( Expression )' -> (new Declaration none none $3))
   ]
 
   @Conditional [
-    (o: 'Value ? Body Terminator' (fn [] [$1 $3]))
+    (o: 'Value ? Body Terminator' -> ([$1 $3]))
   ]
 
   @Conditionals [
-    (o: 'Conditional' (fn [] new Arguments $1))
-    (o: 'Conditionals Conditional' (fn [] new Arguments $1 $2))
+    (o: 'Conditional' -> (new Arguments $1))
+    (o: 'Conditionals Conditional' -> (new Arguments $1 $2))
   ]
 
   @CondElse [
-    (o: 'ELSE ? Body' (fn [] [$1 $3]))
+    (o: 'ELSE ? Body' -> ([$1 $3]))
   ]
 
   @Cond [
-    (o: 'COND TERMINATOR Conditionals CondElse' (fn [] new Cond $3 $4))
+    (o: 'COND TERMINATOR Conditionals CondElse' -> (new Cond $3 $4))
   ]
 
   @Pattern [
-    (o: '[ ] Body TERMINATOR' (fn [] [none $3] ))
-    (o: '[ VectorArgs ] Body TERMINATOR' (fn [] [$2 $4] ))
-    (o: '[ ELSE ] Body TERMINATOR' (fn [] [$2 $4] ))
+    (o: '[ ] Body TERMINATOR' -> ([none $3] ))
+    (o: '[ VectorArgs ] Body TERMINATOR' -> ([$2 $4] ))
+    (o: '[ ELSE ] Body TERMINATOR' -> ([$2 $4] ))
   ]
 
   @Patterns [
-    (o: 'Pattern' (fn [] new Arguments $1))
-    (o: 'Patterns Pattern' (fn [] new Arguments $1 $2))
+    (o: 'Pattern' -> (new Arguments $1))
+    (o: 'Patterns Pattern' -> (new Arguments $1 $2))
   ]
 
   @PatternMatching [
-    (o: 'FN TERMINATOR Patterns' (fn [] new Pattern $3))
+    (o: 'FN TERMINATOR Patterns' -> (new Pattern $3))
   ]
 
   @Comma [
@@ -223,8 +222,8 @@ bnf = {
   ]
 
   @Vectors [
-    (o: '[ ]' (fn [] new Vector))
-    (o: '[ OptTerminator VectorArgs OptTerminator ]' (fn [] new Vector $3))
+    (o: '[ ]' -> (new Vector))
+    (o: '[ OptTerminator VectorArgs OptTerminator ]' -> (new Vector $3))
   ]
 
   @VectorArg [
@@ -233,47 +232,47 @@ bnf = {
   ]
 
   @VectorArgs [
-    (o: 'VectorArg' (fn [] new Arguments $1))
-    (o: 'VectorArgs OptComma VectorArg' (fn [] new Arguments $1 $3))
+    (o: 'VectorArg' -> (new Arguments $1))
+    (o: 'VectorArgs OptComma VectorArg' -> (new Arguments $1 $3))
   ]
 
   @Key [
-    (o: 'KEY' (fn [] new Identifier $1))
+    (o: 'KEY' -> (new Identifier $1))
   ]
 
   @KeyValue [
-    (o: 'Key' (fn [] new Assignment $1 none))
-    (o: 'Key Value' (fn [] new Assignment $1 $2))
+    (o: 'Key' -> (new Assignment $1 none))
+    (o: 'Key Value' -> (new Assignment $1 $2))
   ]
 
   @MapItems [
-    (o: 'KeyValue' (fn [] new Arguments $1))
-    (o: 'MapItems OptComma KeyValue' (fn [] new Arguments $1 $3))
+    (o: 'KeyValue' -> (new Arguments $1))
+    (o: 'MapItems OptComma KeyValue' -> (new Arguments $1 $3))
   ]
 
   @Maps [
-    (o: '{ }' (fn [] new Map))
-    (o: '{ OptTerminator MapItems OptTerminator }' (fn [] new Map $3))
+    (o: '{ }' -> (new Map))
+    (o: '{ OptTerminator MapItems OptTerminator }' -> (new Map $3))
   ]
 
   @Access [
-    (o: 'Values Accessor' (fn [] new Access $1 $2))
-    (o: 'Access Accessor' (fn [] new Access $1 $2))
+    (o: 'Values Accessor' -> (new Access $1 $2))
+    (o: 'Access Accessor' -> (new Access $1 $2))
   ]
 
   @Accessor [
-    (o: '. Literal' (fn [] $2))
-    (o: '. PROTOTYPE' (fn [] $2))
+    (o: '. Literal' -> ($2))
+    (o: '. PROTOTYPE' -> ($2))
   ]
 
   @Arguments [
-    (o: 'Value' (fn [] new Arguments $1))
-    (o: 'Arguments Comma Value' (fn [] new Arguments $1 $3))
+    (o: 'Value' -> (new Arguments $1))
+    (o: 'Arguments Comma Value' -> (new Arguments $1 $3))
   ]
 
   @Param [
     (o: 'Identifier')
-    (o: '( Identifier = Value )' (fn [] new Assignment $2 $4))
+    (o: '( Identifier = Value )' -> (new Assignment $2 $4))
     (o: 'Rest')
     (o: 'Vectors')
   ]
@@ -284,32 +283,32 @@ bnf = {
   ]
 
   @Parameters [
-    (o: 'Param' (fn [] new Arguments $1))
-    (o: 'Parameters OptComma Param' (fn [] new Arguments $1 $3))
+    (o: 'Param' -> (new Arguments $1))
+    (o: 'Parameters OptComma Param' -> (new Arguments $1 $3))
   ]
 
   @Exceptions [
-    (o: 'TRY Body OptTerminator CATCH Body' (fn [] new Exception $2 $5))
-    (o: 'RAISE Value ErrorType' (fn [] new Exception $1 $2 $3))
+    (o: 'TRY Body OptTerminator CATCH Body' -> (new Exception $2 $5))
+    (o: 'RAISE Value ErrorType' -> (new Exception $1 $2 $3))
   ]
 
   @ErrorType [
-    (o: '' (fn [] none))
+    (o: '' -> (none))
     (o: 'Identifier')
   ]
 
   @Recur [
-    (o: 'RECUR OptTerminator Arguments' (fn [] new Recur $3))
-    (o: '( RECUR OptTerminator Arguments )' (fn [] new Recur $4))
+    (o: 'RECUR OptTerminator Arguments' -> (new Recur $3))
+    (o: '( RECUR OptTerminator Arguments )' -> (new Recur $4))
   ]
 
   @If [
     (o: 'IF CallableValue OptTerminator THEN Body OptTerminator ELSE Body',
-      (fn [] new If $2 $5 $8))
+      -> (new If $2 $5 $8))
   ]
 
   @DefMacro [
-    (o: 'MACRO Identifier Declaration' (fn [] new Macro $2 $3))
+    (o: 'MACRO Identifier Declaration' -> (new Macro $2 $3))
   ]
 
   @TypeParamsMaybe [
@@ -318,79 +317,80 @@ bnf = {
   ]
 
   @TypeParams [
-    (o: 'Type' (fn [] new Arguments $1))
-    (o: 'TypeParams Comma Type' (fn [] new Arguments $1 $3))
+    (o: 'Type' -> (new Arguments $1))
+    (o: 'TypeParams Comma Type' -> (new Arguments $1 $3))
   ]
 
   @TypeSignature [
     (o: 'Identifier LAMBDA TypeParamsMaybe / Type',
-      (fn [] new TypeSignature $1 $3 $5))
+      -> (new TypeSignature $1 $3 $5))
   ]
 
   @Macro [
-    (o: '` OptTerminator Statement' (fn [] new Evaluate $3))
-    (o: '~ OptTerminator Statement' (fn [] new Evaluate $3 true))
+    (o: '` OptTerminator Statement' -> (new Evaluate $3))
+    (o: '~ OptTerminator Statement' -> (new Evaluate $3 true))
   ]
 
   @Operators [
-    (o: '+' (fn [] new Identifier 'sum'))
-    (o: '-' (fn [] new Identifier 'sub'))
-    (o: '*' (fn [] new Identifier 'prod'))
-    (o: '* *' (fn [] new Identifier 'pow'))
-    (o: '/' (fn [] new Identifier 'div'))
-    (o: 'COMPARE' (fn [] new Compare $1))
-    (o: 'LOGIC' (fn [] new Logic $1))
+    (o: '+' -> (new Identifier 'sum'))
+    (o: '-' -> (new Identifier 'sub'))
+    (o: '*' -> (new Identifier 'prod'))
+    (o: '* *' -> (new Identifier 'pow'))
+    (o: '/' -> (new Identifier 'div'))
+    (o: 'COMPARE' -> (new Compare $1))
+    (o: 'LOGIC' -> (new Logic $1))
 
   ]
 
   @SugaryFunctions [
-    (o: 'Operators' (fn [] $1))
+    (o: 'Operators' -> ($1))
     (o: 'Accessor',
-      (fn [] new Declaration '->' (new Arguments 'it'),
+      -> (new Declaration '->' (new Arguments 'it'),
         (new Access 'it' $1)))
     (o: 'Accessor : Arguments',
-      (fn [] new Declaration '->' (new Arguments 'it'),
+      -> (new Declaration '->' (new Arguments 'it'),
         (new Call (new Access 'it' $1) $3)))
     (o: 'COMPARE Value',
-      (fn [] new Declaration '->' (new Arguments 'it'),
+      -> (new Declaration '->' (new Arguments 'it'),
         (new Compare 'it' $1 $2)))
     (o: 'LEFT_OPERATORS Value',
-      (fn [] new Declaration '->' (new Arguments 'it'),
+      -> (new Declaration '->' (new Arguments 'it'),
         (new Operation 'it' $1 $2)))
+    (o: '= Value' -> (new Declaration '->' (new Arguments 'it') $2))
     (o: '+ Value',
-      (fn [] new Declaration '->' (new Arguments 'it'),
+      -> (new Declaration '->' (new Arguments 'it'),
         (new Operation 'it' $1 $2)))
     (o: '- Value',
-      (fn [] new Declaration '->' (new Arguments 'it'),
+      -> (new Declaration '->' (new Arguments 'it'),
         (new Operation 'it' $1 $2)))
     (o: '* Value',
-      (fn [] new Declaration '->' (new Arguments 'it'),
+      -> (new Declaration '->' (new Arguments 'it'),
         (new Operation 'it' $1 $2)))
     (o: '* * Value',
-      (fn [] new Declaration '->' (new Arguments 'it'),
+      -> (new Declaration '->' (new Arguments 'it'),
         (new Operation 'it' '**' $3)))
     (o: '/ Value',
-      (fn [] new Declaration '->' (new Arguments 'it'),
+      -> (new Declaration '->' (new Arguments 'it'),
         (new Operation 'it' $1 $2)))
   ]
 
   @SpecialFunctions [
-    (o: '( SugaryFunctions )' (fn [] $2))
+    (o: '( SugaryFunctions )' -> ($2))
   ]
 
   @Operation [
-    (o: 'Value COMPARE OptTerminator Value' (fn [] new Compare $1 $2 $4))
-    (o: 'Value LOGIC OptTerminator Value' (fn [] new Logic $1 $2 $4))
+    (o: 'Value COMPARE OptTerminator Value' -> (new Compare $1 $2 $4))
+    (o: 'Value LOGIC OptTerminator Value' -> (new Logic $1 $2 $4))
     (o: 'Value LEFT_OPERATORS OptTerminator Value',
-      (fn [] new Operation $1 $2 $4))
+      -> (new Operation $1 $2 $4))
     (o: 'Value RIGHT_OPERATORS OptTerminator Value',
-      (fn [] new Operation $1 $2 $4))
-    (o: 'NOT Value' (fn [] new Compare $2 $1))
-    (o: 'Value + OptTerminator Value' (fn [] new Operation $1 '+' $4))
-    (o: 'Value - OptTerminator Value' (fn [] new Operation $1 '-' $4))
-    (o: 'Value * OptTerminator Value' (fn [] new Operation $1 '*' $4))
-    (o: 'Value * * OptTerminator Value' (fn [] new Operation $1 '**' $5))
-    (o: 'Value / OptTerminator Value' (fn [] new Operation $1 '/' $4))
+      -> (new Operation $1 $2 $4))
+    (o: 'NOT Value' -> (new Compare $2 $1))
+    (o: 'Value + OptTerminator Value' -> (new Operation $1 '+' $4))
+    (o: 'Value - OptTerminator Value' -> (new Operation $1 '-' $4))
+    (o: 'Value * OptTerminator Value' -> (new Operation $1 '*' $4))
+    (o: 'Value * * OptTerminator Value' -> (new Operation $1 '**' $5))
+    (o: 'Value / OptTerminator Value' -> (new Operation $1 '/' $4))
   ]
 }
 

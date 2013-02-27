@@ -2,7 +2,7 @@ fact = fn
   [1] 1
   [n] n * (fact: n - 1)
 
-fact2 = fn [n] if n <= 1 then 1 else n * (fact2: n - 1)
+fact2 = fn [n] { if n <= 1 then 1 else n * (fact2: n - 1) }
 
 fact: 4 | ok: 24
 fact2: 4 | ok: 24

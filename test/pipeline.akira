@@ -1,4 +1,4 @@
-add-akira = fn [r v] r ++ ' is ' ++ v
+add-akira = fn [r v] { r ++ ' is ' ++ v }
 
 id: 'awesome' | add-akira: 'akira' | ok: 'akira is awesome'
 

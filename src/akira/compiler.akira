@@ -9,7 +9,7 @@ parser = require: '../lang/grammar'
 parser.yy = (require: '../lang/nodes')
 
 to-ast = fn [body] {
-  @type 'Program'
+  { @type 'Program'
   @body [
     {
       @type 'ExpressionStatement'
@@ -27,10 +27,10 @@ to-ast = fn [body] {
         @arguments []
       }
     }
-  ]
+  ] }
 }
 
-transform = fn [name parsed (f = to-ast)]
+transform = fn [name parsed (f = to-ast)] {
   cond
     parsed is none ? to-ast: ''
     else ? {
@@ -43,12 +43,13 @@ transform = fn [name parsed (f = to-ast)]
         dependencies ++
         body
     }
+}
 
-lex = fn [name code] lexer: code
-parse = fn [name code] code | lex: name | parser.parse
-gen-ast = fn [name code] parse: name code | transform: name
+lex = fn [name code] { lexer: code }
+parse = fn [name code] { code | lex: name | parser.parse }
+gen-ast = fn [name code] { parse: name code | transform: name }
 
-transpile = fn [name code] code | gen-ast: name | escodegen.generate
+transpile = fn [name code] { code | gen-ast: name | escodegen.generate }
 
 akira = fn [cb filepath (f = transpile)] {
   on-file = fn [name code] {

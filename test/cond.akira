@@ -1,7 +1,8 @@
-one = fn [x]
+one = fn [x] {
   cond
     x is 1 ? 1
     else ? 2
+}
 
 
 one: 1 | ok: 1

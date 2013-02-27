@@ -67,7 +67,7 @@ obj | map? | is-true
 2 | str? | is-false
 
 -- when
-when: true (fn [] 1) | ok: 1
+when: true (= 1) | ok: 1
 
 -- pow
 map: (** 2) [1 2 3] | ok-deep: [1 4 9]

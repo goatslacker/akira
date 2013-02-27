@@ -2,7 +2,7 @@ continue = 1
 ok: continue 1
 for = 2
 ok: for 2
-f = fn [while] while
+f = fn [while] { while }
 f: 3 | ok: 3
 value-of = 1
 ok: value-of 1

@@ -27,11 +27,11 @@ identifiers = {
 
 ignore = { @COMMENTS @WHITESPACE }
 
-get-type = fn [a] rx | (find: (fn [x] x.test: a))
+get-type = fn [a] { rx | (find: fn [x] { x.test: a }) }
 
-extract = fn [key chunk] rx !! key | (.exec: chunk)
+extract = fn [key chunk] { rx !! key | (.exec: chunk) }
 
-parse-alphanumeric = fn [t chunk (n = 1)] extract: t chunk | (!! n)
+parse-alphanumeric = fn [t chunk (n = 1)] { extract: t chunk | (!! n) }
 
 return-identifier = fn
   ['KEYWORDS' item] [(item.toUpperCase!) item]
@@ -39,7 +39,7 @@ return-identifier = fn
 
 parse-identifier = fn [t chunk] {
   item = extract: t chunk
-  token = identifiers | (find: (fn [x] x.indexOf: item.2 | (>= 0)))
+  token = identifiers | (find: (fn [x] { x.indexOf: item.2 | (>= 0) }))
   return-identifier: token || t item.2
 }
 
@@ -49,7 +49,7 @@ parse-regular-expressions = fn [t chunk] {
   ['REGEXP' regexp]
 }
 
-get-token = fn [type chunk]
+get-token = fn [type chunk] {
   cond
     type is 'IDENTIFIER' ||
     type is 'KEY' ||
@@ -63,6 +63,7 @@ get-token = fn [type chunk]
     type is 'WHITESPACE' ||
     type is 'TERMINATOR' ? ' '
     else ? [chunk.1 chunk.1]
+}
 
 process-chunk = fn [code n] {
   type = get-type: code
@@ -85,8 +86,8 @@ incr-line = fn
   [else] line
 
 get-next-index = fn [token] {
-  @index (token.2.toString! | (.length) | get-length: token.1)
-  @token token
+  { @index (token.2.toString! | (.length) | get-length: token.1)
+  @token token }
 }
 
 return-tokens = fn
@@ -101,7 +102,9 @@ return-tokens = fn
       tokens
   }
 
-filter-whitespace = fn [token] not (ignore !! token.1)
+filter-whitespace = fn [token] { not (ignore !! token.1) }
 
-export tokenize = fn [code] return-tokens: code { @index 0 @line 0 } |
-  (.filter: filter-whitespace)
+export tokenize = fn [code] {
+  return-tokens: code { @index 0 @line 0 } |
+    (.filter: filter-whitespace)
+}

@@ -1,7 +1,8 @@
-AssignmentExpression = fn [left right]
+AssignmentExpression = fn [left right] {
   { @type 'AssignmentExpression'
     @operator '='
     @left left
     @right right }
+}
 
 export AssignmentExpression

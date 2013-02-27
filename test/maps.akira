@@ -1,5 +1,7 @@
 -- test function
-map-eq = fn [a b] filter: (fn [x i] x isnt b !! i) a | (.length) | ok: 0
+map-eq = fn [a b] {
+  filter: fn [x i] { x isnt b !! i } a | (.length) | ok: 0
+}
 
 -- setting maps
 obj = { @hello 1 @world 2 }

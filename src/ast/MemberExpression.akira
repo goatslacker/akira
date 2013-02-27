@@ -1,7 +1,8 @@
-MemberExpression = fn [object property (computed = false)]
+MemberExpression = fn [object property (computed = false)] {
   { @type 'MemberExpression'
     @computed computed
     @object object
     @property property }
+}
 
 export MemberExpression

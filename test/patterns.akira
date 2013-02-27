@@ -14,7 +14,7 @@ gt-ten = fn
 ok: false (gt-ten: 11)
 ok: true (gt-ten: 2)
 
-starts-with = fn [noun prefix] prefix == noun.1 + noun.2
+starts-with = fn [noun prefix] { prefix == noun.1 + noun.2 }
 
 spanish-gender-of-noun = fn
   [(starts-with: &0 'el')] 'male'
@@ -34,11 +34,11 @@ sort-even-odd = fn
 [1 2 3 4 5 6] | sort-even-odd | ok-deep: [2 4 6 5 3 1]
 
 -- implementations of our util functions
-init = fn [[& a b]] a
-tail = fn [[a & b]] b
-head = fn [[a & b]] a
-last = fn [[& a b]] b
-get-middle = fn [[a & b c]] b
+init = fn [[& a b]] { a }
+tail = fn [[a & b]] { b }
+head = fn [[a & b]] { a }
+last = fn [[& a b]] { b }
+get-middle = fn [[a & b c]] { b }
 
 
 ls = [1 2 3 4 5]
@@ -94,7 +94,7 @@ fjoes: [0 1 2 3 4] | ok: 2
 ajoleif = fn
   [x b] b&!
 
-ajoleif: 6 (fn [x b] x) | ok: 6
+ajoleif: 6 fn [x b] { x } | ok: 6
 
 jfo = fn
   [2 a & b] 1

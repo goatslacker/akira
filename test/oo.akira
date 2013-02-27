@@ -1,15 +1,15 @@
 -- I have to make a Animal, Cat example...
 Animal = {
-  @speak (fn [] 'my name is ' ++ this.name)
-  @walk (fn [direction] true)
-  @sleep (fn [] 'ZzZzZ...')
+  @speak (= 'my name is ' ++ this.name)
+  @walk (= true)
+  @sleep (= 'ZzZzZ...')
   @alive true
   @eyes 2
 }
 
 Cat = Animal {
-  @speak (fn [] 'meow i am ' ++ this.name)
-  @sleep (fn [] 'Purr ' ++ (prototype.sleep!))
+  @speak (= 'meow i am ' ++ this.name)
+  @sleep (= 'Purr ' ++ (prototype.sleep!))
   @legs 4
 }
 

@@ -35,7 +35,7 @@ a3 = { @a 1 }
 ok: a3.a 1
 a4 = 2 * 4
 ok: a4 8
-a5 = (fn [x] x)
+a5 = (= &0)
 a5: 1,337 | ok: 1337
 a6 = (if true then 1 else 2)
 ok: a6 1
@@ -44,7 +44,7 @@ ok: a7 12
 a8 = 6 | a5
 ok: a8 6
 
-h = fn [x] x
+h = (= &0)
 ok: (h: 5) 5
 
 i = h: 1e9

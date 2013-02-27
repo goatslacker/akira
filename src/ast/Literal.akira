@@ -1,5 +1,6 @@
-Literal = fn [value]
+Literal = fn [value] {
   { @type 'Literal'
     @value value }
+}
 
 export Literal

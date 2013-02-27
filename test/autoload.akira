@@ -1,6 +1,6 @@
 -- NOTE: this file isn't sandboxed, all tests run at the same time.
 
-is-true = fn [n] ok: n true
+is-true = (= (ok: &0 true))
 
 banana = {}
 
@@ -9,21 +9,21 @@ banana.show
 count-alias = count
 { @concat-key concat }
 div = 2
-plus-nine = fn [randomize] 9 + randomize
-mul = fn [] 0
+plus-nine = (+ 9)
+mul = (= 0)
 { @take-while }
 id: zip-with
 closed-function = fn [x] {
   gte = 2
   -- will include gte
-  nothing: (fn [x] gte > x) [1 2 3]
+  nothing: (< gte) [1 2 3]
 }
 closed-function2 = fn [x] {
   intersect = 1
   id: intersect
 }
 intersect-fn = intersect
-closed-function3 = fn [x] lte = false
+closed-function3 = fn [x] { lte = false }
 
 
 words is undefined | is-true
