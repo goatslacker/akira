@@ -99,6 +99,7 @@ bnf = {
 
   @Value [
     (o: 'Values')
+    (o: 'AnonymousFunction')
     (o: 'Access')
     (o: 'Operation')
   ]
@@ -178,6 +179,10 @@ bnf = {
   @Declaration [
     (o: 'FN [ Parameters ] TBody' (fn [] new Declaration none $3 $5))
     (o: 'FN [ ] TBody' (fn [] new Declaration none none $4))
+  ]
+
+  @AnonymousFunction [
+    (o: 'LAMBDA ( Expression )' (fn [] new Declaration none none $3))
   ]
 
   @Conditional [
