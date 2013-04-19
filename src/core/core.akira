@@ -124,7 +124,19 @@ export {
     average = fn [vec] foldl: (fn [a b] a + b) vec | (/ vec.length))
 
   @compact (`
-    compact = fn [vec] filter: (fn [x] not not x) vec)
+    compact = fn [vec] filter: -> (Boolean: &0) vec)
+
+  @concatMap (`
+    concatMap = fn [f vec] {
+      result = []
+      vec.for-each: (fn [x] {
+        item = f: x
+        if Array.isArray: item
+          then Array.prototype.push.apply: result item
+          else result.push: item
+      })
+      result
+    })
 
   @assert (`
     assert = fn [a b] {
