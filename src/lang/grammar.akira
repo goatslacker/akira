@@ -115,8 +115,13 @@ bnf = {
     (o: 'Type')
     (o: 'Prototype')
     (o: 'SpecialFunctions')
-    (o: 'ARGS' -> ('arguments[{{$1}}]'))
+    (o: 'ArgumentsShorthand')
+    (o: 'ArgumentsShorthand ^ Identifier' -> (new Assignment $3 $1))
     (o: '( OptTerminator Expression OptTerminator )' -> ($3))
+  ]
+
+  @ArgumentsShorthand [
+    (o: 'ARGS' -> ('arguments[{{$1}}]'))
   ]
 
   @CallableValue [
