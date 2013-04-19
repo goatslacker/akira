@@ -1,7 +1,7 @@
 nodewatch = require: 'nodewatch'
 
 watch = fn [filename callback] {
-  nodewatch.add: filename | fn [f] { f.on-change: callback }
+  nodewatch.add: filename | -> (&0.on-change: callback)
 }
 
 export watch

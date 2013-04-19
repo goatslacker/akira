@@ -50,8 +50,7 @@ export {
   @compile fn [from target] {
     akira: fn [name code] { exports: name code from target } from }
 
-  @output fn [filename] {
-    akira: output filename }
+  @output -> (akira: output &0)
 
   @run fn [filename context] {
     akira: fn [name code] { run: name code context } filename }
