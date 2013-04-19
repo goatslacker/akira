@@ -101,18 +101,18 @@ export {
     join = fn [by vec] { vec.join: by })
 
   @concat (`
-    concat = fn
+    concat = match {
       [a] a
       [a b] a ++ b
       [a b c] a ++ b ++ c
       [& a] foldl: fn [a b] { a ++ b } a
-  )
+    })
 
   @count (`
-    count = fn
+    count = match {
       [vec] vec.length
       [vec f] filter: f vec | (.length)
-  )
+    })
 
   @zip-with (`
     zip-with = fn [f [a & as] [b & bs]] {

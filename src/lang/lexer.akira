@@ -14,7 +14,7 @@ rx = {
 
 identifiers = {
   @KEYWORDS ['if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none'
-    'fn' 'raise' 'prototype' 'recur' 'macro' 'cond']
+    'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match']
   @TYPE ['Function' 'Number' 'String' 'Vector'
     'Map' 'None' 'RegExp' 'Boolean' 'Any']
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
@@ -33,9 +33,10 @@ extract = fn [key chunk] { rx !! key | (.exec: chunk) }
 
 parse-alphanumeric = fn [t chunk (n = 1)] { extract: t chunk | (!! n) }
 
-return-identifier = fn
+return-identifier = match {
   ['KEYWORDS' item] [(item.toUpperCase!) item]
   [type item] [type item]
+}
 
 parse-identifier = fn [t chunk] {
   item = extract: t chunk
@@ -76,21 +77,23 @@ process-chunk = fn [code n] {
     else [type token n.line]
 }
 
-get-length = fn
+get-length = match {
   ['STR' i] i + 2
   ['ARGS' i] i + 1
   [else] i
+}
 
-incr-line = fn
+incr-line = match {
   ['TERMINATOR' line] line + 1
   [else] line
+}
 
 get-next-index = fn [token] {
   { @index (token.2.toString! | (.length) | get-length: token.1)
   @token token }
 }
 
-return-tokens = fn
+return-tokens = match {
   [code n] return-tokens: code n []
   ['' _ tokens] tokens
   [else] {
@@ -101,6 +104,7 @@ return-tokens = fn
       { @line (incr-line: token.1 n.line) },
       tokens
   }
+}
 
 filter-whitespace = fn [token] { not (ignore !! token.1) }
 

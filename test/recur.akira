@@ -1,14 +1,16 @@
-fib = fn
+fib = match {
   [x] fib: x 0 1
   [1 p n] n
   [else] recur x - 1, n, p + n
+}
 
 fib: 8 | ok: 21
 
 
-fact = fn
+fact = match {
   [n] fact: n 1
   [0 sum] sum
   [else] recur n - 1, sum * n
+}
 
 fact: 4 | ok: 24

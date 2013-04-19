@@ -31,21 +31,23 @@ load-makefile = fn [key opts] {
   }
 }
 
+cli = match {
+  ['compile' [a b]] this.compile: a b
+  ['output' [a]] this.output: a
+  ['run' [a]] this.run: a
+  ['tokens' [a]] akira: analyse a lex
+  ['ast' [a]] akira: analyse a gen-ast
+  ['version'] 'akira ' ++ me.version | output: none
+  ['watch' [a b]] watch: a -> (akira: fn [name code] {
+    exports: name code a b } a)
+  ['make' [a b & c]] akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
+  ['repl' []] start-repl!
+  ['help' []] help!
+  [else] help: &0
+}
+
 export {
-  @cli (fn
-    ['compile' [a b]] this.compile: a b
-    ['output' [a]] this.output: a
-    ['run' [a]] this.run: a
-    ['tokens' [a]] akira: analyse a lex
-    ['ast' [a]] akira: analyse a gen-ast
-    ['version'] 'akira ' ++ me.version | output: none
-    ['watch' [a b]] watch: a -> (akira: fn [name code] {
-      exports: name code a b } a)
-    ['make' [a b & c]] akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
-    ['repl' []] start-repl!
-    ['help' []] help!
-    [else] help: &0
-    )
+  @cli cli
 
   @compile fn [from target] {
     akira: fn [name code] { exports: name code from target } from }

@@ -1,35 +1,39 @@
-numbers = fn
+numbers = match {
   ['one'] 1
   ['two'] 2
   ['three'] 3
   [four] 4
+}
 
 ok: 4 (numbers: 'four')
 ok: 1 (numbers: 'one')
 
-gt-ten = fn
+gt-ten = match {
   [(< 10)] true
   [(> 10)] false
+}
 
 ok: false (gt-ten: 11)
 ok: true (gt-ten: 2)
 
 starts-with = fn [noun prefix] { prefix == noun.1 + noun.2 }
 
-spanish-gender-of-noun = fn
+spanish-gender-of-noun = match {
   [(starts-with: &0 'el')] 'male'
   [(starts-with: &0 'la')] 'female'
+}
 
 ok: 'female' (spanish-gender-of-noun: 'la casa')
 ok: 'male' (spanish-gender-of-noun: 'el carro')
 
-sort-even-odd = fn
+sort-even-odd = match {
   [[]] []
   [[x & xs]] {
     if (odd: x)
       then (sort-even-odd: xs) ++ [x]
       else x +: (sort-even-odd: xs)
   }
+}
 
 [1 2 3 4 5 6] | sort-even-odd | ok-deep: [2 4 6 5 3 1]
 
@@ -49,67 +53,76 @@ ls | tail | ok-deep: [2 3 4 5]
 ls | head | ok: 1
 ls | last | ok: 5
 
-add-two = fn
+add-two = match {
   [0] 0
   [n] n + 2
+}
 
 add-two: 0 | ok: 0
 add-two: 2 | ok: 4
 
-ljfdg = fn
+ljfdg = match {
   [a] 1
   [a b] 2
   [a b c] 3
   [else] 4
+}
 
 ljfdg: 0 0 | ok: 2
 ljfdg: 0 0 0 | ok: 3
 ljfdg! | ok: 4
 
 
-gorje = fn
+gorje = match {
   [_ 3 c] 0
   [a _ 4] 1
   [2 b _] 2
+}
 
 gorje: 0 3 0 | ok: 0
 gorje: 2 0 0 | ok: 2
 
-oiejf = fn
+oiejf = match {
   [1 b 3] 1
   [2 4 c] 2
   [else] 3
+}
 
 oiejf: 1 0 3 | ok: 1
 oiejf! | ok: 3
 
-fjoes = fn
+fjoes = match {
   [[a b 3 4 5]] 1
   [[a b c d e]] c
   [else] 0
+}
 
 fjoes: [1 2 3 4 5] | ok: 1
 fjoes: [0 1 2 3 4] | ok: 2
 
-ajoleif = fn
+ajoleif = match {
   [x b] b&!
+}
 
 ajoleif: 6 fn [x b] { x } | ok: 6
 
-jfo = fn
+jfo = match {
   [2 a & b] 1
   [else] 2
+}
 
 jfo: 6 | ok: 2
 
-jfoe = fn
+jfoe = match {
   [[a _]] 1
   [[a] b] 2
+}
 
 jfoe: [3 6] | ok: 1
 jfoe: [2] 2 | ok: 2
 
-vcxv = fn
+vcxv = match {
   [{ @d }] 3
+}
 
 vcxv: { @d 3 } | ok: 3

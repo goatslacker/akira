@@ -4,9 +4,10 @@ variable-declarator = fn [id (init = none)] {
     @init init }
 }
 
-create-var = fn
+create-var = match {
   [[name init]] variable-declarator: name init
   [declaration] variable-declarator: declaration
+}
 
 VariableDeclaration = fn [declarations] {
   { @type 'VariableDeclaration'

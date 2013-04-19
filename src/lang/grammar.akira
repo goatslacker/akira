@@ -218,7 +218,7 @@ bnf = {
   ]
 
   @PatternMatching [
-    (o: 'FN TERMINATOR Patterns' -> (new Pattern $3))
+    (o: 'MATCH { OptTerminator Patterns }' -> (new Pattern $4))
   ]
 
   @Comma [
@@ -402,7 +402,7 @@ bnf = {
 
 tokens = [
   'ASSERT' 'IF' 'THEN' 'ELSE'
-  'FN' 'KEY' 'LAMBDA'
+  'FN' 'MATCH' 'KEY' 'LAMBDA'
   'IDENTIFIER' 'BOOL' 'NUM' 'STR'
   'LOGIC' 'COMPARE'
   'TERMINATOR'
