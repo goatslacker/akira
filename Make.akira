@@ -2,7 +2,7 @@ fs = require: 'fs'
 path = require: 'path'
 akira = require: (path.join: process.env.PWD 'lib/akira/index.js')
 
-z-str = fn [] ''
+newline = fn [] ''
 
 time = fn [f] {
   start = Date.now!
@@ -40,37 +40,29 @@ test = fn []
       else print: 'Fail'
   })
 
+create-compile = fn [name from to]
+  fn [] {
+    print: 'Building {{name}}'
+    akira.compile: from to
+    print: 'Done.'
+  }
+
+
 build = fn []
-  time: (fn [] {
-    print: 'Building parser...'
-    akira.compile: 'src/lang' 'lib/lang'
-    print: 'Built.'
-  })
+  create-compile: 'parser' 'src/lang' 'lib/lang' | time
 
 build-core = fn []
-  time: (fn [] {
-    print: 'Building core...'
-    akira.compile: 'src/core/core.akira' 'lib/core'
-    print: 'Done.'
-  })
+  create-compile: 'core' 'src/core/core.akira' 'lib/core' | time
 
 build-akira = fn []
-  time: (fn [] {
-    print: 'Building akira...'
-    akira.compile: 'src/akira/index.akira' 'lib/akira'
-    print: 'Done.'
-  })
+  create-compile: 'akira' 'src/akira/index.akira' 'lib/akira' | time
 
 build-ast = fn []
-  time: (fn [] {
-    print: 'Building JS ast...'
-    akira.compile: 'src/ast' 'node_modules/ast'
-    print: 'Done.'
-  })
+  create-compile: 'ast' 'src/ast' 'node_modules/ast' | time
 
 build-all = fn []
   [build build-core build-ast build-akira build test] |
-    map: (fn [f] f! | z-str | print)
+    map: (fn [f] f! | newline | print)
 
 export {
   @test
