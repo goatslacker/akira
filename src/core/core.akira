@@ -35,6 +35,18 @@ macro each fn [sym name test] {
   @each false }
 }
 
+macro obj-set fn [obj key val] {
+  { @type 'AssignmentExpression'
+  @operator '='
+  @left {
+    @type 'MemberExpression'
+    @computed true
+    @object obj
+    @property key
+  }
+  @right val }
+}
+
 macro single-if fn [test body] {
   { @type 'IfStatement'
   @test test
@@ -99,6 +111,13 @@ export {
 
   @join (`
     join = fn [by vec] { vec.join: by })
+
+  @to-map (`
+    to-map = fn [coll] {
+      x = {}
+      coll.for-each: -> (obj-set x &0.1 &0.2)
+      x
+    })
 
   @concat (`
     concat = match {
@@ -245,6 +264,16 @@ export {
         }
       }
       if l < 1 then f else c: []
+    })
+
+  @bind (`
+    bind = fn [f & args] {
+      fn [] { f.apply: f args }
+    })
+
+  @If (`
+    If = fn [yn f] {
+      if yn then f! else none
     })
 
   @when (`
