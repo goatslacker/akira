@@ -27,11 +27,17 @@ identifiers = {
 
 ignore = { @COMMENTS @WHITESPACE }
 
-get-type = fn [a] { rx | (find: fn [x] { x.test: a }) }
+get-type = fn [a] {
+  rx | find: -> (&0.test: a)
+}
 
-extract = fn [key chunk] { rx !! key | (.exec: chunk) }
+extract = fn [key chunk] {
+  rx !! key | (.exec: chunk)
+}
 
-parse-alphanumeric = fn [t chunk (n = 1)] { extract: t chunk | (!! n) }
+parse-alphanumeric = fn [t chunk (n = 1)] {
+  extract: t chunk | (!! n)
+}
 
 return-identifier = match {
   ['KEYWORDS' item] [(item.toUpperCase!) item]
@@ -40,7 +46,7 @@ return-identifier = match {
 
 parse-identifier = fn [t chunk] {
   item = extract: t chunk
-  token = identifiers | (find: (fn [x] { x.indexOf: item.2 | (>= 0) }))
+  token = identifiers | find: -> (&0.indexOf: item.2 | (>= 0))
   return-identifier: token || t item.2
 }
 
@@ -69,11 +75,8 @@ get-token = fn [type chunk] {
 process-chunk = fn [code n] {
   type = get-type: code
   token = get-token: type code
-  if Array.isArray: token
-    then {
-      token.push: n.line
-      token
-    }
+  if token is Vector
+    then token ++ [n.line]
     else [type token n.line]
 }
 
@@ -106,7 +109,9 @@ return-tokens = match {
   }
 }
 
-filter-whitespace = fn [token] { not (ignore !! token.1) }
+filter-whitespace = fn [token] {
+  not (ignore !! token.1)
+}
 
 export tokenize = fn [code] {
   return-tokens: code { @index 0 @line 0 } |
