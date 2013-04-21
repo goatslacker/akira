@@ -112,10 +112,16 @@ export {
   @join (`
     join = fn [by vec] { vec.join: by })
 
+  @reverse (`
+    reverse = fn [coll] { coll.reverse! })
+
   @to-map (`
-    to-map = fn [coll] {
+    to-map = fn [f coll] {
       x = {}
-      coll.for-each: -> (obj-set x &0.1 &0.2)
+      coll.for-each: fn [i] {
+        [key val] = f: i
+        obj-set x key val
+      }
       x
     })
 
