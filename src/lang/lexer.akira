@@ -39,6 +39,8 @@ parse-alphanumeric = fn [t chunk (n = 1)] {
   extract: t chunk | (!! n)
 }
 
+return-token = fn [type] { -> ([type &0]) }
+
 return-identifier = match {
   ['KEYWORDS' item] [(item.toUpperCase!) item]
   [type item] [type item]
@@ -47,14 +49,12 @@ return-identifier = match {
 parse-identifier = fn [t chunk] {
   item = extract: t chunk
   token = identifiers | find: -> (&0.indexOf: item.2 | (>= 0))
-  return-identifier: token || t item.2
+  return-identifier: (token || t) item.2
 }
 
-parse-regular-expressions = fn [t chunk] {
-  item = extract: t chunk
-  regexp = RegExp: item.3 item.4
-  ['REGEXP' regexp]
-}
+convert-regexp = fn [item] { RegExp: item.3 item.4 }
+return-token-regexp = return-token: 'REGEXP'
+parse-regular-expressions = -> (extract &! | convert-regexp | return-token-regexp)
 
 get-token = fn [type chunk] {
   cond
