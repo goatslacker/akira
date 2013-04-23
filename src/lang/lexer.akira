@@ -5,7 +5,7 @@ rx = {
   @STR /^'(.*?)'/
   @ARGS /^&([0-9]+)/
   @LAMBDA /^->/
-  @OPERATION /^(<\+|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
+  @OPERATION /^(<-|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
   @TERMINATOR /^\n/
   @REGEX /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
   @COMMENTS /^(--.*)/
@@ -13,13 +13,14 @@ rx = {
 }
 
 identifiers = {
-  @KEYWORDS ['if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none'
+  @KEYWORDS ['if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none' 'do'
     'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match']
   @TYPE ['Function' 'Number' 'String' 'Vector'
     'Map' 'None' 'RegExp' 'Boolean' 'Any']
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
   @LEFT_OPERATORS ['++' '!!']
   @RIGHT_OPERATORS ['+:']
+  @DO_OPERATOR ['<-']
   @NOT ['not']
   @LOGIC ['&&' '||']
   @BOOL ['true' 'false']
