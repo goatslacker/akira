@@ -193,9 +193,9 @@ bnf = {
   ]
 
   @DoOperation [
-    (o: 'Vectors DO_OPERATOR RETURN Value TERMINATOR' -> ([$1 $4 $3]))
-    (o: 'Vectors DO_OPERATOR Invocation TERMINATOR' -> ([$1 $3]))
-    (o: 'Expression TERMINATOR' -> ([$1]))
+    (o: 'Vectors DO_OPERATOR RETURN Value TERMINATOR' -> ({ @args $1 @call $4 @is-return true }))
+    (o: 'Vectors DO_OPERATOR Invocation TERMINATOR' -> ({ @args $1 @call $3 }))
+    (o: 'Expression TERMINATOR' -> ({ @expr $1 }))
   ]
 
   @DoOperations [
