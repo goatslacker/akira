@@ -193,6 +193,7 @@ bnf = {
   ]
 
   @DoOperation [
+    (o: 'Vectors DO_OPERATOR RETURN Value TERMINATOR' -> ([$1 $4 $3]))
     (o: 'Vectors DO_OPERATOR Invocation TERMINATOR' -> ([$1 $3]))
     (o: 'Expression TERMINATOR' -> ([$1]))
   ]
@@ -426,7 +427,7 @@ tokens = [
   'ASSERT' 'IF' 'THEN' 'ELSE'
   'FN' 'MATCH' 'KEY' 'LAMBDA'
   'IDENTIFIER' 'BOOL' 'NUM' 'STR'
-  'LOGIC' 'COMPARE'
+  'LOGIC' 'COMPARE' 'DO' 'RETURN'
   'TERMINATOR'
 ]
 

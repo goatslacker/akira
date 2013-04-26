@@ -14,7 +14,7 @@ rx = {
 
 identifiers = {
   @KEYWORDS ['if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none' 'do'
-    'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match']
+    'return' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match']
   @TYPE ['Function' 'Number' 'String' 'Vector'
     'Map' 'None' 'RegExp' 'Boolean' 'Any']
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
