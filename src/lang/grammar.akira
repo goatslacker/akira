@@ -94,6 +94,8 @@ bnf = {
     (o: 'PatternMatching')
     (o: 'Cond')
     (o: 'Invocation')
+    (o: 'InlineDeclaration')
+    (o: 'AsyncDo')
     (o: 'Pipeline')
     (o: 'Cloning')
     (o: 'Macro')
@@ -183,6 +185,26 @@ bnf = {
   @Declaration [
     (o: 'FN [ Parameters ] TBody' -> (new Declaration none $3 $5))
     (o: 'FN [ ] TBody' -> (new Declaration none none $4))
+  ]
+
+  @InlineDeclaration [
+    (o: 'FN [ Parameters ] Expression' -> (new Declaration none $3 $5))
+    (o: 'FN [ ] Expression' -> (new Declaration none none $4))
+  ]
+
+  @DoOperation [
+    (o: 'Vectors DO_OPERATOR Invocation TERMINATOR' -> ([$1 $3]))
+    (o: 'Expression TERMINATOR' -> ([$1]))
+  ]
+
+  @DoOperations [
+    (o: 'DoOperation' -> (new Arguments $1))
+    (o: 'DoOperations DoOperation' -> (new Arguments $1 $2))
+  ]
+
+  @AsyncDo [
+    (o: 'DO [ Parameters ] Terminator DoOperations' -> (new Async $6 $3))
+    (o: 'DO Terminator DoOperations' -> (new Async $3 none))
   ]
 
   @AnonymousFunction [
