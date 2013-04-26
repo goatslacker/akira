@@ -246,6 +246,12 @@ export {
   @apply (`
     apply = fn [f & args] { f.apply: f args })
 
+  @compose (`
+    compose = fn [f g] { fn [x] { x | g | f } })
+
+  @sequence (`
+    sequence = fn [f g] { fn [x] { x | f | g } })
+
   @id (`
     id = fn [a] { a })
 
