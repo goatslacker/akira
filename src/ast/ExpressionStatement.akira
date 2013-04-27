@@ -1,7 +1,20 @@
+convert-to-expression-statement = match {
+  [expr 'ExpressionStatement'] expr
+  [expr 'TryStatement'] expr
+  [expr 'IfStatement'] expr
+  [expr 'SwitchStatement'] expr
+  [expr 'ForInStatement'] expr
+  [expr 'ReturnStatement'] expr
+  [expr 'BlockStatement'] expr
+  [expr 'ThrowStatement'] expr
+  [expr 'VariableDeclaration'] expr
+  [else] { @type 'ExpressionStatement' @expression expr }
+}
+
 ExpressionStatement = fn [expr] {
-  if expr is Vector || expr.type is 'ExpressionStatement'
+  if expr is Vector
     then expr
-    else [{ @type 'ExpressionStatement' @expression expr }]
+    else convert-to-expression-statement: expr expr.type
 }
 
 export ExpressionStatement
