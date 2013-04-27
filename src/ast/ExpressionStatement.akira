@@ -1,0 +1,7 @@
+ExpressionStatement = fn [expr] {
+  if expr is Vector || expr.type is 'ExpressionStatement'
+    then expr
+    else [{ @type 'ExpressionStatement' @expression expr }]
+}
+
+export ExpressionStatement
