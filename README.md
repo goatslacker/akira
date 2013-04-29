@@ -139,15 +139,19 @@ Anonymous functions
 ### Pipes
 
 Functions can also be invoked or chained with pipes
+
     sum: 1 2 | print        -- print(sum(1, 2))
 
 Multiple expressions can be piped together
+
     1 | id | print           -- print(id(1))
 
 Previous arguments are carried over into the next function call...
+
     1 | sum: 2 | (== 3)   -- sum(2, 1) === 3
 
 ...and you can use _ (underscore) to place your argument
+
     2 | sub: _ 1 | (== 1)    -- sub(2, 1) === 1
 
 
