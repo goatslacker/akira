@@ -26,49 +26,60 @@ git
     version                  - akira version
     watch [file] [target]    - watch a file for changes and compile on change
 
+
 ## Overview
 
 ### Literals
 
-    -- String
+String
+
     'i am a string'
 
-    -- Number
+Numbers
+
     42
     2.0
     9,000
     -3
 
-    -- Boolean
+Boolean
+
     true
     false
 
-    -- Maps
+Maps
+
     cat = {
       @name 'Luna'
       @age 2
     }
 
-    -- Vectors
+Vectors
+
     [1, 2, 3, 4]
     [1 2 3 4]
     [true false]
 
-    -- Regular Expressions
+Regular Expressions
+
     /[A-Z]+/g
+
 
 ### Operators
 
-    -- standard math
+Math
+
     1 + 2
     4 - 1
     3 * 1
     9 / 3
 
-    -- exponents
+Exponents
+
     3 ** 3      -- Math.pow(3, 3)
 
-    -- equality
+Equality
+
     true == true
     false != true
     3 > 2
@@ -76,22 +87,28 @@ git
     3 >= 3
     3 <= 3
 
-    -- logical
+Logical
+
     false || true
     true && true
 
-    -- concat and cons
+Concat and Cons
+
     [1] ++ [2]          -- [1].concat(2)
     'hello ' ++ 'world' -- 'hello'.concat('world')
     1 +: [2 3]          -- [1].concat(2, 3)
 
-    -- access
+Property Access
+
     { @key 'value' } !! 'key'  -- { key: 'value' }['key']
     { @key 'value' }.key       -- { key: 'value' }.key
     [1 2 3 4] !! 2             -- [1, 2, 3, 4][2]
     [1 2 3].1                  -- [1, 2, 3][0]
 
+
 ### Functions
+
+Defining functions
 
     sum = fn [a b] {
       a + b
@@ -100,42 +117,71 @@ git
       a - b
     }
 
-    -- invoking sum...
+Invoking
+
     sum: 1 2
 
-    -- invoking functions with no args
+Invoking with no arguments
+
     'hello-world'.to-string!
 
-    -- IIFE
+IIFE
+
     fn [] {
       number-of-balloons = 99
     }!
 
-    -- Anonymous functions
+Anonymous functions
+
     fn [x] x * x
+
 
 ### Pipes
 
-    -- functions can also be invoked with pipes
+Functions can also be invoked or chained with pipes
     sum: 1 2 | print        -- print(sum(1, 2))
 
-    -- multiple expressions can be piped together
+Multiple expressions can be piped together
     1 | id | print           -- print(id(1))
 
-    -- previous args are carried over into function calls
-    -- also have some sugar functions such for operations like comparisons.
+Previous arguments are carried over into the next function call...
     1 | sum: 2 | (== 3)   -- sum(2, 1) === 3
 
-    -- or you can use `underscore` to place your arg
+...and you can use _ (underscore) to place your argument
     2 | sub: _ 1 | (== 1)    -- sub(2, 1) === 1
 
 
+### Scope
+
+In akira you may not redeclare a variable, so in reality variables are not
+really variables, they are symbols; you can also think of them as constants.
+
+    a = 1
+    b = true
+    c = [1 2 3]
+    b = false    -- throws a ReferenceError at compile time
+
+So this prevents you from shadowing symbols and misusing scope. You also don't
+need to include the 'var' as there are no globals.
+
+    a = 1        -- outter `a`
+    b = 2
+    c = fn [] {
+      a = 2      -- creates a local `a`
+      b          -- `b` can be accessed in here
+    }
+
+
 ### Conditionals
+
+If statements
 
     n = 4
     is-n-four = if n == 4
       then true
       else false
+
+Multiple conditions
 
     cond
       n == 4 ? n
@@ -144,13 +190,15 @@ git
 
 ### Pattern Matching
 
-    -- There's also Pattern Matching and Guards
+Factorial implemented using pattern matching
+
     fact = match {
       [1] 1
       [n] n * (fact: n - 1)
     }
 
-    -- splits up the list into x = head(list) and xs = tail(list)
+This splits up the list into x = head(list) and xs = tail(list)
+
     sort-even-odd = fn [[x, & xs]] {
       cond
         not x ? []
@@ -171,13 +219,15 @@ git
 
 ### Do
 
-    -- for handling async functions there's the do keyword
+For handling async functions there's the do keyword...
+
     get-my-first-tweet = do
       [tweets] <- get-tweets-for: 'goatslacker'
       [first-tweet] <- process-and-return-first: tweets
       decorate-first-tweet: first-tweet
 
-    -- which compiles into
+...which compiles into
+
     getMyFirstTweet = function (_$callback) {
       return getTweetsFor('goatslacker', function (tweets) {
         processAndReturnFirst(tweets, function (firstTweet) {
