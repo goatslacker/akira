@@ -3,7 +3,30 @@ akira
 
 Functional language that transpiles to JavaScript.
 
-## Syntax
+## Installing
+
+with nodejs and npm
+
+    npm install akira
+
+git
+
+    git clone git://github.com/goatslacker/akira.git
+    ln -s (pwd)/akira/bin/akira /usr/local/bin/akira
+
+## Usage
+
+    ast [file]               - output the Mozilla Parse API for that file
+    compile [file] [target]  - compile to JavaScript
+    make [command] [args]    - run akira unit tests
+    output [file]            - compile to JS and output
+    repl                     - start the repl
+    run [file]               - compile and interpret said file
+    tokens [file]            - output the lexer tokens for that file
+    version                  - akira version
+    watch [file] [target]    - watch a file for changes and compile on change
+
+## Overview
 
 ### Literals
 
@@ -162,6 +185,10 @@ Functional language that transpiles to JavaScript.
         });
       });
     };
+
+## ViM
+
+See: https://github.com/goatslacker/akira.vim
 
 ## License
 
