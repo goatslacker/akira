@@ -5,7 +5,7 @@ rx = {
   @STR /^'(.*?)'/
   @ARGS /^&([0-9]+)/
   @LAMBDA /^->/
-  @OPERATION /^(<-|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:)+/
+  @OPERATION /^(<-|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:|::)/
   @TERMINATOR /^\n/
   @REGEX /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
   @COMMENTS /^(--.*)/
@@ -14,13 +14,13 @@ rx = {
 
 identifiers = {
   @KEYWORDS ['if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none' 'do'
-    'return' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match']
-  @TYPE ['Function' 'Number' 'String' 'Vector'
-    'Map' 'None' 'RegExp' 'Boolean' 'Any']
+    'return' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match' 'maybe'
+    'Maybe']
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
   @LEFT_OPERATORS ['++' '!!']
   @RIGHT_OPERATORS ['+:']
   @DO_OPERATOR ['<-']
+  @TYPE_OPERATOR ['::']
   @NOT ['not']
   @LOGIC ['&&' '||']
   @BOOL ['true' 'false']
@@ -114,7 +114,10 @@ filter-whitespace = fn [token] {
   not (ignore !! token.1)
 }
 
-export tokenize = fn [code] {
+tokenize :: String -> Vector
+tokenize = fn [code] {
   return-tokens: code { @index 0 @line 0 } |
     (.filter: filter-whitespace)
 }
+
+module.exports = tokenize

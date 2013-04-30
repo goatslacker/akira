@@ -57,7 +57,7 @@ macro single-if fn [test body] {
   @alternate none }
 }
 
-export {
+module.exports = {
 
   @eq (`
     eq = fn [a b] { a == b })
@@ -299,8 +299,8 @@ export {
   @when (`
    when = fn [is-true callback] { single-if is-true (callback!) })
 
-  @maybe (`
-    maybe = fn [& args] {
+  @maybe-seq (`
+    maybe-seq = fn [& args] {
       foldl: (fn [a b] {
         if a is none then none else b: a
       }) ([true] ++ args)

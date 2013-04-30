@@ -1,3 +1,4 @@
+AssignmentExpression :: Map Map -> Map
 AssignmentExpression = fn [left right] {
   { @type 'AssignmentExpression'
     @operator '='
@@ -5,4 +6,4 @@ AssignmentExpression = fn [left right] {
     @right right }
 }
 
-export AssignmentExpression
+module.exports = AssignmentExpression

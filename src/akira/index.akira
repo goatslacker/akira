@@ -7,10 +7,6 @@ help = import './help.akira'
 start-repl = import './repl.akira'
 watch = import './watchman.akira'
 
-exports = fn [name code from to] {
-  write-file: name ('module.exports = ' ++ code) from to
-}
-
 output = fn [name code] {
   util.puts: code
 }
@@ -39,18 +35,18 @@ cli = match {
   ['ast' [a]] akira: analyse a gen-ast
   ['version'] 'akira ' ++ me.version | output: none
   ['watch' [a b]] watch: a -> (akira: fn [name code] {
-    exports: name code a b } a)
+    write-file: name code a b } a)
   ['make' [a b & c]] akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
   ['repl' []] start-repl!
   ['help' []] help!
   [else] help: &0
 }
 
-export {
+module.exports = {
   @cli cli
 
   @compile fn [from target] {
-    akira: fn [name code] { exports: name code from target } from }
+    akira: fn [name code] { write-file: name code from target } from }
 
   @output -> (akira: output &0)
 

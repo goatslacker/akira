@@ -1,4 +1,5 @@
-FunctionExpression = fn [id (params = []) body opts] {
+FunctionExpression :: Maybe Map Maybe Vector Vector -> Map
+FunctionExpression = fn [id (params = []) body] {
  { @type 'FunctionExpression'
    @id id
    @params params
@@ -7,4 +8,4 @@ FunctionExpression = fn [id (params = []) body opts] {
      @body body } }
 }
 
-export FunctionExpression
+module.exports = FunctionExpression

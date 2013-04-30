@@ -2,7 +2,7 @@ path = require: 'path'
 
 r = fn [m] { m.to-lower-case! | path.join: __dirname | require }
 
-export {
+module.exports = {
   @Access         (r: 'access')
   @Arguments      (r: 'arguments')
   @Assignment     (r: 'assignment')
@@ -23,11 +23,13 @@ export {
   @Logic          (r: 'logic')
   @Macro          (r: 'macro')
   @Map            (r: 'map')
+  @MaybeSeq       (r: 'maybeseq')
   @Nodes          (r: 'nodes')
   @Operation      (r: 'operation')
   @Pattern        (r: 'pattern')
   @Pipeline       (r: 'pipeline')
   @Recur          (r: 'recur')
+  @Type           (r: 'type')
   @TypeSignature  (r: 'typesignature')
   @Vector         (r: 'vector')
 }

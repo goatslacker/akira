@@ -41,7 +41,7 @@ transform = fn [name parsed (f = to-ast)] {
       f: (parsed.add-vars: context) ++
         (parsed.add-core!) ++
         dependencies ++
-        body
+        (parsed.add-contracts: body)
     }
 }
 
