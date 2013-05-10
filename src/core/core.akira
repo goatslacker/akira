@@ -201,10 +201,11 @@ export {
       Array.prototype.map.call: vec -> (f: &0) })
 
   @foldl (`
-    foldl = fn [f vec] {
+    foldl = fn [f vec (a = [])] {
       if vec.length is 0
         then []
-        else Array.prototype.reduce.call: vec -> (f: &0 &1) })
+        else Array.prototype.reduce.call: (a ++ vec) -> (f: &0 &1)
+    })
 
   @foldr (`
     foldr = fn [f vec] {
@@ -290,6 +291,13 @@ export {
 
   @when (`
    when = fn [is-true callback] { single-if is-true (callback!) })
+
+  @maybe (`
+    maybe = fn [& args] {
+      foldl: (fn [a b] {
+        if a is none then none else b: a
+      }) ([true] ++ args)
+    })
 
   @show (`
     show = fn [i] { i.to-string! })
@@ -390,6 +398,11 @@ export {
 
   @uppercase (`
     uppercase = fn [str] { str.to-upper-case! })
+
+  @stringify (`
+    stringify = fn [& args] {
+      foldl: concat args
+    })
 
   @capitalize (`
     capitalize = fn [str] { (str.1.to-upper-case!) ++ (str.slice: 1) })
