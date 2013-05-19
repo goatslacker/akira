@@ -8,7 +8,7 @@ get-bar = fn [obj] {
     bar
 }
 
-get-bar: a | ok: 'foo'
+get-bar: a | ok: 'bar'
 get-bar: b | ok: none
 
 
