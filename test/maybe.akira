@@ -1,0 +1,28 @@
+a = { @foo 'bar' }
+b = { @baz 'bar' }
+
+
+get-bar = fn [obj] {
+  maybe
+    bar <- obj.foo
+    bar
+}
+
+get-bar: a | ok: 'foo'
+get-bar: b | ok: none
+
+
+add-two = fn [a b] {
+  maybe
+    a1 <- a
+    b1 <- b
+    2
+    3
+    c = 4
+    5
+    6
+    c + a + b
+}
+
+add-two: 2 3 | ok: 9
+add-two: none 3 | ok: none

@@ -15,12 +15,13 @@ ConditionalExpression = fn [test consequent alternate] {
 IfStatement :: Map Vector | Map Maybe Vector | Maybe Map -> Map
 IfStatement = fn [test consequent alternate] {
   cond
-    consequent isnt Vector && alternate isnt Vector ? ConditionalExpression: test consequent alternate
+    consequent is Map && alternate is Map ? ConditionalExpression: test consequent alternate
     else ? {
       @type 'IfStatement'
       @test test
       @consequent (make-block: consequent)
-      @alternate (make-block: alternate) }
+      @alternate (if alternate is none then none else (make-block: alternate))
+    }
 }
 
 module.exports = IfStatement
