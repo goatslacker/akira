@@ -1,0 +1,16 @@
+convert-to-property :: Vector -> Map
+convert-to-property = fn [prop] {
+  [key value] = prop
+  { @type 'Property'
+    @key
+    @value
+    @kind 'init' }
+}
+
+ObjectExpresion :: Vector -> Map
+ObjectExpresion = fn [props] {
+  { @type 'ObjectExpression'
+    @properties (map: convert-to-property props) }
+}
+
+module.exports = ObjectExpresion

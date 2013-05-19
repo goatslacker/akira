@@ -1,0 +1,24 @@
+make-array = require: 'makeArray'
+
+make-block = fn [expr] {
+  { @type 'BlockStatement'
+    @body (make-array: expr) }
+}
+
+ConditionalExpression = fn [test consequent alternate] {
+  { @type 'ConditionalExpression'
+    @test
+    @consequent
+    @alternate }
+}
+
+IfStatement :: Map Vector | Map Maybe Vector | Maybe Map -> Map
+IfStatement = fn [test consequent alternate] {
+  cond
+    consequent isnt Vector && alternate isnt Vector ? ConditionalExpression: test consequent alternate
+    else ? {
+      @type 'IfStatement'
+      @test
+      @consequent (make-block: consequent)
+      @alternate (make-block: alternate) }
+}
