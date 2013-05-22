@@ -62,6 +62,10 @@ module.exports = {
   @eq (`
     eq = fn [a b] { a == b })
 
+  @eq-val (`
+    eq-val = fn [a b] {
+      if a is b then a else none })
+
   @deep-eq (`
     deep-eq = fn [a b] {
       if a.length isnt b.length
