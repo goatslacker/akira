@@ -28,36 +28,37 @@ identifiers = {
 
 ignore = { @COMMENTS @WHITESPACE }
 
-get-type = fn [a] {
+get-type = fn [a]
   rx | find: -> (&0.test: a)
-}
 
-extract = fn [key chunk] {
+extract = fn [key chunk]
   rx !! key | (.exec: chunk)
-}
 
-parse-alphanumeric = fn [t chunk (n = 1)] {
+parse-alphanumeric = fn [t chunk (n = 1)]
   extract: t chunk | (!! n)
-}
 
-return-token = fn [type] { -> ([type &0]) }
+return-token = fn [type]
+  -> ([type &0])
 
 return-identifier = match {
   ['KEYWORDS' item] [(item.toUpperCase!) item]
   [type item] [type item]
 }
 
-parse-identifier = fn [t chunk] {
-  item = extract: t chunk
-  token = identifiers | find: -> (&0.indexOf: item.2 | (>= 0))
-  return-identifier: (token || t) item.2
-}
+parse-identifier = fn [t chunk]
+  let
+    item = extract: t chunk
+    token = identifiers | find: -> (&0.indexOf: item.2 | (>= 0))
+  then
+    return-identifier: (token || t) item.2
 
-convert-regexp = fn [item] { RegExp: item.3 item.4 }
+convert-regexp = fn [item]
+  RegExp: item.3 item.4
+
 return-token-regexp = return-token: 'REGEXP'
 parse-regular-expressions = -> (extract &! | convert-regexp | return-token-regexp)
 
-get-token = fn [type chunk] {
+get-token = fn [type chunk]
   cond
     type is 'IDENTIFIER' ||
     type is 'KEY' ||
@@ -71,15 +72,15 @@ get-token = fn [type chunk] {
     type is 'WHITESPACE' ||
     type is 'TERMINATOR' ? ' '
     else ? [chunk.1 chunk.1]
-}
 
-process-chunk = fn [code n] {
-  type = get-type: code
-  token = get-token: type code
-  if token is Vector
-    then token ++ [n.line]
-    else [type token n.line]
-}
+process-chunk = fn [code n]
+  let
+    type = get-type: code
+    token = get-token: type code
+  then
+    if token is Vector
+      then token ++ [n.line]
+      else [type token n.line]
 
 get-length = match {
   ['STR' i] i + 2
@@ -92,10 +93,9 @@ incr-line = match {
   [else] line
 }
 
-get-next-index = fn [token] {
+get-next-index = fn [token]
   { @index (token.2.toString! | (.length) | get-length: token.1)
   @token token }
-}
 
 return-tokens = match {
   [code n] return-tokens: code n []
@@ -110,14 +110,13 @@ return-tokens = match {
   }
 }
 
-filter-whitespace = fn [token] {
+filter-whitespace = fn [token]
   not (ignore !! token.1)
-}
 
 tokenize :: String -> Vector
-tokenize = fn [code] {
+tokenize = fn [code]
   return-tokens: code { @index 0 @line 0 } |
     (.filter: filter-whitespace)
-}
+
 
 module.exports = tokenize
