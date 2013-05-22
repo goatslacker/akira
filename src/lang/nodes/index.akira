@@ -18,6 +18,7 @@ module.exports = {
   @If             (r: 'if')
   @Identifier     (r: 'identifier')
   @Import         (r: 'import')
+  @Let            (r: 'let')
   @L              (r: 'line')
   @Literal        (r: 'literal')
   @Logic          (r: 'logic')

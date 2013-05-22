@@ -97,6 +97,7 @@ bnf = {
     (o: 'InlineDeclaration')
     (o: 'AsyncDo')
     (o: 'MaybeSeq')
+    (o: 'Let')
     (o: 'Pipeline')
     (o: 'Cloning')
     (o: 'Macro')
@@ -186,18 +187,21 @@ bnf = {
 
   @InlineDeclaration [
     (o: 'FN [ Parameters ] Expression' -> (new Declaration none $3 $5))
+    (o: 'FN [ Parameters ] TERMINATOR Expression' -> (new Declaration none $3 $6))
     (o: 'FN [ ] Expression' -> (new Declaration none none $4))
   ]
 
-  @DoOperation [
-    (o: 'Vectors DO_OPERATOR RETURN Value TERMINATOR' -> ({ @args $1 @call $4 @is-return true }))
-    (o: 'Vectors DO_OPERATOR Invocation TERMINATOR' -> ({ @args $1 @call $3 }))
-    (o: 'Expression TERMINATOR' -> ({ @expr $1 }))
+  @LetOperation [
+    (o: 'Assignment Terminator')
   ]
 
-  @DoOperations [
-    (o: 'DoOperation' -> (new Arguments $1))
-    (o: 'DoOperations DoOperation' -> (new Arguments $1 $2))
+  @LetOperations [
+    (o: 'LetOperation' -> (new Arguments $1))
+    (o: 'LetOperations LetOperation' -> (new Arguments $1 $2))
+  ]
+
+  @Let [
+    (o: 'LET Terminator LetOperations THEN OptTerminator Expression TERMINATOR' -> (new Let $3 $6))
   ]
 
   @MaybeOperation [
@@ -212,6 +216,17 @@ bnf = {
 
   @MaybeSeq [
     (o: 'MAYBE Terminator MaybeOperations' -> (new MaybeSeq $3))
+  ]
+
+  @DoOperation [
+    (o: 'Vectors DO_OPERATOR RETURN Value TERMINATOR' -> ({ @args $1 @call $4 @is-return true }))
+    (o: 'Vectors DO_OPERATOR Invocation TERMINATOR' -> ({ @args $1 @call $3 }))
+    (o: 'Expression TERMINATOR' -> ({ @expr $1 }))
+  ]
+
+  @DoOperations [
+    (o: 'DoOperation' -> (new Arguments $1))
+    (o: 'DoOperations DoOperation' -> (new Arguments $1 $2))
   ]
 
   @AsyncDo [
