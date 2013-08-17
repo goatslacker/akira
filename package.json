@@ -21,6 +21,24 @@
     "dune": "*"
   },
 
+  "bundledDependencies": [
+    "Store",
+    "addScope",
+    "ast",
+    "concatMap",
+    "createFunction",
+    "destructure",
+    "genUniqueIdentifier",
+    "implicitReturn",
+    "inline",
+    "log",
+    "makeArray",
+    "obj2str",
+    "tg",
+    "traverse",
+    "unwrapExpressionStatement"
+  ],
+
   "devDependencies": {
     "jison": "*",
     "nodewatch": "*"
