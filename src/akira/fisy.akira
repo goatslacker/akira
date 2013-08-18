@@ -4,7 +4,7 @@ path = require: 'path'
 walk = fn [cb tree] {
   try {
     stat = fs.stat-sync: tree
-  } catch {
+  } catch err {
     raise err
   }
 

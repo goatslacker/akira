@@ -55,7 +55,7 @@ akira = fn [cb filepath (f = transpile)] {
   on-file = fn [name code] {
     try {
       result = code | f: name | cb: name
-    } catch {
+    } catch err {
       util.error: 'Filename: ' ++ name
       util.error: err.stack
       process.exit: 1
@@ -68,7 +68,7 @@ akira = fn [cb filepath (f = transpile)] {
 run = fn [name code context] {
   try {
     result = dune.string: code name context
-  } catch {
+  } catch err {
     util.error: name
     util.error: err.stack
   }

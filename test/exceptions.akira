@@ -1,6 +1,6 @@
 try {
   a = 1
-} catch {
+} catch ex {
  b = 1
 }
 
@@ -9,17 +9,17 @@ ok: b undefined
 
 try {
   raise 'Ah!'
-} catch {
+} catch ex {
   c = 3
 }
 ok: c 3
 
 try f = 2
-catch raise err
+catch err raise err
 ok: f 2
 
-try k = 1 catch g = 2
+try k = 1 catch ex g = 2
 ok: k 1
 
-j = fn [x] { try { 1 } catch { none } }
+j = fn [x] { try { 1 } catch ex { none } }
 j: 0 | ok: 1

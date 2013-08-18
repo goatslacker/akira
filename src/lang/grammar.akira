@@ -101,6 +101,7 @@ bnf = {
     (o: 'Pipeline')
     (o: 'Cloning')
     (o: 'Macro')
+    (o: 'Raise')
     (o: 'IMPORT STR' -> (new Import $2))
   ]
 
@@ -342,7 +343,10 @@ bnf = {
   ]
 
   @Exceptions [
-    (o: 'TRY Body OptTerminator CATCH Body' -> (new Exception $2 $5))
+    (o: 'TRY Body OptTerminator CATCH Identifier Body' -> (new ExceptionGuard $2 $5 $6))
+  ]
+
+  @Raise [
     (o: 'RAISE Value ErrorType' -> (new Exception $1 $2 $3))
   ]
 

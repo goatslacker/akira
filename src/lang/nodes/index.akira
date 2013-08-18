@@ -13,6 +13,7 @@ module.exports = {
   @Cond           (r: 'cond')
   @Declaration    (r: 'declaration')
   @Exception      (r: 'exception')
+  @ExceptionGuard (r: 'exception-guard')
   @Export         (r: 'export')
   @Evaluate       (r: 'evaluate')
   @If             (r: 'if')

@@ -20,7 +20,7 @@ read-eval-print-loop = fn [data _ filename cb] {
   try {
     code = to-code: filename data
     vm.run-in-new-context: code context | inspect | cb
-  } catch {
+  } catch err {
     util.error: err.stack
   }
 }
