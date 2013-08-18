@@ -201,7 +201,7 @@ bnf = {
   ]
 
   @Let [
-    (o: 'LET Terminator LetOperations THEN OptTerminator Expression TERMINATOR' -> (new Let $3 $6))
+    (o: 'LET OptTerminator LetOperations THEN OptTerminator Expression TERMINATOR' -> (new Let $3 $6))
   ]
 
   @MaybeOperation [
