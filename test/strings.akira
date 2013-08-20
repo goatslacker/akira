@@ -16,8 +16,8 @@ condense: '      foo bar ' | ok: 'foobar'
 
 'hi' * 3 | ok: 'hihihi'
 
-(fn [] {
+-> {
   b = 'hello-world'
   c = b.replace: /-([a-z])/g fn [x] { x.2.toUpperCase! }
   ok: c 'helloWorld'
-}): none
+}!

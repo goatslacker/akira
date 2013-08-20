@@ -22,8 +22,8 @@ load-makefile = fn [key opts] {
     cmd = key |
       (.replace: /[-+|:]([a-zA-Z0-9$_])/g fn [i] { i.2.to-upper-case! })
 
-    make = run: name ('module.exports = ' ++ code)
-    (make !! cmd): opts
+    make = run: name ('module.exports = ' ++ code) | (!! cmd)
+    make: opts
   }
 }
 
@@ -34,7 +34,7 @@ cli = match {
   ['tokens' [a]] akira: analyse a lex
   ['ast' [a]] akira: analyse a gen-ast
   ['version'] 'akira ' ++ me.version | output: none
-  ['watch' [a b]] watch: a -> (akira: fn [name code] {
+  ['watch' [a b]] watch: a (-> akira: fn [name code] {
     write-file: name code a b } a)
   ['make' [a b & c]] akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
   ['repl' []] start-repl!
@@ -48,7 +48,7 @@ module.exports = {
   @compile fn [from target] {
     akira: fn [name code] { write-file: name code from target } from }
 
-  @output -> (akira: output &0)
+  @output (-> akira: output &0)
 
   @run fn [filename context] {
     akira: fn [name code] { run: name code context } filename }

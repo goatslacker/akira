@@ -9,7 +9,7 @@ walk = fn [cb tree] {
   }
 
   if stat.is-directory!
-    then fs.readdir-sync: tree | map: -> (path.join: tree &0 | walk: cb)
+    then fs.readdir-sync: tree | map: (-> path.join: tree &0 | walk: cb)
     else {
       if (tree.index-of: '.akira') >= 0
         then get-file-contents: cb tree

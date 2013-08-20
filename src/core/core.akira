@@ -154,7 +154,7 @@ module.exports = {
       foldl: sum vec | (/ vec.length) })
 
   @compact (`
-    compact = fn [vec] { filter: -> (Boolean: &0) vec })
+    compact = fn [vec] { filter: (-> Boolean: &0) vec })
 
   @concat-map (`
     concat-map = fn [f vec] {
@@ -198,23 +198,23 @@ module.exports = {
 
   @filter (`
     filter = fn [f vec] {
-      Array.prototype.filter.call: vec -> (f: &0) })
+      Array.prototype.filter.call: vec (-> f: &0) })
 
   @map (`
     map = fn [f vec] {
-      Array.prototype.map.call: vec -> (f: &0) })
+      Array.prototype.map.call: vec (-> f: &0) })
 
   @foldl (`
     foldl = match {
       [f vec] {
         if vec.length is 0
           then []
-          else Array.prototype.reduce.call: vec -> (f: &0 &1)
+          else Array.prototype.reduce.call: vec (-> f: &0 &1)
       }
       [f vec a] {
         if vec.length is 0
           then []
-          else Array.prototype.reduce.call: ([a] ++ vec) -> (f: &0 &1)
+          else Array.prototype.reduce.call: ([a] ++ vec) (-> f: &0 &1)
       }
     })
 
@@ -222,11 +222,11 @@ module.exports = {
     foldr = fn [f vec] {
       if vec.length is 0
         then []
-        else Array.prototype.reduce-right.call: vec -> (f: &0 &1) })
+        else Array.prototype.reduce-right.call: vec (-> f: &0 &1) })
 
   @intersect (`
     intersect = fn [vec1 vec2] {
-      filter: -> (vec2.indexOf: &0 | (!= -1)) vec1 })
+      filter: (-> vec2.indexOf: &0 | (!= -1)) vec1 })
 
   @max (`
     max = fn [vec] {
@@ -241,7 +241,7 @@ module.exports = {
 
   @randomize (`
     randomize = fn [vec] {
-      sort: -> ((Math.random!) > 0.5) vec })
+      sort: (-> (Math.random!) > 0.5) vec })
 
   @take (`
     take = fn [n vec] { vec.slice: 0 n })

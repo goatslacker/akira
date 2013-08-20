@@ -6,20 +6,20 @@ array = [
 
 
 -- IIFE
-(fn [] {
+-> {
 -- Testing foldr, expressions in arguments, anonymous functions
   lastEl = (= (foldl: (= (flip: id &0 &1)) &0))
   lastEl: [1 2 3] | ok: 3
-}): none
+}!
 
 -- Partial application
-(fn [] {
+-> {
   mapper = partial: map square
   ok-array = (= (ok-deep: &0 [1 4 9]))
 
   array | map: square | ok-array
   array | mapper | ok-array
-}): none
+}!
 
 array.map: square | ok-deep: [1 4 9]
 
