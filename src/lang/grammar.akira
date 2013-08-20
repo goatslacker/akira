@@ -113,6 +113,7 @@ bnf = {
   @Callable [
     (o: 'Identifier')
     (o: 'Declaration')
+    (o: 'ArgumentsShorthand')
     (o: 'Access')
   ]
 
@@ -124,7 +125,6 @@ bnf = {
     (o: 'Type')
     (o: 'Prototype')
     (o: 'SpecialFunctions')
-    (o: 'ArgumentsShorthand')
     (o: 'ArgumentsShorthand ^ Identifier' (-> new Assignment $3 $1))
     (o: '( OptTerminator Expression OptTerminator )' (-> $3))
   ]

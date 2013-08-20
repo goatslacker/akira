@@ -7,25 +7,16 @@ help = import './help.akira'
 start-repl = import './repl.akira'
 watch = import './watchman.akira'
 
-output = fn [name code] {
-  util.puts: code
-}
+output = fn [_ code] util.puts: code
 
-analyse = fn [name body] {
-  body |
-  fn [data] { util.inspect: data false 50 } |
-  output: none
-}
+analyse = fn [_ body]
+  body | (-> util.inspect: data false Infinity) | output: none
 
-load-makefile = fn [key opts] {
-  fn [name code] {
-    cmd = key |
+load-makefile = fn [key opts]
+  fn [name code]
+    let cmd = key |
       (.replace: /[-+|:]([a-zA-Z0-9$_])/g fn [i] { i.2.to-upper-case! })
-
-    make = run: name ('module.exports = ' ++ code) | (!! cmd)
-    make: opts
-  }
-}
+    then run: name ('module.exports = ' ++ code) | (!! cmd) | (-> &0: opts)
 
 cli = match {
   ['compile' [a b]] this.compile: a b
