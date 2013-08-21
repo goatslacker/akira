@@ -26,6 +26,7 @@ module.exports = {
   @Macro          (r 'macro')
   @Map            (r 'map')
   @MaybeSeq       (r 'maybeseq')
+  @Modules        (r 'modules')
   @Nodes          (r 'nodes')
   @Operation      (r 'operation')
   @Pattern        (r 'pattern')
