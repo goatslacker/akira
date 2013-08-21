@@ -2,10 +2,33 @@ jison = require 'jison'
 
 unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
 
-macro new fn [name & args] {
+macro jsnew fn [name & args] {
   { @type 'NewExpression'
-  @callee name
-  @arguments args }
+    @callee name
+    @arguments args }
+}
+
+macro new fn [name & args] {
+  { @type 'CallExpression'
+    @callee {
+      @type 'MemberExpression'
+      @computed false
+      @object { @type 'Identifier' @name 'yy' }
+      @property { @type 'Identifier' @name 'L' }
+    }
+    @arguments [
+      { @type 'Identifier' @name 'yylineno' }
+      { @type 'NewExpression'
+        @callee {
+          @type 'MemberExpression'
+          @computed false
+          @object { @type 'Identifier' @name 'yy' }
+          @property name
+        }
+        @arguments args
+      }
+    ]
+  }
 }
 
 get-match = fn [action] {
@@ -13,15 +36,12 @@ get-match = fn [action] {
   if x then x.2 else '({{action}}())'
 }
 
-addYY = fn [str] { str.replace /new /g, 'new yy.' }
-add-line = fn [str] { 'yy.L(yylineno, ' ++ (str.replace ';', '') ++ ');' }
-
 o = fn [pattern action] {
   pattern-string = pattern.replace /\s{2,}/g, ' '
   if not action
     then [pattern-string '$$ = $1']
     else {
-      newaction = action | get-match | addYY | add-line
+      newaction = action | get-match
       [pattern-string '$$ = {{newaction}}']
     }
 }
@@ -508,7 +528,7 @@ operators = [
   ['left' '*' '**' '/']
 ]
 
-parser = new: jison.Parser { @tokens @bnf @operators @start-symbol }
+parser = jsnew: jison.Parser { @tokens @bnf @operators @start-symbol }
 parser.lexer = {
   @lex (fn [] {
     ref = this.tokens !! this.pos || ['']
