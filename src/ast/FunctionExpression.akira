@@ -8,4 +8,4 @@ FunctionExpression = fn [id (params = []) body] {
      @body body } }
 }
 
-module.exports = FunctionExpression
+export *FunctionExpression

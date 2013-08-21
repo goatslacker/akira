@@ -57,7 +57,7 @@ macro single-if fn [test body] {
   @alternate none }
 }
 
-module.exports = {
+export *{
 
   @eq (`
     eq = fn [a b] { a == b })

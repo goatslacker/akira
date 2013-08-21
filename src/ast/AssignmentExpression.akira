@@ -6,4 +6,4 @@ AssignmentExpression = fn [left right] {
     @right right }
 }
 
-module.exports = AssignmentExpression
+export *AssignmentExpression

@@ -3,4 +3,4 @@ Literal = fn [value] {
     @value value }
 }
 
-module.exports = Literal
+export *Literal

@@ -4,4 +4,4 @@ ArrayExpression = fn [(elements = [])] {
     @elements elements }
 }
 
-module.exports = ArrayExpression
+export *ArrayExpression

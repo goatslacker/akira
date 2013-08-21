@@ -119,4 +119,4 @@ tokenize = fn [code]
     (.filter filter-whitespace)
 
 
-module.exports = tokenize
+export *tokenize

@@ -6,4 +6,4 @@ Identifier = fn [name (core = false) (rest = false)] {
     @__rest rest }
 }
 
-module.exports = Identifier
+export *Identifier

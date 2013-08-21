@@ -33,7 +33,7 @@ cli = match {
   [else] help &0
 }
 
-module.exports = {
+export *{
   @cli cli
 
   @compile fn [from target] {

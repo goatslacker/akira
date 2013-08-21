@@ -6,4 +6,4 @@ BinaryExpression = fn [op left right] {
     @right right }
 }
 
-module.exports = BinaryExpression
+export *BinaryExpression

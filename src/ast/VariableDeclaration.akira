@@ -15,4 +15,4 @@ VariableDeclaration = fn [declarations] {
     @kind 'var' }
 }
 
-module.exports = VariableDeclaration
+export *VariableDeclaration

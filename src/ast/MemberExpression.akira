@@ -5,4 +5,4 @@ MemberExpression = fn [object property (computed = false)] {
     @property property }
 }
 
-module.exports = MemberExpression
+export *MemberExpression

@@ -7,10 +7,10 @@ convert-to-property = fn [prop] {
     @kind 'init' }
 }
 
-ObjectExpresion :: Vector -> Map
-ObjectExpresion = fn [props] {
+ObjectExpression :: Vector -> Map
+ObjectExpression = fn [props] {
   { @type 'ObjectExpression'
     @properties (map convert-to-property props) }
 }
 
-module.exports = ObjectExpresion
+export *ObjectExpression

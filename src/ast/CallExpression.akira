@@ -8,4 +8,4 @@ CallExpression = match {
   }
 }
 
-module.exports = CallExpression
+export *CallExpression

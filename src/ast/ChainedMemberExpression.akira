@@ -7,4 +7,4 @@ ChainedMemberExpression = fn [& args] {
   }
 }
 
-module.exports = ChainedMemberExpression
+export *ChainedMemberExpression

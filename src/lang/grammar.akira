@@ -162,7 +162,8 @@ bnf = {
   ]
 
   @Exporting [
-    (o 'EXPORT Expression' (-> new : Export $2))
+    (o 'EXPORT Expression' (-> new : Export $2 false))
+    (o 'EXPORT * Expression' (-> new : Export $3 true))
   ]
 
   @Cloning [
@@ -523,4 +524,4 @@ parser.lexer = {
   })
 }
 
-module.exports = parser
+export *parser
