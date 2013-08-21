@@ -1,6 +1,6 @@
-fs = require: 'fs'
-path = require: 'path'
-akira = require: (path.join: process.env.PWD 'lib/akira/index.js')
+fs = require 'fs'
+path = require 'path'
+akira = require (path.join process.env.PWD 'lib/akira/index.js')
 
 newline = fn [] { '' }
 
@@ -8,68 +8,68 @@ time = fn [f] {
   start = Date.now!
   f!
   end = Date.now!
-  print: 'Time {{end - start}}ms'
+  print 'Time {{end - start}}ms'
 }
 
 test-results = match {
-  [true name len] (print: '√ {{name}} {{len}}') || true
-  [false name len] (print: 'x {{name}}') && false
+  [true name len] (print '√ {{name}} {{len}}') || true
+  [false name len] (print 'x {{name}}') && false
 }
 
 test-file = fn [name] {
   assertions = []
-  ok  = fn [a b] { assertions.push: a == b }
+  ok = fn [a b] assertions.push a == b
   ok-deep = fn [a b] {
-    zip-with: (==) a b | foldl: (&&) | ok: true
+    zip-with (==) a b | foldl (&&) | ok true
   }
 
-  akira.run: ('test/' ++ name) { @ok @ok-deep }
+  akira.run ('test/' ++ name) { @ok @ok-deep }
 
-  test-results: (foldl: (&&) assertions),
-    (name.replace: '.akira' ''),
+  test-results (foldl (&&) assertions),
+    (name.replace '.akira' ''),
     assertions.length
 }
 
 test = fn [] {
-  time: fn [] {
-    print: 'Running tests...'
-    results = fs.readdir-sync: 'test' | map: test-file | foldl: (&&)
+  time fn [] {
+    print 'Running tests...'
+    results = fs.readdir-sync 'test' | map test-file | foldl (&&)
 
-    print: ''
+    print ''
 
     if results == true
-      then print: 'OK!'
-      else print: 'Fail'
+      then print 'OK!'
+      else print 'Fail'
   }
 }
 
 create-compile = fn [name from to] {
   fn [] {
-    print: 'Building {{name}}'
-    akira.compile: from to
-    print: 'Done.'
+    print 'Building {{name}}'
+    akira.compile from to
+    print 'Done.'
   }
 }
 
 build = fn [] {
-  create-compile: 'parser' 'src/lang' 'lib/lang' | time
+  create-compile 'parser' 'src/lang' 'lib/lang' | time
 }
 
 build-core = fn [] {
-  create-compile: 'core' 'src/core/core.akira' 'lib/core' | time
+  create-compile 'core' 'src/core/core.akira' 'lib/core' | time
 }
 
 build-akira = fn [] {
-  create-compile: 'akira' 'src/akira/index.akira' 'lib/akira' | time
+  create-compile 'akira' 'src/akira/index.akira' 'lib/akira' | time
 }
 
 build-ast = fn [] {
-  create-compile: 'ast' 'src/ast' 'node_modules/ast' | time
+  create-compile 'ast' 'src/ast' 'node_modules/ast' | time
 }
 
 build-all = fn [] {
   [build build-core build-ast build-akira build test] |
-    map: fn [f] { f! | newline | print }
+    map fn [f] { f! | newline | print }
 }
 
 export {

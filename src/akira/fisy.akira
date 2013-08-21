@@ -1,41 +1,41 @@
-fs = require: 'fs'
-path = require: 'path'
+fs = require 'fs'
+path = require 'path'
 
 walk = fn [cb tree] {
   try {
-    stat = fs.stat-sync: tree
+    stat = fs.stat-sync tree
   } catch err {
     raise err
   }
 
   if stat.is-directory!
-    then fs.readdir-sync: tree | map: (-> path.join: tree &0 | walk: cb)
+    then fs.readdir-sync tree | map (-> path.join tree &0 | walk cb)
     else {
-      if (tree.index-of: '.akira') >= 0
-        then get-file-contents: cb tree
+      if (tree.index-of '.akira') >= 0
+        then get-file-contents cb tree
         else none
     }
 }
 
 get-file-contents = fn [cb filepath] {
-  path.join: process.env.PWD, filepath |
+  path.join process.env.PWD, filepath |
     fs.read-file-sync |
     show |
-    cb: filepath
+    cb filepath
 }
 
 get-files = fn [cb dirname] {
-  stat = fs.stat-sync: dirname
-  if stat.is-directory! then walk: cb dirname
-  else get-file-contents: cb dirname
+  stat = fs.stat-sync dirname
+  if stat.is-directory! then walk cb dirname
+  else get-file-contents cb dirname
 }
 
-write-file = fn [file code from (to = (path.dirname: file))] {
-  filename = (path.relative: from file) || (path.basename: file)
+write-file = fn [file code from (to = (path.dirname file))] {
+  filename = (path.relative from file) || (path.basename file)
 
   code |
-    fs.write-file-sync: (filename.replace: '.akira' '.js' |
-      path.join: to)
+    fs.write-file-sync (filename.replace '.akira' '.js' |
+      path.join to)
 }
 
 export { @get-files @write-file }

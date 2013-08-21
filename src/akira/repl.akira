@@ -1,32 +1,32 @@
-repl = require: 'repl'
+repl = require 'repl'
 context = { @console console }
-vm = require: 'vm'
-util = require: 'util'
+vm = require 'vm'
+util = require 'util'
 
 { @parse @transform @escodegen } = import './compiler.akira'
 
 xform = fn [data] {
-  transform: 'repl' data fn [ast] {
+  transform 'repl' data fn [ast] {
     { @type 'Program'
     @body ast }
   }
 }
 
-to-code = fn [name code] { parse: name code | xform | escodegen.generate }
+to-code = fn [name code] { parse name code | xform | escodegen.generate }
 
-inspect = fn [val] { util.inspect: val false 35 }
+inspect = fn [val] { util.inspect val false 35 }
 
 read-eval-print-loop = fn [data _ filename cb] {
   try {
-    code = to-code: filename data
-    vm.run-in-new-context: code context | inspect | cb
+    code = to-code filename data
+    vm.run-in-new-context code context | inspect | cb
   } catch err {
-    util.error: err.stack
+    util.error err.stack
   }
 }
 
 export fn [] {
-  repl.start: {
+  repl.start {
     @prompt 'akira> '
     @input process.stdin
     @output process.stdout

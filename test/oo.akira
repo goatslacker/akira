@@ -7,28 +7,28 @@ Animal = {
   @eyes 2
 }
 
-Cat = Animal {
+Cat = Animal : {
   @speak (= 'meow i am ' ++ this.name)
   @sleep (= 'Purr ' ++ (prototype.sleep!))
   @legs 4
 }
 
-cat = Cat { @name 'Luna' }
-wasabi = Cat { @name 'Wasabi' }
+cat = Cat : { @name 'Luna' }
+wasabi = Cat : { @name 'Wasabi' }
 
-cat.speak! | ok: 'meow i am Luna'
-cat.alive | ok: true
-cat.eyes | ok: 2
-cat.legs | ok: 4
-cat.walk! | ok: true
-cat.sleep! | ok: 'Purr ZzZzZ...'
+cat.speak! | ok 'meow i am Luna'
+cat.alive | ok true
+cat.eyes | ok 2
+cat.legs | ok 4
+cat.walk! | ok true
+cat.sleep! | ok 'Purr ZzZzZ...'
 
-wasabi.speak! | ok: 'meow i am Wasabi'
+wasabi.speak! | ok 'meow i am Wasabi'
 
-([1 2 3] 4 5 6) | ok-deep: [1 2 3 4 5 6]
-([1 2 3] [4]) | ok-deep: [1 2 3 4]
+([1 2 3] 4 5 6) | ok-deep [1 2 3 4 5 6]
+([1 2 3] [4]) | ok-deep [1 2 3 4]
 
 a = { @a 1 } { @b 2 } { @c 3 }
-ok: a.a 1
-ok: a.b 2
-ok: a.c 3
+ok a.a 1
+ok a.b 2
+ok a.c 3

@@ -29,13 +29,13 @@ identifiers = {
 ignore = { @COMMENTS @WHITESPACE }
 
 get-type = fn [a]
-  rx | find: (-> &0.test: a)
+  rx | find (-> &0.test a)
 
 extract = fn [key chunk]
-  rx !! key | (.exec: chunk)
+  rx !! key | (.exec chunk)
 
 parse-alphanumeric = fn [t chunk (n = 1)]
-  extract: t chunk | (!! n)
+  extract t chunk | (!! n)
 
 return-token = fn [type]
   (-> [type &0])
@@ -47,15 +47,15 @@ return-identifier = match {
 
 parse-identifier = fn [t chunk]
   let
-    item = extract: t chunk
-    token = identifiers | find: (-> &0.indexOf: item.2 | (>= 0))
+    item = extract t chunk
+    token = identifiers | find (-> &0.indexOf item.2 | (>= 0))
   then
-    return-identifier: (token || t) item.2
+    return-identifier (token || t) item.2
 
 convert-regexp = fn [item]
-  RegExp: item.3 item.4
+  RegExp item.3 item.4
 
-return-token-regexp = return-token: 'REGEXP'
+return-token-regexp = return-token 'REGEXP'
 parse-regular-expressions = (-> extract &! | convert-regexp | return-token-regexp)
 
 get-token = fn [type chunk]
@@ -63,20 +63,20 @@ get-token = fn [type chunk]
     type is 'IDENTIFIER' ||
     type is 'KEY' ||
     type is 'OPERATION' ? parse-identifier &!
-    type is 'NUM' ? parse-alphanumeric: type chunk 0
+    type is 'NUM' ? parse-alphanumeric type chunk 0
     type is 'STR' ||
     type is 'COMMENTS' ? parse-alphanumeric &!
     type is 'LAMBDA' ? 'FN'
     type is 'REGEX' ? parse-regular-expressions &!
-    type is 'ARGS' ? [type (extract: type chunk | (!! 1))]
+    type is 'ARGS' ? [type (extract type chunk | (!! 1))]
     type is 'WHITESPACE' ||
     type is 'TERMINATOR' ? ' '
     else ? [chunk.1 chunk.1]
 
 process-chunk = fn [code n]
   let
-    type = get-type: code
-    token = get-token: type code
+    type = get-type code
+    token = get-token type code
   then
     if token is Vector
       then token ++ [n.line]
@@ -94,18 +94,18 @@ incr-line = match {
 }
 
 get-next-index = fn [token]
-  { @index (token.2.toString! | (.length) | get-length: token.1)
+  { @index (token.2.toString! | (.length) | get-length token.1)
   @token token }
 
 return-tokens = match {
-  [code n] return-tokens: code n []
+  [code n] return-tokens code n []
   ['' _ tokens] tokens
   [else] {
-    {@index @token} = process-chunk: code n | get-next-index
-    tokens.push: token
+    {@index @token} = process-chunk code n | get-next-index
+    tokens.push token
     recur
-      (code.substr: index code.length),
-      { @line (incr-line: token.1 n.line) },
+      (code.substr index code.length),
+      { @line (incr-line token.1 n.line) },
       tokens
   }
 }
@@ -115,8 +115,8 @@ filter-whitespace = fn [token]
 
 tokenize :: String -> Vector
 tokenize = fn [code]
-  return-tokens: code { @index 0 @line 0 } |
-    (.filter: filter-whitespace)
+  return-tokens code { @index 0 @line 0 } |
+    (.filter filter-whitespace)
 
 
 module.exports = tokenize

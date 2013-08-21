@@ -1,6 +1,6 @@
--- NOTE: this file isn't sandboxed, all tests run at the same time.
+-- NOTE this file isn't sandboxed, all tests run at the same time.
 
-is-true = (= (ok: &0 true))
+is-true = (= (ok &0 true))
 
 banana = {}
 
@@ -12,15 +12,15 @@ div = 2
 plus-nine = (+ 9)
 mul = (= 0)
 { @take-while }
-id: zip-with
+id zip-with
 closed-function = fn [x] {
   gte = 2
   -- will include gte
-  nothing: (< gte) [1 2 3]
+  nothing (< gte) [1 2 3]
 }
 closed-function2 = fn [x] {
   intersect = 1
-  id: intersect
+  id intersect
 }
 intersect-fn = intersect
 closed-function3 = fn [x] { lte = false }
@@ -32,7 +32,7 @@ count is Function | is-true
 concat is Function | is-true
 div is 2 | is-true
 randomize is undefined | is-true
-mul! | ok: 0
+mul! | ok 0
 take-while is Function | is-true
 zip-with is Function | is-true
 nothing is Function | is-true

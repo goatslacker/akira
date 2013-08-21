@@ -5,13 +5,13 @@ variable-declarator = fn [id (init = none)] {
 }
 
 create-var = match {
-  [[name init]] variable-declarator: name init
-  [declaration] variable-declarator: declaration
+  [[name init]] variable-declarator name init
+  [declaration] variable-declarator declaration
 }
 
 VariableDeclaration = fn [declarations] {
   { @type 'VariableDeclaration'
-    @declarations (map: create-var declarations)
+    @declarations (map create-var declarations)
     @kind 'var' }
 }
 

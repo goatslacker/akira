@@ -1,29 +1,29 @@
 a = [1 2 3]
 
-ok-deep: [1] ++ [2], [1 2]
+ok-deep [1] ++ [2], [1 2]
 
-ok-deep: 1 +: [2], [1 2]
+ok-deep 1 +: [2], [1 2]
 
-ok-deep: [1] ++ [2] ++ [3], [1 2 3]
+ok-deep [1] ++ [2] ++ [3], [1 2 3]
 
-ok: not true, false
-ok: not false, true
+ok not true, false
+ok not false, true
 
-ok: 1 < 2, true
-ok: 2 > 1, true
-ok: 2 >= 2, true
-ok: 3 <= 1, false
+ok 1 < 2, true
+ok 2 > 1, true
+ok 2 >= 2, true
+ok 3 <= 1, false
 
-ok: 1 + 1, 2
-ok: 1 - 1, 0
-ok: 3 * 0, 0
-ok: 4 / 2, 2
+ok 1 + 1, 2
+ok 1 - 1, 0
+ok 3 * 0, 0
+ok 4 / 2, 2
 
-a | foldl: (+) | ok: 6
-a | foldl: (*) | ok: 6
-a | map: (* 2) | ok-deep: [2 4 6]
-a | map: (- 1) | ok-deep: [0 1 2]
+a | foldl (+) | ok 6
+a | foldl (*) | ok 6
+a | map (* 2) | ok-deep [2 4 6]
+a | map (- 1) | ok-deep [0 1 2]
 
-foldl: (**) [4 2] | ok: 16
-4 ** 2 | ok: 16
-4 | (** 2) | ok: 16
+foldl (**) [4 2] | ok 16
+4 ** 2 | ok 16
+4 | (** 2) | ok 16

@@ -4,22 +4,22 @@ try {
  b = 1
 }
 
-ok: a 1
-ok: b undefined
+ok a 1
+ok b undefined
 
 try {
   raise 'Ah!'
 } catch ex {
   c = 3
 }
-ok: c 3
+ok c 3
 
 try f = 2
 catch err raise err
-ok: f 2
+ok f 2
 
 try k = 1 catch ex g = 2
-ok: k 1
+ok k 1
 
 j = fn [x] { try { 1 } catch ex { none } }
-j: 0 | ok: 1
+j 0 | ok 1

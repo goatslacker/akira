@@ -1,5 +1,5 @@
-util = require: 'util'
-me = require: '../../package.json'
+util = require 'util'
+me = require '../../package.json'
 
 { @akira @run @lex @gen-ast } = import './compiler.akira'
 { @write-file @get-files } = import './fisy.akira'
@@ -7,40 +7,40 @@ help = import './help.akira'
 start-repl = import './repl.akira'
 watch = import './watchman.akira'
 
-output = fn [_ code] util.puts: code
+output = fn [_ code] util.puts code
 
 analyse = fn [_ body]
-  body | (-> util.inspect: data false Infinity) | output: none
+  body | (-> util.inspect data false Infinity) | output none
 
 load-makefile = fn [key opts]
   fn [name code]
     let cmd = key |
-      (.replace: /[-+|:]([a-zA-Z0-9$_])/g fn [i] { i.2.to-upper-case! })
-    then run: name ('module.exports = ' ++ code) | (!! cmd) | (-> &0: opts)
+      (.replace /[-+|:]([a-zA-Z0-9$_])/g fn [i] { i.2.to-upper-case! })
+    then run name ('module.exports = ' ++ code) | (!! cmd) | (-> &0 opts)
 
 cli = match {
-  ['compile' [a b]] this.compile: a b
-  ['output' [a]] this.output: a
-  ['run' [a]] this.run: a
-  ['tokens' [a]] akira: analyse a lex
-  ['ast' [a]] akira: analyse a gen-ast
-  ['version'] 'akira ' ++ me.version | output: none
-  ['watch' [a b]] watch: a (-> akira: fn [name code] {
-    write-file: name code a b } a)
-  ['make' [a b & c]] akira: (load-makefile: a (b || []) ++ c) 'Make.akira'
+  ['compile' [a b]] this.compile a b
+  ['output' [a]] this.output a
+  ['run' [a]] this.run a
+  ['tokens' [a]] akira analyse a lex
+  ['ast' [a]] akira analyse a gen-ast
+  ['version'] 'akira ' ++ me.version | output none
+  ['watch' [a b]] watch a (-> akira fn [name code] {
+    write-file name code a b } a)
+  ['make' [a b & c]] akira (load-makefile a (b || []) ++ c) 'Make.akira'
   ['repl' []] start-repl!
   ['help' []] help!
-  [else] help: &0
+  [else] help &0
 }
 
 module.exports = {
   @cli cli
 
   @compile fn [from target] {
-    akira: fn [name code] { write-file: name code from target } from }
+    akira fn [name code] { write-file name code from target } from }
 
-  @output (-> akira: output &0)
+  @output (-> akira output &0)
 
   @run fn [filename context] {
-    akira: fn [name code] { run: name code context } filename }
+    akira fn [name code] { run name code context } filename }
 }

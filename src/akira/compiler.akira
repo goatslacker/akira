@@ -1,12 +1,12 @@
-util = require: 'util'
-escodegen = require: 'escodegen'
-dune = require: 'dune'
+util = require 'util'
+escodegen = require 'escodegen'
+dune = require 'dune'
 
 { @get-files } = import './fisy.akira'
 
-lexer = require: '../lang/lexer'
-parser = require: '../lang/grammar'
-parser.yy = (require: '../lang/nodes')
+lexer = require '../lang/lexer'
+parser = require '../lang/grammar'
+parser.yy = (require '../lang/nodes')
 
 to-ast = fn [body] {
   { @type 'Program'
@@ -32,45 +32,45 @@ to-ast = fn [body] {
 
 transform = fn [name parsed (f = to-ast)] {
   cond
-    parsed is none ? to-ast: ''
+    parsed is none ? to-ast ''
     else ? {
       context = {}
-      body = parsed.compile: context name
-      dependencies = parsed.add-deps: context
-      parsed.flag-core-methods: body
-      f: (parsed.add-vars: context) ++
+      body = parsed.compile context name
+      dependencies = parsed.add-deps context
+      parsed.flag-core-methods body
+      f (parsed.add-vars context) ++
         (parsed.add-core!) ++
         dependencies ++
-        (parsed.add-contracts: body)
+        (parsed.add-contracts body)
     }
 }
 
-lex = fn [name code] { lexer: code }
-parse = fn [name code] { code | lex: name | parser.parse }
-gen-ast = fn [name code] { parse: name code | transform: name }
+lex = fn [name code] { lexer code }
+parse = fn [name code] { code | lex name | parser.parse }
+gen-ast = fn [name code] { parse name code | transform name }
 
-transpile = fn [name code] { code | gen-ast: name | escodegen.generate }
+transpile = fn [name code] { code | gen-ast name | escodegen.generate }
 
 akira = fn [cb filepath (f = transpile)] {
   on-file = fn [name code] {
     try {
-      result = code | f: name | cb: name
+      result = code | f name | cb name
     } catch err {
-      util.error: 'Filename: ' ++ name
-      util.error: err.stack
-      process.exit: 1
+      util.error 'Filename ' ++ name
+      util.error err.stack
+      process.exit 1
     }
     result
   }
-  get-files: on-file filepath
+  get-files on-file filepath
 }
 
 run = fn [name code context] {
   try {
-    result = dune.string: code name context
+    result = dune.string code name context
   } catch err {
-    util.error: name
-    util.error: err.stack
+    util.error name
+    util.error err.stack
   }
   result
 }

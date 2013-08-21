@@ -1,23 +1,23 @@
 str = 'hello'
-hi = str.split: '' | foldl: sum
-ok: hi str
+hi = str.split '' | foldl sum
+ok hi str
 
-capitalize: str | ok: 'Hello'
+capitalize str | ok 'Hello'
 
-camelize: 'hello-world' | ok: 'helloWorld'
-camelize: 'hello_world' | ok: 'helloWorld'
-camelize: 'hello_world-i_am_Akira' | ok: 'helloWorldIAmAkira'
+camelize 'hello-world' | ok 'helloWorld'
+camelize 'hello_world' | ok 'helloWorld'
+camelize 'hello_world-i_am_Akira' | ok 'helloWorldIAmAkira'
 
-uppercase: str | ok: 'HELLO'
+uppercase str | ok 'HELLO'
 
-chars: uppercase str | join: '' | ok: 'HELLO'
+chars uppercase str | join '' | ok 'HELLO'
 
-condense: '      foo bar ' | ok: 'foobar'
+condense '      foo bar ' | ok 'foobar'
 
-'hi' * 3 | ok: 'hihihi'
+'hi' * 3 | ok 'hihihi'
 
 -> {
   b = 'hello-world'
-  c = b.replace: /-([a-z])/g fn [x] { x.2.toUpperCase! }
-  ok: c 'helloWorld'
+  c = b.replace /-([a-z])/g fn [x] { x.2.toUpperCase! }
+  ok c 'helloWorld'
 }!

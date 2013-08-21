@@ -1,6 +1,6 @@
 CallExpression :: Map Maybe Vector -> Map
 CallExpression = match {
-  [callee, none] CallExpression: callee []
+  [callee, none] CallExpression callee []
   [callee, args] {
     @type 'CallExpression'
     @callee callee
