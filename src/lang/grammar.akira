@@ -81,7 +81,6 @@ bnf = {
   @Statement [
     (o 'Exporting')
     (o 'Expression')
-    (o 'Exceptions')
     (o 'Recur')
     (o 'DefMacro')
     (o 'TypeSignature')
@@ -103,6 +102,7 @@ bnf = {
     (o 'Cloning')
     (o 'Macro')
     (o 'Raise')
+    (o 'Exceptions')
     (o 'IMPORT STR' (-> new : Import $2))
   ]
 
