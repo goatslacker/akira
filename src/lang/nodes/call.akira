@@ -1,0 +1,42 @@
+CallExpression = require 'ast/CallExpression'
+Identifier = require 'ast/Identifier'
+MemberExpression = require 'ast/MemberExpression'
+Store = require 'Store'
+TypeSystem = require 'TypeSystem'
+ast = require 'ast'
+unwrapExpressionStatement = require 'unwrapExpressionStatement'
+
+gen-ast = fn [context] -> ast &0 context
+
+to-null = fn [b]
+  if b == true then true else none
+
+checkCallType = fn [name params context line] {
+  maybe
+    type <- Store.types !! name
+    params <- type.params
+    non-matching-parameter-length <- (to-null type.params.length != params.length)
+    console.warn name ++ ' was signed with ' ++ type.params.length ++
+      ' arguments yet it was provided with ' ++ params.length ++ ' at ' ++
+      (context !! '$$$filename') ++ ' line ' ++ line
+}
+
+unwrap = fn [xargs]
+  maybe
+    args <- xargs
+    map unwrapExpressionStatement args
+
+call = fn [ref params]
+  fn [line context] {
+    ast = gen-ast context
+    callee = ast ref
+    args = ast params
+
+    checkCallType ref.name args context line
+
+    if params == 'apply'
+    then CallExpression (MemberExpression callee (Identifier 'apply')) [(Identifier 'null') (Identifier 'arguments')]
+    else CallExpression callee (unwrap args)
+  }
+
+export *call
