@@ -25,6 +25,7 @@
     "Store",
     "addScope",
     "ast",
+    "betaRedex",
     "concatMap",
     "createFunction",
     "destructure",
