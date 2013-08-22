@@ -16,9 +16,9 @@ checkCallType = fn [name params context line] {
     type <- Store.types !! name
     params <- type.params
     non-matching-parameter-length <- (to-null type.params.length != params.length)
-    console.warn name ++ ' was signed with ' ++ type.params.length ++
-      ' arguments yet it was provided with ' ++ params.length ++ ' at ' ++
-      (context !! '$$$filename') ++ ' line ' ++ line
+    console.warn '{{name}} was signed with {{type.params.length}} ' ++
+      'arguments yet it was provided with {{params.length}} ' ++
+      'at {{context.$$$filename}} line {{line}}'
 }
 
 unwrap = fn [xargs]
