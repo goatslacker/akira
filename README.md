@@ -56,7 +56,6 @@ Maps
 
 Vectors
 
-    [1, 2, 3, 4]
     [1 2 3 4]
     [true false]
 
@@ -76,7 +75,9 @@ Math
 
 Exponents
 
-    3 ** 3      -- Math.pow(3, 3)
+    | akira  | javascript     |
+    | ------ | -------------- |
+    | 3 ** 3 | Math.pow(3, 3) |
 
 Equality
 
@@ -94,9 +95,11 @@ Logical
 
 Concat and Cons
 
-    [1] ++ [2]          -- [1].concat(2)
-    'hello ' ++ 'world' -- 'hello'.concat('world')
-    1 +: [2 3]          -- [1].concat(2, 3)
+    | akira              | javascript              |
+    | ------------------ | ----------------------- |
+    | [1] ++ [2]         | [1].concat(2)           |
+    | 'hello' ++ 'world' | 'hello'.concat('world') |
+    | 1 +: [2 3]         | [1].concat(2, 3)        |
 
 Property Access
 
@@ -119,17 +122,19 @@ Defining functions
 
 Invoking
 
-    sum: 1 2
+    sum 1 2
 
 Invoking with no arguments
 
     'hello-world'.to-string!
 
-IIFE
+IIFE/Beta-redex
 
     fn [] {
       number-of-balloons = 99
     }!
+
+    (-> 'foobar')!
 
 Anonymous functions
 
@@ -140,7 +145,7 @@ Anonymous functions
 
 Functions can also be invoked or chained with pipes
 
-    sum: 1 2 | print        -- print(sum(1, 2))
+    sum 1 2 | print        -- print(sum(1, 2))
 
 Multiple expressions can be piped together
 
@@ -148,11 +153,11 @@ Multiple expressions can be piped together
 
 Previous arguments are carried over into the next function call...
 
-    1 | sum: 2 | (== 3)   -- sum(2, 1) === 3
+    1 | sum 2 | (== 3)   -- sum(2, 1) === 3
 
 ...and you can use _ (underscore) to place your argument
 
-    2 | sub: _ 1 | (== 1)    -- sub(2, 1) === 1
+    2 | sub _ 1 | (== 1)    -- sub(2, 1) === 1
 
 
 ### Scope
@@ -198,7 +203,7 @@ Factorial implemented using pattern matching
 
     fact = match {
       [1] 1
-      [n] n * (fact: n - 1)
+      [n] n * (fact n - 1)
     }
 
 This splits up the list into x = head(list) and xs = tail(list)
@@ -206,19 +211,19 @@ This splits up the list into x = head(list) and xs = tail(list)
     sort-even-odd = fn [[x, & xs]] {
       cond
         not x ? []
-        odd: x ? (sort-even-odd: xs) ++ [x]
-        else ? x +: (sort-even-odd: xs)
+        odd x ? (sort-even-odd xs) ++ [x]
+        else ? x +: (sort-even-odd xs)
     }
 
-    [1 2 3 4 5 6] | sort-even-odd | assert-deep: [2 4 6 5 3 1]
+    [1 2 3 4 5 6] | sort-even-odd | assert-deep [2 4 6 5 3 1]
 
 
 ### Exceptions
 
     try {
       some-function-that-may-crash!
-    } catch {
-      raise err       -- err is the error object inside catch
+    } catch err {
+      raise err
     }
 
 ### Do
@@ -226,9 +231,9 @@ This splits up the list into x = head(list) and xs = tail(list)
 For handling async functions there's the do keyword...
 
     get-my-first-tweet = do
-      [tweets] <- get-tweets-for: 'goatslacker'
-      [first-tweet] <- process-and-return-first: tweets
-      decorate-first-tweet: first-tweet
+      [tweets] <- get-tweets-for 'goatslacker'
+      [first-tweet] <- process-and-return-first tweets
+      decorate-first-tweet first-tweet
 
 ...which compiles into
 
@@ -240,9 +245,9 @@ For handling async functions there's the do keyword...
       });
     };
 
-## ViM
+## Text Editor Support
 
-See: https://github.com/goatslacker/akira.vim
+ViM: https://github.com/goatslacker/akira.vim
 
 ## License
 
