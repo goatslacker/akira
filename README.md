@@ -95,18 +95,20 @@ Logical
 
 Concat and Cons
 
-    | akira              | javascript              |
-    | ------------------ | ----------------------- |
-    | [1] ++ [2]         | [1].concat(2)           |
-    | 'hello' ++ 'world' | 'hello'.concat('world') |
-    | 1 +: [2 3]         | [1].concat(2, 3)        |
+| akira              | javascript              |
+| ------------------ | ----------------------- |
+| [1] ++ [2]         | [1].concat(2)           |
+| 'hello' ++ 'world' | 'hello'.concat('world') |
+| 1 +: [2 3]         | [1].concat(2, 3)        |
 
 Property Access
 
-    { @key 'value' } !! 'key'  -- { key: 'value' }['key']
-    { @key 'value' }.key       -- { key: 'value' }.key
-    [1 2 3 4] !! 2             -- [1, 2, 3, 4][2]
-    [1 2 3].1                  -- [1, 2, 3][0]
+akira | javascript
+----- | ----------
+{ @key 'value' } !! 'key' | { key: 'value' }['key']
+{ @key 'value' }.key | { key: 'value' }.key
+[1 2 3 4] !! 2 | [1, 2, 3, 4][2]
+[1 2 3].1 | [1, 2, 3][0]
 
 
 ### Functions
@@ -133,8 +135,6 @@ IIFE/Beta-redex
     fn [] {
       number-of-balloons = 99
     }!
-
-    (-> 'foobar')!
 
 Anonymous functions
 
