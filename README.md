@@ -75,9 +75,9 @@ Math
 
 Exponents
 
-    | akira  | javascript     |
-    | ------ | -------------- |
-    | 3 ** 3 | Math.pow(3, 3) |
+| akira  | javascript     |
+| ------ | -------------- |
+| 3 ** 3 | Math.pow(3, 3) |
 
 Equality
 
