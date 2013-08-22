@@ -97,7 +97,7 @@ Concat and Cons
 
 | akira              | javascript              |
 | ------------------ | ----------------------- |
-| [1] ++ [2]         | ```javascript [1].concat(2) ``` |
+| [1] ++ [2]         | [1].concat(2)           |
 | 'hello' ++ 'world' | 'hello'.concat('world') |
 | 1 +: [2 3]         | [1].concat(2, 3)        |
 
