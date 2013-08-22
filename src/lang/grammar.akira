@@ -78,15 +78,15 @@ bnf = {
   ]
 
   @Identifier [
-    (o 'IDENTIFIER' (-> new : Identifier $1))
+    (o 'IDENTIFIER' (-> new Identifier $1))
   ]
 
   @Prototype [
-    (o 'PROTOTYPE' (-> new : Identifier '__prototype'))
+    (o 'PROTOTYPE' (-> new Identifier '__prototype'))
   ]
 
   @Rest [
-    (o '& IDENTIFIER' (-> new : Identifier $2 true))
+    (o '& IDENTIFIER' (-> new Identifier $2 true))
   ]
 
   @TBody [
@@ -123,7 +123,7 @@ bnf = {
     (o 'Macro')
     (o 'Raise')
     (o 'Exceptions')
-    (o 'IMPORT STR' (-> new : Import $2))
+    (o 'IMPORT STR' (-> new Import $2))
   ]
 
   @Value [
@@ -146,7 +146,7 @@ bnf = {
     (o 'Type')
     (o 'Prototype')
     (o 'SpecialFunctions')
-    (o 'ArgumentsShorthand ^ Identifier' (-> new : Assignment $3 $1))
+    (o 'ArgumentsShorthand ^ Identifier' (-> new Assignment $3 $1))
     (o '( OptTerminator Expression OptTerminator )' (-> $3))
   ]
 
@@ -156,40 +156,40 @@ bnf = {
 
   @Literal [
     (o 'AlphaNumeric')
-    (o 'NONE' (-> new : Literal none))
-    (o 'BOOL' (-> new : Literal ($1 is 'true')))
-    (o 'REGEXP' (-> new : Literal $1))
+    (o 'NONE' (-> new Literal none))
+    (o 'BOOL' (-> new Literal ($1 is 'true')))
+    (o 'REGEXP' (-> new Literal $1))
   ]
 
   @AlphaNumeric [
-    (o 'NUM' (-> new : Literal (Number ($1.replace /,/g, ''))))
+    (o 'NUM' (-> new Literal (Number ($1.replace /,/g, ''))))
     (o 'Strings')
   ]
 
   @Strings [
-    (o 'STR' (-> new : Literal (String $1)))
+    (o 'STR' (-> new Literal (String $1)))
   ]
 
   @Assignment [
-    (o 'Identifier = Expression' (-> new : Assignment $1 $3))
-    (o 'Access = Expression' (-> new : Assignment $1 $3))
-    (o 'Vectors = Expression' (-> new : Assignment $1 $3))
-    (o 'Maps = Expression' (-> new : Assignment $1 $3))
+    (o 'Identifier = Expression' (-> new Assignment $1 $3))
+    (o 'Access = Expression' (-> new Assignment $1 $3))
+    (o 'Vectors = Expression' (-> new Assignment $1 $3))
+    (o 'Maps = Expression' (-> new Assignment $1 $3))
   ]
 
   @Modules [
-    (o 'MODULE STR Body' (-> new : Modules $2 $3))
+    (o 'MODULE STR Body' (-> new Modules $2 $3))
   ]
 
   @Exporting [
-    (o 'EXPORT Expression' (-> new : Export $2 false))
-    (o 'EXPORT * Expression' (-> new : Export $3 true))
+    (o 'EXPORT Expression' (-> new Export $2 false))
+    (o 'EXPORT * Expression' (-> new Export $3 true))
   ]
 
   @Cloning [
-    (o 'Identifier : Arguments' (-> new : Cloning $3 $1))
-    (o 'Maps Arguments' (-> new : Cloning $2 $1))
-    (o 'Vectors Arguments' (-> new : Cloning $2 $1))
+    (o 'Identifier : Arguments' (-> new Cloning $3 $1))
+    (o 'Maps Arguments' (-> new Cloning $2 $1))
+    (o 'Vectors Arguments' (-> new Cloning $2 $1))
   ]
 
   @CallableValue [
@@ -198,28 +198,28 @@ bnf = {
   ]
 
   @Pipeline [
-    (o 'Value | OptTerminator CallableValue' (-> new : Pipeline $1 $4))
-    (o 'Invocation | OptTerminator CallableValue' (-> new : Pipeline $1 $4))
-    (o 'Pipeline | OptTerminator CallableValue' (-> new : Pipeline $1 $4))
+    (o 'Value | OptTerminator CallableValue' (-> new Pipeline $1 $4))
+    (o 'Invocation | OptTerminator CallableValue' (-> new Pipeline $1 $4))
+    (o 'Pipeline | OptTerminator CallableValue' (-> new Pipeline $1 $4))
   ]
 
   @Invocation [
-    (o 'Callable Arguments' (-> new : Call $1 $2))
-    (o 'Callable !' (-> new : Call $1))
-    (o 'Callable & !' (-> new : Call $1, 'apply'))
+    (o 'Callable Arguments' (-> new Call $1 $2))
+    (o 'Callable !' (-> new Call $1))
+    (o 'Callable & !' (-> new Call $1, 'apply'))
   ]
 
   @Declaration [
-    (o 'FN [ Parameters ] TBody' (-> new : Declaration none $3 $5))
-    (o 'FN [ ] TBody' (-> new : Declaration none none $4))
-    (o 'LAMBDA TBody' (-> new : Declaration none none $2))
+    (o 'FN [ Parameters ] TBody' (-> new Declaration none $3 $5))
+    (o 'FN [ ] TBody' (-> new Declaration none none $4))
+    (o 'LAMBDA TBody' (-> new Declaration none none $2))
   ]
 
   @InlineDeclaration [
-    (o 'FN [ Parameters ] Expression' (-> new : Declaration none $3 $5))
-    (o 'FN [ Parameters ] TERMINATOR Expression' (-> new : Declaration none $3 $6))
-    (o 'FN [ ] Expression' (-> new : Declaration none none $4))
-    (o 'LAMBDA Expression' (-> new : Declaration none none $2))
+    (o 'FN [ Parameters ] Expression' (-> new Declaration none $3 $5))
+    (o 'FN [ Parameters ] TERMINATOR Expression' (-> new Declaration none $3 $6))
+    (o 'FN [ ] Expression' (-> new Declaration none none $4))
+    (o 'LAMBDA Expression' (-> new Declaration none none $2))
   ]
 
   @LetOperation [
@@ -227,26 +227,26 @@ bnf = {
   ]
 
   @LetOperations [
-    (o 'LetOperation' (-> new : Arguments $1))
-    (o 'LetOperations LetOperation' (-> new : Arguments $1 $2))
+    (o 'LetOperation' (-> new Arguments $1))
+    (o 'LetOperations LetOperation' (-> new Arguments $1 $2))
   ]
 
   @Let [
-    (o 'LET OptTerminator LetOperations THEN OptTerminator Expression TERMINATOR' (-> new : Let $3 $6))
+    (o 'LET OptTerminator LetOperations THEN OptTerminator Expression TERMINATOR' (-> new Let $3 $6))
   ]
 
   @MaybeOperation [
-    (o 'Identifier DO_OPERATOR Value TERMINATOR' (-> new : Assignment $1 $3))
+    (o 'Identifier DO_OPERATOR Value TERMINATOR' (-> new Assignment $1 $3))
     (o 'Expression TERMINATOR' (-> { @expr $1 }))
   ]
 
   @MaybeOperations [
-    (o 'MaybeOperation' (-> new : Arguments $1))
-    (o 'MaybeOperations MaybeOperation' (-> new : Arguments $1 $2))
+    (o 'MaybeOperation' (-> new Arguments $1))
+    (o 'MaybeOperations MaybeOperation' (-> new Arguments $1 $2))
   ]
 
   @MaybeSeq [
-    (o 'MAYBE Terminator MaybeOperations' (-> new : MaybeSeq $3))
+    (o 'MAYBE Terminator MaybeOperations' (-> new MaybeSeq $3))
   ]
 
   @DoOperation [
@@ -255,13 +255,13 @@ bnf = {
   ]
 
   @DoOperations [
-    (o 'DoOperation' (-> new : Arguments $1))
-    (o 'DoOperations DoOperation' (-> new : Arguments $1 $2))
+    (o 'DoOperation' (-> new Arguments $1))
+    (o 'DoOperations DoOperation' (-> new Arguments $1 $2))
   ]
 
   @AsyncDo [
-    (o 'DO [ Parameters ] Terminator DoOperations' (-> new : Async $6 $3))
-    (o 'DO Terminator DoOperations' (-> new : Async $3 none))
+    (o 'DO [ Parameters ] Terminator DoOperations' (-> new Async $6 $3))
+    (o 'DO Terminator DoOperations' (-> new Async $3 none))
   ]
 
   @Conditional [
@@ -269,8 +269,8 @@ bnf = {
   ]
 
   @Conditionals [
-    (o 'Conditional' (-> new : Arguments $1))
-    (o 'Conditionals Conditional' (-> new : Arguments $1 $2))
+    (o 'Conditional' (-> new Arguments $1))
+    (o 'Conditionals Conditional' (-> new Arguments $1 $2))
   ]
 
   @CondElse [
@@ -278,7 +278,7 @@ bnf = {
   ]
 
   @Cond [
-    (o 'COND TERMINATOR Conditionals CondElse' (-> new : Cond $3 $4))
+    (o 'COND TERMINATOR Conditionals CondElse' (-> new Cond $3 $4))
   ]
 
   @Pattern [
@@ -288,12 +288,12 @@ bnf = {
   ]
 
   @Patterns [
-    (o 'Pattern' (-> new : Arguments $1))
-    (o 'Patterns Pattern' (-> new : Arguments $1 $2))
+    (o 'Pattern' (-> new Arguments $1))
+    (o 'Patterns Pattern' (-> new Arguments $1 $2))
   ]
 
   @PatternMatching [
-    (o 'MATCH { OptTerminator Patterns }' (-> new : Pattern $4))
+    (o 'MATCH { OptTerminator Patterns }' (-> new Pattern $4))
   ]
 
   @Comma [
@@ -302,8 +302,8 @@ bnf = {
   ]
 
   @Vectors [
-    (o '[ ]' (-> new : Vector))
-    (o '[ OptTerminator VectorArgs OptTerminator ]' (-> new : Vector $3))
+    (o '[ ]' (-> new Vector))
+    (o '[ OptTerminator VectorArgs OptTerminator ]' (-> new Vector $3))
   ]
 
   @VectorArg [
@@ -312,31 +312,31 @@ bnf = {
   ]
 
   @VectorArgs [
-    (o 'VectorArg' (-> new : Arguments $1))
-    (o 'VectorArgs OptComma VectorArg' (-> new : Arguments $1 $3))
+    (o 'VectorArg' (-> new Arguments $1))
+    (o 'VectorArgs OptComma VectorArg' (-> new Arguments $1 $3))
   ]
 
   @Key [
-    (o 'KEY' (-> new : Identifier $1))
+    (o 'KEY' (-> new Identifier $1))
   ]
 
   @KeyValue [
-    (o 'Key' (-> new : Assignment $1 none))
-    (o 'Key Value' (-> new : Assignment $1 $2))
+    (o 'Key' (-> new Assignment $1 none))
+    (o 'Key Value' (-> new Assignment $1 $2))
   ]
 
   @MapItems [
-    (o 'KeyValue' (-> new : Arguments $1))
-    (o 'MapItems OptComma KeyValue' (-> new : Arguments $1 $3))
+    (o 'KeyValue' (-> new Arguments $1))
+    (o 'MapItems OptComma KeyValue' (-> new Arguments $1 $3))
   ]
 
   @Maps [
-    (o '{ }' (-> new : Map))
-    (o '{ OptTerminator MapItems OptTerminator }' (-> new : Map $3))
+    (o '{ }' (-> new Map))
+    (o '{ OptTerminator MapItems OptTerminator }' (-> new Map $3))
   ]
 
   @Access [
-    (o 'Accessibles Accessor' (-> new : Access $1 $2))
+    (o 'Accessibles Accessor' (-> new Access $1 $2))
   ]
 
   @Accessor [
@@ -346,13 +346,13 @@ bnf = {
   ]
 
   @Arguments [
-    (o 'Value' (-> new : Arguments $1))
-    (o 'Arguments Comma Value' (-> new : Arguments $1 $3))
+    (o 'Value' (-> new Arguments $1))
+    (o 'Arguments Comma Value' (-> new Arguments $1 $3))
   ]
 
   @Param [
     (o 'Identifier')
-    (o '( Identifier = Value )' (-> new : Assignment $2 $4))
+    (o '( Identifier = Value )' (-> new Assignment $2 $4))
     (o 'Rest')
     (o 'Vectors')
   ]
@@ -363,16 +363,16 @@ bnf = {
   ]
 
   @Parameters [
-    (o 'Param' (-> new : Arguments $1))
-    (o 'Parameters OptComma Param' (-> new : Arguments $1 $3))
+    (o 'Param' (-> new Arguments $1))
+    (o 'Parameters OptComma Param' (-> new Arguments $1 $3))
   ]
 
   @Exceptions [
-    (o 'TRY Body OptTerminator CATCH Identifier Body' (-> new : ExceptionGuard $2 $5 $6))
+    (o 'TRY Body OptTerminator CATCH Identifier Body' (-> new ExceptionGuard $2 $5 $6))
   ]
 
   @Raise [
-    (o 'RAISE Value ErrorType' (-> new : Exception $1 $2 $3))
+    (o 'RAISE Value ErrorType' (-> new Exception $1 $2 $3))
   ]
 
   @ErrorType [
@@ -381,37 +381,37 @@ bnf = {
   ]
 
   @Recur [
-    (o 'RECUR OptTerminator Arguments' (-> new : Recur $3))
-    (o '( RECUR OptTerminator Arguments )' (-> new : Recur $4))
+    (o 'RECUR OptTerminator Arguments' (-> new Recur $3))
+    (o '( RECUR OptTerminator Arguments )' (-> new Recur $4))
   ]
 
   @If [
     (o 'IF CallableValue OptTerminator THEN Body OptTerminator ELSE Body',
-      (-> new : If $2 $5 $8))
+      (-> new If $2 $5 $8))
   ]
 
   @DefMacro [
-    (o 'MACRO Identifier Declaration' (-> new : Macro $2 $3))
+    (o 'MACRO Identifier Declaration' (-> new Macro $2 $3))
   ]
 
   @TypeValues [
     (o 'Identifier')
     (o 'VectorType')
     (o 'MapType')
-    (o 'MAYBE TypeValues' (-> new : Type $2 'maybe'))
+    (o 'MAYBE TypeValues' (-> new Type $2 'maybe'))
   ]
 
   @TypeValue [
     (o 'TypeValues')
-    (o 'TypeValues | TypeValue' (-> new : Type [$1 $3] 'or'))
+    (o 'TypeValues | TypeValue' (-> new Type [$1 $3] 'or'))
   ]
 
   @VectorType [
-    (o '[ TypeParams ]' (-> new : Type $2 'vector'))
+    (o '[ TypeParams ]' (-> new Type $2 'vector'))
   ]
 
   @MapType [
-    (o '{ MapTypeParams }' (-> new : Type $2 'map'))
+    (o '{ MapTypeParams }' (-> new Type $2 'map'))
   ]
 
   @MaybeTypeParams [
@@ -420,70 +420,70 @@ bnf = {
   ]
 
   @TypeKeyValue [
-    (o 'Key' (-> new : Assignment $1 none))
-    (o 'Key TypeValue' (-> new : Assignment $1 $2))
+    (o 'Key' (-> new Assignment $1 none))
+    (o 'Key TypeValue' (-> new Assignment $1 $2))
   ]
 
   @MapTypeParams [
-    (o 'TypeKeyValue' (-> new : Arguments $1))
-    (o 'MapTypeParams TypeKeyValue' (-> new : Arguments $1 $2))
+    (o 'TypeKeyValue' (-> new Arguments $1))
+    (o 'MapTypeParams TypeKeyValue' (-> new Arguments $1 $2))
   ]
 
   @TypeParams [
-    (o 'TypeValue' (-> new : Arguments $1))
-    (o 'TypeParams TypeValue' (-> new : Arguments $1 $2))
+    (o 'TypeValue' (-> new Arguments $1))
+    (o 'TypeParams TypeValue' (-> new Arguments $1 $2))
   ]
 
   @TypeSignature [
     (o 'Identifier TYPE_OPERATOR MaybeTypeParams LAMBDA TypeValue',
-      (-> new : TypeSignature $1 $3 $5))
+      (-> new TypeSignature $1 $3 $5))
   ]
 
   @Macro [
-    (o '` OptTerminator Statement' (-> new : Evaluate $3))
-    (o '~ OptTerminator Statement' (-> new : Evaluate $3 true))
+    (o '` OptTerminator Statement' (-> new Evaluate $3))
+    (o '~ OptTerminator Statement' (-> new Evaluate $3 true))
   ]
 
   @Operators [
-    (o '+' (-> new : Identifier 'sum'))
-    (o '-' (-> new : Identifier 'sub'))
-    (o '*' (-> new : Identifier 'prod'))
-    (o '* *' (-> new : Identifier 'pow'))
-    (o '/' (-> new : Identifier 'div'))
-    (o 'COMPARE' (-> new : Compare $1))
-    (o 'LOGIC' (-> new : Logic $1))
+    (o '+' (-> new Identifier 'sum'))
+    (o '-' (-> new Identifier 'sub'))
+    (o '*' (-> new Identifier 'prod'))
+    (o '* *' (-> new Identifier 'pow'))
+    (o '/' (-> new Identifier 'div'))
+    (o 'COMPARE' (-> new Compare $1))
+    (o 'LOGIC' (-> new Logic $1))
   ]
 
   @SugaryFunctions [
     (o 'Operators' (-> $1))
     (o 'Accessor',
-      (-> new : Declaration '->' (new : Arguments 'it'),
-        (new : Access 'it' $1)))
+      (-> new Declaration '->' (new Arguments 'it'),
+        (new Access 'it' $1)))
     (o 'Accessor Arguments',
-      (-> new : Declaration '->' (new : Arguments 'it'),
-        (new : Call (new : Access 'it' $1) $2)))
+      (-> new Declaration '->' (new Arguments 'it'),
+        (new Call (new Access 'it' $1) $2)))
     (o 'COMPARE Value',
-      (-> new : Declaration '->' (new : Arguments 'it'),
-        (new : Compare 'it' $1 $2)))
+      (-> new Declaration '->' (new Arguments 'it'),
+        (new Compare 'it' $1 $2)))
     (o 'LEFT_OPERATORS Value',
-      (-> new : Declaration '->' (new : Arguments 'it'),
-        (new : Operation 'it' $1 $2)))
-    (o '= Value' (-> new : Declaration '->' (new : Arguments 'it') $2))
+      (-> new Declaration '->' (new Arguments 'it'),
+        (new Operation 'it' $1 $2)))
+    (o '= Value' (-> new Declaration '->' (new Arguments 'it') $2))
     (o '+ Value',
-      (-> new : Declaration '->' (new : Arguments 'it'),
-        (new : Operation 'it' $1 $2)))
+      (-> new Declaration '->' (new Arguments 'it'),
+        (new Operation 'it' $1 $2)))
     (o '- Value',
-      (-> new : Declaration '->' (new : Arguments 'it'),
-        (new : Operation 'it' $1 $2)))
+      (-> new Declaration '->' (new Arguments 'it'),
+        (new Operation 'it' $1 $2)))
     (o '* Value',
-      (-> new : Declaration '->' (new : Arguments 'it'),
-        (new : Operation 'it' $1 $2)))
+      (-> new Declaration '->' (new Arguments 'it'),
+        (new Operation 'it' $1 $2)))
     (o '* * Value',
-      (-> new : Declaration '->' (new : Arguments 'it'),
-        (new : Operation 'it' '**' $3)))
+      (-> new Declaration '->' (new Arguments 'it'),
+        (new Operation 'it' '**' $3)))
     (o '/ Value',
-      (-> new : Declaration '->' (new : Arguments 'it'),
-        (new : Operation 'it' $1 $2)))
+      (-> new Declaration '->' (new Arguments 'it'),
+        (new Operation 'it' $1 $2)))
   ]
 
   @SpecialFunctions [
@@ -491,18 +491,18 @@ bnf = {
   ]
 
   @Operation [
-    (o 'Value COMPARE OptTerminator Value' (-> new : Compare $1 $2 $4))
-    (o 'Value LOGIC OptTerminator Value' (-> new : Logic $1 $2 $4))
+    (o 'Value COMPARE OptTerminator Value' (-> new Compare $1 $2 $4))
+    (o 'Value LOGIC OptTerminator Value' (-> new Logic $1 $2 $4))
     (o 'Value LEFT_OPERATORS OptTerminator Value',
-      (-> new : Operation $1 $2 $4))
+      (-> new Operation $1 $2 $4))
     (o 'Value RIGHT_OPERATORS OptTerminator Value',
-      (-> new : Operation $1 $2 $4))
-    (o 'NOT Value' (-> new : Compare $2 $1))
-    (o 'Value + OptTerminator Value' (-> new : Operation $1 '+' $4))
-    (o 'Value - OptTerminator Value' (-> new : Operation $1 '-' $4))
-    (o 'Value * OptTerminator Value' (-> new : Operation $1 '*' $4))
-    (o 'Value * * OptTerminator Value' (-> new : Operation $1 '**' $5))
-    (o 'Value / OptTerminator Value' (-> new : Operation $1 '/' $4))
+      (-> new Operation $1 $2 $4))
+    (o 'NOT Value' (-> new Compare $2 $1))
+    (o 'Value + OptTerminator Value' (-> new Operation $1 '+' $4))
+    (o 'Value - OptTerminator Value' (-> new Operation $1 '-' $4))
+    (o 'Value * OptTerminator Value' (-> new Operation $1 '*' $4))
+    (o 'Value * * OptTerminator Value' (-> new Operation $1 '**' $5))
+    (o 'Value / OptTerminator Value' (-> new Operation $1 '/' $4))
   ]
 }
 
@@ -528,7 +528,7 @@ operators = [
   ['left' '*' '**' '/']
 ]
 
-parser = jsnew: jison.Parser { @tokens @bnf @operators @start-symbol }
+parser = jsnew jison.Parser { @tokens @bnf @operators @start-symbol }
 parser.lexer = {
   @lex (fn [] {
     ref = this.tokens !! this.pos || ['']

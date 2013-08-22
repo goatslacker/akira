@@ -124,7 +124,7 @@ export *{
       x = {}
       coll.for-each fn [i] {
         [key val] = f i
-        obj-set : x key val
+        obj-set x key val
       }
       x
     })
@@ -179,7 +179,7 @@ export *{
     })
 
   @find (`
-    find = fn [f ds] { each : i ds ((f ds !! i) is true) })
+    find = fn [f ds] { each i ds ((f ds !! i) is true) })
 
   @call (`
     call = fn [obj prop & args] { (obj !! prop) | (.apply obj, args) })
@@ -301,7 +301,7 @@ export *{
     })
 
   @when (`
-   when = fn [is-true callback] { single-if : is-true (callback!) })
+   when = fn [is-true callback] { single-if is-true (callback!) })
 
   @maybe-seq (`
     maybe-seq = fn [& args] {
@@ -314,25 +314,25 @@ export *{
     show = fn [i] { i.to-string! })
 
   @mod (`
-    mod = fn [a b] { bin-expr : '%' a b })
+    mod = fn [a b] { bin-expr '%' a b })
 
   @bit-and (`
-    bit-and = fn [a b] { bin-expr : '&' a b })
+    bit-and = fn [a b] { bin-expr '&' a b })
 
   @bit-or (`
-    bit-or = fn [a b] { bin-expr : '|' a b })
+    bit-or = fn [a b] { bin-expr '|' a b })
 
   @bit-xor (`
-    bit-xor = fn [a b] { bin-expr : '^' a b })
+    bit-xor = fn [a b] { bin-expr '^' a b })
 
   @bit-shiftl (`
-    bit-shiftl = fn [a b] { bin-expr : '<<' a b })
+    bit-shiftl = fn [a b] { bin-expr '<<' a b })
 
   @bit-shiftr (`
-    bit-shiftr = fn [a b] { bin-expr : '>>' a b })
+    bit-shiftr = fn [a b] { bin-expr '>>' a b })
 
   @bit-ushiftr (`
-    bit-ushiftr = fn [a b] { bin-expr : '>>>' a b })
+    bit-ushiftr = fn [a b] { bin-expr '>>>' a b })
 
   @square (`
     square = fn [x] { x * x })
@@ -350,10 +350,10 @@ export *{
     div = fn [a b] { a / b })
 
   @even (`
-    even = fn [n] { (bin-expr : '%' n 2) | (== 0) })
+    even = fn [n] { (bin-expr '%' n 2) | (== 0) })
 
   @odd (`
-    odd = fn [n] { (bin-expr : '%' n 2) | (!= 0) })
+    odd = fn [n] { (bin-expr '%' n 2) | (!= 0) })
 
   @abs (`
     abs = fn [n] { Math.abs n })
