@@ -10,7 +10,7 @@ watch = import './watchman.akira'
 output = fn [_ code] util.puts code
 
 analyse = fn [_ body]
-  body | (-> util.inspect data false Infinity) | output none
+  body | (-> util.inspect &0 false Infinity) | output none
 
 load-makefile = fn [key opts]
   fn [name code]
