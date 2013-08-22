@@ -8,15 +8,14 @@ unwrapExpressionStatement = require 'unwrapExpressionStatement'
 
 gen-ast = fn [context] -> ast &0 context
 
-to-null = fn [b]
-  if b == true then true else none
+to-null = fn [b] if b == true then true else none
 
 checkCallType = fn [name params context line] {
   maybe
     type <- Store.types !! name
-    params <- type.params
-    non-matching-parameter-length <- (to-null type.params.length != params.length)
-    console.warn '{{name}} was signed with {{type.params.length}} ' ++
+    tparams <- type.params
+    non-matching-parameter-length <- (to-null tparams.length != params.length)
+    console.warn '{{name}} was signed with {{tparams.length}} ' ++
       'arguments yet it was provided with {{params.length}} ' ++
       'at {{context.$$$filename}} line {{line}}'
 }
