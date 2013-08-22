@@ -1,14 +1,26 @@
 CallExpression = require 'ast/CallExpression'
+ExpressionStatement = require 'ast/ExpressionStatement'
 Identifier = require 'ast/Identifier'
 MemberExpression = require 'ast/MemberExpression'
 Store = require 'Store'
 TypeSystem = require 'TypeSystem'
 ast = require 'ast'
+escodegen = require 'escodegen'
+esprima = require 'esprima'
+obj2str = require 'obj2str'
 unwrapExpressionStatement = require 'unwrapExpressionStatement'
+vm = require 'vm'
 
 gen-ast = fn [context] -> ast &0 context
 
 to-null = fn [b] if b == true then true else none
+
+run-macro = fn [name xargs context]
+  let
+    ast = Store.macros !! name
+    args = obj2str xargs | esprima.parse
+    code = CallExpression ast args.body.1.expression.elements | ExpressionStatement | escodegen.generate
+  then vm.run-in-new-context code context
 
 checkCallType = fn [name params context line] {
   maybe
@@ -25,17 +37,23 @@ unwrap = fn [xargs]
     args <- xargs
     map unwrapExpressionStatement args
 
+return-function = fn [callee args params context line] {
+  checkCallType callee.name args context line
+
+  if params == 'apply'
+  then CallExpression (MemberExpression callee (Identifier 'apply')) [(Identifier 'null') (Identifier 'arguments')]
+  else CallExpression callee (unwrap args)
+}
+
 call = fn [ref params]
   fn [line context] {
     ast = gen-ast context
     callee = ast ref
     args = ast params
 
-    checkCallType ref.name args context line
-
-    if params == 'apply'
-    then CallExpression (MemberExpression callee (Identifier 'apply')) [(Identifier 'null') (Identifier 'arguments')]
-    else CallExpression callee (unwrap args)
+    if callee.type == 'Identifier' && Store.macros !! callee.name
+      then run-macro callee.name (ast params) context
+      else return-function callee args params context line
   }
 
 export *call
