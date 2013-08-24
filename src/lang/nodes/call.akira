@@ -11,8 +11,6 @@ obj2str = require 'obj2str'
 unwrapExpressionStatement = require 'unwrapExpressionStatement'
 vm = require 'vm'
 
-gen-ast = fn [context] -> ast &0 context
-
 to-null = fn [b] if b == true then true else none
 
 run-macro = fn [name xargs context]
@@ -47,12 +45,12 @@ return-function = fn [callee args params context line] {
 
 call = fn [ref params]
   fn [line context] {
-    ast = gen-ast context
-    callee = ast ref
-    args = ast params
+    compile = ast.gen context
+    callee = compile ref
+    args = compile params
 
     if callee.type == 'Identifier' && Store.macros !! callee.name
-      then run-macro callee.name (ast params) context
+      then run-macro callee.name (compile params) context
       else return-function callee args params context line
   }
 

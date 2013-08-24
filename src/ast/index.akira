@@ -1,0 +1,13 @@
+Identifier = require 'ast/Identifier'
+
+ast = fn [val context]
+  cond
+    val == undefined || val == none ? none
+    val == String ? Identifier val
+    val == Function ? val context
+    val.compile ? val.compile context
+    else ? val
+
+ast.gen = fn [context] -> ast &0 context
+
+export *ast
