@@ -7,7 +7,7 @@ help = import './help.akira'
 start-repl = import './repl.akira'
 watch = import './watchman.akira'
 
-output = fn [_ code] util.puts code
+output = fn [_ code] process.stdout.write code
 
 analyse = fn [_ body]
   body | (-> util.inspect &0 false Infinity) | output none
@@ -24,12 +24,13 @@ cli = match {
   ['run' [a]] this.run a
   ['tokens' [a]] akira analyse a lex
   ['ast' [a]] akira analyse a gen-ast
-  ['version'] 'akira ' ++ me.version | output none
+  ['version' []] 'akira ' ++ me.version | output none
   ['watch' [a b]] watch a (-> akira fn [name code] {
     write-file name code a b } a)
   ['make' [a b & c]] akira (load-makefile a (b || []) ++ c) 'Make.akira'
   ['repl' []] start-repl!
   ['help' []] help!
+  [undefined []] start-repl!
   [else] help &0
 }
 
