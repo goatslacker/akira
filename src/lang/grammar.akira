@@ -518,7 +518,7 @@ tokens = [
 operators = [
   ['right' 'NOT']
   ['right' 'IF' 'THEN' 'ELSE' 'IMPORT' 'EXPORT']
-  ['right' '=' '|']
+  ['right' '=' '|' '<<']
   ['right' 'RIGHT_OPERATORS']
   ['nonassoc' '(' ')' '[' ']' '{' '}' ':']
   ['left' 'LOGIC']
