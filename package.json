@@ -18,7 +18,8 @@
   "dependencies": {
     "esprima": "*",
     "escodegen": "*",
-    "dune": "*"
+    "dune": "*",
+    "fu": "*"
   },
 
   "bundledDependencies": [

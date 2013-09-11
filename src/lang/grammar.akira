@@ -105,6 +105,7 @@ bnf = {
     (o 'DefMacro')
     (o 'TypeSignature')
     (o 'Modules')
+    (o 'Class')
   ]
 
   @Expression [
@@ -330,6 +331,23 @@ bnf = {
     (o 'MapItems OptComma KeyValue' (-> new Arguments $1 $3))
   ]
 
+--    (o 'CLASS Identifier { OptTerminator ClassDefinition OptTerminator }',
+  @Class [
+    (o 'CLASS Identifier TypeValues',
+      (-> new Class (new TypeSignature $2 '' $3)))
+  ]
+
+--  @ClassDefinition [
+--    (o 'ClassItem' (-> new Arguments $1))
+--    (o 'ClassDefinition Terminator ClassItem' (-> new Arguments $1 $3))
+--  ]
+--
+--  @ClassItem [
+--    (o 'Key TYPE_OPERATOR MaybeTypeParams LAMBDA TypeValue',
+--      (-> new TypeSignature $1 $3 $5))
+--    (o 'Key TypeValue' (-> new TypeSignature $1 $2))
+--  ]
+
   @Maps [
     (o '{ }' (-> new Map))
     (o '{ OptTerminator MapItems OptTerminator }' (-> new Map $3))
@@ -411,7 +429,7 @@ bnf = {
   ]
 
   @MapType [
-    (o '{ MapTypeParams }' (-> new Type $2 'map'))
+    (o '{ OptTerminator MapTypeParams OptTerminator }' (-> new Type $3 'map'))
   ]
 
   @MaybeTypeParams [
