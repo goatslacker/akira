@@ -11,8 +11,6 @@ obj2str = require 'obj2str'
 unwrapExpressionStatement = require 'unwrapExpressionStatement'
 vm = require 'vm'
 
-to-null = fn [b] if b == true then true else none
-
 run-macro = fn [name xargs context]
   let
     ast = Store.macros !! name
@@ -21,19 +19,22 @@ run-macro = fn [name xargs context]
   then vm.run-in-new-context code context
 
 checkCallType = fn [name params context line] {
-  maybe
-    type <- Store.types !! name
-    tparams <- type.params
-    non-matching-parameter-length <- (to-null tparams.length != params.length)
-    console.warn '{{name}} was signed with {{tparams.length}} ' ++
+  let params-unbalanced = maybe {
+    type = Store.types !! name
+    tparams = type.params
+    tparams.length != params.length
+  }
+  then if params-unbalanced is true
+    then console.warn '{{name}} was signed with {{tparams.length}} ' ++
       'arguments yet it was provided with {{params.length}} ' ++
       'at {{context.$$$filename}} line {{line}}'
+    else none
 }
 
 unwrap = fn [xargs]
-  maybe
-    args <- xargs
-    map unwrapExpressionStatement args
+  maybe {
+    map unwrapExpressionStatement xargs
+  }
 
 return-function = fn [callee args params context line] {
   checkCallType callee.name args context line
