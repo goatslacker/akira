@@ -236,8 +236,14 @@ bnf = {
     (o 'LET OptTerminator LetOperations THEN OptTerminator Expression TERMINATOR' (-> new Let $3 $6))
   ]
 
+  @MaybeParameters [
+    (o 'Value' (-> new Arguments $1))
+    (o 'MaybeParameters OptComma Value' (-> new Arguments $1 $3))
+  ]
+
   @MaybeSeq [
-    (o 'MAYBE Body' (-> new MaybeSeq $2))
+    (o 'MAYBE [ MaybeParameters ] TBody' (-> new MaybeSeq $5 $3))
+    (o 'MAYBE TBody' (-> new MaybeSeq $2))
   ]
 
   @DoOperation [
