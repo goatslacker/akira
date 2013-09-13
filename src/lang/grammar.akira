@@ -116,6 +116,7 @@ bnf = {
     (o 'Cond')
     (o 'Invocation')
     (o 'InlineDeclaration')
+    (o 'Async')
     (o 'AsyncDo')
     (o 'MaybeSeq')
     (o 'Let')
@@ -247,7 +248,7 @@ bnf = {
   ]
 
   @DoOperation [
-    (o 'Vectors DO_OPERATOR Value TERMINATOR' (-> { @args $1 @call $3 }))
+    (o 'Vectors DO_OPERATOR Invocation TERMINATOR' (-> { @args $1 @call $3 }))
     (o 'Expression TERMINATOR' (-> { @expr $1 }))
   ]
 
@@ -256,9 +257,12 @@ bnf = {
     (o 'DoOperations DoOperation' (-> new Arguments $1 $2))
   ]
 
+  @Async [
+    (o 'TASK [ Parameters ] OptTerminator AsyncDo' (-> new Async $6 $3))
+  ]
+
   @AsyncDo [
-    (o 'DO [ Parameters ] Terminator DoOperations' (-> new Async $6 $3))
-    (o 'DO Terminator DoOperations' (-> new Async $3 none))
+    (o 'DO Terminator DoOperations' (-> new Do $3))
   ]
 
   @Conditional [
@@ -306,6 +310,7 @@ bnf = {
   @VectorArg [
     (o 'Value')
     (o 'Rest')
+    (o 'CATCH')
   ]
 
   @VectorArgs [

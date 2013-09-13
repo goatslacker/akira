@@ -13,6 +13,7 @@ export *{
   @Compare        (r 'compare')
   @Cond           (r 'cond')
   @Declaration    (r 'declaration')
+  @Do             (r 'do')
   @Exception      (r 'exception')
   @ExceptionGuard (r 'exception-guard')
   @Export         (r 'export')
