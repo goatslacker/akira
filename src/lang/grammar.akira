@@ -249,6 +249,7 @@ bnf = {
 
   @DoOperation [
     (o 'Vectors DO_OPERATOR Invocation TERMINATOR' (-> { @args $1 @call $3 }))
+    (o 'Vectors DO_OPERATOR Identifier TERMINATOR' (-> { @args $1 @call $3 }))
     (o 'Expression TERMINATOR' (-> { @expr $1 }))
   ]
 
