@@ -243,8 +243,7 @@ bnf = {
   ]
 
   @MaybeSeq [
-    (o 'MAYBE [ MaybeParameters ] TBody' (-> new MaybeSeq $5 $3))
-    (o 'MAYBE TBody' (-> new MaybeSeq $2))
+    (o 'MAYBE Value' (-> new MaybeSeq $2))
   ]
 
   @DoOperation [
