@@ -264,6 +264,7 @@ bnf = {
 
   @AsyncDo [
     (o 'DO Terminator DoOperations' (-> new Do $3))
+    (o 'DO { OptTerminator DoOperations }' (-> new Do $4))
   ]
 
   @Conditional [
