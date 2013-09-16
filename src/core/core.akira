@@ -57,6 +57,20 @@ macro single-if fn [test body] {
   @alternate none }
 }
 
+macro decrement fn [i] {
+  { @type 'UpdateExpression' @operator '--' @argument i @prefix true }
+}
+
+macro push fn [vec i v] {
+  { @type 'AssignmentExpression'
+    @operator '='
+    @left { @type 'MemberExpression'
+            @computed true
+            @object vec
+            @property i }
+    @right v }
+}
+
 export *{
 
   @eq (`
@@ -223,6 +237,18 @@ export *{
       if vec.length is 0
         then []
         else Array.prototype.reduce-right.call vec (-> f &0 &1) })
+
+  @asyncmap (`
+    asyncmap = fn [f vec cb] {
+      count = vec.length
+      results = []
+      next = fn [i] fn [value] {
+        decrement count
+        push results i value
+        single-if (count is 0) cb << results
+      }
+      vec.for-each fn [x i] { f x next << i }
+    })
 
   @intersect (`
     intersect = fn [vec1 vec2] {
