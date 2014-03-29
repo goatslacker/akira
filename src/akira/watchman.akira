@@ -1,3 +1,5 @@
+-- XXX unsupported
+
 nodewatch = require 'nodewatch'
 
 watch = fn [filename callback] nodewatch.add filename | (.on-change callback)

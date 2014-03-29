@@ -1,8 +1,8 @@
 util = require 'util'
 me = require '../../package.json'
 
-{ @akira @run @lex @gen-ast } = import './compiler.akira'
-{ @write-file @get-files } = import './fisy.akira'
+{ @foreach-file @run @lexer @gen-ast } = import './compiler.akira'
+{ @write-file } = import './fisy.akira'
 help = import './help.akira'
 start-repl = import './repl.akira'
 watch = import './watchman.akira'
@@ -18,30 +18,54 @@ load-makefile = fn [key opts]
       (.replace /[-+|:]([a-zA-Z0-9$_])/g fn [i] { i.2.to-upper-case! })
     then run name ('module.exports = ' ++ code) | (!! cmd) | (-> &0 opts)
 
-cli = match {
-  ['compile' [a b]] this.compile a b
-  ['output' [a]] this.output a
-  ['run' [a]] this.run a
-  ['tokens' [a]] akira analyse a lex
-  ['ast' [a]] akira analyse a gen-ast
-  ['version' []] 'akira ' ++ me.version | output none
-  ['watch' [a b]] watch a (-> akira fn [name code] {
-    write-file name code a b } a)
-  ['make' [a b & c]] akira (load-makefile a (b || []) ++ c) 'Make.akira'
-  ['repl' []] start-repl!
-  ['help' []] help!
-  [undefined []] start-repl!
-  [else] help &0
+--cli = match {
+--  ['compile' [a b]] this.compile a b
+--  ['output' [a]] this.output a
+--  ['run' [a]] this.run a
+--  ['tokens' [a]] akira analyse a lex
+--  ['ast' [a]] akira analyse a gen-ast
+--  ['version' []] 'akira ' ++ me.version | output none
+--  ['watch' [a b]] watch a (-> akira fn [name code] {
+--    write-file name code a b } a)
+--  ['make' [a b & c]] akira (load-makefile a (b || []) ++ c) 'Make.akira'
+--  ['repl' []] start-repl!
+--  ['help' []] help!
+--  [undefined []] start-repl!
+--  [else] help &0
+--}
+
+compile = fn [from target] {
+  foreach-file fn [name code] {
+    write-file name code from target
+  } from
 }
 
+file-output = (-> foreach-file output &0)
+
+make = fn [cmd (arg = []) args]
+  foreach-file (load-makefile cmd arg ++ args) 'Make.akira'
+
 export *{
-  @cli cli
+  @cli fn [args] {
+    cmd = head args
+    opts = tail args
 
-  @compile fn [from target] {
-    akira fn [name code] { write-file name code from target } from }
+    cond
+      cmd is 'make' ? make opts.1 opts.2 opts.3
+      cmd is 'compile' ? compile opts.1 opts.2
+      cmd is 'output' ? map file-output opts
+      cmd is 'run' ? none
+      cmd is 'version' ? 'akira ' ++ me.version | output none
+      cmd is 'repl' || cmd is undefined ? start-repl!
+      cmd is 'help' ? help!
+      else ? help opts
+  }
 
-  @output (-> akira output &0)
+  @compile compile
+
+  @output file-output
 
   @run fn [filename context] {
-    akira fn [name code] { run name code context } filename }
+    foreach-file fn [name code] { run name code context } filename
+  }
 }

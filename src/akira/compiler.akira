@@ -1,17 +1,16 @@
+{ @get-files } = import './fisy.akira'
+
 util = require 'util'
 escodegen = require 'escodegen'
 dune = require 'dune'
-
-{ @get-files } = import './fisy.akira'
-
 lexer = require '../lang/lexer'
 parser = require '../lang/grammar'
 parser.yy = (require '../lang/nodes')
 
 to-ast = fn [body] {
-  { @type 'Program'
-  @body [
-    {
+  {
+    @type 'Program'
+    @body [{
       @type 'ExpressionStatement'
       @expression {
         @type 'CallExpression'
@@ -26,13 +25,13 @@ to-ast = fn [body] {
         }
         @arguments []
       }
-    }
-  ] }
+    }]
+  }
 }
 
 transform = fn [name parsed (f = to-ast)] {
   cond
-    parsed is none ? to-ast ''
+    parsed is none ? f ''
     else ? {
       context = {}
       body = parsed.compile context name
@@ -45,35 +44,40 @@ transform = fn [name parsed (f = to-ast)] {
     }
 }
 
-lex = fn [name code] { lexer code }
-parse = fn [name code] { code | lex name | parser.parse }
-gen-ast = fn [name code] { parse name code | transform name }
+parse = fn [code] code | lexer | parser.parse
 
-transpile = fn [name code] { code | gen-ast name | escodegen.generate }
+gen-ast = fn [name code] parse code | transform name
 
-akira = fn [cb filepath (f = transpile)] {
-  on-file = fn [name code] {
+transpile = fn [name code] code | gen-ast name | escodegen.generate
+
+each-file = fn [cb f] {
+  fn [name code] {
     try {
-      result = code | f name | cb name
+      code | f name | cb name
     } catch err {
       util.error 'Filename ' ++ name
       util.error err.stack
       process.exit 1
     }
-    result
   }
-  get-files on-file filepath
 }
+
+foreach-file = fn [cb filepath (f = transpile)]
+  get-files (each-file cb f) filepath
 
 run = fn [name code context] {
   try {
-    result = dune.string code name context
+    dune.string code name context
   } catch err {
     util.error name
     util.error err.stack
+    none
   }
-  result
 }
 
-export { @lex @parse @gen-ast @transpile @run
-  @akira @transform @escodegen }
+export {
+  @foreach-file
+  @gen-ast
+  @lexer
+  @run
+}
