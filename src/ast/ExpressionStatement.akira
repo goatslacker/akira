@@ -18,4 +18,4 @@ ExpressionStatement = fn [expr] {
     else convert-to-expression-statement expr expr.type
 }
 
-export *ExpressionStatement
+module.exports = ExpressionStatement

@@ -45,7 +45,7 @@ file-output = (-> foreach-file output &0)
 make = fn [cmd (arg = []) args]
   foreach-file (load-makefile cmd arg ++ args) 'Make.akira'
 
-export *{
+module.exports = {
   @cli fn [args] {
     cmd = head args
     opts = tail args

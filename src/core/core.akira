@@ -71,7 +71,7 @@ macro push fn [vec i v] {
     @right v }
 }
 
-export *{
+module.exports = {
 
   @eq (`
     eq = fn [a b] { a == b })

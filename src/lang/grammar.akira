@@ -104,7 +104,6 @@ bnf = {
     (o 'Recur')
     (o 'DefMacro')
     (o 'TypeSignature')
-    (o 'Modules')
     (o 'Class')
   ]
 
@@ -179,13 +178,8 @@ bnf = {
     (o 'Maps = Expression' (-> new Assignment $1 $3))
   ]
 
-  @Modules [
-    (o 'MODULE STR Body' (-> new Modules $2 $3))
-  ]
-
   @Exporting [
-    (o 'EXPORT Expression' (-> new Export $2 false))
-    (o 'EXPORT * Expression' (-> new Export $3 true))
+    (o 'EXPORT Expression' (-> new Export $2))
   ]
 
   @Cloning [
@@ -553,4 +547,4 @@ parser.lexer = {
   })
 }
 
-export *parser
+module.exports = parser

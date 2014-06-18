@@ -15,7 +15,7 @@ rx = {
 identifiers = {
   @KEYWORDS ['if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none' 'do'
     'let' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match' 'maybe'
-    'Maybe' 'module' 'class' 'task']
+    'Maybe' 'class' 'task']
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
   @LEFT_OPERATORS ['++' '!!']
   @RIGHT_OPERATORS ['+:' '<<']
@@ -119,4 +119,4 @@ tokenize = fn [code]
     (.filter filter-whitespace)
 
 
-export *tokenize
+module.exports = tokenize

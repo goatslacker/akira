@@ -52,4 +52,4 @@ call = fn [ref params]
       else return-function callee args params context line
   }
 
-export *call
+module.exports = call

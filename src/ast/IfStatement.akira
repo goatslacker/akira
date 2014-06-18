@@ -24,4 +24,4 @@ IfStatement = fn [test consequent alternate] {
     }
 }
 
-export *IfStatement
+module.exports = IfStatement

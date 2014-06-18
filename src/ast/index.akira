@@ -10,4 +10,4 @@ ast = fn [val context]
 
 ast.gen = fn [context] -> ast &0 context
 
-export *ast
+module.exports = ast

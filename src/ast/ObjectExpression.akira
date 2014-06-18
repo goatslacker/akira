@@ -13,4 +13,4 @@ ObjectExpression = fn [props] {
     @properties (map convert-to-property props) }
 }
 
-export *ObjectExpression
+module.exports = ObjectExpression
