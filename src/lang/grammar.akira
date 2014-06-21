@@ -329,7 +329,7 @@ bnf = {
   ]
 
   @Class [
-    (o 'CLASS Identifier TypeValues',
+    (o 'TYPEALIAS Identifier TypeValues',
       (-> new Class (new TypeSignature $2 '' $3)))
   ]
 
