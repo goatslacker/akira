@@ -10,4 +10,9 @@ ast = fn [val context]
 
 ast.gen = fn [context] -> ast &0 context
 
+ast.node = fn [name f] {
+  f.akira-fn = name
+  f
+}
+
 module.exports = ast

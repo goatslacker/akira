@@ -48,12 +48,12 @@ return-identifier = match {
 parse-identifier = fn [t chunk]
   let
     item = extract t chunk
-    token = identifiers | find (-> &0.indexOf item.2 | (>= 0))
+    token = identifiers | find (-> &0.indexOf item.1 | (>= 0))
   then
-    return-identifier (token || t) item.2
+    return-identifier (token || t) item.1
 
 convert-regexp = fn [item]
-  RegExp item.3 item.4
+  RegExp item.2 item.3
 
 return-token-regexp = return-token 'REGEXP'
 parse-regular-expressions = (-> extract &! | convert-regexp | return-token-regexp)
@@ -71,7 +71,7 @@ get-token = fn [type chunk]
     type is 'ARGS' ? [type (extract type chunk | (!! 1))]
     type is 'WHITESPACE' ||
     type is 'TERMINATOR' ? ' '
-    else ? [chunk.1 chunk.1]
+    else ? [chunk.0 chunk.0]
 
 process-chunk = fn [code n]
   let
@@ -94,7 +94,7 @@ incr-line = match {
 }
 
 get-next-index = fn [token]
-  { @index (token.2.toString! | (.length) | get-length token.1)
+  { @index (token.1.toString! | (.length) | get-length token.0)
   @token token }
 
 return-tokens = match {
@@ -105,13 +105,13 @@ return-tokens = match {
     tokens.push token
     recur
       (code.substr index code.length),
-      { @line (incr-line token.1 n.line) },
+      { @line (incr-line token.0 n.line) },
       tokens
   }
 }
 
 filter-whitespace = fn [token]
-  not (ignore !! token.1)
+  not (ignore !! token.0)
 
 tokenize :: String -> Vector
 tokenize = fn [code]

@@ -33,7 +33,7 @@ macro new fn [name & args] {
 
 get-match = fn [action] {
   x = unwrap.exec action
-  if x then x.2 else '({{action}}())'
+  if x then x.1 else '({{action}}())'
 }
 
 o = fn [pattern action] {
@@ -536,9 +536,9 @@ parser.lexer = {
   @lex (fn [] {
     ref = this.tokens !! this.pos || ['']
     this.pos = this.pos + 1
-    this.yytext = ref !! 1
-    this.yylineno = ref !! 2
-    ref !! 0
+    this.yytext = ref.1
+    this.yylineno = ref.2
+    ref.0
   })
 
   @set-input (fn [tokens] {

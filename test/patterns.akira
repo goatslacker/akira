@@ -16,7 +16,7 @@ gt-ten = match {
 ok false (gt-ten 11)
 ok true (gt-ten 2)
 
-starts-with = fn [noun prefix] { prefix == noun.1 + noun.2 }
+starts-with = fn [noun prefix] { prefix == noun.0 + noun.1 }
 
 spanish-gender-of-noun = match {
   [(starts-with &0 'el')] 'male'
