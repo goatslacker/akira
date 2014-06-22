@@ -15,7 +15,7 @@ rx = {
 identifiers = {
   @KEYWORDS ['if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none' 'do'
     'let' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match' 'maybe'
-    'Maybe' 'typealias' 'task']
+    'Maybe' 'class' 'typealias' 'task' 'new']
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
   @LEFT_OPERATORS ['++' '!!']
   @RIGHT_OPERATORS ['+:' '<<']
