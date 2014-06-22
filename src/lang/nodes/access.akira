@@ -1,0 +1,22 @@
+MemberExpression = require 'ast/MemberExpression'
+ast = require 'ast'
+unwrap-expression-statement = require 'unwrapExpressionStatement'
+
+Access = class {
+  [id prop] {
+    this.id = id
+    this.prop = prop
+  }
+
+  compile [context] {
+    id = ast this.id context | unwrap-expression-statement
+    prop = ast this.prop context
+    computed = prop.type == 'Literal'
+
+    MemberExpression id prop computed
+  }
+}
+
+Access.prototype.akira-name = 'Access'
+
+module.exports = Access
