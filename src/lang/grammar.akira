@@ -121,7 +121,6 @@ bnf = {
     (o 'Let')
     (o 'Pipeline')
     (o 'Cloning')
-    (o 'Class')
     (o 'Instantiate')
     (o 'Macro')
     (o 'Raise')
@@ -131,6 +130,7 @@ bnf = {
 
   @Value [
     (o 'Accessibles')
+    (o 'Class')
     (o 'Operation')
   ]
 
