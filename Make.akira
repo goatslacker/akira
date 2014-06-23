@@ -3,6 +3,8 @@ esmangle = require 'esmangle'
 esprima = require 'esprima'
 fs = require 'fs'
 path = require 'path'
+obj2str = require 'obj2str'
+
 akira = require (path.join process.env.PWD 'lib/akira/index.js')
 
 mangle = fn [data] {
@@ -20,7 +22,7 @@ mangle = fn [data] {
 
 transform-core-fns = fn [code core] {
   name = core.key.name
-  ast = core.value | JSON.stringify
+  ast = core.value | obj2str
   code ++ '{{name}}: {{ast}},'
 }
 
@@ -34,7 +36,7 @@ gen-compile-core-ast = fn [from target] {
   }
 }
 
-newline = fn [] { '' }
+newline = (= '')
 
 time = fn [f] {
   start = Date.now!
