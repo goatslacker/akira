@@ -47,16 +47,6 @@ macro obj-set fn [obj key val] {
   @right val }
 }
 
-macro single-if fn [test body] {
-  { @type 'IfStatement'
-  @test test
-  @consequent {
-    @type 'BlockStatement'
-    @body [body]
-  }
-  @alternate none }
-}
-
 macro decrement fn [i] {
   { @type 'UpdateExpression' @operator '--' @argument i @prefix true }
 }
@@ -74,8 +64,7 @@ macro push fn [vec i v] {
 export {
   @eq fn [a b] { a == b }
 
-  @eq-val fn [a b] {
-      if a is b then a else none }
+  @eq-val fn [a b] { a if a is b }
 
   @deep-eq fn [a b] {
       if a.length isnt b.length
@@ -217,7 +206,7 @@ export {
       next = fn [i] fn [value] {
         decrement count
         push results i value
-        single-if (count is 0) cb << results
+        (cb results) if count is 0
       }
       vec.for-each fn [x i] { f x next << i }
     }
@@ -275,12 +264,6 @@ export {
   @bind fn [f & args] {
       fn [] { f.apply f args }
     }
-
-  @If fn [yn f] {
-      if yn then f! else none
-    }
-
-  @when fn [is-true callback] { single-if is-true (callback!) }
 
   @maybe-seq fn [& args] {
       foldl (fn [a b] {
