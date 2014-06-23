@@ -1,6 +1,5 @@
 { @get-files } = import './fisy.akira'
 
-util = require 'util'
 escodegen = require 'escodegen'
 dune = require 'dune'
 lexer = require '../lang/lexer'
@@ -55,8 +54,8 @@ each-file = fn [cb f] {
     try {
       code | f name | cb name
     } catch err {
-      util.error 'Filename ' ++ name
-      util.error err.stack
+      console.error 'Filename ' ++ name
+      console.error err.stack
       process.exit 1
     }
   }
@@ -69,8 +68,8 @@ run = fn [name code context] {
   try {
     dune.string code name context
   } catch err {
-    util.error name
-    util.error err.stack
+    console.error name
+    console.error err.stack
     none
   }
 }
