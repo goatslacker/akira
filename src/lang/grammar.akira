@@ -178,6 +178,7 @@ bnf = {
     (o 'Access = Expression' (-> n Assignment $1 $3))
     (o 'Vectors = Expression' (-> n Assignment $1 $3))
     (o 'Maps = Expression' (-> n Assignment $1 $3))
+    (o 'AccessOperation = Expression' (-> n Assignment $1 $3))
   ]
 
   @Exporting [
@@ -498,6 +499,9 @@ bnf = {
     (o 'LEFT_OPERATORS Value',
       (-> n Declaration '->' (n Arguments 'it'),
         (n Operation 'it' $1 $2)))
+    (o 'ACCESSOR_OPERATOR Value',
+      (-> n Declaration '->' (n Arguments 'it'),
+        (n Operation 'it' $1 $2)))
     (o '= Value' (-> n Declaration '->' (n Arguments 'it') $2))
     (o '+ Value',
       (-> n Declaration '->' (n Arguments 'it'),
@@ -520,9 +524,15 @@ bnf = {
     (o '( SugaryFunctions )' (-> $2))
   ]
 
+  @AccessOperation [
+    (o 'Value ACCESSOR_OPERATOR OptTerminator Value',
+      (-> n Operation $1 $2 $4))
+  ]
+
   @Operation [
     (o 'Value COMPARE OptTerminator Value' (-> n Compare $1 $2 $4))
     (o 'Value LOGIC OptTerminator Value' (-> n Logic $1 $2 $4))
+    (o 'AccessOperation')
     (o 'Value LEFT_OPERATORS OptTerminator Value',
       (-> n Operation $1 $2 $4))
     (o 'Value RIGHT_OPERATORS OptTerminator Value',
@@ -554,6 +564,7 @@ operators = [
   ['left' 'LOGIC']
   ['left' 'COMPARE']
   ['left' 'LEFT_OPERATORS']
+  ['left' 'ACCESSOR_OPERATOR']
   ['left' '+' '-']
   ['left' '*' '**' '/']
 ]

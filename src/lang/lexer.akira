@@ -17,7 +17,8 @@ identifiers = {
     'let' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match' 'maybe'
     'Maybe' 'class' 'typealias' 'task' 'new']
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
-  @LEFT_OPERATORS ['++' '!!']
+  @ACCESSOR_OPERATOR ['!!']
+  @LEFT_OPERATORS ['++']
   @RIGHT_OPERATORS ['+:' '<<']
   @DO_OPERATOR ['<-']
   @TYPE_OPERATOR ['::']

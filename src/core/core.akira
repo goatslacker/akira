@@ -35,18 +35,6 @@ macro each fn [sym name test] {
   @each false }
 }
 
-macro obj-set fn [obj key val] {
-  { @type 'AssignmentExpression'
-  @operator '='
-  @left {
-    @type 'MemberExpression'
-    @computed true
-    @object obj
-    @property key
-  }
-  @right val }
-}
-
 macro decrement fn [i] {
   { @type 'UpdateExpression' @operator '--' @argument i @prefix true }
 }
@@ -107,7 +95,7 @@ export {
       x = {}
       coll.for-each fn [i] {
         [key val] = f i
-        obj-set x key val
+        x !! key = val
       }
       x
     }
