@@ -5,18 +5,34 @@ fs = require 'fs'
 path = require 'path'
 akira = require (path.join process.env.PWD 'lib/akira/index.js')
 
-mangle = fn [data]
-  let
-    ast = esprima.parse data
-    optimized = esmangle.optimize ast none
-    result = esmangle.mangle optimized
-    compressed = escodegen.generate result {
-      @format {
-        @renumber true @hexadecimal true @escapeless true
-        @compact true @semicolons false @parentheses false
-      }
+mangle = fn [data] {
+  ast = esprima.parse data
+  optimized = esmangle.optimize ast none
+  result = esmangle.mangle optimized
+  compressed = escodegen.generate result {
+    @format {
+      @renumber true @hexadecimal true @escapeless true
+      @compact true @semicolons false @parentheses false
     }
-  then compressed
+  }
+  compressed
+}
+
+transform-core-fns = fn [code core] {
+  name = core.key.name
+  ast = core.value | JSON.stringify
+  code ++ '{{name}}: {{ast}},'
+}
+
+gen-compile-core-ast = fn [from target] {
+  fn [name ast] {
+    ret = last ast.body.0.expression.callee.body.body
+    obj-lit = ret.argument.properties
+    meat = foldl transform-core-fns obj-lit ''
+    code = mangle 'module.exports = { {{meat}} }'
+    akira.write name code from target
+  }
+}
 
 newline = fn [] { '' }
 
@@ -67,20 +83,19 @@ create-compile = fn [name from to] {
   }
 }
 
-create-compile-mangle = fn [name from to] {
-  fn [] {
-    print 'Building and Minifying {{name}}'
-    akira.compile from to mangle
-    print 'Done.'
-  }
-}
-
 build = fn [] {
   create-compile 'parser' 'src/lang' 'lib/lang' | time
 }
 
 build-core = fn [] {
-  create-compile-mangle 'core' 'src/core/core.akira' 'lib/core' | time
+  fn [] {
+    print 'Building and Minifying core'
+    from = 'src/core/core.akira'
+    target = 'lib/core'
+    compile-core-ast = gen-compile-core-ast from target
+    akira.ast from target compile-core-ast
+    print 'Done.'
+  } | time
 }
 
 build-akira = fn [] {

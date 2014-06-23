@@ -71,107 +71,81 @@ macro push fn [vec i v] {
     @right v }
 }
 
-module.exports = {
+export {
+  @eq fn [a b] { a == b }
 
-  @eq (`
-    eq = fn [a b] { a == b })
+  @eq-val fn [a b] {
+      if a is b then a else none }
 
-  @eq-val (`
-    eq-val = fn [a b] {
-      if a is b then a else none })
-
-  @deep-eq (`
-    deep-eq = fn [a b] {
+  @deep-eq fn [a b] {
       if a.length isnt b.length
         then false
         else if a.length is 0
           then false
-          else zip-with (==) a b | foldl (&&) | eq true })
+          else zip-with (==) a b | foldl (&&) | eq true }
 
-  @neq (`
-    neq = fn [a b] { a != b })
+  @neq fn [a b] { a != b }
 
-  @gt (`
-    gt = fn [a b] { a > b })
+  @gt fn [a b] { a > b }
 
-  @lt (`
-    lt = fn [a b] { a < b })
+  @lt fn [a b] { a < b }
 
-  @gte (`
-    gte = fn [a b] { a >= b })
+  @gte fn [a b] { a >= b }
 
-  @lte (`
-    lte = fn [a b] { a <= b })
+  @lte fn [a b] { a <= b }
 
-  @and (`
-    and = fn [a b] { a && b })
+  @and fn [a b] { a && b }
 
-  @or (`
-    or = fn [a b] { a || b })
+  @or fn [a b] { a || b }
 
-  @head (`
-    head = fn [[x]] { x })
+  @head fn [[x]] { x }
 
-  @init (`
-    init = fn [[& xs x]] { xs })
+  @init fn [[& xs x]] { xs }
 
-  @tail (`
-    tail = fn [[x & xs]] { xs })
+  @tail fn [[x & xs]] { xs }
 
-  @last (`
-    last = fn [xs] { xs !! xs.length - 1 })
+  @last fn [xs] { xs !! xs.length - 1 }
 
-  @get (`
-    get = fn [obj prop] { obj !! prop })
+  @get fn [obj prop] { obj !! prop }
 
-  @length (`
-    length = fn [of] { of.length })
+  @length fn [of] { of.length }
 
-  @join (`
-    join = fn [by vec] { vec.join by })
+  @join fn [by vec] { vec.join by }
 
-  @reverse (`
-    reverse = fn [coll] { coll.reverse! })
+  @reverse fn [coll] { coll.reverse! }
 
-  @to-map (`
-    to-map = fn [f coll] {
+  @to-map fn [f coll] {
       x = {}
       coll.for-each fn [i] {
         [key val] = f i
         obj-set x key val
       }
       x
-    })
+    }
 
-  @concat (`
-    concat = match {
+  @concat (match {
       [a] a
       [a b] a ++ b
       [a b c] a ++ b ++ c
       [& a] foldl fn [a b] { a ++ b } a
     })
 
-  @count (`
-    count = match {
+  @count (match {
       [vec] vec.length
       [vec f] filter f vec | (.length)
     })
 
-  @zip-with (`
-    zip-with = fn [f [a & as] [b & bs]] {
+  @zip-with fn [f [a & as] [b & bs]] {
       if (a is undefined) || (b is undefined)
         then []
-        else (f a b) +: (zip-with f as bs) })
+        else (f a b) +: (zip-with f as bs) }
 
-  @average (`
-    average = fn [vec] {
-      foldl sum vec | (/ vec.length) })
+  @average fn [vec] {
+      foldl sum vec | (/ vec.length) }
 
-  @compact (`
-    compact = fn [vec] { filter (-> Boolean &0) vec })
+  @compact fn [vec] { filter (-> Boolean &0) vec }
 
-  @flatten (`
-    flatten = fn [vec (f = Array.is-array)] {
+  @flatten fn [vec (f = Array.is-array)] {
       result = []
       vec.for-each (fn [x] {
         if f x
@@ -179,10 +153,9 @@ module.exports = {
           else result.push x
       })
       result
-    })
+    }
 
-  @concat-map (`
-    concat-map = fn [f vec] {
+  @concat-map fn [f vec] {
       result = []
       vec.for-each (fn [x] {
         item = f x
@@ -191,46 +164,36 @@ module.exports = {
           else result.push item
       })
       result
-    })
+    }
 
-  @assert (`
-    assert = fn [a b] {
+  @assert fn [a b] {
       if a != b
         then {
           raise 'Expected {{a}} == {{b}}'
           false
         }
         else true
-    })
+    }
 
-  @find (`
-    find = fn [f ds] { each i ds ((f ds !! i) is true) })
+  @find fn [f ds] { each i ds ((f ds !! i) is true) }
 
-  @call (`
-    call = fn [obj prop & args] { (obj !! prop) | (.apply obj, args) })
+  @call fn [obj prop & args] { (obj !! prop) | (.apply obj, args) }
 
-  @keys (`
-    keys = Object.keys)
+  @keys Object.keys
 
-  @values (`
-    values = fn [x] { map fn [k] { x !! k } (keys x) })
+  @values fn [x] { map fn [k] { x !! k } (keys x) }
 
-  @key (`
-    key = fn [v x] { find (== v) x })
+  @key fn [v x] { find (== v) x }
 
-  @value (`
-    value = fn [k x] { x !! k })
+  @value fn [k x] { x !! k }
 
-  @filter (`
-    filter = fn [f vec] {
-      Array.prototype.filter.call vec (-> f &0) })
+  @filter fn [f vec] {
+      Array.prototype.filter.call vec (-> f &0) }
 
-  @map (`
-    map = fn [f vec] {
-      Array.prototype.map.call vec (-> f &0) })
+  @map fn [f vec] {
+      Array.prototype.map.call vec (-> f &0) }
 
-  @foldl (`
-    foldl = match {
+  @foldl (match {
       [f vec] {
         if vec.length is 0
           then []
@@ -243,14 +206,12 @@ module.exports = {
       }
     })
 
-  @foldr (`
-    foldr = fn [f vec] {
+  @foldr fn [f vec] {
       if vec.length is 0
         then []
-        else Array.prototype.reduce-right.call vec (-> f &0 &1) })
+        else Array.prototype.reduce-right.call vec (-> f &0 &1) }
 
-  @asyncmap (`
-    asyncmap = fn [f vec cb] {
+  @asyncmap fn [f vec cb] {
       count = vec.length
       results = []
       next = fn [i] fn [value] {
@@ -259,64 +220,48 @@ module.exports = {
         single-if (count is 0) cb << results
       }
       vec.for-each fn [x i] { f x next << i }
-    })
+    }
 
-  @intersect (`
-    intersect = fn [vec1 vec2] {
-      filter (-> vec2.indexOf &0 | (!= -1)) vec1 })
+  @intersect fn [vec1 vec2] {
+      filter (-> vec2.indexOf &0 | (!= -1)) vec1 }
 
-  @max (`
-    max = fn [vec] {
-      foldl (fn [a b] { if a > b then a else b }) vec })
+  @max fn [vec] {
+      foldl (fn [a b] { if a > b then a else b }) vec }
 
-  @min (`
-    min = fn [vec] {
-      foldl (fn [a b] { if a < b then a else b }) vec })
+  @min fn [vec] {
+      foldl (fn [a b] { if a < b then a else b }) vec }
 
-  @nothing (`
-    nothing = fn [f vec] { filter f vec | (.length) | (== 0) })
+  @nothing fn [f vec] { filter f vec | (.length) | (== 0) }
 
-  @randomize (`
-    randomize = fn [vec] {
-      sort (-> (Math.random!) > 0.5) vec })
+  @randomize fn [vec] {
+      sort (-> (Math.random!) > 0.5) vec }
 
-  @take (`
-    take = fn [n vec] { vec.slice 0 n })
+  @take fn [n vec] { vec.slice 0 n }
 
-  @drop (`
-    drop = fn [n vec] { vec.slice n })
+  @drop fn [n vec] { vec.slice n }
 
-  @take-while (`
-    take-while = fn [f [x & xs]] {
+  @take-while fn [f [x & xs]] {
       if (f x) is true
         then x +: (take-while f xs)
-        else [] })
+        else [] }
 
-  @apply (`
-    apply = fn [f & args] { f.apply f args })
+  @apply fn [f & args] { f.apply f args }
 
-  @compose (`
-    compose = fn [f g] { fn [x] { x | g | f } })
+  @compose fn [f g] { fn [x] { x | g | f } }
 
-  @sequence (`
-    sequence = fn [f g] { fn [x] { x | f | g } })
+  @sequence fn [f g] { fn [x] { x | f | g } }
 
-  @id (`
-    id = fn [a] { a })
+  @id fn [a] { a }
 
-  @flip (`
-    flip = fn [f a b] { f b a })
+  @flip fn [f a b] { f b a }
 
-  @partial (`
-    partial = fn [f & args] {
-      fn [& xargs] { f.apply f, args ++ xargs } })
+  @partial fn [f & args] {
+      fn [& xargs] { f.apply f, args ++ xargs } }
 
-  @partialr (`
-    partialr = fn [f & args] {
-      fn [& xargs] { f.apply f, xargs ++ args } })
+  @partialr fn [f & args] {
+      fn [& xargs] { f.apply f, xargs ++ args } }
 
-  @curry (`
-    curry = fn [f] {
+  @curry fn [f] {
       l = f.length
       c = fn [args] {
         fn [& arg] {
@@ -325,148 +270,102 @@ module.exports = {
         }
       }
       if l < 1 then f else c []
-    })
+    }
 
-  @bind (`
-    bind = fn [f & args] {
+  @bind fn [f & args] {
       fn [] { f.apply f args }
-    })
+    }
 
-  @If (`
-    If = fn [yn f] {
+  @If fn [yn f] {
       if yn then f! else none
-    })
+    }
 
-  @when (`
-   when = fn [is-true callback] { single-if is-true (callback!) })
+  @when fn [is-true callback] { single-if is-true (callback!) }
 
-  @maybe-seq (`
-    maybe-seq = fn [& args] {
+  @maybe-seq fn [& args] {
       foldl (fn [a b] {
         if a is none then none else b a
       }) ([true] ++ args)
-    })
+    }
 
-  @show (`
-    show = fn [i] { i.to-string! })
+  @show fn [i] { i.to-string! }
 
-  @mod (`
-    mod = fn [a b] { bin-expr '%' a b })
+  @mod fn [a b] { bin-expr '%' a b }
 
-  @bit-and (`
-    bit-and = fn [a b] { bin-expr '&' a b })
+  @bit-and fn [a b] { bin-expr '&' a b }
 
-  @bit-or (`
-    bit-or = fn [a b] { bin-expr '|' a b })
+  @bit-or fn [a b] { bin-expr '|' a b }
 
-  @bit-xor (`
-    bit-xor = fn [a b] { bin-expr '^' a b })
+  @bit-xor fn [a b] { bin-expr '^' a b }
 
-  @bit-shiftl (`
-    bit-shiftl = fn [a b] { bin-expr '<<' a b })
+  @bit-shiftl fn [a b] { bin-expr '<<' a b }
 
-  @bit-shiftr (`
-    bit-shiftr = fn [a b] { bin-expr '>>' a b })
+  @bit-shiftr fn [a b] { bin-expr '>>' a b }
 
-  @bit-ushiftr (`
-    bit-ushiftr = fn [a b] { bin-expr '>>>' a b })
+  @bit-ushiftr fn [a b] { bin-expr '>>>' a b }
 
-  @square (`
-    square = fn [x] { x * x })
+  @square fn [x] { x * x }
 
-  @sum (`
-    sum = fn [a b] { a + b })
+  @sum fn [a b] { a + b }
 
-  @sub (`
-    sub = fn [a b] { a - b })
+  @sub fn [a b] { a - b }
 
-  @prod (`
-    prod = fn [a b] { a * b })
+  @prod fn [a b] { a * b }
 
-  @div (`
-    div = fn [a b] { a / b })
+  @div fn [a b] { a / b }
 
-  @even (`
-    even = fn [n] { (bin-expr '%' n 2) | (== 0) })
+  @even fn [n] { (bin-expr '%' n 2) | (== 0) }
 
-  @odd (`
-    odd = fn [n] { (bin-expr '%' n 2) | (!= 0) })
+  @odd fn [n] { (bin-expr '%' n 2) | (!= 0) }
 
-  @abs (`
-    abs = fn [n] { Math.abs n })
+  @abs fn [n] { Math.abs n }
 
-  @sqrt (`
-    sqrt = fn [n] { Math.sqrt n })
+  @sqrt fn [n] { Math.sqrt n }
 
-  @pow (`
-    pow = fn [a b] { Math.pow a b })
+  @pow fn [a b] { Math.pow a b }
 
-  @inc (`
-    inc = fn [x] { x + 1 })
+  @inc fn [x] { x + 1 }
 
-  @dec (`
-    dec = fn [x] { x - 1 })
+  @dec fn [x] { x - 1 }
 
-  @false? (`
-    false? = fn [x] { x is false })
+  @false? fn [x] { x is false }
 
-  @true? (`
-    true? = fn [x] { x is true })
+  @true? fn [x] { x is true }
 
-  @pos? (`
-    pos? = fn [x] { x > 0 })
+  @pos? fn [x] { x > 0 }
 
-  @neg? (`
-    neg? = fn [x] { x < 0 })
+  @neg? fn [x] { x < 0 }
 
-  @zero? (`
-    zero? = fn [x] { x is 0 })
+  @zero? fn [x] { x is 0 }
 
-  @num? (`
-    num? = fn [x] { x is Number })
+  @num? fn [x] { x is Number }
 
-  @str? (`
-    str? = fn [x] { x is String })
+  @str? fn [x] { x is String }
 
-  @map? (`
-    map? = fn [x] { x is Map })
+  @map? fn [x] { x is Map }
 
-  @vector? (`
-    vector? = fn [x] { x is Vector })
+  @vector? fn [x] { x is Vector }
 
-  @bool? (`
-    bool? = fn [x] { x is true || x is false })
+  @bool? fn [x] { x is true || x is false }
 
-  @none? (`
-    none? = fn [x] { x is none })
+  @none? fn [x] { x is none }
 
-  @camelize (`
-    camelize = fn [str] {
-      str.replace /(-|_)+([a-zA-Z0-9$_])/g fn [i] { i.1.to-upper-case! } })
+  @camelize fn [str] {
+      str.replace /(-|_)+([a-zA-Z0-9$_])/g fn [i] { i.1.to-upper-case! } }
 
-  @uppercase (`
-    uppercase = fn [str] { str.to-upper-case! })
+  @uppercase fn [str] { str.to-upper-case! }
 
-  @stringify (`
-    stringify = fn [& args] {
-      foldl concat args
-    })
+  @stringify fn [& args] { foldl concat args }
 
-  @capitalize (`
-    capitalize = fn [str] { (str.0.to-upper-case!) ++ (str.slice 1) })
+  @capitalize fn [str] { (str.0.to-upper-case!) ++ (str.slice 1) }
 
-  @chars (`
-    chars = fn [f str] { str.split '' | map f })
+  @chars fn [f str] { str.split '' | map f }
 
-  @condense (`
-    condense = fn [str] { str.replace /\ /g '' })
+  @condense fn [str] { str.replace /\ /g '' }
 
-  @lines (`
-    lines = fn [f str] { str.split '\n' | map f })
+  @lines fn [f str] { str.split '\n' | map f }
 
-  @words (`
-    words = fn [f str] { str.split ' ' | map f })
+  @words fn [f str] { str.split ' ' | map f }
 
-  @print (`
-    print = fn [& args] { console.log.apply console args })
+  @print fn [& args] { console.log.apply console args }
 }

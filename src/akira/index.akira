@@ -40,6 +40,10 @@ compile = fn [from target (f = id)] {
   } from
 }
 
+to-ast = fn [from target (cb = analyse)] {
+  foreach-file cb from gen-ast
+}
+
 file-output = (-> foreach-file output &0)
 
 make = fn [cmd (arg = []) args]
@@ -62,6 +66,10 @@ module.exports = {
   }
 
   @compile compile
+
+  @ast to-ast
+
+  @write fn [name code from target] { write-file name code from target }
 
   @output file-output
 
