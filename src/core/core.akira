@@ -170,6 +170,17 @@ module.exports = {
   @compact (`
     compact = fn [vec] { filter (-> Boolean &0) vec })
 
+  @flatten (`
+    flatten = fn [vec (f = Array.is-array)] {
+      result = []
+      vec.for-each (fn [x] {
+        if f x
+          then flatten x | Array.prototype.push.apply result
+          else result.push x
+      })
+      result
+    })
+
   @concat-map (`
     concat-map = fn [f vec] {
       result = []

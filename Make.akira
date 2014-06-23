@@ -1,6 +1,22 @@
+escodegen = require 'escodegen'
+esmangle = require 'esmangle'
+esprima = require 'esprima'
 fs = require 'fs'
 path = require 'path'
 akira = require (path.join process.env.PWD 'lib/akira/index.js')
+
+mangle = fn [data]
+  let
+    ast = esprima.parse data
+    optimized = esmangle.optimize ast none
+    result = esmangle.mangle optimized
+    compressed = escodegen.generate result {
+      @format {
+        @renumber true @hexadecimal true @escapeless true
+        @compact true @semicolons false @parentheses false
+      }
+    }
+  then compressed
 
 newline = fn [] { '' }
 
@@ -51,12 +67,20 @@ create-compile = fn [name from to] {
   }
 }
 
+create-compile-mangle = fn [name from to] {
+  fn [] {
+    print 'Building and Minifying {{name}}'
+    akira.compile from to mangle
+    print 'Done.'
+  }
+}
+
 build = fn [] {
   create-compile 'parser' 'src/lang' 'lib/lang' | time
 }
 
 build-core = fn [] {
-  create-compile 'core' 'src/core/core.akira' 'lib/core' | time
+  create-compile-mangle 'core' 'src/core/core.akira' 'lib/core' | time
 }
 
 build-akira = fn [] {
@@ -68,8 +92,15 @@ build-ast = fn [] {
 }
 
 build-all = fn [] {
-  [build build-core build-ast build-akira build test] |
-    map fn [f] { f! | newline | print }
+  let tasks = [
+    build
+    build-core
+    build-ast
+    build-akira
+    build
+    test
+  ]
+  then (-> map fn [f] { f! | newline | print } tasks) | time
 }
 
 export {

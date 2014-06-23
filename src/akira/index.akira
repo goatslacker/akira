@@ -34,9 +34,9 @@ load-makefile = fn [key opts]
 --  [else] help &0
 --}
 
-compile = fn [from target] {
+compile = fn [from target (f = id)] {
   foreach-file fn [name code] {
-    write-file name code from target
+    write-file name (f code) from target
   } from
 }
 
