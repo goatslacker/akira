@@ -1,9 +1,9 @@
-safe-head = fn [v] do {
-  v !! 0
-}
+--safe-head = fn [v] do {
+--  v !! 0
+--}
 
-safe-head [1] | ok 1
-safe-head none | ok none
+--safe-head [1] | ok 1
+--safe-head none | ok none
 
 a = { @foo 'bar' }
 b = { @baz 'bar' }

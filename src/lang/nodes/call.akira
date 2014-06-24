@@ -19,16 +19,18 @@ run-macro = fn [name xargs context]
   then vm.run-in-new-context code context
 
 checkCallType = fn [name params context line] {
-  let params-unbalanced = do {
-    type = Store.types !! name
+  type = Store.types !! name
+  if type then {
     tparams = type.params
-    tparams.length != params.length
-  }
-  then if params-unbalanced is true
-    then console.warn '{{name}} was signed with {{tparams.length}} ' ++
-      'arguments yet it was provided with {{params.length}} ' ++
-      'at {{context.$$$filename}} line {{line}}'
-    else none
+    if tparams then {
+      params-unbalanced = tparams.length != params.length
+      if params-unbalanced is true
+        then console.warn '{{name}} was signed with {{tparams.length}} ' ++
+          'arguments yet it was provided with {{params.length}} ' ++
+          'at {{context.$$$filename}} line {{line}}'
+        else none
+    } else none
+  } else none
 }
 
 unwrap = fn [xargs] maybe xargs { map unwrapExpressionStatement xargs }

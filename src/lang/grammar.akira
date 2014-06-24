@@ -244,25 +244,14 @@ bnf = {
     (o 'MAYBE Value TBody' (-> n MaybeSeq $2 $3))
   ]
 
-  @DoOperation [
-    (o 'Vectors DO_OPERATOR Invocation TERMINATOR' (-> { @args $1 @call $3 }))
-    (o 'Vectors DO_OPERATOR Identifier TERMINATOR' (-> { @args $1 @call $3 }))
-    (o 'Expression TERMINATOR' (-> { @expr $1 }))
-  ]
-
-  @DoOperations [
-    (o 'DoOperation' (-> n Arguments $1))
-    (o 'DoOperations DoOperation' (-> n Arguments $1 $2))
-  ]
-
   @Async [
-    (o 'TASK [ Parameters ] OptTerminator AsyncDo' (-> n Async $6 $3))
+    (o 'TASK [ ] TBody' (-> n Async none $4))
+    (o 'TASK [ Parameters ] TBody' (-> n Async $3 $5))
   ]
 
-  @AsyncDo [
-    (o 'DO Terminator DoOperations' (-> n Do $3))
-    (o 'DO { OptTerminator DoOperations }' (-> n Do $4))
-  ]
+--  @AsyncDo [
+--    (o 'DO CallableValue Declaration' (-> n Do $3 $4))
+--  ]
 
   @Conditional [
     (o 'Value ? Body Terminator' (-> [$1 $3]))
