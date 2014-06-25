@@ -1,0 +1,25 @@
+ast = require 'ast'
+CallExpression = require 'ast/CallExpression'
+FunctionExpression = require 'ast/FunctionExpression'
+Identifier = require 'ast/Identifier'
+MemberExpression = require 'ast/MemberExpression'
+
+xthen = Identifier 'then'
+
+Await = class {
+  [call] {
+    this.call = call
+  }
+
+  compile [context] {
+    call = ast this.call context
+    callback = FunctionExpression none [] []
+--    callback.__await = true
+
+    node = CallExpression (MemberExpression call xthen) [callback]
+    node.__await = true
+    node
+  }
+}
+
+module.exports = Await
