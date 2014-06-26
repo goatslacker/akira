@@ -49,6 +49,10 @@ file-output = (-> foreach-file output &0)
 make = fn [cmd (arg = []) args]
   foreach-file (load-makefile cmd arg ++ args) 'Make.akira'
 
+cli-run = fn [filename] {
+  foreach-file fn [name code] { run name code } filename
+}
+
 module.exports = {
   @cli fn [args] {
     cmd = head args
@@ -58,7 +62,7 @@ module.exports = {
       cmd is 'make' ? make opts.0 opts.1 opts.2
       cmd is 'compile' ? compile opts.0 opts.1
       cmd is 'output' ? map file-output opts
-      cmd is 'run' ? none
+      cmd is 'run' ? cli-run opts.0
       cmd is 'version' ? 'akira ' ++ me.version | output none
       cmd is 'repl' || cmd is undefined ? start-repl!
       cmd is 'help' ? help!
