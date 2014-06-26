@@ -254,9 +254,9 @@ bnf = {
     (o 'AWAIT CallableValue' (-> n Await $2))
   ]
 
---  @AsyncDo [
---    (o 'DO CallableValue Declaration' (-> n Do $3 $4))
---  ]
+  @AsyncDo [
+    (o 'DO Value Declaration' (-> n Do $2 $3))
+  ]
 
   @Conditional [
     (o 'Value ? Body Terminator' (-> [$1 $3]))
