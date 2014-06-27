@@ -167,6 +167,12 @@ export {
   @filter fn [f vec] {
       Array.prototype.filter.call vec (-> f &0) }
 
+  @any fn [f vec] {
+    Array.prototype.some.call vec (-> f &0) }
+
+  @all fn [f vec] {
+    Array.prototype.every.call vec (-> f &0) }
+
   @map fn [f vec] {
       Array.prototype.map.call vec (-> f &0) }
 

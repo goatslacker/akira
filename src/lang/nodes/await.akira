@@ -5,6 +5,16 @@ Identifier = require 'ast/Identifier'
 MemberExpression = require 'ast/MemberExpression'
 
 xthen = Identifier 'then'
+Promise = Identifier 'Promise'
+supported-async-fns = ['map' 'filter']
+
+xchange-if-async-caller = fn [call] {
+  name = call.callee.name
+  xform = any (-> &0 is name) supported-async-fns
+  if xform is true
+    then CallExpression (MemberExpression Promise call.callee) call.arguments
+    else call
+}
 
 Await = class {
   [call] {
@@ -14,9 +24,12 @@ Await = class {
   compile [context] {
     call = ast this.call context
     callback = FunctionExpression none [] []
---    callback.__await = true
 
-    node = CallExpression (MemberExpression call xthen) [callback]
+    caller = if call.callee.type == 'Identifier'
+      then xchange-if-async-caller call
+      else call
+
+    node = CallExpression (MemberExpression caller xthen) [callback]
     node.__await = true
     node
   }
