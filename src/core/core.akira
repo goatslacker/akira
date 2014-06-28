@@ -194,16 +194,11 @@ export {
         then []
         else Array.prototype.reduce-right.call vec (-> f &0 &1) }
 
-  @asyncmap fn [f vec cb] {
-      count = vec.length
-      results = []
-      next = fn [i] fn [value] {
-        decrement count
-        push results i value
-        (cb results) if count is 0
-      }
-      vec.for-each fn [x i] { f x next << i }
-    }
+  @Promise (require 'bluebird')
+
+  @require-awaitable fn [m] {
+    Promise.promisify-all (require m)
+  }
 
   @intersect fn [vec1 vec2] {
       filter (-> vec2.indexOf &0 | (!= -1)) vec1 }
