@@ -40,7 +40,7 @@ compile = fn [from target (f = id)] {
   } from
 }
 
-to-ast = fn [from target (cb = analyse)] {
+to-ast = fn [from (cb = analyse)] {
   foreach-file cb from gen-ast
 }
 
@@ -59,9 +59,11 @@ module.exports = {
     opts = tail args
 
     cond
+      cmd is 'ast' ? to-ast opts.0
       cmd is 'make' ? make opts.0 opts.1 opts.2
       cmd is 'compile' ? compile opts.0 opts.1
       cmd is 'output' ? map file-output opts
+      cmd is 'debug' ? map (-> foreach-file id &0) opts
       cmd is 'run' ? cli-run opts.0
       cmd is 'version' ? 'akira ' ++ me.version | output none
       cmd is 'repl' || cmd is undefined ? start-repl!

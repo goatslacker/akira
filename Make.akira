@@ -95,7 +95,7 @@ build-core = fn [] {
     from = 'src/core/core.akira'
     target = 'lib/core'
     compile-core-ast = gen-compile-core-ast from target
-    akira.ast from target compile-core-ast
+    akira.ast from compile-core-ast
     print 'Done.'
   } | time
 }
