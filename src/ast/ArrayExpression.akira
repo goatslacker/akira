@@ -1,5 +1,5 @@
-ArrayExpression :: Maybe Vector -> Map
-ArrayExpression = fn [(elements = [])] {
+ArrayExpression :: Vector -> Map
+ArrayExpression = fn [elements] {
   { @type 'ArrayExpression'
     @elements elements }
 }
