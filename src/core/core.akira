@@ -340,4 +340,8 @@ export {
   @words fn [f str] { str.split ' ' | map f }
 
   @print fn [& args] { console.log.apply console args }
+
+  @Set (require 'collections/set')
+  @Dict (require 'collections/dict')
+  @Map (require 'collections/map')
 }
