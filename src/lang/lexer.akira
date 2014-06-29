@@ -5,7 +5,7 @@ rx = {
   @STR /^'(.*?)'/
   @ARGS /^&([0-9]+)/
   @LAMBDA /^->/
-  @OPERATION /^(<-|<<|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:|::)/
+  @OPERATION /^(<<|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:|::)/
   @TERMINATOR /^\n/
   @REGEX /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
   @COMMENTS /^(--.*)/
@@ -20,7 +20,6 @@ identifiers = {
   @ACCESSOR_OPERATOR ['!!']
   @LEFT_OPERATORS ['++']
   @RIGHT_OPERATORS ['+:' '<<']
-  @DO_OPERATOR ['<-']
   @TYPE_OPERATOR ['::']
   @NOT ['not']
   @LOGIC ['&&' '||']
