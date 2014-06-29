@@ -256,6 +256,7 @@ bnf = {
 
   @AsyncDo [
     (o 'DO Value Declaration' (-> n Do $2 $3))
+    (o 'DO Value InlineDeclaration' (-> n Do $2 $3))
   ]
 
   @Conditional [
