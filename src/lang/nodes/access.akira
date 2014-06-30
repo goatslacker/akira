@@ -3,10 +3,8 @@ ast = require 'ast'
 unwrap-expression-statement = require 'unwrapExpressionStatement'
 
 Access = class {
-  [id prop] {
+  [@id @prop] {
     this.akira-name = 'Access'
-    this.id = id
-    this.prop = prop
   }
 
   compile [context] {

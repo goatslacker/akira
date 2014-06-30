@@ -350,6 +350,7 @@ bnf = {
     (o 'Identifier')
     (o '( Identifier = Value )' (-> n Assignment $2 $4))
     (o 'Rest')
+    (o 'Key')
     (o 'Vectors')
   ]
 

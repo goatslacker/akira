@@ -46,10 +46,7 @@ return-function = fn [callee args params context line] {
 }
 
 Call = class {
-  [ref params] {
-    this.ref = ref
-    this.params = params
-  }
+  [@ref @params] { this }
 
   compile [context] {
     callee = ast this.ref context

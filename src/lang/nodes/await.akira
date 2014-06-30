@@ -17,9 +17,7 @@ xchange-if-async-caller = fn [call] {
 }
 
 Await = class {
-  [call] {
-    this.call = call
-  }
+  [@call] { this }
 
   compile [context] {
     call = ast this.call context

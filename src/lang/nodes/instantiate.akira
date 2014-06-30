@@ -1,9 +1,7 @@
 ast = require 'ast'
 
 Instantiate = class {
-  [iden] {
-    this.iden = iden
-  }
+  [@iden] { this }
 
   compile [context] {
     name = ast this.iden context
