@@ -342,6 +342,7 @@ bnf = {
 
   @Arguments [
     (o 'Value' (-> n Arguments $1))
+    (o 'Rest')
     (o 'Arguments Comma Value' (-> n Arguments $1 $3))
   ]
 

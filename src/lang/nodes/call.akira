@@ -38,20 +38,27 @@ unwrap = fn [xargs] maybe xargs { map unwrapExpressionStatement xargs }
 return-function = fn [callee args params context line] {
   checkCallType callee.name args context line
 
-  if params == 'apply'
-  then CallExpression (MemberExpression callee (Identifier 'apply')) [(Identifier 'null') (Identifier 'arguments')]
-  else CallExpression callee (unwrap args)
+  if args && args.__rest is true
+    then CallExpression (MemberExpression callee (Identifier 'apply')) [(Identifier 'null') args]
+    else if params == 'apply'
+      then CallExpression (MemberExpression callee (Identifier 'apply')) [(Identifier 'null') (Identifier 'arguments')]
+      else CallExpression callee (unwrap args)
 }
 
-call = fn [ref params]
-  fn [line context] {
-    compile = ast.gen context
-    callee = compile ref
-    args = compile params
-
-    if callee.type == 'Identifier' && Store.macros !! callee.name
-      then run-macro callee.name (compile params) context
-      else return-function callee args params context line
+Call = class {
+  [ref params] {
+    this.ref = ref
+    this.params = params
   }
 
-module.exports = call
+  compile [context] {
+    callee = ast this.ref context
+    args = ast this.params context
+
+    if callee.type == 'Identifier' && Store.macros !! callee.name
+      then run-macro callee.name args context
+      else return-function callee args this.params context this.line
+  }
+}
+
+module.exports = Call
