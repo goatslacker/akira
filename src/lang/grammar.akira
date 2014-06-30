@@ -2,12 +2,6 @@ jison = require 'jison'
 
 unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
 
-macro jsn fn [name & args] {
-  { @type 'NewExpression'
-    @callee name
-    @arguments args }
-}
-
 macro n fn [name & args] {
   { @type 'CallExpression'
     @callee {
@@ -564,7 +558,7 @@ operators = [
   ['left' '*' '**' '/']
 ]
 
-parser = jsn jison.Parser { @tokens @bnf @operators @start-symbol }
+parser = new jison.Parser { @tokens @bnf @operators @start-symbol }
 parser.lexer = {
   @lex (fn [] {
     ref = this.tokens !! this.pos || ['']
