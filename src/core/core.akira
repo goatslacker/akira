@@ -35,20 +35,6 @@ macro each fn [sym name test] {
   @each false }
 }
 
-macro decrement fn [i] {
-  { @type 'UpdateExpression' @operator '--' @argument i @prefix true }
-}
-
-macro push fn [vec i v] {
-  { @type 'AssignmentExpression'
-    @operator '='
-    @left { @type 'MemberExpression'
-            @computed true
-            @object vec
-            @property i }
-    @right v }
-}
-
 export {
   @eq fn [a b] { a == b }
 
