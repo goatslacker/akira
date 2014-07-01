@@ -1,56 +1,62 @@
 util = require 'util'
 me = require '../../package.json'
 
-{ @foreach-file @run @lexer @gen-ast } = import './compiler.akira'
-{ @write-file } = import './fisy.akira'
+{ @run @lexer @gen-program-ast @transpile } = import './compiler.akira'
+{ @write-file @get-all-files @get-file } = import './fisy.akira'
 help = import './help.akira'
-start-repl = import './repl.akira'
-watch = import './watchman.akira'
 
-output = fn [_ code] process.stdout.write code
+analyse = fn [_ body] {
+  body | (-> util.inspect &0 false Infinity) | console.log
+}
 
-analyse = fn [_ body]
-  body | (-> util.inspect &0 false Infinity) | output none
-
-load-makefile = fn [key opts]
-  fn [name code]
-    let cmd = key |
-      (.replace /[-+|:]([a-zA-Z0-9$_])/g fn [i] { i.1.to-upper-case! })
-    then run name ('module.exports = ' ++ code) | (!! cmd) | (-> &0 opts)
-
---cli = match {
---  ['compile' [a b]] this.compile a b
---  ['output' [a]] this.output a
---  ['run' [a]] this.run a
---  ['tokens' [a]] akira analyse a lex
---  ['ast' [a]] akira analyse a gen-ast
---  ['version' []] 'akira ' ++ me.version | output none
---  ['watch' [a b]] watch a (-> akira fn [name code] {
---    write-file name code a b } a)
---  ['make' [a b & c]] akira (load-makefile a (b || []) ++ c) 'Make.akira'
---  ['repl' []] start-repl!
---  ['help' []] help!
---  [undefined []] start-repl!
---  [else] help &0
---}
-
-compile = fn [from target (f = id)] {
-  foreach-file fn [name code] {
-    write-file name (f code) from target
-  } from
+compile = fn [from target] {
+  do (get-all-files from) fn [files] {
+    map fn [file] {
+      try {
+        data = transpile file.name file.code
+        do (write-file file.name data from target) -> none
+      } catch err {
+        console.error 'Filename ' ++ file.name
+        console.error err.stack
+        process.exit 1
+      }
+    } files
+  }
 }
 
 to-ast = fn [from (cb = analyse)] {
-  foreach-file cb from gen-ast
+  do (get-all-files from) fn [files] {
+    map fn [file] {
+      gen-program-ast file.name file.code | cb file.name
+    } files
+  }
 }
 
-file-output = (-> foreach-file output &0)
+make = fn [cmd (args = [])] {
+  do (get-file 'Make.akira') fn [file] {
+    key = cmd.replace /[-+|:]([a-zA-Z0-9$_])/g fn [i] { i.1.to-upper-case! }
+    code = transpile file.name file.code
+    run file.name ('module.exports = ' ++ code) | (!! key) | (-> &0 args)
+  }
+}
 
-make = fn [cmd (arg = []) args]
-  foreach-file (load-makefile cmd arg ++ args) 'Make.akira'
+run-a-file = fn [filename context] {
+  do (get-file filename) fn [file] {
+    code = transpile file.name file.code
+    run file.name code (context || {})
+  }
+}
 
-cli-run = fn [filename] {
-  foreach-file fn [name code] { run name code } filename
+file-output = fn [filepath] {
+  do (get-all-files filepath) fn [files] {
+    map (-> transpile &0.name &0.code | console.log) files
+  }
+}
+
+lex = fn [filepath (cb = console.log)] {
+  do (get-file filename) fn [file] {
+    lexer file.code | cb
+  }
 }
 
 module.exports = {
@@ -60,26 +66,20 @@ module.exports = {
 
     cond
       cmd is 'ast' ? to-ast opts.0
-      cmd is 'make' ? make opts.0 opts.1 opts.2
       cmd is 'compile' ? compile opts.0 opts.1
-      cmd is 'output' ? map file-output opts
-      cmd is 'debug' ? map (-> foreach-file id &0) opts
-      cmd is 'run' ? cli-run opts.0
-      cmd is 'version' ? 'akira ' ++ me.version | output none
-      cmd is 'repl' || cmd is undefined ? start-repl!
       cmd is 'help' ? help!
+      cmd is 'make' ? make opts.0 (tail opts)
+      cmd is 'output' ? map file-output opts
+      cmd is 'run' ? run-a-file opts.0
+      cmd is 'tokens' ? lex opts.0
+      cmd is 'version' ? console.log ('akira ' ++ me.version)
       else ? help opts
   }
 
-  @compile compile
-
   @ast to-ast
-
-  @write fn [name code from target] { write-file name code from target }
-
+  @compile compile
+  @lexer lex
   @output file-output
-
-  @run fn [filename context] {
-    foreach-file fn [name code] { run name code context } filename
-  }
+  @run run-a-file
+  @write write-file
 }

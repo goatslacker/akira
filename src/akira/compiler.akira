@@ -1,5 +1,3 @@
-{ @get-files } = import './fisy.akira'
-
 escodegen = require 'escodegen'
 dune = require 'dune'
 lexer = require '../lang/lexer'
@@ -19,7 +17,7 @@ OPTIONS = {
   @directive true
 }
 
-to-ast = fn [body] {
+make-program = fn [body] {
   {
     @type 'Program'
     @body [{
@@ -45,41 +43,28 @@ to-ast = fn [body] {
   }
 }
 
-transform = fn [name parsed (f = to-ast)] {
+transform = fn [name parsed] {
   cond
-    parsed is none ? f ''
+    parsed is none ? make-program ''
     else ? {
       context = {}
       body = parsed.compile context name
       dependencies = parsed.add-deps context
       parsed.flag-core-methods body
-      f (parsed.add-vars context) ++
+      make-program (parsed.add-vars context) ++
         (parsed.add-core!) ++
         dependencies ++
         (parsed.add-contracts body)
     }
 }
 
-parse = fn [code] code | lexer | parser.parse
-
-gen-ast = fn [name code] parse code | transform name
-
-transpile = fn [name code] code | gen-ast name | (-> escodegen.generate &0 OPTIONS)
-
-each-file = fn [cb f] {
-  fn [name code] {
-    try {
-      code | f name | cb name
-    } catch err {
-      console.error 'Filename ' ++ name
-      console.error err.stack
-      process.exit 1
-    }
-  }
+gen-program-ast = fn [name code] {
+  lexer code | parser.parse | transform name
 }
 
-foreach-file = fn [cb filepath (f = transpile)]
-  get-files (each-file cb f) filepath
+transpile = fn [name code] {
+  escodegen.generate (gen-program-ast name code) OPTIONS
+}
 
 run = fn [name code context] {
   try {
@@ -92,8 +77,8 @@ run = fn [name code context] {
 }
 
 export {
-  @foreach-file
-  @gen-ast
+  @gen-program-ast
   @lexer
   @run
+  @transpile
 }

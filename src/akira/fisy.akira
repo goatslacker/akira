@@ -1,37 +1,36 @@
-fs = require 'fs'
+fs = require-awaitable 'fs'
 path = require 'path'
 
-walk = fn [cb tree] {
-  try {
-    stat = fs.stat-sync tree
-  } catch err {
-    raise err
+File = class {
+  [@name @code] { this }
+}
+
+get-file = async [filepath] {
+  file = path.join process.env.PWD filepath
+  data = await fs.read-file-async file
+  new File filepath (show data)
+}
+
+get-all-files = async [filepath] {
+  st = await fs.stat-async filepath
+
+  if st.is-directory! then {
+    ls = await fs.readdir-async filepath
+    files = await map ls fn [file] {
+      fullpath = path.join filepath file
+      get-all-files fullpath
+    }
+    flatten files
+  } else {
+    akira-files = filter (-> (&0.index-of '.akira') >= 0) [filepath]
+    await map akira-files (-> get-file &0)
   }
-
-  if stat.is-directory!
-    then fs.readdir-sync tree | map (-> path.join tree &0 | walk cb)
-    else (get-file-contents cb tree) if (tree.index-of '.akira') >= 0
 }
 
-get-file-contents = fn [cb filepath] {
-  path.join process.env.PWD, filepath |
-    fs.read-file-sync |
-    show |
-    cb filepath
-}
-
-get-files = fn [cb dirname] {
-  stat = fs.stat-sync dirname
-  if stat.is-directory! then walk cb dirname
-  else get-file-contents cb dirname
-}
-
-write-file = fn [file code from (to = (path.dirname file))] {
+write-file = async [file code from (to = (path.dirname file))] {
   filename = (path.relative from file) || (path.basename file)
-
-  code |
-    fs.write-file-sync (filename.replace '.akira' '.js' |
-      path.join to)
+  write-path = filename.replace '.akira' '.js' | path.join to
+  await fs.write-file-async write-path code
 }
 
-export { @get-files @write-file }
+export { @get-all-files @write-file @get-file }
