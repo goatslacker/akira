@@ -5,14 +5,15 @@ Identifier = require 'ast/Identifier'
 MemberExpression = require 'ast/MemberExpression'
 
 xthen = Identifier 'then'
-Promise = Identifier 'Promise' true
+PromiseNode = Identifier 'Promise'
+PromiseNode.__core = true
 supported-async-fns = ['map' 'filter']
 
 xchange-if-async-caller = fn [call] {
   name = call.callee.name
   xform = any (-> &0 is name) supported-async-fns
   if xform is true
-    then CallExpression (MemberExpression Promise call.callee) call.arguments
+    then CallExpression (MemberExpression PromiseNode call.callee) call.arguments
     else call
 }
 

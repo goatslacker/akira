@@ -20,7 +20,7 @@ IfStatement = fn [test consequent alternate] {
       @type 'IfStatement'
       @test test
       @consequent (make-block consequent)
-      @alternate (if alternate is none then none else (make-block alternate))
+      @alternate ((make-block alternate) if alternate)
     }
 }
 

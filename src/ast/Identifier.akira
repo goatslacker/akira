@@ -1,9 +1,7 @@
-Identifier :: String Maybe Boolean Maybe Boolean -> Map
-Identifier = fn [name (core = false) (rest = false)] {
+Identifier :: String -> Map
+Identifier = fn [name] {
   { @type 'Identifier'
-    @name name
-    @__core core
-    @__rest rest }
+    @name name }
 }
 
 module.exports = Identifier
