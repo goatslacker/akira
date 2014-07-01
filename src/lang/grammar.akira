@@ -112,7 +112,6 @@ bnf = {
     (o 'AsyncFunction')
     (o 'AsyncDo')
     (o 'Awaitable')
-    (o 'MaybeSeq')
     (o 'Let')
     (o 'Pipeline')
     (o 'Cloning')
@@ -232,11 +231,6 @@ bnf = {
   @MaybeParameters [
     (o 'Value' (-> n Arguments $1))
     (o 'MaybeParameters OptComma Value' (-> n Arguments $1 $3))
-  ]
-
-  @MaybeSeq [
-    (o 'MAYBE Value' (-> n MaybeSeq $2))
-    (o 'MAYBE Value TBody' (-> n MaybeSeq $2 $3))
   ]
 
   @AsyncFunction [

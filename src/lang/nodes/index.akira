@@ -30,7 +30,6 @@ module.exports = {
   @Logic          (r 'logic')
   @Macro          (r 'macro')
   @Map            (r 'map')
-  @MaybeSeq       (r 'maybeseq')
   @Nodes          (r 'nodes')
   @Operation      (r 'operation')
   @Pattern        (r 'pattern')

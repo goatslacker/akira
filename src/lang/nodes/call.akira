@@ -33,7 +33,9 @@ checkCallType = fn [name params context line] {
   } else none
 }
 
-unwrap = fn [xargs] maybe xargs { map unwrapExpressionStatement xargs }
+unwrap = fn [xargs] {
+  (map unwrapExpressionStatement xargs) if xargs
+}
 
 return-function = fn [callee args params context line] {
   checkCallType callee.name args context line
