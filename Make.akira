@@ -1,3 +1,5 @@
+Promise = require 'bluebird'
+
 escodegen = require 'escodegen'
 esmangle = require 'esmangle'
 esprima = require 'esprima'
@@ -36,57 +38,65 @@ gen-compile-core-ast = fn [from target] {
   }
 }
 
-newline = (= '')
-
 time = fn [f] {
   start = Date.now!
-  f!
-  end = Date.now!
-  print 'Time {{end - start}}ms'
-}
-
-test-results = match {
-  [true name len] (print '√ {{name}} {{len}}') || true
-  [false name len] (print 'x {{name}}') && false
-}
-
-test-file = fn [name] {
-  assertions = []
-  ok = fn [a b] assertions.push a == b
-  ok-deep = fn [a b] {
-    zip-with (==) a b | foldl (&&) | ok true
-  }
-
-  akira.run ('test/' ++ name) { @ok @ok-deep }
-
-  test-results (foldl (&&) assertions),
-    (name.replace '.akira' ''),
-    assertions.length
-}
-
-test = fn [] {
-  time fn [] {
-    print 'Running tests...'
-    results = fs.readdir-sync 'test' | map test-file | foldl (&&)
-
-    print ''
-
-    if results == true
-      then print 'OK!'
-      else print 'Fail'
+  do (f!) fn [str] {
+    end = Date.now!
+    print str ++ ' Time {{end - start}}ms'
   }
 }
 
-create-compile = fn [name from to] {
+--test-results = match {
+--  [true name len] (print '√ {{name}} {{len}}') || true
+--  [false name len] (print 'x {{name}}') && false
+--}
+--
+--test-file = fn [name] {
+--  assertions = []
+--  ok = fn [a b] assertions.push a == b
+--  ok-deep = fn [a b] {
+--    zip-with (==) a b | foldl (&&) | ok true
+--  }
+--
+--  akira.run ('test/' ++ name) { @ok @ok-deep }
+--
+--  test-results (foldl (&&) assertions),
+--    (name.replace '.akira' ''),
+--    assertions.length
+--}
+
+test = fn [] { }
+
+--test = fn [] {
+--  time fn [] {
+--    print 'Running tests...'
+--    results = fs.readdir-sync 'test' | map test-file | foldl (&&)
+--
+--    print ''
+--
+--    if results == true
+--      then print 'OK!'
+--      else print 'Fail'
+--  }
+--}
+
+start-compile = fn [name from to] {
   fn [] {
     print 'Building {{name}}'
-    akira.compile from to
-    print 'Done.'
+    do (akira.compile from to) -> 'Done building {{name}}.'
   }
 }
 
 build = fn [] {
-  create-compile 'parser' 'src/lang' 'lib/lang' | time
+  start-compile 'parser' 'src/lang' 'lib/lang' | time
+}
+
+build-ast = fn [] {
+  start-compile 'ast' 'src/ast' 'node_modules/ast' | time
+}
+
+build-akira = fn [] {
+  start-compile 'akira' 'src/akira/index.akira' 'lib/akira' | time
 }
 
 build-core = fn [] {
@@ -95,29 +105,24 @@ build-core = fn [] {
     from = 'src/core/core.akira'
     target = 'lib/core'
     compile-core-ast = gen-compile-core-ast from target
-    akira.ast from compile-core-ast
-    print 'Done.'
+    do (akira.ast from compile-core-ast) -> 'Done building core.'
   } | time
 }
 
-build-akira = fn [] {
-  create-compile 'akira' 'src/akira/index.akira' 'lib/akira' | time
-}
-
-build-ast = fn [] {
-  create-compile 'ast' 'src/ast' 'node_modules/ast' | time
-}
-
-build-all = fn [] {
-  let tasks = [
+build-all-async = async [] {
+  tasks = [
     build
     build-core
     build-ast
     build-akira
-    build
     test
   ]
-  then (-> map fn [f] { f! | newline | print } tasks) | time
+  done = await map tasks fn [f] { f! }
+  done
+}
+
+build-all = fn [] {
+  (-> do (build-all-async!) -> 'All done.') | time
 }
 
 export {
