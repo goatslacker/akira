@@ -9,54 +9,48 @@ analyse = fn [_ body] {
   body | (-> util.inspect &0 false Infinity) | console.log
 }
 
-compile = fn [from target] {
-  do (get-all-files from) fn [files] {
-    map fn [file] {
-      try {
-        data = transpile file.name file.code
-        do (write-file file.name data from target) -> none
-      } catch err {
-        console.error 'Filename ' ++ file.name
-        console.error err.stack
-        process.exit 1
-      }
-    } files
-  }
+compile = async [from target] {
+  files = await get-all-files from
+  map fn [file] {
+    try {
+      data = transpile file.name file.code
+      do (write-file file.name data from target) -> &0
+    } catch err {
+      console.error 'Filename ' ++ file.name
+      console.error err.stack
+      process.exit 1
+    }
+  } files
 }
 
-to-ast = fn [from (cb = analyse)] {
-  do (get-all-files from) fn [files] {
-    map fn [file] {
-      gen-program-ast file.name file.code | cb file.name
-    } files
-  }
+to-ast = async [from (cb = analyse)] {
+  files = await get-all-files from
+  map fn [file] {
+    gen-program-ast file.name file.code | cb file.name
+  } files
 }
 
-make = fn [cmd (args = [])] {
-  do (get-file 'Make.akira') fn [file] {
-    key = cmd.replace /[-+|:]([a-zA-Z0-9$_])/g fn [i] { i.1.to-upper-case! }
-    code = transpile file.name file.code
-    run file.name ('module.exports = ' ++ code) | (!! key) | (-> &0 args)
-  }
+make = async [cmd (args = [])] {
+  file = await get-file 'Make.akira'
+  key = cmd.replace /[-+|:]([a-zA-Z0-9$_])/g fn [i] { i.1.to-upper-case! }
+  code = transpile file.name file.code
+  run file.name ('module.exports = ' ++ code) | (!! key) | (-> &0 args)
 }
 
-run-a-file = fn [filename context] {
-  do (get-file filename) fn [file] {
-    code = transpile file.name file.code
-    run file.name code (context || {})
-  }
+run-a-file = async [filename context] {
+  file = await get-file filename
+  code = transpile file.name file.code
+  run file.name code (context || {})
 }
 
-file-output = fn [filepath] {
-  do (get-all-files filepath) fn [files] {
-    map (-> transpile &0.name &0.code | console.log) files
-  }
+file-output = async [filepath] {
+  files = await get-all-files filepath
+  map (-> transpile &0.name &0.code | console.log) files
 }
 
-lex = fn [filepath (cb = console.log)] {
-  do (get-file filename) fn [file] {
-    lexer file.code | cb
-  }
+lex = async [filepath (cb = console.log)] {
+  file = await get-file filepath
+  lexer file.code | cb
 }
 
 module.exports = {

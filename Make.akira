@@ -117,8 +117,7 @@ build-all-async = async [] {
     build-akira
     test
   ]
-  done = await map tasks fn [f] { f! }
-  done
+  await map tasks fn [f] { f! }
 }
 
 build-all = fn [] {
