@@ -109,7 +109,7 @@ bnf = {
     (o 'Cond')
     (o 'Invocation')
     (o 'InlineDeclaration')
-    (o 'Async')
+    (o 'AsyncFunction')
     (o 'AsyncDo')
     (o 'Awaitable')
     (o 'MaybeSeq')
@@ -239,9 +239,9 @@ bnf = {
     (o 'MAYBE Value TBody' (-> n MaybeSeq $2 $3))
   ]
 
-  @Async [
-    (o 'TASK [ ] TBody' (-> n Async none $4))
-    (o 'TASK [ Parameters ] TBody' (-> n Async $3 $5))
+  @AsyncFunction [
+    (o 'ASYNC [ ] TBody' (-> n AsyncFunction none $4))
+    (o 'ASYNC [ Parameters ] TBody' (-> n AsyncFunction $3 $5))
   ]
 
   @Awaitable [
@@ -420,7 +420,7 @@ bnf = {
     (o 'Identifier')
     (o 'VectorType')
     (o 'MapType')
-    (o 'AWAITABLE LAMBDA Identifier' (-> n Type $3 'async'))
+    (o 'ASYNC LAMBDA Identifier' (-> n Type $3 'async'))
     (o 'MAYBE TypeValues' (-> n Type $2 'maybe'))
   ]
 
