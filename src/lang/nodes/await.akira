@@ -5,7 +5,7 @@ Identifier = require 'ast/Identifier'
 MemberExpression = require 'ast/MemberExpression'
 
 xthen = Identifier 'then'
-Promise = Identifier 'Promise'
+Promise = Identifier 'Promise' true
 supported-async-fns = ['map' 'filter']
 
 xchange-if-async-caller = fn [call] {

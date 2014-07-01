@@ -1,4 +1,4 @@
-Promise = require 'bluebird'
+--Promise = require 'bluebird'
 
 escodegen = require 'escodegen'
 esmangle = require 'esmangle'
