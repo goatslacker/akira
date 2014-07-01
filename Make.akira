@@ -3,7 +3,6 @@
 escodegen = require 'escodegen'
 esmangle = require 'esmangle'
 esprima = require 'esprima'
-fs = require 'fs'
 path = require 'path'
 obj2str = require 'obj2str'
 
@@ -46,40 +45,6 @@ time = fn [f] {
   }
 }
 
---test-results = match {
---  [true name len] (print '√ {{name}} {{len}}') || true
---  [false name len] (print 'x {{name}}') && false
---}
---
---test-file = fn [name] {
---  assertions = []
---  ok = fn [a b] assertions.push a == b
---  ok-deep = fn [a b] {
---    zip-with (==) a b | foldl (&&) | ok true
---  }
---
---  akira.run ('test/' ++ name) { @ok @ok-deep }
---
---  test-results (foldl (&&) assertions),
---    (name.replace '.akira' ''),
---    assertions.length
---}
-
-test = fn [] { }
-
---test = fn [] {
---  time fn [] {
---    print 'Running tests...'
---    results = fs.readdir-sync 'test' | map test-file | foldl (&&)
---
---    print ''
---
---    if results == true
---      then print 'OK!'
---      else print 'Fail'
---  }
---}
-
 start-compile = fn [name from to] {
   fn [] {
     print 'Building {{name}}'
@@ -107,6 +72,24 @@ build-core = fn [] {
     compile-core-ast = gen-compile-core-ast from target
     do (akira.ast from compile-core-ast) -> 'Done building core.'
   } | time
+}
+
+test = fn [] {
+  time fn [] {
+    print 'Running tests...'
+    do (akira.test!) fn [results] {
+      test-results = foldl fn [bool result] {
+        [name value len] = result
+        val-ascii = if value is true then '√' else 'x'
+        print val-ascii ++ ' {{name}} {{len}} assertions.'
+        bool && value
+      } results
+
+      if test-results == true
+        then 'Tests OK!'
+        else 'Tests Fail'
+    }
+  }
 }
 
 build-all-async = async [] {

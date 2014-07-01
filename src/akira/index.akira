@@ -9,6 +9,19 @@ analyse = fn [_ body] {
   body | (-> util.inspect &0 false Infinity) | console.log
 }
 
+test-file = fn [file] {
+  assertions = []
+  ok = fn [a b] assertions.push a == b
+  ok-deep = fn [a b] {
+    zip-with (==) a b | foldl (&&) | ok true
+  }
+  context = { @ok @ok-deep }
+
+  code = transpile file.name file.code
+  run file.name code context
+  [file.name (foldl (&&) assertions) assertions.length]
+}
+
 compile = async [from target] {
   files = await get-all-files from
   map fn [file] {
@@ -48,6 +61,11 @@ file-output = async [filepath] {
   map (-> transpile &0.name &0.code | console.log) files
 }
 
+test = async [(filepath = 'test')] {
+  test-files = await get-all-files filepath
+  map test-file test-files
+}
+
 lex = async [filepath (cb = console.log)] {
   file = await get-file filepath
   lexer file.code | cb
@@ -65,6 +83,7 @@ module.exports = {
       cmd is 'make' ? make opts.0 (tail opts)
       cmd is 'output' ? map file-output opts
       cmd is 'run' ? run-a-file opts.0
+      cmd is 'test' ? test!
       cmd is 'tokens' ? lex opts.0
       cmd is 'version' ? console.log ('akira ' ++ me.version)
       else ? help opts
@@ -75,5 +94,6 @@ module.exports = {
   @lexer lex
   @output file-output
   @run run-a-file
+  @test test
   @write write-file
 }
