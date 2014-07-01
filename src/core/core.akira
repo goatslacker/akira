@@ -182,7 +182,7 @@ export {
 
   @Promise (require 'bluebird')
 
-  @require-awaitable fn [m] {
+  @require-node-async fn [m] {
     Promise.promisify-all (require m)
   }
 

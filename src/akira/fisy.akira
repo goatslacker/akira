@@ -1,4 +1,4 @@
-fs = require-awaitable 'fs'
+fs = require-node-async 'fs'
 path = require 'path'
 
 File = class {
