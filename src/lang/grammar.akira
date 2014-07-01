@@ -420,6 +420,7 @@ bnf = {
     (o 'Identifier')
     (o 'VectorType')
     (o 'MapType')
+    (o 'AWAITABLE LAMBDA Identifier' (-> n Type $3 'async'))
     (o 'MAYBE TypeValues' (-> n Type $2 'maybe'))
   ]
 
