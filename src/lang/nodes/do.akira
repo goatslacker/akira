@@ -1,0 +1,20 @@
+CallExpression = require 'ast/CallExpression'
+Identifier = require 'ast/Identifier'
+MemberExpression = require 'ast/MemberExpression'
+
+ast = require 'ast'
+
+IdenThen = Identifier 'then'
+
+Do = class {
+  [@call @f] { this }
+
+  compile [context] {
+    call = ast this.call context
+    f = ast this.f context
+
+    CallExpression (MemberExpression call IdenThen) [f]
+  }
+}
+
+module.exports = Do

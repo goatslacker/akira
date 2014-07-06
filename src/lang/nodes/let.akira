@@ -1,0 +1,29 @@
+ExpressionStatement = require 'ast/ExpressionStatement'
+ast = require 'ast'
+beta-redex = require 'betaRedex'
+implicit-return = require 'implicitReturn'
+get-scope = require 'getScope'
+
+Let = class {
+  [body ret] {
+    this.body = body.args.slice 0
+    this.ret = ret
+  }
+
+  compile [context] {
+    scope = get-scope context []
+    nodes = this.body.reverse!
+    ret = ast this.ret scope
+
+    body = foldl fn [nodes node] {
+      expr = ExpressionStatement (ast node scope)
+      [expr] ++ nodes
+    } [ret] ++ nodes
+
+    implicit-return body
+
+    beta-redex body scope
+  }
+}
+
+module.exports = Let
