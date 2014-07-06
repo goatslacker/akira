@@ -1,3 +1,4 @@
+one :: Number -> Number
 one = fn [x] {
   cond
     x is 1 ? 1

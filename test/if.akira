@@ -1,3 +1,4 @@
+foo :: Boolean -> Boolean
 foo = fn [x] {
   if x
     then {

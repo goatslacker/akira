@@ -1,4 +1,5 @@
 -- test function
+map-eq :: Map Map -> Number
 map-eq = fn [a b] {
   filter fn [x i] { x isnt b !! i } a | (.length) | ok 0
 }

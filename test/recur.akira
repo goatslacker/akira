@@ -6,7 +6,6 @@ fib = match {
 
 fib 8 | ok 21
 
-
 fact = match {
   [n] fact n 1
   [0 sum] sum

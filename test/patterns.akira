@@ -1,3 +1,4 @@
+numbers :: String -> Number
 numbers = match {
   ['one'] 1
   ['two'] 2
@@ -8,6 +9,7 @@ numbers = match {
 ok 4 (numbers 'four')
 ok 1 (numbers 'one')
 
+gt-ten :: Number -> Boolean
 gt-ten = match {
   [(< 10)] true
   [(> 10)] false
@@ -16,8 +18,10 @@ gt-ten = match {
 ok false (gt-ten 11)
 ok true (gt-ten 2)
 
+starts-with :: String String -> Boolean
 starts-with = fn [noun prefix] { prefix == noun.0 + noun.1 }
 
+spanish-gender-of-noun :: String -> String
 spanish-gender-of-noun = match {
   [(starts-with &0 'el')] 'male'
   [(starts-with &0 'la')] 'female'
@@ -26,6 +30,7 @@ spanish-gender-of-noun = match {
 ok 'female' (spanish-gender-of-noun 'la casa')
 ok 'male' (spanish-gender-of-noun 'el carro')
 
+sort-even-odd :: Vector -> Vector
 sort-even-odd = match {
   [[]] []
   [[x & xs]] {
