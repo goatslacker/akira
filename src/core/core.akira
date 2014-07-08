@@ -162,18 +162,18 @@ export {
   @map fn [f vec] {
       Array.prototype.map.call vec (-> f &0) }
 
-  @foldl (match {
-      [f vec] {
-        if vec.length is 0
-          then []
-          else Array.prototype.reduce.call vec (-> f &0 &1)
+  @foldl fn [f vec a] {
+    reduce = Array.prototype.reduce
+    reducer = (-> f &0 &1)
+
+    if vec.length is 0
+      then []
+      else {
+        if a == undefined
+          then reduce.call vec reducer
+          else reduce.call vec reducer a
       }
-      [f vec a] {
-        if vec.length is 0
-          then []
-          else Array.prototype.reduce.call ([a] ++ vec) (-> f &0 &1)
-      }
-    })
+  }
 
   @foldr fn [f vec] {
       if vec.length is 0
