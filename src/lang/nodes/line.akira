@@ -1,0 +1,6 @@
+line = fn [n node] {
+  node.line = n + 1
+  node
+}
+
+module.exports = line
