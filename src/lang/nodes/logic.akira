@@ -1,0 +1,37 @@
+Identifier = require 'ast/Identifier'
+ast = require 'ast'
+
+get-identifier = match {
+  ['&&'] 'and'
+  ['||'] 'or'
+  [else] raise 'Invalid operation'
+}
+
+get-core-function = fn [op] {
+  node = Identifier (get-identifier op)
+  node.__core = true
+  node
+}
+
+Logic = class {
+  [a op b sugar] {
+    this.compare = [a b]
+    this.operation = op
+    this.sugar = sugar
+  }
+
+  compile [context] {
+    if this.sugar then {
+      get-core-function this.operation
+    } else {
+      {
+        @type 'LogicalExpression'
+        @operator this.operation
+        @left (ast this.compare.0 context)
+        @right (ast this.compare.1 context)
+      }
+    }
+  }
+}
+
+module.exports = Logic

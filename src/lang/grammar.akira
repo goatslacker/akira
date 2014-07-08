@@ -468,7 +468,7 @@ bnf = {
     (o '* *' (-> n Identifier 'pow'))
     (o '/' (-> n Identifier 'div'))
     (o 'COMPARE' (-> n Compare $1))
-    (o 'LOGIC' (-> n Logic $1))
+    (o 'LOGIC' (-> n Logic none $1 none true))
   ]
 
   @SugaryFunctions [
@@ -482,6 +482,9 @@ bnf = {
     (o 'COMPARE Value',
       (-> n Declaration '->' (n Arguments 'it'),
         (n Compare 'it' $1 $2)))
+    (o 'LOGIC Value',
+      (-> n Declaration '->' (n Arguments 'it'),
+        (n Logic 'it' $1 $2)))
     (o 'LEFT_OPERATORS Value',
       (-> n Declaration '->' (n Arguments 'it'),
         (n Operation 'it' $1 $2)))
