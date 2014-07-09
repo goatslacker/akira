@@ -358,14 +358,15 @@ bnf = {
     (o 'Parameters OptComma Param' (-> n Arguments $1 $3))
   ]
 
-  @ClassMethod [
+  @ClassMember [
     (o 'Identifier [ Parameters ] TBody' (-> n ClassMethod $1 $3 $5))
     (o 'Identifier [ ] TBody' (-> n ClassMethod $1 none $4))
+    (o 'Key Value' (-> [$1 $2]))
   ]
 
-  @ClassMethods [
-    (o 'ClassMethod' (-> n Arguments $1))
-    (o 'ClassMethods Terminator ClassMethod' (-> n Arguments $1 $3))
+  @ClassMembers [
+    (o 'ClassMember' (-> n Arguments $1))
+    (o 'ClassMembers Terminator ClassMember' (-> n Arguments $1 $3))
   ]
 
   @Constructor [
@@ -375,7 +376,7 @@ bnf = {
 
   @Class [
     (o 'CLASS { Terminator Constructor Terminator }' (-> n Class $4 []))
-    (o 'CLASS { Terminator Constructor Terminator ClassMethods Terminator }' (-> n Class $4 $6))
+    (o 'CLASS { Terminator Constructor Terminator ClassMembers Terminator }' (-> n Class $4 $6))
   ]
 
   @Instantiate [
