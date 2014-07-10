@@ -147,7 +147,7 @@ bnf = {
   ]
 
   @ArgumentsShorthand [
-    (o 'ARGS' (-> 'arguments[{{$1}}]'))
+    (o 'ARGS' (-> n Access (n Identifier 'arguments') (n Literal (Number $1))))
   ]
 
   @Literal [
