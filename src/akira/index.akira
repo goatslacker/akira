@@ -61,6 +61,11 @@ file-output = async [filepath] {
   map (-> transpile &0.name &0.code | console.log) files
 }
 
+file-debug = async [filepath] {
+  files = await get-all-files filepath
+  map (-> transpile &0.name &0.code) files
+}
+
 test = async [(filepath = 'test')] {
   test-files = await get-all-files filepath
   map test-file test-files
@@ -79,6 +84,7 @@ module.exports = {
     cond
       cmd is 'ast' ? to-ast opts.0
       cmd is 'compile' ? compile opts.0 opts.1
+      cmd is 'debug' ? map file-debug opts
       cmd is 'help' ? help!
       cmd is 'make' ? make opts.0 (tail opts)
       cmd is 'output' ? map file-output opts
@@ -91,6 +97,7 @@ module.exports = {
 
   @ast to-ast
   @compile compile
+  @debug file-debug
   @lexer lex
   @output file-output
   @run run-a-file
