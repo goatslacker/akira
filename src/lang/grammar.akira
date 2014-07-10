@@ -376,13 +376,18 @@ bnf = {
   ]
 
   @OptImplements [
-    (o '')
+    (o '' (-> none))
     (o 'TYPE_OPERATOR Identifier' (-> $2))
   ]
 
+  @OptInherits [
+    (o '' (-> none))
+    (o 'INHERITANCE Identifier' (-> $2))
+  ]
+
   @Class [
-    (o 'CLASS OptImplements { Terminator Constructor Terminator }' (-> n Class $5 [] $2))
-    (o 'CLASS OptImplements { Terminator Constructor Terminator ClassMembers Terminator }' (-> n Class $5 $7 $2))
+    (o 'CLASS OptInherits OptImplements { Terminator Constructor Terminator }' (-> n Class $6 [] $3 $2))
+    (o 'CLASS OptInherits OptImplements { Terminator Constructor Terminator ClassMembers Terminator }' (-> n Class $6 $8 $3 $2))
   ]
 
   @KeyType [

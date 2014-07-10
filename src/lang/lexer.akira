@@ -17,9 +17,10 @@ identifiers = {
     'let' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match' 'interface'
     'Maybe' 'Async' 'class' 'typealias' 'async' 'new' 'await']
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
+  @INHERITANCE ['<<']
   @ACCESSOR_OPERATOR ['!!']
   @LEFT_OPERATORS ['++']
-  @RIGHT_OPERATORS ['+:' '<<']
+  @RIGHT_OPERATORS ['+:']
   @TYPE_OPERATOR ['::']
   @NOT ['not']
   @LOGIC ['&&' '||']
