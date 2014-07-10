@@ -23,6 +23,7 @@ module.exports = {
   @If             (r 'if')
   @Identifier     (r 'identifier')
   @Instantiate    (r 'instantiate')
+  @Interface      (r 'interface')
   @Import         (r 'import')
   @Let            (r 'let')
   @L              (r 'line')

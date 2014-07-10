@@ -99,6 +99,7 @@ bnf = {
     (o 'DefMacro')
     (o 'TypeSignature')
     (o 'TypeAlias')
+    (o 'Interface')
   ]
 
   @Expression [
@@ -377,6 +378,19 @@ bnf = {
   @Class [
     (o 'CLASS { Terminator Constructor Terminator }' (-> n Class $4 []))
     (o 'CLASS { Terminator Constructor Terminator ClassMembers Terminator }' (-> n Class $4 $6))
+  ]
+
+  @KeyType [
+    (o 'Key TypeValue' (-> [$1 $2]))
+  ]
+
+  @InterfaceKeys [
+    (o 'KeyType' (-> n Arguments $1))
+    (o 'InterfaceKeys OptComma KeyType' (-> n Arguments $1 $3))
+  ]
+
+  @Interface [
+    (o 'INTERFACE Identifier { OptTerminator InterfaceKeys OptTerminator }' (-> n Interface $2 $5))
   ]
 
   @Instantiate [
