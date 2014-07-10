@@ -141,10 +141,8 @@ bnf = {
     (o 'Literal')
     (o 'Vectors')
     (o 'Maps')
-    (o 'Type')
     (o 'Prototype')
     (o 'SpecialFunctions')
-    (o 'ArgumentsShorthand ^ Identifier' (-> n Assignment $3 $1))
     (o '( OptTerminator Expression OptTerminator )' (-> $3))
   ]
 

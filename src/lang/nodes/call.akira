@@ -22,7 +22,7 @@ checkCallType = fn [name params context line] {
   type = Store.types !! name
   if type then {
     tparams = type.params
-    if tparams then {
+    if tparams && params then {
       params-unbalanced = tparams.length != params.length
       if params-unbalanced is true
         then console.warn '{{name}} was signed with {{tparams.length}} ' ++
