@@ -5,6 +5,13 @@ make-block = fn [expr] {
     @body (make-array expr) }
 }
 
+can-be-conditional = fn [consequent alternate] {
+  consequent is Map &&
+  alternate is Map &&
+  consequent.type != 'ThrowStatement' &&
+  alternate.type != 'ThrowStatement'
+}
+
 ConditionalExpression = fn [test consequent alternate] {
   { @type 'ConditionalExpression'
     @test test
@@ -15,7 +22,7 @@ ConditionalExpression = fn [test consequent alternate] {
 IfStatement :: Map Vector | Map Maybe Vector | Maybe Map -> Map
 IfStatement = fn [test consequent alternate] {
   cond
-    consequent is Map && alternate is Map ? ConditionalExpression test consequent alternate
+    (can-be-conditional consequent alternate) ? ConditionalExpression test consequent alternate
     else ? {
       @type 'IfStatement'
       @test test
