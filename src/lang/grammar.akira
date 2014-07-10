@@ -375,9 +375,14 @@ bnf = {
     (o '[ ] TBody' (-> n ClassMethod none none $3))
   ]
 
+  @OptImplements [
+    (o '')
+    (o 'TYPE_OPERATOR Identifier' (-> $2))
+  ]
+
   @Class [
-    (o 'CLASS { Terminator Constructor Terminator }' (-> n Class $4 []))
-    (o 'CLASS { Terminator Constructor Terminator ClassMembers Terminator }' (-> n Class $4 $6))
+    (o 'CLASS OptImplements { Terminator Constructor Terminator }' (-> n Class $5 [] $2))
+    (o 'CLASS OptImplements { Terminator Constructor Terminator ClassMembers Terminator }' (-> n Class $5 $7 $2))
   ]
 
   @KeyType [
