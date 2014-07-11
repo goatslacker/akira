@@ -14,7 +14,8 @@ vm = require 'vm'
 run-macro = fn [name xargs context] {
   ast = Store.macros !! name
   args = obj2str xargs | esprima.parse
-  code = CallExpression ast args.body.0.expression.elements | ExpressionStatement | escodegen.generate
+  elements = args.body.0.expression.elements || []
+  code = CallExpression ast elements | ExpressionStatement | escodegen.generate
   vm.run-in-new-context code context
 }
 
