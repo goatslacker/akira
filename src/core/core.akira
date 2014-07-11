@@ -222,6 +222,13 @@ export {
   @partial fn [f & args] {
       fn [& xargs] { f.apply f, args ++ xargs } }
 
+  @copy fn [x y] {
+    (Object.keys x).for-each fn [k] {
+      y !! k = x !! k
+    }
+    y
+  }
+
   @partialr fn [f & args] {
       fn [& xargs] { f.apply f, xargs ++ args } }
 
