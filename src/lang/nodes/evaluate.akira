@@ -12,8 +12,8 @@ Evaluate = class {
       then { @__akira a }
       else {
         xform = '(' ++ (obj2str a) ++ ')'
-        ast = exprima.parse xform
-        ast.body.0.expression
+        xast = esprima.parse xform
+        xast.body.0.expression
       }
   }
 }
