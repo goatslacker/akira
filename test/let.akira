@@ -1,0 +1,9 @@
+x = let [a 1] then a + 2
+ok x 3
+b = a is undefined
+ok b true
+
+y = let [a 1 b 2 c 3] then {
+  a + b + c + 4
+}
+ok y 10
