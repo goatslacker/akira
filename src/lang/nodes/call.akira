@@ -20,9 +20,31 @@ run-macro = fn [name xargs context] {
   vm.run-in-new-context code scope
 }
 
-checkCallType = fn [name params context line] {
+type-check-params = fn [inferred actual context line name] {
+  combined = zip-with fn [a b] {
+    if a is none || b is none
+      then true
+      else a == b
+  } inferred actual
+  matched = foldl (&&) combined true
+
+  (raise '{{name}} was provided with an incorrect parameter ' ++
+    'at {{context.$$$filename}} line {{line}}' TypeError) if not matched
+}
+
+checkCallType = fn [name (params = []) context line] {
   type = Store.types !! name
   if type then {
+    inferred-params = map (-> TypeSystem.infer &0 context) params
+    akira-param-types = if type.params
+      then map TypeSystem.convert-akira-type type.params
+      else []
+    (type-check-params inferred-params,
+      akira-param-types,
+      context,
+      line,
+      name) if akira-param-types.length && inferred-params.length
+
     tparams = type.params
     if tparams && params then {
       params-unbalanced = tparams.length != params.length
