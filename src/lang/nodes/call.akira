@@ -16,14 +16,7 @@ run-macro = fn [name xargs context] {
   args = obj2str xargs | esprima.parse
   elements = args.body.0.expression.elements || []
   code = CallExpression ast elements | ExpressionStatement | escodegen.generate
-  scope = {}
-  self = this
-  (Object.keys self).for-each fn [k] {
-    scope !! k = self !! k
-  }
-  (Object.keys context).for-each fn [k] {
-    scope !! k = context !! k
-  }
+  scope = copy (copy {} context) this
   vm.run-in-new-context code scope
 }
 
