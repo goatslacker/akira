@@ -215,16 +215,17 @@ bnf = {
   ]
 
   @LetOperation [
-    (o 'Assignment Terminator')
+    (o 'Identifier Value' (-> n Assignment $1 $2))
   ]
 
   @LetOperations [
     (o 'LetOperation' (-> n Arguments $1))
-    (o 'LetOperations LetOperation' (-> n Arguments $1 $2))
+    (o 'LetOperations OptComma LetOperation' (-> n Arguments $1 $3))
   ]
 
   @Let [
-    (o 'LET OptTerminator LetOperations THEN OptTerminator Expression TERMINATOR' (-> n Let $3 $6))
+    (o 'LET [ OptTerminator LetOperations OptTerminator ] THEN Expression' (-> n Let $4 $8))
+    (o 'LET [ OptTerminator LetOperations OptTerminator ] THEN TBody' (-> n Let $4 $8))
   ]
 
   @MaybeParameters [

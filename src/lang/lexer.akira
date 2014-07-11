@@ -46,12 +46,11 @@ return-identifier = match {
   [type item] [type item]
 }
 
-parse-identifier = fn [t chunk]
-  let
-    item = extract t chunk
-    token = identifiers | find (-> &0.indexOf item.1 | (>= 0))
-  then
-    return-identifier (token || t) item.1
+parse-identifier = fn [t chunk] {
+  item = extract t chunk
+  token = identifiers | find (-> &0.indexOf item.1 | (>= 0))
+  return-identifier (token || t) item.1
+}
 
 convert-regexp = fn [item]
   RegExp item.2 item.3
@@ -74,14 +73,13 @@ get-token = fn [type chunk]
     type is 'TERMINATOR' ? ' '
     else ? [chunk.0 chunk.0]
 
-process-chunk = fn [code n]
-  let
-    type = get-type code
-    token = get-token type code
-  then
-    if token is Vector
-      then token ++ [n.line]
-      else [type token n.line]
+process-chunk = fn [code n] {
+  type = get-type code
+  token = get-token type code
+  if token is Vector
+    then token ++ [n.line]
+    else [type token n.line]
+}
 
 get-length = match {
   ['STR' i] i + 2
