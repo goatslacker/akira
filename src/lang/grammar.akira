@@ -55,8 +55,8 @@ bnf = {
   ]
 
   @Statements [
-    (o 'Body' (-> yy.Nodes.wrap $1))
-    (o 'Statements TERMINATOR Body' (-> $1.push $3))
+    (o 'Statement' (-> yy.Nodes.wrap $1))
+    (o 'Statements TERMINATOR Statement' (-> $1.push $3))
     (o 'Statements ; Body' (-> $1.push $3))
     (o 'Statements TERMINATOR')
   ]
@@ -89,13 +89,12 @@ bnf = {
 
   @Body [
     (o 'TBody')
-    (o 'Statement')
+    (o 'Expression')
   ]
 
   @Statement [
     (o 'Exporting')
     (o 'Expression')
-    (o 'Recur')
     (o 'DefMacro')
     (o 'TypeSignature')
     (o 'TypeAlias')
@@ -119,6 +118,7 @@ bnf = {
     (o 'Instantiate')
     (o 'Macro')
     (o 'Raise')
+    (o 'Recur')
     (o 'Exceptions')
     (o 'IMPORT STR' (-> n Import $2))
   ]
@@ -420,7 +420,6 @@ bnf = {
 
   @Recur [
     (o 'RECUR OptTerminator Arguments' (-> n Recur $3))
-    (o '( RECUR OptTerminator Arguments )' (-> n Recur $4))
   ]
 
   @If [
