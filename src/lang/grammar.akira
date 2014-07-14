@@ -329,7 +329,7 @@ bnf = {
 
   @Accessor [
     (o '. Identifier' (-> $2))
-    (o '. Literal' (-> $2))
+    (o '. AlphaNumeric' (-> $2))
     (o '. PROTOTYPE' (-> $2))
   ]
 
