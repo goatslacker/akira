@@ -124,9 +124,12 @@ bnf = {
   ]
 
   @Value [
-    (o 'Callable')
+    (o 'NONE' (-> n Literal none))
+    (o 'BOOL' (-> n Literal ($1 is 'true')))
+    (o 'REGEXP' (-> n Literal $1))
     (o 'Vectors')
     (o 'Maps')
+    (o 'Callable')
     (o 'SpecialFunctions')
     (o 'Class')
     (o 'Operation')
@@ -140,7 +143,7 @@ bnf = {
 
   @Accessibles [
     (o 'Identifier')
-    (o 'Literal')
+    (o 'AlphaNumeric')
     (o 'Prototype')
     (o 'ArgumentsShorthand')
     (o 'Access')
@@ -148,13 +151,6 @@ bnf = {
 
   @ArgumentsShorthand [
     (o 'ARGS' (-> n Access (n Identifier 'arguments') (n Literal (Number $1))))
-  ]
-
-  @Literal [
-    (o 'AlphaNumeric')
-    (o 'NONE' (-> n Literal none))
-    (o 'BOOL' (-> n Literal ($1 is 'true')))
-    (o 'REGEXP' (-> n Literal $1))
   ]
 
   @AlphaNumeric [
