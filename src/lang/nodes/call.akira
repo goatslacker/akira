@@ -49,12 +49,20 @@ return-function = fn [callee args params context line] {
       else CallExpression callee (unwrap args)
 }
 
+check-callee-type = fn [node] {
+  if node.type == 'Literal'
+    then raise 'Cannot call using a Literal' TypeError
+    else none
+}
+
 Call = class {
   [@ref @params] { this }
 
   compile [context] {
     callee = ast this.ref context
     args = ast this.params context
+
+    check-callee-type callee
 
     if callee.type == 'Identifier' && Store.macros !! callee.name
       then run-macro callee.name args context
