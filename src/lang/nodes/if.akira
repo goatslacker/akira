@@ -1,0 +1,28 @@
+IfStatement = require 'ast/IfStatement'
+Literal = require 'ast/Literal'
+
+ast = require 'ast'
+beta-redex = require 'betaRedex'
+implicit-return = require 'implicitReturn'
+
+If = class {
+  [@test @consequent @alternate] { this }
+
+  compile [context] {
+    test = ast this.test context
+    consequent = ast this.consequent context
+    alternate = (ast this.alternate context) || (Literal none)
+
+    condition = IfStatement test consequent alternate
+
+    if condition.type == 'ConditionalExpression'
+      then condition
+      else {
+        body = [condition]
+        implicit-return body
+        beta-redex body
+      }
+  }
+}
+
+module.exports = If
