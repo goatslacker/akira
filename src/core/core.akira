@@ -223,9 +223,9 @@ export {
       fn [& xargs] { f.apply f, args ++ xargs } }
 
   @copy fn [x y] {
-    (Object.keys y).for-each fn [k] {
+    Object.keys y | (.for-each fn [k] {
       x !! k = y !! k
-    }
+    })
     x
   }
 

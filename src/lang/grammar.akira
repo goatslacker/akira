@@ -125,6 +125,10 @@ bnf = {
 
   @Value [
     (o 'Accessibles')
+    (o 'Vectors')
+    (o 'Maps')
+    (o 'SpecialFunctions')
+    (o '( OptTerminator Expression OptTerminator )' (-> $3))
     (o 'Class')
     (o 'Operation')
   ]
@@ -139,11 +143,7 @@ bnf = {
   @Accessibles [
     (o 'Callable')
     (o 'Literal')
-    (o 'Vectors')
-    (o 'Maps')
     (o 'Prototype')
-    (o 'SpecialFunctions')
-    (o '( OptTerminator Expression OptTerminator )' (-> $3))
   ]
 
   @ArgumentsShorthand [
