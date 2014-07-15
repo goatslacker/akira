@@ -3,7 +3,7 @@ context = { @console console }
 vm = require 'vm'
 util = require 'util'
 
-{ @transpile } = import './compiler.akira'
+{ @transpile } = require '../lang/compiler.js'
 
 inspect = fn [val] { util.inspect val false 35 }
 

@@ -1,7 +1,7 @@
 util = require 'util'
 me = require '../../package.json'
+{ @run @lexer @gen-program-ast @transpile } = require '../lang/compiler'
 
-{ @run @lexer @gen-program-ast @transpile } = import './compiler.akira'
 { @write-file @get-all-files @get-file } = import './fisy.akira'
 repl = import './repl.akira'
 help = import './help.akira'
