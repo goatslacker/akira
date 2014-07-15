@@ -120,6 +120,7 @@ bnf = {
     (o 'Raise')
     (o 'Recur')
     (o 'Exceptions')
+    (o 'TypeCheck')
     (o 'IMPORT STR' (-> n Import $2))
   ]
 
@@ -147,6 +148,10 @@ bnf = {
     (o 'Prototype')
     (o 'ArgumentsShorthand')
     (o 'Access')
+  ]
+
+  @TypeCheck [
+    (o 'TYPE_OPERATOR Value' (-> n Operation $2 '::'))
   ]
 
   @ArgumentsShorthand [
