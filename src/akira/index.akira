@@ -3,6 +3,7 @@ me = require '../../package.json'
 
 { @run @lexer @gen-program-ast @transpile } = import './compiler.akira'
 { @write-file @get-all-files @get-file } = import './fisy.akira'
+repl = import './repl.akira'
 help = import './help.akira'
 
 analyse = fn [_ body] {
@@ -88,6 +89,7 @@ module.exports = {
       cmd is 'help' ? help!
       cmd is 'make' ? make opts.0 (tail opts)
       cmd is 'output' ? map file-output opts
+      cmd is 'repl' ? repl!
       cmd is 'run' ? run-a-file opts.0
       cmd is 'test' ? test!
       cmd is 'tokens' ? lex opts.0
@@ -100,6 +102,7 @@ module.exports = {
   @debug file-debug
   @lexer lex
   @output file-output
+  @repl repl
   @run run-a-file
   @test test
   @write write-file
