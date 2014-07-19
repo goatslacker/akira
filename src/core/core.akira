@@ -35,7 +35,7 @@ macro each fn [sym name test] {
   @each false }
 }
 
-export {
+{
   @eq fn [a b] { a == b }
 
   @eq-val fn [a b] { a if a is b }

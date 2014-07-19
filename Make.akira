@@ -1,3 +1,5 @@
+export Makefile-Functions
+
 escodegen = require 'escodegen'
 esmangle = require 'esmangle'
 esprima = require 'esprima'
@@ -117,7 +119,7 @@ build-all = fn [] {
   (-> do (build-all-async!) -> 'All done.') | time
 }
 
-export {
+Makefile-Functions = {
   @test
   @build
   @build-all

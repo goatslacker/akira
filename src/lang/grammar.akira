@@ -176,7 +176,7 @@ bnf = {
   ]
 
   @Exporting [
-    (o 'EXPORT Expression' (-> n Export $2))
+    (o 'EXPORT Identifier' (-> n Export $2))
   ]
 
   @Cloning [

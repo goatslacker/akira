@@ -33,4 +33,4 @@ write-file = async [file code from (to = (path.dirname file))] {
   await fs.write-file-async write-path code
 }
 
-export { @get-all-files @write-file @get-file }
+{ @get-all-files @write-file @get-file }

@@ -32,7 +32,9 @@ OPTIONS = {
   @directive true
 }
 
-make-program = fn [body] {
+make-program = fn [body context] {
+  exported = context !! '$$$exported'
+  (body.push exported) if exported
   implicit-return body
   {
     @type 'Program'
@@ -61,16 +63,17 @@ make-program = fn [body] {
 
 transform = fn [name parsed] {
   cond
-    parsed is none ? make-program ''
+    parsed is none ? make-program '' {}
     else ? {
       context = {}
       body = parsed.compile context name
       dependencies = parsed.add-deps context
       parsed.flag-core-methods body
-      make-program (parsed.add-vars context) ++
+      program-body = (parsed.add-vars context) ++
         (parsed.add-core!) ++
         dependencies ++
         (parsed.add-contracts body)
+      make-program program-body context
     }
 }
 

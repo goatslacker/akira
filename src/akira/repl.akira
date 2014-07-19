@@ -17,7 +17,7 @@ read-eval-print-loop = fn [data _ filename cb] {
   }
 }
 
-export fn [] {
+fn [] {
   repl.start {
     @prompt 'akira> '
     @input process.stdin
