@@ -1,6 +1,7 @@
 escodegen = require 'escodegen'
 dune = require 'dune'
 lexer = require './lexer'
+implicit-return = require 'implicitReturn'
 { @parser } = require './parser'
 parser.yy = (require '../lang/nodes')
 parser.lexer = {
@@ -32,6 +33,7 @@ OPTIONS = {
 }
 
 make-program = fn [body] {
+  implicit-return body
   {
     @type 'Program'
     @body [{
