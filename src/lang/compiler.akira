@@ -85,6 +85,27 @@ transpile = fn [name code] {
   escodegen.generate (gen-program-ast name code) OPTIONS
 }
 
+replify = fn [name code] {
+  ast = gen-program-ast name code
+  program = {
+    @type 'Program'
+    @body [{
+      @type 'ExpressionStatement'
+      @expression {
+        @type 'AssignmentExpression'
+        @operator '='
+        @left {
+          @type 'MemberExpression'
+          @object { @type 'Identifier' @name 'this' }
+          @property { @type 'Identifier' @name '_$resultValue' }
+        }
+        @right ast.body.0.expression
+      }
+    }]
+  }
+  escodegen.generate program OPTIONS
+}
+
 run = fn [name code context] {
   try {
     dune.string code name context
@@ -100,4 +121,5 @@ module.exports = {
   @lexer
   @run
   @transpile
+  @replify
 }

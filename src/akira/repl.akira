@@ -3,15 +3,15 @@ context = { @console console }
 vm = require 'vm'
 util = require 'util'
 
-{ @transpile } = require '../lang/compiler.js'
+{ @replify } = require '../lang/compiler.js'
 
 inspect = fn [val] { util.inspect val false 35 }
 
 read-eval-print-loop = fn [data _ filename cb] {
   try {
-    code = transpile filename data
+    code = replify filename data
     vm.run-in-new-context code context
-    cb!
+    cb (context !! '_$resultValue')
   } catch err {
     util.error err.stack
   }
