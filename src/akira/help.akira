@@ -1,3 +1,5 @@
+export help
+
 text = [
    ''
    'ast [file]               - output the Mozilla Parse API for that file'

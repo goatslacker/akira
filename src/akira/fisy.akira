@@ -1,3 +1,5 @@
+export functions
+
 fs = require-node-async 'fs'
 path = require 'path'
 
@@ -33,4 +35,4 @@ write-file = async [file code from (to = (path.dirname file))] {
   await fs.write-file-async write-path code
 }
 
-{ @get-all-files @write-file @get-file }
+functions = { @get-all-files @write-file @get-file }

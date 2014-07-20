@@ -1,3 +1,5 @@
+export start-repl
+
 repl = require 'repl'
 context = { @console console }
 vm = require 'vm'
@@ -17,7 +19,7 @@ read-eval-print-loop = fn [data _ filename cb] {
   }
 }
 
-fn [] {
+start-repl = fn [] {
   repl.start {
     @prompt 'akira> '
     @input process.stdin
