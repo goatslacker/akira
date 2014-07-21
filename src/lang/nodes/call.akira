@@ -32,9 +32,9 @@ type-check-params = fn [inferred actual context line name] {
     'at {{context.$$$filename}} line {{line}}' TypeError) if not matched
 }
 
-checkCallType = fn [name (params = []) context line] {
+checkCallType = fn [name params context line] {
   type = Store.types !! name
-  if type then {
+  if params == Vector && type then {
     inferred-params = map (-> TypeSystem.infer &0 context) params
     akira-param-types = if type.params
       then map TypeSystem.convert-akira-type type.params
