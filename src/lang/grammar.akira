@@ -315,7 +315,7 @@ bnf = {
   ]
 
   @TypeAlias [
-    (o 'TYPEALIAS Identifier TypeValues',
+    (o 'TYPEALIAS Identifier TypeValue',
       (-> n TypeAlias (n TypeSignature $2 '' $3)))
   ]
 
