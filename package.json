@@ -37,7 +37,8 @@
     "obj2str",
     "tg",
     "traverse",
-    "unwrapExpressionStatement"
+    "unwrapExpressionStatement",
+    "prelude"
   ],
 
   "devDependencies": {
