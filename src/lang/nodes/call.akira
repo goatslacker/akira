@@ -8,7 +8,7 @@ ast = require 'ast'
 escodegen = require 'escodegen'
 esprima = require 'esprima'
 obj2str = require 'obj2str'
-unwrapExpressionStatement = require 'unwrapExpressionStatement'
+unwrap-expression-statement = require 'unwrapExpressionStatement'
 vm = require 'vm'
 
 run-macro = fn [name xargs context] {
@@ -20,49 +20,53 @@ run-macro = fn [name xargs context] {
   vm.run-in-new-context code scope
 }
 
-type-check-params = fn [inferred actual context line name] {
-  combined = zip-with fn [a b] {
+type-check-params = fn [provided expected context line name] {
+  zip-with fn [a b] {
     if a is none || b is none
-      then true
-      else a == b
-  } inferred actual
-  matched = foldl (&&) combined true
-
-  (raise '{{name}} was provided with an incorrect parameter ' ++
-    'at {{context.$$$filename}} line {{line}}' TypeError) if not matched
+      then none
+      else {
+        (raise 'Expected {{b}} but got {{a}} for function {{name}} ' ++
+          'at {{context.$$$filename}} line {{line}}' TypeError) if a != b
+      }
+  } provided expected
 }
 
-checkCallType = fn [name params context line] {
+verify-number-params = fn [name params context line] {
   type = Store.types !! name
-  if params == Vector && type then {
-    inferred-params = map (-> TypeSystem.infer &0 context) params
-    akira-param-types = if type.params
-      then map TypeSystem.convert-akira-type type.params
-      else []
-    (type-check-params inferred-params,
-      akira-param-types,
-      context,
-      line,
-      name) if akira-param-types.length && inferred-params.length
+  tparams = type.params
 
-    tparams = type.params
-    if tparams && params then {
-      params-unbalanced = tparams.length != params.length
-      if params-unbalanced is true
-        then console.warn '{{name}} was signed with {{tparams.length}} ' ++
-          'arguments yet it was provided with {{params.length}} ' ++
-          'at {{context.$$$filename}} line {{line}}'
-        else none
-    } else none
+  if tparams then {
+    params-unbalanced = tparams.length != params.length
+    (console.warn '{{name}} was signed with {{tparams.length}} ' ++
+      'arguments yet it was provided with {{params.length}} ' ++
+      'at {{context.$$$filename}} line {{line}}') if params-unbalanced is true
   } else none
 }
 
+verify-types = fn [name params context line] {
+  type = Store.types !! name
+  xparams = if params is Vector then params else []
+
+--  verify-number-params name xparams context line
+
+  inferred-params = map (-> TypeSystem.infer &0 context) xparams
+  akira-param-types = if type.params
+    then map TypeSystem.convert-akira-type type.params
+    else []
+
+  (type-check-params inferred-params,
+    akira-param-types,
+    context,
+    line,
+    name) if akira-param-types.length && inferred-params.length
+}
+
 unwrap = fn [xargs] {
-  (map unwrapExpressionStatement xargs) if xargs
+  (map unwrap-expression-statement xargs) if xargs
 }
 
 return-function = fn [callee args params context line] {
-  checkCallType callee.name args context line
+  (verify-types callee.name args context line) if Store.types !! callee.name
 
   if args && args.__rest is true
     then CallExpression (MemberExpression callee (Identifier 'apply')) [(Identifier 'null') args]
@@ -71,20 +75,12 @@ return-function = fn [callee args params context line] {
       else CallExpression callee (unwrap args)
 }
 
-check-callee-type = fn [node] {
-  if node.type == 'Literal'
-    then raise 'Cannot call using a Literal' TypeError
-    else none
-}
-
 Call = class {
   [@ref @params] { this }
 
   compile [context] {
     callee = ast this.ref context
     args = ast this.params context
-
-    check-callee-type callee
 
     if callee.type == 'Identifier' && Store.macros !! callee.name
       then run-macro callee.name args context
