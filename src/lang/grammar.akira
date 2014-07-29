@@ -125,6 +125,7 @@ bnf = {
   ]
 
   @Value [
+    (o 'NUM' (-> n Literal (Number ($1.replace /,/g, ''))))
     (o 'NONE' (-> n Literal none))
     (o 'BOOL' (-> n Literal ($1 is 'true')))
     (o 'REGEXP' (-> n Literal $1))
@@ -144,7 +145,7 @@ bnf = {
 
   @Accessibles [
     (o 'Identifier')
-    (o 'AlphaNumeric')
+    (o 'Strings')
     (o 'Prototype')
     (o 'ArgumentsShorthand')
     (o 'Access')
@@ -185,15 +186,22 @@ bnf = {
     (o 'Vectors Arguments' (-> n Cloning $2 $1))
   ]
 
-  @CallableValue [
+  @ValuePlusCalls [
     (o 'Value')
     (o 'Invocation')
   ]
 
+  @AllCallables [
+    (o 'Callable')
+    (o 'Invocation')
+    (o 'SpecialFunctions')
+    (o '( OptTerminator InlineDeclaration OptTerminator )' (-> $3))
+  ]
+
   @Pipeline [
-    (o 'Value | OptTerminator CallableValue' (-> n Pipeline $1 $4))
-    (o 'Invocation | OptTerminator CallableValue' (-> n Pipeline $1 $4))
-    (o 'Pipeline | OptTerminator CallableValue' (-> n Pipeline $1 $4))
+    (o 'Value | OptTerminator AllCallables' (-> n Pipeline $1 $4))
+    (o 'Invocation | OptTerminator AllCallables' (-> n Pipeline $1 $4))
+    (o 'Pipeline | OptTerminator AllCallables' (-> n Pipeline $1 $4))
   ]
 
   @Invocation [
@@ -239,7 +247,7 @@ bnf = {
   ]
 
   @Awaitable [
-    (o 'AWAIT CallableValue' (-> n Await $2))
+    (o 'AWAIT AllCallables' (-> n Await $2 false))
   ]
 
   @AsyncDo [
@@ -424,8 +432,8 @@ bnf = {
   ]
 
   @If [
-    (o 'Value IF CallableValue' (-> n If $3 $1 none))
-    (o 'IF CallableValue OptTerminator THEN Body OptTerminator ELSE Body',
+    (o 'Value IF ValuePlusCalls' (-> n If $3 $1 none))
+    (o 'IF ValuePlusCalls OptTerminator THEN Body OptTerminator ELSE Body',
       (-> n If $2 $5 $8))
   ]
 
