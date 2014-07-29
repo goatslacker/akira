@@ -246,8 +246,22 @@ bnf = {
     (o 'ASYNC [ Parameters ] Body' (-> n AsyncFunction $3 $5))
   ]
 
+  @MultipleAwaitable [
+    (o 'AllCallables TERMINATOR' (-> $1))
+  ]
+
+  @MultipleAwaitables [
+    (o 'MultipleAwaitable' (-> n Arguments $1))
+    (o 'MultipleAwaitables MultipleAwaitable' (-> n Arguments $1 $2))
+  ]
+
+  @AwaitBlock [
+    (o '{ OptTerminator MultipleAwaitables }' (-> $3))
+  ]
+
   @Awaitable [
     (o 'AWAIT AllCallables' (-> n Await $2 false))
+    (o 'AWAIT AwaitBlock' (-> n Await $2 true))
   ]
 
   @AsyncDo [

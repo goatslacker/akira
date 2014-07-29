@@ -9,6 +9,9 @@ PromiseNode = Identifier 'Promise'
 PromiseNode.__core = true
 supported-async-fns = ['map' 'filter']
 
+parallel = Identifier 'parallel'
+parallel.__core = true
+
 xchange-if-async-caller = fn [call] {
   name = call.callee.name
   xform = any (-> &0 is name) supported-async-fns
@@ -18,10 +21,13 @@ xchange-if-async-caller = fn [call] {
 }
 
 Await = class {
-  [@call] { this }
+  [@call @parallel] { this }
 
   compile [context] {
-    call = ast this.call context
+    call = if this.parallel is true
+      then CallExpression parallel (map (-> ast &0 context) this.call.args)
+      else ast this.call context
+
     callback = FunctionExpression none [] []
 
     caller = if call.callee.type == 'Identifier'

@@ -5,6 +5,12 @@ macro bin-expr fn [op a b] {
   @right b }
 }
 
+macro mdec fn [x] {
+  { @type 'UpdateExpression'
+    @operator '--'
+    @argument x }
+}
+
 macro each fn [sym name test] {
   { @type 'ForInStatement'
   @left {
@@ -333,6 +339,21 @@ macro each fn [sym name test] {
   @words fn [f str] { str.split ' ' | map f }
 
   @print fn [& args] { console.log.apply console args }
+
+  @parallel fn [& f] {
+    n = arguments.length
+    c = []
+
+    new Promise fn [resolve reject] {
+      many.for-each fn [next] {
+        do (next!) fn [data] {
+          c.push data
+          mdec n
+          (resolve c) if (n == 0)
+        }
+      }
+    }
+  }
 
   @Set (require 'collections/set')
   @Dict (require 'collections/dict')
