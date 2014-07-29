@@ -48,7 +48,7 @@ time = fn [f] {
 start-compile = fn [name from to] {
   fn [] {
     print 'Building {{name}}'
-    do (akira.compile from to) -> 'Done building {{name}}.'
+    do (akira.compile from to) (-> 'Done building {{name}}.')
   }
 }
 
@@ -63,7 +63,7 @@ build-parser = fn [] {
     name = from = 'lib/lang/parser.js'
     code = grammar.generate!
     target = path.join process.env.PWD 'lib/lang/'
-    do (akira.write name code from target) -> 'Done building parser.'
+    do (akira.write name code from target) (-> 'Done building parser.')
   }
 }
 
@@ -81,7 +81,7 @@ build-core = fn [] {
     from = 'src/core/core.akira'
     target = 'lib/core'
     compile-core-ast = gen-compile-core-ast from target
-    do (akira.ast from compile-core-ast) -> 'Done building core.'
+    do (akira.ast from compile-core-ast) (-> 'Done building core.')
   } | time
 }
 
@@ -116,7 +116,7 @@ build-all-async = async [] {
 }
 
 build-all = fn [] {
-  (-> do (build-all-async!) -> 'All done.') | time
+  (-> do (build-all-async!) (-> 'All done.')) | time
 }
 
 Makefile-Functions = {

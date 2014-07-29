@@ -265,8 +265,8 @@ bnf = {
   ]
 
   @AsyncDo [
-    (o 'DO Value Declaration' (-> n Do $2 $3))
-    (o 'DO Value InlineDeclaration' (-> n Do $2 $3))
+    (o 'DO Value AllCallables' (-> n Do $2 $3 none))
+--    (o 'DO Value AllCallables OptTerminator CATCH OptTerminator AllCallables' (-> n Do $2 $3 $7))
   ]
 
   @Conditional [
@@ -314,7 +314,6 @@ bnf = {
   @VectorArg [
     (o 'Value')
     (o 'Rest')
-    (o 'CATCH')
   ]
 
   @VectorArgs [

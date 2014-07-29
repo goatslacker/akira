@@ -28,7 +28,7 @@ compile = async [from target] {
   map fn [file] {
     try {
       data = transpile file.name file.code
-      do (write-file file.name data from target) -> &0
+      do (write-file file.name data from target) (-> &0)
     } catch err {
       console.error 'Filename ' ++ file.name
       console.error err.stack

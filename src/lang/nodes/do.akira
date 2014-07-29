@@ -7,13 +7,16 @@ ast = require 'ast'
 IdenThen = Identifier 'then'
 
 Do = class {
-  [@call @f] { this }
+  [@call @f @e] { this }
 
   compile [context] {
     call = ast this.call context
     f = ast this.f context
+    e = if this.e
+      then [(ast this.e context)]
+      else []
 
-    CallExpression (MemberExpression call IdenThen) [f]
+    CallExpression (MemberExpression call IdenThen) ([f] ++ e)
   }
 }
 
