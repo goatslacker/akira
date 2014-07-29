@@ -61,6 +61,13 @@ bnf = {
     (o 'Statements TERMINATOR')
   ]
 
+  @Expressions [
+    (o 'Expression' (-> yy.Nodes.wrap $1))
+    (o 'Expressions TERMINATOR Expression' (-> $1.push $3))
+    (o 'Expressions ; Body' (-> $1.push $3))
+    (o 'Expressions TERMINATOR')
+  ]
+
   @Terminator [
     (o 'TERMINATOR')
     (o 'Terminator TERMINATOR')
@@ -84,7 +91,7 @@ bnf = {
   ]
 
   @TBody [
-    (o '{ OptTerminator Statements }' (-> $3))
+    (o '{ OptTerminator Expressions }' (-> $3))
   ]
 
   @Body [
