@@ -338,7 +338,9 @@ macro each fn [sym name test] {
 
   @words fn [f str] { str.split ' ' | map f }
 
-  @print fn [& args] { console.log.apply console args }
+  @print fn [& args] {
+    (console.log.apply console args) if console.log == Function
+  }
 
   @parallel fn [& f] {
     n = arguments.length
