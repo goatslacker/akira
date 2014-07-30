@@ -39,16 +39,16 @@ gen-compile-core-ast = fn [from target] {
 
 time = fn [f] {
   start = Date.now!
-  do (f!) fn [str] {
+  do f! then fn [str] {
     end = Date.now!
     print str ++ ' Time {{end - start}}ms'
-  }
+  } catch print
 }
 
 start-compile = fn [name from to] {
   fn [] {
     print 'Building {{name}}'
-    do (akira.compile from to) (-> 'Done building {{name}}.')
+    do akira.compile from to then (-> 'Done building {{name}}.') catch print
   }
 }
 
@@ -63,7 +63,9 @@ build-parser = fn [] {
     name = from = 'lib/lang/parser.js'
     code = grammar.generate!
     target = path.join process.env.PWD 'lib/lang/'
-    do (akira.write name code from target) (-> 'Done building parser.')
+    do akira.write name code from target
+      then (-> 'Done building parser.')
+      catch print
   }
 }
 
@@ -81,14 +83,16 @@ build-core = fn [] {
     from = 'src/core/core.akira'
     target = 'lib/core'
     compile-core-ast = gen-compile-core-ast from target
-    do (akira.ast from compile-core-ast) (-> 'Done building core.')
+    do akira.ast from compile-core-ast
+      then (-> 'Done building core.')
+      catch print
   } | time
 }
 
 test = fn [] {
   time fn [] {
     print 'Running tests...'
-    do (akira.test!) fn [results] {
+    do akira.test! then fn [results] {
       test-results = foldl fn [bool result] {
         [name value len] = result
         val-ascii = if value is true then '√' else 'x'
@@ -99,7 +103,7 @@ test = fn [] {
       if test-results == true
         then 'Tests OK!'
         else 'Tests Fail'
-    }
+    } catch print
   }
 }
 
@@ -116,7 +120,7 @@ build-all-async = async [] {
 }
 
 build-all = fn [] {
-  (-> do (build-all-async!) (-> 'All done.')) | time
+  (-> do build-all-async! then (-> 'All done.') catch print) | time
 }
 
 Makefile-Functions = {

@@ -12,11 +12,9 @@ Do = class {
   compile [context] {
     call = ast this.call context
     f = ast this.f context
-    e = if this.e
-      then [(ast this.e context)]
-      else []
+    e = ast this.e context
 
-    CallExpression (MemberExpression call IdenThen) ([f] ++ e)
+    CallExpression (MemberExpression call IdenThen) [f e]
   }
 }
 
