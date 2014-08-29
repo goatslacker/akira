@@ -360,4 +360,6 @@ macro each fn [sym name test] {
   @Set (require 'collections/set')
   @Dict (require 'collections/dict')
   @Map (require 'collections/map')
+
+  @React (require 'react')
 }
