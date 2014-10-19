@@ -22,7 +22,6 @@
     "addScope",
     "ast",
     "betaRedex",
-    "concatMap",
     "createFunction",
     "destructure",
     "genUniqueIdentifier",
