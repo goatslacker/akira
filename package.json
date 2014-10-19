@@ -25,6 +25,7 @@
     "createFunction",
     "destructure",
     "genUniqueIdentifier",
+    "gulp-akira",
     "implicitReturn",
     "inline",
     "log",
@@ -36,11 +37,15 @@
     "prelude"
   ],
   "devDependencies": {
+    "gulp": "^3.8.8",
+    "gulp-rename": "^1.2.0",
+    "gulp-streamify": "0.0.5",
     "jison": "^0.4.15"
   },
   "bin": {
     "akira": "./bin/akira"
   },
+  "main": "index.js",
   "engines": {
     "node": ">= 0.4.0"
   }

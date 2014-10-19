@@ -37,25 +37,6 @@ gen-compile-core-ast = fn [from target] {
   }
 }
 
-time = fn [f] {
-  start = Date.now!
-  do f! then fn [str] {
-    end = Date.now!
-    print str ++ ' Time {{end - start}}ms'
-  } catch print
-}
-
-start-compile = fn [name from to] {
-  fn [] {
-    print 'Building {{name}}'
-    do akira.compile from to then (-> 'Done building {{name}}.') catch print
-  }
-}
-
-build = fn [] {
-  start-compile 'parser' 'src/lang' 'lib/lang' | time
-}
-
 build-parser = fn [] {
   time fn [] {
     print 'Building parser'
@@ -67,14 +48,6 @@ build-parser = fn [] {
       then (-> 'Done building parser.')
       catch print
   }
-}
-
-build-ast = fn [] {
-  start-compile 'ast' 'src/ast' 'node_modules/ast' | time
-}
-
-build-akira = fn [] {
-  start-compile 'akira' 'src/akira/index.akira' 'lib/akira' | time
 }
 
 build-core = fn [] {
@@ -105,30 +78,4 @@ test = fn [] {
         else 'Tests Fail'
     } catch print
   }
-}
-
-build-all-async = async [] {
-  tasks = [
-    build
-    build-core
-    build-ast
-    build-akira
-    build-parser
-    test
-  ]
-  await map tasks fn [f] { f! }
-}
-
-build-all = fn [] {
-  (-> do build-all-async! then (-> 'All done.') catch print) | time
-}
-
-Makefile-Functions = {
-  @test
-  @build
-  @build-all
-  @build-core
-  @build-parser
-  @build-akira
-  @build-ast
 }
