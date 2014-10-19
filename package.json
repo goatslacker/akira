@@ -3,24 +3,20 @@
   "author": "Josh Perez <josh@goatslacker.com>",
   "version": "0.0.1",
   "description": "toy functional language that transpiles to JavaScript",
-
   "scripts": {
     "test": "bin/akira make test"
   },
-
   "repository": {
     "type": "git",
     "url": "https://github.com/goatslacker/akira.git"
   },
-
   "dependencies": {
-    "bluebird": "*",
-    "esprima": "*",
-    "escodegen": "*",
+    "bluebird": "^2.3.6",
     "dune": "*",
-    "fu": "*"
+    "escodegen": "^1.4.1",
+    "esprima": "^1.2.2",
+    "fu": "^0.1.0"
   },
-
   "bundledDependencies": [
     "Store",
     "addScope",
@@ -40,14 +36,12 @@
     "unwrapExpressionStatement",
     "prelude"
   ],
-
   "devDependencies": {
-    "jison": "*",
-    "nodewatch": "*"
+    "jison": "^0.4.15"
   },
-
-  "bin": { "akira": "./bin/akira" },
-
+  "bin": {
+    "akira": "./bin/akira"
+  },
   "engines": {
     "node": ">= 0.4.0"
   }
