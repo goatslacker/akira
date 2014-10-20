@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "bluebird": "^2.3.6",
-    "dune": "*",
+    "dune": "^0.2.0",
     "escodegen": "^1.4.1",
     "esprima": "^1.2.2",
     "fu": "^0.1.0"
