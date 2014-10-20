@@ -5,6 +5,8 @@ var rename = require('gulp-rename')
 var source = require('vinyl-source-stream')
 var streamify = require('gulp-streamify')
 var uglify = require('gulp-uglify')
+var util = require('gulp-util')
+var vm = require('gulp-vm')
 
 const paths = {
   ast: './src/ast/*.akira',
@@ -50,7 +52,6 @@ gulp.task('lexer', transpile(paths.lexer, dest.lang))
 gulp.task('grammar', transpile(paths.grammar, dest.lang))
 
 gulp.task('parser', ['grammar'], function () {
-  var vm = require('gulp-vm')
   gulp.src('./lib/lang/grammar.js')
     .pipe(streamify(vm(function (x) {
       return x.generate()
@@ -84,21 +85,16 @@ gulp.task('core', function () {
 //    .pipe(gulp.dest('./tmp'))
 })
 
-// XXX
 gulp.task('test', function () {
-  return
-
-//  gulp.src('test/*.akira')
-//    .pipe(streamify(akira(function (code, file) {
-//      return this.run(file.path, code, {
-//        ok: function () {
-//          console.log('@@@@@@@@@')
-//        }
-//      })
-//    })))
+  gulp.src('./test/*.akira')
+    .pipe(streamify(akira(function (code, file) {
+      util.log('Running', util.colors.magenta(file.path))
+      return this.transpile(file.path, code)
+    })))
+    .pipe(streamify(vm()))
 })
 
-gulp.task('default', ['lexer', 'parser', 'compiler', 'ast', 'nodes', 'core', 'binary', 'grammar', 'parser'])
+gulp.task('default', ['lexer', 'parser', 'compiler', 'ast', 'nodes', 'core', 'binary', 'grammar', 'parser', 'test'])
 gulp.task('all', ['default'])
 gulp.task('lang', ['lexer', 'parser', 'compiler'])
 gulp.task('rest', ['ast', 'nodes', 'core', 'binary'])

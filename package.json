@@ -26,6 +26,7 @@
     "destructure",
     "genUniqueIdentifier",
     "gulp-akira",
+    "gulp-vm",
     "implicitReturn",
     "inline",
     "log",
