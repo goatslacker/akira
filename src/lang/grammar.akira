@@ -138,7 +138,7 @@ bnf = {
     (o 'REGEXP' (-> n Literal $1))
     (o 'Vectors')
     (o 'Maps')
-    (o 'Callable')
+    (o 'Accessibles')
     (o 'SpecialFunctions')
     (o 'Class')
     (o 'Operation')
@@ -146,14 +146,10 @@ bnf = {
     (o '( OptTerminator Expression OptTerminator )' (-> $3))
   ]
 
-  @Callable [
-    (o 'Accessibles')
-    (o 'Declaration')
-  ]
-
   @Accessibles [
     (o 'Identifier')
     (o 'Strings')
+    (o 'Declaration')
     (o 'Prototype')
     (o 'ArgumentsShorthand')
     (o 'Access')
@@ -200,7 +196,7 @@ bnf = {
   ]
 
   @AllCallables [
-    (o 'Callable')
+    (o 'Accessibles')
     (o 'Invocation')
     (o 'SpecialFunctions')
     (o '( OptTerminator InlineDeclaration OptTerminator )' (-> $3))
@@ -213,9 +209,9 @@ bnf = {
   ]
 
   @Invocation [
-    (o 'Callable Arguments' (-> n Call $1 $2))
-    (o 'Callable !' (-> n Call $1))
-    (o 'Callable & !' (-> n Call $1, 'apply'))
+    (o 'Accessibles Arguments' (-> n Call $1 $2))
+    (o 'Accessibles !' (-> n Call $1))
+    (o 'Accessibles & !' (-> n Call $1, 'apply'))
   ]
 
   @Declaration [
