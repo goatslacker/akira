@@ -66,8 +66,19 @@ parse-args = fn [type chunk] {
   [type token raw]
 }
 
+special = match {
+  ['n'] '\n'
+  ['r'] '\r'
+  ['t'] '\t'
+  ['b'] '\b'
+  ['f'] '\f'
+  [x] x
+}
+
 parse-str = fn [type chunk] {
-  token = extract type chunk | (!! 2)
+  token = extract type chunk | (!! 2) | fn [str] {
+    str.replace /\\([a-z])/g (-> special &1)
+  }
   raw = extract type chunk | (!! 0)
   [type token raw]
 }
