@@ -2,8 +2,8 @@ rx = {
   @IDENTIFIER /^([a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
   @KEY /^(@[a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
   @NUM /^(-?([0-9]+[\.e])?[0-9]+,?)+/
-  @STR /^'(.*?)'/
-  @ARGS /^&([0-9]+)/
+  @STR /^('(.*?)')/
+  @ARGS /^(&([0-9]+))/
   @LAMBDA /^->/
   @OPERATION /^(<<|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:|::)/
   @TERMINATOR /^\n/
@@ -61,8 +61,15 @@ parse-regular-expressions = fn [] {
 }
 
 parse-args = fn [type chunk] {
-  token = extract type chunk | (!! 1)
-  [type token token]
+  token = extract type chunk | (!! 2)
+  raw = extract type chunk | (!! 0)
+  [type token raw]
+}
+
+parse-str = fn [type chunk] {
+  token = extract type chunk | (!! 2)
+  raw = extract type chunk | (!! 0)
+  [type token raw]
 }
 
 get-token = fn [type chunk]
@@ -71,7 +78,7 @@ get-token = fn [type chunk]
     type is 'KEY' ||
     type is 'OPERATION' ? parse-identifier &!
     type is 'NUM' ? parse-alphanumeric type chunk 0
-    type is 'STR' ||
+    type is 'STR' ? parse-str &!
     type is 'COMMENTS' ? parse-alphanumeric &!
     type is 'LAMBDA' ? 'FN'
     type is 'REGEXP' ? parse-regular-expressions &!
@@ -88,19 +95,13 @@ process-chunk = fn [code n] {
     else [type token token n.line]
 }
 
-get-length = match {
-  ['STR' i] i + 2
-  ['ARGS' i] i + 1
-  [else] i
-}
-
 incr-line = match {
   ['TERMINATOR' line] line + 1
   [else] line
 }
 
 get-next-index = fn [token]
-  { @index (token.2.toString! | (.length) | get-length token.0)
+  { @index (token.2.toString! | (.length))
   @token token }
 
 return-tokens = match {
