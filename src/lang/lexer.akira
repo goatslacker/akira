@@ -7,7 +7,7 @@ rx = {
   @LAMBDA /^->/
   @OPERATION /^(<<|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:|::)/
   @TERMINATOR /^\n/
-  @REGEX /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
+  @REGEXP /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
   @COMMENTS /^(--.*)/
   @WHITESPACE /^ /
 }
@@ -29,17 +29,17 @@ identifiers = {
 
 ignore = { @COMMENTS @WHITESPACE }
 
-get-type = fn [a]
+get-type = fn [a] {
   rx | find (-> &0.test a)
+}
 
-extract = fn [key chunk]
+extract = fn [key chunk] {
   rx !! key | (.exec chunk)
+}
 
-parse-alphanumeric = fn [t chunk (n = 1)]
+parse-alphanumeric = fn [t chunk (n = 1)] {
   extract t chunk | (!! n)
-
-return-token = fn [type]
-  (-> [type &0])
+}
 
 return-identifier = match {
   ['KEYWORDS' item] [(item.toUpperCase!) item]
@@ -52,11 +52,13 @@ parse-identifier = fn [t chunk] {
   return-identifier (token || t) item.1
 }
 
-convert-regexp = fn [item]
+convert-regexp = fn [item] {
   RegExp item.2 item.3
+}
 
-return-token-regexp = return-token 'REGEXP'
-parse-regular-expressions = (-> extract &! | convert-regexp | return-token-regexp)
+parse-regular-expressions = fn [] {
+  extract &! | convert-regexp | (-> ['REGEXP' &0 &0])
+}
 
 get-token = fn [type chunk]
   cond
@@ -67,7 +69,7 @@ get-token = fn [type chunk]
     type is 'STR' ||
     type is 'COMMENTS' ? parse-alphanumeric &!
     type is 'LAMBDA' ? 'FN'
-    type is 'REGEX' ? parse-regular-expressions &!
+    type is 'REGEXP' ? parse-regular-expressions &!
     type is 'ARGS' ? [type (extract type chunk | (!! 1))]
     type is 'WHITESPACE' ||
     type is 'TERMINATOR' ? ' '
