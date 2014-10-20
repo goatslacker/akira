@@ -42,8 +42,8 @@ parse-alphanumeric = fn [t chunk (n = 1)] {
 }
 
 return-identifier = match {
-  ['KEYWORDS' item] [(item.toUpperCase!) item]
-  [type item] [type item]
+  ['KEYWORDS' item] [(item.toUpperCase!) item item]
+  [type item] [type item item]
 }
 
 parse-identifier = fn [t chunk] {
@@ -60,6 +60,11 @@ parse-regular-expressions = fn [] {
   extract &! | convert-regexp | (-> ['REGEXP' &0 &0])
 }
 
+parse-args = fn [type chunk] {
+  token = extract type chunk | (!! 1)
+  [type token token]
+}
+
 get-token = fn [type chunk]
   cond
     type is 'IDENTIFIER' ||
@@ -70,17 +75,17 @@ get-token = fn [type chunk]
     type is 'COMMENTS' ? parse-alphanumeric &!
     type is 'LAMBDA' ? 'FN'
     type is 'REGEXP' ? parse-regular-expressions &!
-    type is 'ARGS' ? [type (extract type chunk | (!! 1))]
+    type is 'ARGS' ? parse-args &!
     type is 'WHITESPACE' ||
     type is 'TERMINATOR' ? ' '
-    else ? [chunk.0 chunk.0]
+    else ? [chunk.0 chunk.0 chunk.0]
 
 process-chunk = fn [code n] {
   type = get-type code
   token = get-token type code
   if token is Vector
     then token ++ [n.line]
-    else [type token n.line]
+    else [type token token n.line]
 }
 
 get-length = match {
@@ -95,7 +100,7 @@ incr-line = match {
 }
 
 get-next-index = fn [token]
-  { @index (token.1.toString! | (.length) | get-length token.0)
+  { @index (token.2.toString! | (.length) | get-length token.0)
   @token token }
 
 return-tokens = match {
