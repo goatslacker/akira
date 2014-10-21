@@ -1,3 +1,7 @@
+ok-deep = fn [a b] {
+  assert true (foldl (&&) (zip-with (==) a b))
+}
+
 numbers :: String -> Number
 numbers = match {
   ['one'] 1
@@ -6,8 +10,8 @@ numbers = match {
   [four] 4
 }
 
-ok 4 (numbers 'four')
-ok 1 (numbers 'one')
+assert 4 (numbers 'four')
+assert 1 (numbers 'one')
 
 gt-ten :: Number -> Boolean
 gt-ten = match {
@@ -15,8 +19,8 @@ gt-ten = match {
   [(> 10)] false
 }
 
-ok false (gt-ten 11)
-ok true (gt-ten 2)
+assert false (gt-ten 11)
+assert true (gt-ten 2)
 
 starts-with :: String String -> Boolean
 starts-with = fn [noun prefix] { prefix == noun.0 + noun.1 }
@@ -27,8 +31,8 @@ spanish-gender-of-noun = match {
   [(starts-with &0 'la')] 'female'
 }
 
-ok 'female' (spanish-gender-of-noun 'la casa')
-ok 'male' (spanish-gender-of-noun 'el carro')
+assert 'female' (spanish-gender-of-noun 'la casa')
+assert 'male' (spanish-gender-of-noun 'el carro')
 
 sort-even-odd :: Vector -> Vector
 sort-even-odd = match {
@@ -55,16 +59,16 @@ ls = [1 2 3 4 5]
 ls | get-middle | ok-deep [2 3 4]
 ls | init | ok-deep [1 2 3 4]
 ls | tail | ok-deep [2 3 4 5]
-ls | head | ok 1
-ls | last | ok 5
+ls | head | assert 1
+ls | last | assert 5
 
 add-two = match {
   [0] 0
   [n] n + 2
 }
 
-add-two 0 | ok 0
-add-two 2 | ok 4
+add-two 0 | assert 0
+add-two 2 | assert 4
 
 ljfdg = match {
   [a] 1
@@ -73,9 +77,9 @@ ljfdg = match {
   [else] 4
 }
 
-ljfdg 0 0 | ok 2
-ljfdg 0 0 0 | ok 3
-ljfdg! | ok 4
+ljfdg 0 0 | assert 2
+ljfdg 0 0 0 | assert 3
+ljfdg! | assert 4
 
 
 gorje = match {
@@ -84,8 +88,8 @@ gorje = match {
   [2 b _] 2
 }
 
-gorje 0 3 0 | ok 0
-gorje 2 0 0 | ok 2
+gorje 0 3 0 | assert 0
+gorje 2 0 0 | assert 2
 
 oiejf = match {
   [1 b 3] 1
@@ -93,8 +97,8 @@ oiejf = match {
   [else] 3
 }
 
-oiejf 1 0 3 | ok 1
-oiejf! | ok 3
+oiejf 1 0 3 | assert 1
+oiejf! | assert 3
 
 fjoes = match {
   [[a b 3 4 5]] 1
@@ -102,32 +106,32 @@ fjoes = match {
   [else] 0
 }
 
-fjoes [1 2 3 4 5] | ok 1
-fjoes [0 1 2 3 4] | ok 2
+fjoes [1 2 3 4 5] | assert 1
+fjoes [0 1 2 3 4] | assert 2
 
 ajoleif = match {
   [x b] b&!
 }
 
-ajoleif 6 fn [x b] { x } | ok 6
+ajoleif 6 fn [x b] { x } | assert 6
 
 jfo = match {
   [2 a & b] 1
   [else] 2
 }
 
-jfo 6 | ok 2
+jfo 6 | assert 2
 
 jfoe = match {
   [[a _]] 1
   [[a] b] 2
 }
 
-jfoe [3 6] | ok 1
-jfoe [2] 2 | ok 2
+jfoe [3 6] | assert 1
+jfoe [2] 2 | assert 2
 
 vcxv = match {
   [{ @d }] 3
 }
 
-vcxv { @d 3 } | ok 3
+vcxv { @d 3 } | assert 3

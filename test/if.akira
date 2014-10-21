@@ -11,12 +11,12 @@ foo = fn [x] {
 foo-true = foo true
 foo-false = foo false
 
-ok foo-true false
-ok foo-false true
+assert foo-true false
+assert foo-false true
 
 a = if false then true else if true then true else false
-ok a true
+assert a true
 
 [c d] = if true then [0 1] else [4 5]
-ok c 0
-ok d 1
+assert c 0
+assert d 1

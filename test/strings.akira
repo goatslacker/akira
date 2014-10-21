@@ -1,23 +1,24 @@
 str = 'hello'
 hi = str.split '' | foldl sum
-ok hi str
 
-capitalize str | ok 'Hello'
+assert hi str
 
-camelize 'hello-world' | ok 'helloWorld'
-camelize 'hello_world' | ok 'helloWorld'
-camelize 'hello_world-i_am_Akira' | ok 'helloWorldIAmAkira'
+capitalize str | assert 'Hello'
 
-uppercase str | ok 'HELLO'
+camelize 'hello-world' | assert 'helloWorld'
+camelize 'hello_world' | assert 'helloWorld'
+camelize 'hello_world-i_am_Akira' | assert 'helloWorldIAmAkira'
 
-chars uppercase str | join '' | ok 'HELLO'
+uppercase str | assert 'HELLO'
 
-condense '      foo bar ' | ok 'foobar'
+chars uppercase str | join '' | assert 'HELLO'
 
-'hi' * 3 | ok 'hihihi'
+condense '      foo bar ' | assert 'foobar'
+
+'hi' * 3 | assert 'hihihi'
 
 -> {
   b = 'hello-world'
   c = b.replace /-([a-z])/g fn [x] { x.1.toUpperCase! }
-  ok c 'helloWorld'
+  assert c 'helloWorld'
 }!

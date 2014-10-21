@@ -1,18 +1,22 @@
+ok-deep = fn [a b] {
+  assert true (foldl (&&) (zip-with (==) a b))
+}
+
 add-akira = fn [r v] { r ++ ' is ' ++ v }
 
-id 'awesome' | add-akira 'akira' | ok 'akira is awesome'
+id 'awesome' | add-akira 'akira' | assert 'akira is awesome'
 
-2 | (+ 1) | ok 3
+2 | (+ 1) | assert 3
 
 list = [1 2]
 list2 = [1 2 3]
 
-list | (.length) | (+ 2) | ok 4
+list | (.length) | (+ 2) | assert 4
 
 list | filter (> 1) | ok-deep [2]
 
-list2 | map (- 2) | map Math.abs | foldl (+) | ok 2
+list2 | map (- 2) | map Math.abs | foldl (+) | assert 2
 
-list | (!! 0) | ok 1
+list | (!! 0) | assert 1
 
-list2 | map (- 1) | foldl (+) | (- 3) | ok 0
+list2 | map (- 1) | foldl (+) | (- 3) | assert 0

@@ -4,7 +4,7 @@ fib = match {
   [else] recur x - 1, n, p + n
 }
 
-fib 8 | ok 21
+fib 8 | assert 21
 
 fact = match {
   [n] fact n 1
@@ -12,4 +12,4 @@ fact = match {
   [else] recur n - 1, sum * n
 }
 
-fact 4 | ok 24
+fact 4 | assert 24

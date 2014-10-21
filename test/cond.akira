@@ -6,5 +6,5 @@ one = fn [x] {
 }
 
 
-one 1 | ok 1
-one 0 | ok 2
+one 1 | assert 1
+one 0 | assert 2

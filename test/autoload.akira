@@ -1,6 +1,6 @@
 -- NOTE this file isn't sandboxed, all tests run at the same time.
 
-is-true = (= (ok &0 true))
+is-true = (= (assert &0 true))
 
 banana = {}
 
@@ -32,7 +32,7 @@ count is Function | is-true
 concat is Function | is-true
 div is 2 | is-true
 randomize is undefined | is-true
-mul! | ok 0
+mul! | assert 0
 take-while is Function | is-true
 zip-with is Function | is-true
 nothing is Function | is-true

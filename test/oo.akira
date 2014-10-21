@@ -1,3 +1,7 @@
+ok-deep = fn [a b] {
+  assert true (foldl (&&) (zip-with (==) a b))
+}
+
 -- I have to make a Animal, Cat example...
 Animal = {
   @speak (= 'my name is ' ++ this.name)
@@ -16,19 +20,19 @@ Cat = Animal << {
 cat = Cat << { @name 'Luna' }
 wasabi = Cat << { @name 'Wasabi' }
 
-cat.speak! | ok 'meow i am Luna'
-cat.alive | ok true
-cat.eyes | ok 2
-cat.legs | ok 4
-cat.walk! | ok true
-cat.sleep! | ok 'Purr ZzZzZ...'
+cat.speak! | assert 'meow i am Luna'
+cat.alive | assert true
+cat.eyes | assert 2
+cat.legs | assert 4
+cat.walk! | assert true
+cat.sleep! | assert 'Purr ZzZzZ...'
 
-wasabi.speak! | ok 'meow i am Wasabi'
+wasabi.speak! | assert 'meow i am Wasabi'
 
 ([1 2 3] 4 5 6) | ok-deep [1 2 3 4 5 6]
 ([1 2 3] [4]) | ok-deep [1 2 3 4]
 
 a = { @a 1 } { @b 2 } { @c 3 }
-ok a.a 1
-ok a.b 2
-ok a.c 3
+assert a.a 1
+assert a.b 2
+assert a.c 3
