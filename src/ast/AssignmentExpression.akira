@@ -1,9 +1,11 @@
 AssignmentExpression :: Map Map -> Map
-AssignmentExpression = fn [left right] {
-  { @type 'AssignmentExpression'
+AssignmentExpression = fn [left right]
+  {
+    @type 'AssignmentExpression'
     @operator '='
     @left left
-    @right right }
-}
+    @right right
+  }
+
 
 module.exports = AssignmentExpression

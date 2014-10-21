@@ -14,7 +14,6 @@ text = [
    ''
 ]
 
-help = match {
+help = match
   [invalid] print ['ERR Invalid command {{invalid}}'] ++ text
   [else] print text
-}

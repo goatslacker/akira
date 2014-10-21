@@ -12,18 +12,18 @@ supported-async-fns = ['map' 'filter']
 parallel = Identifier 'parallel'
 parallel.__core = true
 
-xchange-if-async-caller = fn [call] {
+xchange-if-async-caller = fn [call]
   name = call.callee.name
   xform = any (-> &0 is name) supported-async-fns
   if xform is true
     then CallExpression (MemberExpression PromiseNode call.callee) call.arguments
     else call
-}
 
-Await = class {
-  [@call @parallel] { this }
+Await = class
+  [@call @parallel]
+    this
 
-  compile [context] {
+  compile [context]
     call = if this.parallel is true
       then CallExpression parallel (map (-> ast &0 context) this.call.args)
       else ast this.call context
@@ -37,7 +37,5 @@ Await = class {
     node = CallExpression (MemberExpression caller xthen) [callback]
     node.__await = true
     node
-  }
-}
 
 module.exports = Await

@@ -1,4 +1,4 @@
-convert-to-expression-statement = match {
+convert-to-expression-statement = match
   [expr 'ExpressionStatement'] expr
   [expr 'TryStatement'] expr
   [expr 'IfStatement'] expr
@@ -9,13 +9,12 @@ convert-to-expression-statement = match {
   [expr 'ThrowStatement'] expr
   [expr 'VariableDeclaration'] expr
   [else] { @type 'ExpressionStatement' @expression expr }
-}
 
 ExpressionStatement :: Map | Vector -> Map | Vector
-ExpressionStatement = fn [expr] {
+ExpressionStatement = fn [expr]
   if expr is Vector
     then expr
     else convert-to-expression-statement expr expr.type
-}
+
 
 module.exports = ExpressionStatement

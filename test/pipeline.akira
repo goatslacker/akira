@@ -1,8 +1,8 @@
-ok-deep = fn [a b] {
+ok-deep = fn [a b]
   assert true (foldl (&&) (zip-with (==) a b))
-}
 
-add-akira = fn [r v] { r ++ ' is ' ++ v }
+add-akira = fn [r v]
+  r ++ ' is ' ++ v
 
 id 'awesome' | add-akira 'akira' | assert 'akira is awesome'
 

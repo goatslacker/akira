@@ -6,16 +6,15 @@ ast = require 'ast'
 
 IdenThen = Identifier 'then'
 
-Do = class {
-  [@call @f @e] { this }
+Do = class
+  [@call @f @e]
+    this
 
-  compile [context] {
+  compile [context]
     call = ast this.call context
     f = ast this.f context
     e = ast this.e context
 
     CallExpression (MemberExpression call IdenThen) [f e]
-  }
-}
 
 module.exports = Do

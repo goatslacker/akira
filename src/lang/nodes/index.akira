@@ -1,6 +1,7 @@
 path = require 'path'
 
-r = fn [m] { m.to-lower-case! | path.join __dirname | require }
+r = fn [m]
+  m.to-lower-case! | path.join __dirname | require
 
 module.exports = {
   @Access         (r 'access')

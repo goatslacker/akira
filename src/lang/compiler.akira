@@ -5,18 +5,16 @@ implicit-return = require 'implicitReturn'
 { @parser } = require './parser'
 parser.yy = (require '../lang/nodes')
 parser.lexer = {
-  @lex (fn [] {
+  @lex fn []
     ref = this.tokens !! this.pos || ['']
     this.pos = this.pos + 1
     this.yytext = ref.1
     this.yylineno = ref.3
     ref.0
-  })
 
-  @set-input (fn [tokens] {
+  @set-input fn [tokens]
     this.tokens = tokens
     this.pos = 0
-  })
 }
 me = require '../../package.json'
 prelude = require 'prelude'
@@ -33,7 +31,7 @@ OPTIONS = {
   @directive true
 }
 
-make-program = fn [body context] {
+make-program = fn [body context]
   exported = context !! '$$$exported'
   (body.push exported) if exported
   implicit-return body
@@ -55,39 +53,32 @@ make-program = fn [body context] {
         @arguments []
       }
       @leading-comments [{
-        @type 'Line',
+        @type 'Line'
         @value HEADER
       }]
     }]
   }
-}
 
-transform = fn [name parsed] {
+transform = fn [name parsed]
   cond
-    parsed is none ? make-program '' {}
-    else ? {
+    parsed is none ?
+      make-program '' {}
+    else ?
       context = {}
       lexer prelude | parser.parse | (.compile {} 'prelude')
       body = parsed.compile context name
       dependencies = parsed.add-deps context
       parsed.flag-core-methods body
-      program-body = (parsed.add-vars context) ++
-        (parsed.add-core!) ++
-        dependencies ++
-        (parsed.add-contracts body)
+      program-body = (parsed.add-vars context) ++ (parsed.add-core!) ++ dependencies ++ (parsed.add-contracts body)
       make-program program-body context
-    }
-}
 
-gen-program-ast = fn [name code] {
+gen-program-ast = fn [name code]
   lexer code | parser.parse | transform name
-}
 
-transpile = fn [name code] {
+transpile = fn [name code]
   escodegen.generate (gen-program-ast name code) OPTIONS
-}
 
-replify = fn [name code] {
+replify = fn [name code]
   ast = gen-program-ast name code
   program = {
     @type 'Program'
@@ -106,17 +97,14 @@ replify = fn [name code] {
     }]
   }
   escodegen.generate program OPTIONS
-}
 
-run = fn [name code context] {
-  try {
+run = fn [name code context]
+  try
     dune.string code name context
-  } catch err {
+  catch err
     console.error name
     console.error err.stack
     none
-  }
-}
 
 module.exports = {
   @gen-program-ast

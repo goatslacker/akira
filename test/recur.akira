@@ -1,15 +1,13 @@
-fib = match {
+fib = match
   [x] fib x 0 1
   [1 p n] n
   [else] recur x - 1, n, p + n
-}
 
 fib 8 | assert 21
 
-fact = match {
+fact = match
   [n] fact n 1
   [0 sum] sum
   [else] recur n - 1, sum * n
-}
 
 fact 4 | assert 24

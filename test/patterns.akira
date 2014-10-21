@@ -1,57 +1,57 @@
-ok-deep = fn [a b] {
+ok-deep = fn [a b]
   assert true (foldl (&&) (zip-with (==) a b))
-}
 
 numbers :: String -> Number
-numbers = match {
+numbers = match
   ['one'] 1
   ['two'] 2
   ['three'] 3
   [four] 4
-}
 
 assert 4 (numbers 'four')
 assert 1 (numbers 'one')
 
 gt-ten :: Number -> Boolean
-gt-ten = match {
+gt-ten = match
   [(< 10)] true
   [(> 10)] false
-}
 
 assert false (gt-ten 11)
 assert true (gt-ten 2)
 
 starts-with :: String String -> Boolean
-starts-with = fn [noun prefix] { prefix == noun.0 + noun.1 }
+starts-with = fn [noun prefix]
+  prefix == noun.0 + noun.1
 
 spanish-gender-of-noun :: String -> String
-spanish-gender-of-noun = match {
+spanish-gender-of-noun = match
   [(starts-with &0 'el')] 'male'
   [(starts-with &0 'la')] 'female'
-}
 
 assert 'female' (spanish-gender-of-noun 'la casa')
 assert 'male' (spanish-gender-of-noun 'el carro')
 
 sort-even-odd :: Vector -> Vector
-sort-even-odd = match {
+sort-even-odd = match
   [[]] []
-  [[x & xs]] {
+  [[x & xs]]
     if (odd x)
       then (sort-even-odd xs) ++ [x]
       else x +: (sort-even-odd xs)
-  }
-}
 
 [1 2 3 4 5 6] | sort-even-odd | ok-deep [2 4 6 5 3 1]
 
 -- implementations of our util functions
-init = fn [[& a b]] { a }
-tail = fn [[a & b]] { b }
-head = fn [[a & b]] { a }
-last = fn [[& a b]] { b }
-get-middle = fn [[a & b c]] { b }
+init = fn [[& a b]]
+  a
+tail = fn [[a & b]]
+  b
+head = fn [[a & b]]
+  a
+last = fn [[& a b]]
+  b
+get-middle = fn [[a & b c]]
+  b
 
 
 ls = [1 2 3 4 5]
@@ -62,76 +62,78 @@ ls | tail | ok-deep [2 3 4 5]
 ls | head | assert 1
 ls | last | assert 5
 
-add-two = match {
+add-two = match
   [0] 0
   [n] n + 2
-}
 
 add-two 0 | assert 0
 add-two 2 | assert 4
 
-ljfdg = match {
+ljfdg = match
   [a] 1
   [a b] 2
   [a b c] 3
   [else] 4
-}
 
 ljfdg 0 0 | assert 2
 ljfdg 0 0 0 | assert 3
 ljfdg! | assert 4
 
 
-gorje = match {
+gorje = match
   [_ 3 c] 0
   [a _ 4] 1
   [2 b _] 2
-}
 
 gorje 0 3 0 | assert 0
 gorje 2 0 0 | assert 2
 
-oiejf = match {
+oiejf = match
   [1 b 3] 1
   [2 4 c] 2
   [else] 3
-}
 
 oiejf 1 0 3 | assert 1
 oiejf! | assert 3
 
-fjoes = match {
+fjoes = match
   [[a b 3 4 5]] 1
   [[a b c d e]] c
   [else] 0
-}
 
 fjoes [1 2 3 4 5] | assert 1
 fjoes [0 1 2 3 4] | assert 2
 
-ajoleif = match {
+ajoleif = match
   [x b] b&!
-}
 
-ajoleif 6 fn [x b] { x } | assert 6
+ajoleif 6 (-> &0) | assert 6
 
-jfo = match {
+jfo = match
   [2 a & b] 1
   [else] 2
-}
 
 jfo 6 | assert 2
 
-jfoe = match {
+jfoe = match
   [[a _]] 1
   [[a] b] 2
-}
 
 jfoe [3 6] | assert 1
 jfoe [2] 2 | assert 2
 
-vcxv = match {
+vcxv = match
   [{ @d }] 3
-}
 
 vcxv { @d 3 } | assert 3
+
+xxx = match
+  ['A']
+    true
+
+  ['C']
+    false
+
+yyy = match
+  ['A'] true
+  ['C'] false

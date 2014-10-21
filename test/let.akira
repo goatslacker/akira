@@ -1,9 +1,31 @@
-x = let [a 1] then a + 2
+x = let a = 1 then a + 2
 assert x 3
 b = a is undefined
 assert b true
 
-y = let [a 1 b 2 c 3] then {
+y = let a = 1 b = 2 c = 3 then
   a + b + c + 4
-}
+
 assert y 10
+
+g = let a = 1 then
+  a + 2
+
+yy = let a = 1 b = 2 c = 3 then a + b + c + 4
+
+z = let a = 1 b = 2 c = 3 then
+  a + b + c + 4
+
+a = let
+  a = 1
+  b = 2
+  c = 3
+then
+  a + b + c + 4
+
+let
+  a = 1
+  b = 2
+  c = 3
+then
+  a + b + c + 4

@@ -2,26 +2,24 @@ CallExpression = require 'ast/CallExpression'
 ast = require 'ast'
 inline = require 'inline'
 
-push-last-call = fn [node] {
+push-last-call = fn [node]
   if node.callee.type == 'CallExpression'
     then CallExpression node.callee.callee (node.callee.arguments.concat node.arguments)
     else node
-}
 
-Pipeline = class {
-  [@ref @params] { this }
+Pipeline = class
+  [@ref @params]
+    this
 
-  compile [context] {
+  compile [context]
     inlined = inline this.params this.ref context
 
     if inlined
-      then inlined
-      else {
-        callee = ast this.params context
-        args = ast this.ref context
-        CallExpression callee [args] | push-last-call | inline.x
-      }
-  }
-}
+      inlined
+    else
+      callee = ast this.params context
+      args = ast this.ref context
+      CallExpression callee [args] | push-last-call | inline.x
+
 
 module.exports = Pipeline

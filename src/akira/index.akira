@@ -7,56 +7,48 @@ me = require '../../package.json'
 repl = import './repl.akira'
 help = import './help.akira'
 
-analyse = fn [_ body] {
+analyse = fn [_ body]
   body | (-> util.inspect &0 false Infinity) | console.log
-}
 
-compile = async [from target] {
+compile = async [from target]
   files = await get-all-files from
-  map fn [file] {
-    try {
+  map (fn [file]
+    try
       data = transpile file.name file.code
       do write-file file.name data from target
-        then (-> &0)
-        catch print
-    } catch err {
+      then (-> &0)
+      catch print
+    catch err
       console.error 'Filename ' ++ file.name
       console.error err.stack
       process.exit 1
-    }
-  } files
-}
+  ) files
 
-to-ast = async [from (cb = analyse)] {
+to-ast = async [from (cb = analyse)]
   files = await get-all-files from
-  map fn [file] {
+  map (fn [file]
     gen-program-ast file.name file.code | cb file.name
-  } files
-}
+  ) files
 
-run-a-file = async [filename context] {
+run-a-file = async [filename context]
   file = await get-file filename
   code = transpile file.name file.code
   run file.name code (context || {})
-}
 
-file-output = async [filepath] {
+file-output = async [filepath]
   files = await get-all-files filepath
   map (-> transpile &0.name &0.code | console.log) files
-}
 
-file-debug = async [filepath] {
+file-debug = async [filepath]
   files = await get-all-files filepath
   map (-> transpile &0.name &0.code) files
-}
 
-lex = async [filepath (cb = console.log)] {
+lex = async [filepath (cb = console.log)]
   file = await get-file filepath
   lexer file.code | cb
-}
 
 module.exports = {
-  @cli fn [args] {
+  @cli fn [args]
     cmd = head args
     opts = tail args
 
@@ -71,7 +63,6 @@ module.exports = {
       cmd is 'tokens' ? lex opts.0
       cmd is 'version' ? console.log ('akira ' ++ me.version)
       else ? help opts
-  }
 
   @ast to-ast
   @compile compile

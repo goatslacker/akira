@@ -95,3 +95,4 @@ gulp.task('default', ['lexer', 'parser', 'compiler', 'ast', 'nodes', 'core', 'bi
 gulp.task('all', ['default'])
 gulp.task('lang', ['lexer', 'parser', 'compiler'])
 gulp.task('rest', ['ast', 'nodes', 'core', 'binary'])
+gulp.task('notest', ['lang', 'rest'])

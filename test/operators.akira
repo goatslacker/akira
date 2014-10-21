@@ -1,6 +1,5 @@
-ok-deep = fn [a b] {
+ok-deep = fn [a b]
   assert true (foldl (&&) (zip-with (==) a b))
-}
 
 a = [1 2 3]
 

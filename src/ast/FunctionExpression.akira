@@ -1,11 +1,14 @@
 FunctionExpression :: Maybe Map Vector Vector -> Map
-FunctionExpression = fn [id params body] {
- { @type 'FunctionExpression'
+FunctionExpression = fn [id params body]
+ {
+   @type 'FunctionExpression'
    @id id
    @params params
    @body {
      @type 'BlockStatement'
-     @body body } }
-}
+     @body body
+    }
+  }
+
 
 module.exports = FunctionExpression

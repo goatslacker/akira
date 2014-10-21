@@ -139,10 +139,11 @@ nodes = {
   @tspan
 }
 
-Markup = class {
-  [@node @props @children] { this }
+Markup = class
+  [@node @props @children]
+    this
 
-  compile[context] {
+  compile[context]
     props = ast this.props context
     children = ast this.children context
     node = Identifier this.node.name
@@ -150,7 +151,6 @@ Markup = class {
     if nodes !! this.node.name
       then CallExpression (MemberExpression CreateVNode node) [props children]
       else CallExpression node [props children]
-  }
-}
+
 
 module.exports = Markup

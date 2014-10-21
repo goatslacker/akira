@@ -1,9 +1,10 @@
 BinaryExpression :: String Map Map -> Map
-BinaryExpression = fn [op left right] {
-  { @type 'BinaryExpression'
+BinaryExpression = fn [op left right]
+  {
+    @type 'BinaryExpression'
     @operator op
     @left left
-    @right right }
-}
+    @right right
+  }
 
 module.exports = BinaryExpression

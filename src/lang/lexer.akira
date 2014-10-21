@@ -13,9 +13,11 @@ rx = {
 }
 
 identifiers = {
-  @KEYWORDS ['if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none' 'do'
+  @KEYWORDS [
+    'if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none' 'do'
     'let' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match' 'interface'
-    'Maybe' 'Async' 'class' 'typealias' 'async' 'new' 'await']
+    'Maybe' 'Async' 'class' 'typealias' 'async' 'new' 'await'
+  ]
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
   @INHERITANCE ['<<']
   @ACCESSOR_OPERATOR ['!!']
@@ -29,59 +31,48 @@ identifiers = {
 
 ignore = { @COMMENTS @WHITESPACE }
 
-get-type = fn [a] {
+get-type = fn [a]
   rx | find (-> &0.test a)
-}
 
-extract = fn [key chunk] {
+extract = fn [key chunk]
   rx !! key | (.exec chunk)
-}
 
-parse-alphanumeric = fn [t chunk (n = 1)] {
+parse-alphanumeric = fn [t chunk (n = 1)]
   extract t chunk | (!! n)
-}
 
-return-identifier = match {
+return-identifier = match
   ['KEYWORDS' item] [(item.toUpperCase!) item item]
   [type item] [type item item]
-}
 
-parse-identifier = fn [t chunk] {
+parse-identifier = fn [t chunk]
   item = extract t chunk
   token = identifiers | find (-> &0.indexOf item.1 | (>= 0))
   return-identifier (token || t) item.1
-}
 
-convert-regexp = fn [item] {
+convert-regexp = fn [item]
   RegExp item.2 item.3
-}
 
-parse-regular-expressions = fn [] {
+parse-regular-expressions = fn []
   extract &! | convert-regexp | (-> ['REGEXP' &0 &0])
-}
 
-parse-args = fn [type chunk] {
+parse-args = fn [type chunk]
   token = extract type chunk | (!! 2)
   raw = extract type chunk | (!! 0)
   [type token raw]
-}
 
-special = match {
+special = match
   ['n'] '\n'
   ['r'] '\r'
   ['t'] '\t'
   ['b'] '\b'
   ['f'] '\f'
   [x] x
-}
 
-parse-str = fn [type chunk] {
-  token = extract type chunk | (!! 2) | fn [str] {
+parse-str = fn [type chunk]
+  token = extract type chunk | (!! 2) | fn [str]
     str.replace /\\([a-z])/g (-> special &1)
-  }
   raw = extract type chunk | (!! 0)
   [type token raw]
-}
 
 get-token = fn [type chunk]
   cond
@@ -98,43 +89,79 @@ get-token = fn [type chunk]
     type is 'TERMINATOR' ? ' '
     else ? [chunk.0 chunk.0 chunk.0]
 
-process-chunk = fn [code n] {
+process-chunk = fn [code n]
   type = get-type code
   token = get-token type code
   if token is Vector
     then token ++ [n.line]
     else [type token token n.line]
-}
 
-incr-line = match {
+incr-line = match
   ['TERMINATOR' line] line + 1
   [else] line
-}
 
 get-next-index = fn [token]
-  { @index (token.2.toString! | (.length))
-  @token token }
+  {
+    @index (token.2.toString! | (.length))
+    @token token
+  }
 
-return-tokens = match {
+return-tokens = match
   [code n] return-tokens code n []
   ['' _ tokens] tokens
-  [else] {
+  [else]
     {@index @token} = process-chunk code n | get-next-index
     tokens.push token
-    recur
-      (code.substr index code.length),
-      { @line (incr-line token.0 n.line) },
-      tokens
-  }
-}
+    recur (code.substr index code.length) { @line (incr-line token.0 n.line) } tokens
 
 filter-whitespace = fn [token]
   not (ignore !! token.0)
 
-tokenize :: String -> Vector
+rxindent = /^([ ])+/
+
 tokenize = fn [code]
-  return-tokens code { @index 0 @line 0 } |
-    (.filter filter-whitespace)
+  lines = code.split '\n'
+  tokens = []
+  indentstack = []
+
+  dedent = fn [f i]
+    if f!
+      dedent-num = indentstack.pop!
+      tokens.push ['DEDENT' dedent-num ' ' i]
+      dedent f i
+    else
+      tokens.push ['TERMINATOR' ' ' ' ' i]
+      none
+
+  lines.for-each fn [line i]
+    tokens.push ['TERMINATOR' ' ' ' ' i]
+    indentation = if rx.COMMENTS.test line
+      then none
+      else rxindent.exec line
+    indent = if indentation then indentation.0.length else none
+    if indent
+      if indentstack.length
+        last-indent = last indentstack
+        cond
+          indent > last-indent ?
+            indentstack.push indent
+            tokens.push ['INDENT' indent ' ' i]
+          indent < last-indent ?
+            dedent (-> indentstack.length && indent < (last indentstack)) i
+          else ? none
+      else
+        indentstack.push indent
+        tokens.push ['INDENT' indent ' ' i]
+    else
+      (dedent (-> indentstack.length) i) if line != '' && not (rx.COMMENTS.test line)
+
+    tokens.push.apply tokens (
+      return-tokens line { @index 0 @line i } | (.filter filterWhitespace)
+    )
+    line
+
+  dedent (-> indentstack.length) lines.length
+  tokens
 
 
 module.exports = tokenize

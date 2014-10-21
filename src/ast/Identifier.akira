@@ -1,7 +1,8 @@
 Identifier :: String -> Map
-Identifier = fn [name] {
-  { @type 'Identifier'
-    @name name }
-}
+Identifier = fn [name]
+  {
+    @type 'Identifier'
+    @name name
+  }
 
 module.exports = Identifier

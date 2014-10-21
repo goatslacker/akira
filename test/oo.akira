@@ -1,6 +1,5 @@
-ok-deep = fn [a b] {
+ok-deep = fn [a b]
   assert true (foldl (&&) (zip-with (==) a b))
-}
 
 -- I have to make a Animal, Cat example...
 Animal = {

@@ -1,8 +1,9 @@
-MemberExpression = fn [object property (computed = false)] {
-  { @type 'MemberExpression'
+MemberExpression = fn [object property (computed = false)]
+  {
+    @type 'MemberExpression'
     @computed computed
     @object object
-    @property property }
-}
+    @property property
+  }
 
 module.exports = MemberExpression

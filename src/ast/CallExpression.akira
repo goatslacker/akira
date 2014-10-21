@@ -1,11 +1,10 @@
 CallExpression :: Map Maybe Vector -> Map
-CallExpression = match {
-  [callee, none] CallExpression callee []
-  [callee, args] {
+CallExpression = match
+  [callee none] CallExpression callee []
+  [callee args] {
     @type 'CallExpression'
     @callee callee
     @arguments args
   }
-}
 
 module.exports = CallExpression

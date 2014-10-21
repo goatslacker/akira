@@ -7,23 +7,21 @@ util = require 'util'
 
 { @replify } = require '../lang/compiler.js'
 
-inspect = fn [val] { util.inspect val false 35 }
+inspect = fn [val]
+  util.inspect val false 35
 
-read-eval-print-loop = fn [data _ filename cb] {
-  try {
+read-eval-print-loop = fn [data _ filename cb]
+  try
     code = replify filename data
     vm.run-in-new-context code context
     cb (context !! '_$resultValue')
-  } catch err {
+  catch err
     util.error err.stack
-  }
-}
 
-start-repl = fn [] {
+start-repl = fn []
   repl.start {
     @prompt 'akira> '
     @input process.stdin
     @output process.stdout
     @eval read-eval-print-loop
   }
-}

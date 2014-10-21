@@ -1,16 +1,15 @@
 ast = require 'ast'
 
-Instantiate = class {
-  [@iden] { this }
+Instantiate = class
+  [@iden]
+    this
 
-  compile [context] {
+  compile [context]
     name = ast this.iden context
     {
       @type 'NewExpression'
       @callee name.callee
       @arguments name.arguments
     }
-  }
-}
 
 module.exports = Instantiate

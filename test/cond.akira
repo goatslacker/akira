@@ -1,10 +1,38 @@
 one :: Number -> Number
-one = fn [x] {
+one = fn [x]
   cond
     x is 1 ? 1
     else ? 2
-}
 
 
 one 1 | assert 1
 one 0 | assert 2
+
+bmi-tell = fn [weight height]
+  bmi = weight / height ** 2
+  skinny = 18.5
+  normal = 25.0
+  fat = 30.0
+
+  cond
+    bmi <= skinny ?
+      'under'
+
+    bmi <= normal ? 'normal'
+    bmi <= fat ? 'fat'
+    else ? 'whale'
+
+get-token = fn [type chunk]
+  cond
+    type is 'IDENTIFIER' ||
+    type is 'KEY' ||
+    type is 'OPERATION' ? parse-identifier &!
+    type is 'NUM' ? parse-alphanumeric type chunk 0
+    type is 'STR' ? parse-str &!
+    type is 'COMMENTS' ? parse-alphanumeric &!
+    type is 'LAMBDA' ? 'FN'
+    type is 'REGEXP' ? parse-regular-expressions &!
+    type is 'ARGS' ? parse-args &!
+    type is 'WHITESPACE' ||
+    type is 'TERMINATOR' ? ' '
+    else ? [chunk.0 chunk.0 chunk.0]

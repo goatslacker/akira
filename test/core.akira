@@ -1,6 +1,5 @@
-ok-deep = fn [a b] {
+ok-deep = fn [a b]
   assert true (foldl (&&) (zip-with (==) a b))
-}
 
 curried-assert = curry assert
 is-false = curried-assert false

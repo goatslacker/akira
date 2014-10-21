@@ -11,58 +11,40 @@ obj2str = require 'obj2str'
 unwrap-expression-statement = require 'unwrapExpressionStatement'
 vm = require 'vm'
 
-run-macro = fn [name xargs context] {
+run-macro = fn [name xargs context]
   ast = Store.macros !! name
   args = obj2str xargs | esprima.parse
   elements = args.body.0.expression.elements || []
   code = CallExpression ast elements | ExpressionStatement | escodegen.generate
   scope = copy (copy {} context) this
   vm.run-in-new-context code scope
-}
 
-type-check-params = fn [inferred signed context line name] {
-  zip-with fn [provided expected] {
+type-check-params = fn [inferred signed context line name]
+  zip-with (fn [provided expected]
     if a is none || b is none
-      then none
-      else {
-        (raise 'Expected {{expected}} but got {{provided}} for function {{name}} ' ++
-          'at {{context.$$$filename}} line {{line}}' TypeError)
-      }
-  } inferred signed
-}
+      none
+    else
+      raise 'Expected {{expected}} but got {{provided}} for function {{name}} ' ++ 'at {{context.$$$filename}} line {{line}}' TypeError
+  ) inferred signed
 
-verify-number-params = fn [name params context line] {
+verify-number-params = fn [name params context line]
   type = Store.types !! name
   tparams = type.params
 
-  if tparams then {
+  if tparams
     params-unbalanced = tparams.length != params.length
-    (console.warn '{{name}} was signed with {{tparams.length}} ' ++
-      'arguments yet it was provided with {{params.length}} ' ++
-      'at {{context.$$$filename}} line {{line}}') if params-unbalanced is true
-  } else none
-}
+    (console.warn '{{name}} was signed with {{tparams.length}} arguments yet it was provided with {{params.length}} ' ++ 'at {{context.$$$filename}} line {{line}}') if params-unbalanced is true
+  else
+    none
 
-verify-types = fn [name params context line] {
+verify-types = fn [name params context line]
   type = Store.types !! name
   xparams = if params is Vector then params else []
 
---  verify-number-params name xparams context line
-
---  inferred-params = map (-> TypeSystem.infer &0 context) xparams
-
---  (type-check-params inferred-params,
---    type.origin.params,
---    context,
---    line,
---    name) if type.origin.params.length && inferred-params.length
-}
-
-unwrap = fn [xargs] {
+unwrap = fn [xargs]
   (map unwrap-expression-statement xargs) if xargs
-}
 
-return-function = fn [callee args params context line] {
+return-function = fn [callee args params context line]
   (verify-types callee.name args context line) if Store.types !! callee.name
 
   if args && args.__rest is true
@@ -70,19 +52,17 @@ return-function = fn [callee args params context line] {
     else if params == 'apply'
       then CallExpression (MemberExpression callee (Identifier 'apply')) [(Identifier 'null') (Identifier 'arguments')]
       else CallExpression callee (unwrap args)
-}
 
-Call = class {
-  [@ref @params] { this }
+Call = class
+  [@ref @params]
+    this
 
-  compile [context] {
+  compile [context]
     callee = ast this.ref context
     args = ast this.params context
 
     if callee.type == 'Identifier' && Store.macros !! callee.name
       then run-macro callee.name args context
       else return-function callee args this.params context this.line
-  }
-}
 
 module.exports = Call

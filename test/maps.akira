@@ -1,8 +1,9 @@
 -- test function
 map-eq :: Map Map -> Boolean
-map-eq = fn [a b] {
-  filter fn [x i] { x isnt b !! i } a | (.length) | assert 0
-}
+map-eq = fn [a b]
+  filter (fn [x i]
+    x isnt b !! i
+  ) a | (.length) | assert 0
 
 -- setting maps
 obj = { @hello 1 @world 2 }

@@ -3,36 +3,31 @@ export functions
 fs = require-node-async 'fs'
 path = require 'path'
 
-File = class {
-  [@name @code] { this }
-}
+File = class
+  [@name @code]
+    this
 
-get-file = async [filepath] {
+get-file = async [filepath]
   file = path.join process.env.PWD filepath
   data = await fs.read-file-async file
   new File filepath (show data)
-}
 
-get-all-files = async [filepath] {
+get-all-files = async [filepath]
   st = await fs.stat-async filepath
 
-  if st.is-directory! then {
+  if st.is-directory!
     ls = await fs.readdir-async filepath
-    files = await map ls fn [file] {
+    files = await map ls fn [file]
       fullpath = path.join filepath file
       get-all-files fullpath
-    }
     flatten files
-  } else {
+  else
     akira-files = filter (-> (&0.index-of '.akira') >= 0) [filepath]
     await map akira-files (-> get-file &0)
-  }
-}
 
-write-file = async [file code from (to = (path.dirname file))] {
+write-file = async [file code from (to = (path.dirname file))]
   filename = (path.relative from file) || (path.basename file)
   write-path = filename.replace '.akira' '.js' | path.join to
   await fs.write-file-async write-path code
-}
 
 functions = { @get-all-files @write-file @get-file }

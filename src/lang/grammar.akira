@@ -2,8 +2,9 @@ jison = require 'jison'
 
 unwrap = /^function\s*\(\)\s*\{\s*return\s*([\s\S]*)\s*\}/
 
-macro n fn [name & args] {
-  { @type 'CallExpression'
+macro n fn [name & args]
+  {
+    @type 'CallExpression'
     @callee {
       @type 'MemberExpression'
       @computed false
@@ -12,7 +13,8 @@ macro n fn [name & args] {
     }
     @arguments [
       { @type 'Identifier' @name 'yylineno' }
-      { @type 'NewExpression'
+      {
+        @type 'NewExpression'
         @callee {
           @type 'MemberExpression'
           @computed false
@@ -23,22 +25,18 @@ macro n fn [name & args] {
       }
     ]
   }
-}
 
-get-match = fn [action] {
+get-match = fn [action]
   x = unwrap.exec action
   if x then x.1 else '({{action}}())'
-}
 
-o = fn [pattern action] {
-  pattern-string = pattern.replace /\s{2,}/g, ' '
+o = fn [pattern action]
+  pattern-string = pattern.replace /\s{2,}/g ' '
   if not action
-    then [pattern-string '$$ = $1']
-    else {
-      xaction = action | get-match
-      [pattern-string '$$ = {{xaction}}']
-    }
-}
+    [pattern-string '$$ = $1']
+  else
+    xaction = action | get-match
+    [pattern-string '$$ = {{xaction}}']
 
 start-symbol = 'Root'
 
@@ -78,6 +76,16 @@ bnf = {
     (o 'Terminator')
   ]
 
+  @OptComma [
+    (o '')
+    (o ',')
+  ]
+
+  @BodyOrExpression [
+    (o 'Body OptTerminator')
+    (o 'Expression Terminator')
+  ]
+
   @Identifier [
     (o 'IDENTIFIER' (-> n Identifier $1))
   ]
@@ -90,13 +98,16 @@ bnf = {
     (o '& IDENTIFIER' (-> n Identifier $2 true))
   ]
 
-  @TBody [
-    (o '{ OptTerminator Expressions }' (-> $3))
+  @Body [
+    (o 'Indent Expressions DEDENT' (-> $2))
   ]
 
-  @Body [
-    (o 'TBody')
-    (o 'Expression')
+  @Indent [
+    (o 'Terminator INDENT OptTerminator')
+  ]
+
+  @Dedent [
+    (o 'OptTerminator DEDENT')
   ]
 
   @Statement [
@@ -132,7 +143,7 @@ bnf = {
   ]
 
   @Value [
-    (o 'NUM' (-> n Literal (Number ($1.replace /,/g, ''))))
+    (o 'NUM' (-> n Literal (Number ($1.replace /,/g ''))))
     (o 'NONE' (-> n Literal none))
     (o 'BOOL' (-> n Literal ($1 is 'true')))
     (o 'REGEXP' (-> n Literal $1))
@@ -143,7 +154,8 @@ bnf = {
     (o 'Class')
     (o 'Operation')
     (o 'Markup')
-    (o '( OptTerminator Expression OptTerminator )' (-> $3))
+    (o '( Indent Expression Dedent Terminator )' (-> $3))
+    (o '( Expression OptTerminator )' (-> $2))
   ]
 
   @Accessibles [
@@ -164,7 +176,7 @@ bnf = {
   ]
 
   @AlphaNumeric [
-    (o 'NUM' (-> n Literal (Number ($1.replace /,/g, ''))))
+    (o 'NUM' (-> n Literal (Number ($1.replace /,/g ''))))
     (o 'Strings')
   ]
 
@@ -199,7 +211,7 @@ bnf = {
     (o 'Accessibles')
     (o 'Invocation')
     (o 'SpecialFunctions')
-    (o '( OptTerminator InlineDeclaration OptTerminator )' (-> $3))
+    (o '( InlineDeclaration )' (-> $2))
   ]
 
   @Pipeline [
@@ -211,20 +223,18 @@ bnf = {
   @Invocation [
     (o 'Accessibles Arguments' (-> n Call $1 $2))
     (o 'Accessibles !' (-> n Call $1))
-    (o 'Accessibles & !' (-> n Call $1, 'apply'))
+    (o 'Accessibles & !' (-> n Call $1 'apply'))
   ]
 
   @Declaration [
-    (o 'FN [ Parameters ] TBody' (-> n Declaration none $3 $5))
-    (o 'FN [ ] TBody' (-> n Declaration none none $4))
-    (o 'LAMBDA TBody' (-> n Declaration none none $2))
+    (o 'FN [ Parameters ] Body' (-> n Declaration none $3 $5))
+    (o 'FN [ ] Body' (-> n Declaration none none $4))
+    (o 'LAMBDA Body' (-> n Declaration none none $2))
   ]
 
   @InlineDeclaration [
-    (o 'FN [ Parameters ] Expression' (-> n Declaration none $3 $5))
-    (o 'FN [ Parameters ] TERMINATOR Expression' (-> n Declaration none $3 $6))
-    (o 'FN [ ] Expression' (-> n Declaration none none $4))
     (o 'LAMBDA Expression' (-> n Declaration none none $2))
+    (o 'FN [ Parameters ] Expression' (-> n Declaration none $3 $5))
   ]
 
   @Markup [
@@ -232,21 +242,19 @@ bnf = {
   ]
 
   @LetOperation [
-    (o 'Identifier Value' (-> n Assignment $1 $2))
+    (o 'Identifier = Value' (-> n Assignment $1 $3))
   ]
 
   @LetOperations [
     (o 'LetOperation' (-> n Arguments $1))
-    (o 'LetOperations OptComma LetOperation' (-> n Arguments $1 $3))
+    (o 'LetOperations OptTerminator LetOperation' (-> n Arguments $1 $3))
   ]
 
   @Let [
-    (o 'LET [ OptTerminator LetOperations OptTerminator ] THEN Body' (-> n Let $4 $8))
-  ]
-
-  @MaybeParameters [
-    (o 'Value' (-> n Arguments $1))
-    (o 'MaybeParameters OptComma Value' (-> n Arguments $1 $3))
+    (o 'LET Indent LetOperations Dedent Terminator THEN Body' (-> n Let $3 $7))
+    (o 'LET Indent LetOperations Dedent Terminator THEN Expression' (-> n Let $3 $7))
+    (o 'LET LetOperations THEN Body' (-> n Let $2 $4))
+    (o 'LET LetOperations THEN Expression' (-> n Let $2 $4))
   ]
 
   @AsyncFunction [
@@ -273,11 +281,11 @@ bnf = {
   ]
 
   @AsyncDo [
-    (o 'DO ValuePlusCalls OptTerminator THEN AllCallables OptTerminator CATCH AllCallables' (-> n Do $2 $5 $8))
+    (o 'DO ValuePlusCalls OptTerminator THEN AllCallables Terminator CATCH AllCallables' (-> n Do $2 $5 $8))
   ]
 
   @Conditional [
-    (o 'Value ? Body Terminator' (-> [$1 $3]))
+    (o 'Value ? BodyOrExpression' (-> [$1 $3]))
   ]
 
   @Conditionals [
@@ -286,17 +294,18 @@ bnf = {
   ]
 
   @CondElse [
+    (o 'ELSE ? Expression' (-> [$1 $3]))
     (o 'ELSE ? Body' (-> [$1 $3]))
   ]
 
   @Cond [
-    (o 'COND TERMINATOR Conditionals CondElse' (-> n Cond $3 $4))
+    (o 'COND Indent Conditionals CondElse Dedent' (-> n Cond $3 $4))
   ]
 
   @Pattern [
-    (o '[ ] Body TERMINATOR' (-> [none $3]))
-    (o '[ VectorArgs ] Body TERMINATOR' (-> [$2 $4]))
-    (o '[ ELSE ] Body TERMINATOR' (-> [$2 $4]))
+    (o '[ ] BodyOrExpression' (-> [none $3]))
+    (o '[ VectorArgs ] BodyOrExpression' (-> [$2 $4]))
+    (o '[ ELSE ] BodyOrExpression' (-> [$2 $4]))
   ]
 
   @Patterns [
@@ -305,17 +314,13 @@ bnf = {
   ]
 
   @PatternMatching [
-    (o 'MATCH { OptTerminator Patterns }' (-> n Pattern $4))
-  ]
-
-  @Comma [
-    (o '')
-    (o ', OptTerminator')
+    (o 'MATCH Indent Patterns DEDENT' (-> n Pattern $3))
   ]
 
   @Vectors [
     (o '[ ]' (-> n Vector))
-    (o '[ OptTerminator VectorArgs OptTerminator ]' (-> n Vector $3))
+    (o '[ VectorArgs ]' (-> n Vector $2))
+    (o '[ Indent VectorArgs Dedent Terminator ]' (-> n Vector $3))
   ]
 
   @VectorArg [
@@ -325,7 +330,7 @@ bnf = {
 
   @VectorArgs [
     (o 'VectorArg' (-> n Arguments $1))
-    (o 'VectorArgs OptComma VectorArg' (-> n Arguments $1 $3))
+    (o 'VectorArgs OptTerminator VectorArg' (-> n Arguments $1 $3))
   ]
 
   @Key [
@@ -339,17 +344,17 @@ bnf = {
 
   @MapItems [
     (o 'KeyValue' (-> n Arguments $1))
-    (o 'MapItems OptComma KeyValue' (-> n Arguments $1 $3))
+    (o 'MapItems OptTerminator KeyValue' (-> n Arguments $1 $3))
   ]
 
   @TypeAlias [
-    (o 'TYPEALIAS Identifier TypeValue',
-      (-> n TypeAlias (n TypeSignature $2 '' $3)))
+    (o 'TYPEALIAS Identifier TypeValue' (-> n TypeAlias (n TypeSignature $2 '' $3)))
   ]
 
   @Maps [
     (o '{ }' (-> n Map))
-    (o '{ OptTerminator MapItems OptTerminator }' (-> n Map $3))
+    (o '{ MapItems }' (-> n Map $2))
+    (o '{ Indent MapItems Dedent Terminator }' (-> n Map $3))
   ]
 
   @Access [
@@ -365,7 +370,7 @@ bnf = {
   @Arguments [
     (o 'Value' (-> n Arguments $1))
     (o 'Rest')
-    (o 'Arguments Comma Value' (-> n Arguments $1 $3))
+    (o 'Arguments OptComma Value' (-> n Arguments $1 $3))
   ]
 
   @Param [
@@ -374,11 +379,6 @@ bnf = {
     (o 'Rest')
     (o 'Key')
     (o 'Vectors')
-  ]
-
-  @OptComma [
-    (o ', OptTerminator')
-    (o 'OptTerminator')
   ]
 
   @Parameters [
@@ -413,8 +413,8 @@ bnf = {
   ]
 
   @Class [
-    (o 'CLASS OptInherits OptImplements { Terminator Constructor Terminator }' (-> n Class $6 [] $3 $2))
-    (o 'CLASS OptInherits OptImplements { Terminator Constructor Terminator ClassMembers Terminator }' (-> n Class $6 $8 $3 $2))
+    (o 'CLASS OptInherits OptImplements Indent Constructor Dedent' (-> n Class $5 [] $3 $2))
+    (o 'CLASS OptInherits OptImplements Indent Constructor Terminator ClassMembers Dedent' (-> n Class $5 $7 $3 $2))
   ]
 
   @KeyType [
@@ -423,7 +423,7 @@ bnf = {
 
   @InterfaceKeys [
     (o 'KeyType' (-> n Arguments $1))
-    (o 'InterfaceKeys OptComma KeyType' (-> n Arguments $1 $3))
+    (o 'InterfaceKeys KeyType' (-> n Arguments $1 $2))
   ]
 
   @Interface [
@@ -435,7 +435,7 @@ bnf = {
   ]
 
   @Exceptions [
-    (o 'TRY Body OptTerminator CATCH Identifier Body' (-> n ExceptionGuard $2 $5 $6))
+    (o 'TRY Body Terminator CATCH Identifier Body' (-> n ExceptionGuard $2 $5 $6))
   ]
 
   @Raise [
@@ -448,13 +448,14 @@ bnf = {
   ]
 
   @Recur [
-    (o 'RECUR OptTerminator Arguments' (-> n Recur $3))
+    (o 'RECUR Arguments' (-> n Recur $2))
   ]
 
   @If [
     (o 'Value IF ValuePlusCalls' (-> n If $3 $1 none))
-    (o 'IF ValuePlusCalls OptTerminator THEN Body OptTerminator ELSE Body',
-      (-> n If $2 $5 $8))
+    (o 'IF ValuePlusCalls THEN Expression ELSE Expression' (-> n If $2 $4 $6))
+    (o 'IF ValuePlusCalls Indent THEN Expression Terminator ELSE Expression Dedent' (-> n If $2 $5 $8))
+    (o 'IF ValuePlusCalls Body Terminator ELSE Body' (-> n If $2 $3 $6))
   ]
 
   @DefMacro [
@@ -503,8 +504,7 @@ bnf = {
   ]
 
   @TypeSignature [
-    (o 'Identifier TYPE_OPERATOR MaybeTypeParams LAMBDA TypeValue',
-      (-> n TypeSignature $1 $3 $5))
+    (o 'Identifier TYPE_OPERATOR MaybeTypeParams LAMBDA TypeValue' (-> n TypeSignature $1 $3 $5))
   ]
 
   @Macro [
@@ -524,40 +524,18 @@ bnf = {
 
   @SugaryFunctions [
     (o 'Operators' (-> $1))
-    (o 'Accessor',
-      (-> n Declaration '->' (n Arguments 'it'),
-        (n Access 'it' $1)))
-    (o 'Accessor Arguments',
-      (-> n Declaration '->' (n Arguments 'it'),
-        (n Call (n Access 'it' $1) $2)))
-    (o 'COMPARE Value',
-      (-> n Declaration '->' (n Arguments 'it'),
-        (n Compare 'it' $1 $2)))
-    (o 'LOGIC Value',
-      (-> n Declaration '->' (n Arguments 'it'),
-        (n Logic 'it' $1 $2)))
-    (o 'LEFT_OPERATORS Value',
-      (-> n Declaration '->' (n Arguments 'it'),
-        (n Operation 'it' $1 $2)))
-    (o 'ACCESSOR_OPERATOR Value',
-      (-> n Declaration '->' (n Arguments 'it'),
-        (n Operation 'it' $1 $2)))
+    (o 'Accessor' (-> n Declaration '->' (n Arguments 'it') (n Access 'it' $1)))
+    (o 'Accessor Arguments' (-> n Declaration '->' (n Arguments 'it') (n Call (n Access 'it' $1) $2)))
+    (o 'COMPARE Value' (-> n Declaration '->' (n Arguments 'it') (n Compare 'it' $1 $2)))
+    (o 'LOGIC Value' (-> n Declaration '->' (n Arguments 'it') (n Logic 'it' $1 $2)))
+    (o 'LEFT_OPERATORS Value' (-> n Declaration '->' (n Arguments 'it') (n Operation 'it' $1 $2)))
+    (o 'ACCESSOR_OPERATOR Value' (-> n Declaration '->' (n Arguments 'it') (n Operation 'it' $1 $2)))
     (o '= Value' (-> n Declaration '->' (n Arguments 'it') $2))
-    (o '+ Value',
-      (-> n Declaration '->' (n Arguments 'it'),
-        (n Operation 'it' $1 $2)))
-    (o '- Value',
-      (-> n Declaration '->' (n Arguments 'it'),
-        (n Operation 'it' $1 $2)))
-    (o '* Value',
-      (-> n Declaration '->' (n Arguments 'it'),
-        (n Operation 'it' $1 $2)))
-    (o '* * Value',
-      (-> n Declaration '->' (n Arguments 'it'),
-        (n Operation 'it' '**' $3)))
-    (o '/ Value',
-      (-> n Declaration '->' (n Arguments 'it'),
-        (n Operation 'it' $1 $2)))
+    (o '+ Value' (-> n Declaration '->' (n Arguments 'it') (n Operation 'it' $1 $2)))
+    (o '- Value' (-> n Declaration '->' (n Arguments 'it') (n Operation 'it' $1 $2)))
+    (o '* Value' (-> n Declaration '->' (n Arguments 'it') (n Operation 'it' $1 $2)))
+    (o '* * Value' (-> n Declaration '->' (n Arguments 'it') (n Operation 'it' '**' $3)))
+    (o '/ Value' (-> n Declaration '->' (n Arguments 'it') (n Operation 'it' $1 $2)))
   ]
 
   @SpecialFunctions [
@@ -565,18 +543,15 @@ bnf = {
   ]
 
   @AccessOperation [
-    (o 'Value ACCESSOR_OPERATOR OptTerminator Value',
-      (-> n Operation $1 $2 $4))
+    (o 'Value ACCESSOR_OPERATOR OptTerminator Value' (-> n Operation $1 $2 $4))
   ]
 
   @Operation [
     (o 'Value COMPARE OptTerminator Value' (-> n Compare $1 $2 $4))
     (o 'Value LOGIC OptTerminator Value' (-> n Logic $1 $2 $4))
     (o 'AccessOperation')
-    (o 'Value LEFT_OPERATORS OptTerminator Value',
-      (-> n Operation $1 $2 $4))
-    (o 'Value RIGHT_OPERATORS OptTerminator Value',
-      (-> n Operation $1 $2 $4))
+    (o 'Value LEFT_OPERATORS OptTerminator Value' (-> n Operation $1 $2 $4))
+    (o 'Value RIGHT_OPERATORS OptTerminator Value' (-> n Operation $1 $2 $4))
     (o 'NOT Value' (-> n Compare $2 $1))
     (o 'Value + OptTerminator Value' (-> n Operation $1 '+' $4))
     (o 'Value - OptTerminator Value' (-> n Operation $1 '-' $4))

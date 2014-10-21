@@ -13,17 +13,15 @@ plus-nine = (+ 9)
 mul = (= 0)
 { @take-while }
 id zip-with
-closed-function = fn [x] {
+closed-function = ->
   gte = 2
   -- will include gte
   nothing (< gte) [1 2 3]
-}
-closed-function2 = fn [x] {
+closed-function2 = ->
   intersect = 1
   id intersect
-}
 intersect-fn = intersect
-closed-function3 = fn [x] { lte = false }
+closed-function3 = -> lte = false
 
 
 words is undefined | is-true

@@ -1,12 +1,9 @@
 foo :: Boolean -> Boolean
-foo = fn [x] {
+foo = fn [x]
   if x
-    then {
-      if not x then true else {false}
-    } else {
-      if not x then true else false
-    }
-}
+    if not x then true else false
+  else
+    if not x then true else false
 
 foo-true = foo true
 foo-false = foo false
@@ -20,3 +17,10 @@ assert a true
 [c d] = if true then [0 1] else [4 5]
 assert c 0
 assert d 1
+
+if foo
+  true
+else
+  false
+
+if foo then true else false

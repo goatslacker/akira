@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "description": "toy functional language that transpiles to JavaScript",
   "scripts": {
+    "start": "git co b9946a8 lib/lang/parser.js; gulp parser",
     "test": "bin/akira make test"
   },
   "repository": {

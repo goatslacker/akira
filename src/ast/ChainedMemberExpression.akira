@@ -1,10 +1,11 @@
-ChainedMemberExpression = fn [& args] {
-  args | foldl fn [a b] {
-    { @type 'MemberExpression'
+ChainedMemberExpression = fn [& args]
+  args | foldl fn [a b]
+    {
+      @type 'MemberExpression'
       @computed false
       @object a
-      @property b }
-  }
-}
+      @property b
+    }
+
 
 module.exports = ChainedMemberExpression
