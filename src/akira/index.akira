@@ -11,19 +11,6 @@ analyse = fn [_ body] {
   body | (-> util.inspect &0 false Infinity) | console.log
 }
 
-test-file = fn [file] {
-  assertions = []
-  ok = fn [a b] assertions.push a == b
-  ok-deep = fn [a b] {
-    zip-with (==) a b | foldl (&&) | ok true
-  }
-  context = { @ok @ok-deep }
-
-  code = transpile file.name file.code
-  run file.name code context
-  [file.name (foldl (&&) assertions) assertions.length]
-}
-
 compile = async [from target] {
   files = await get-all-files from
   map fn [file] {
@@ -47,13 +34,6 @@ to-ast = async [from (cb = analyse)] {
   } files
 }
 
-make = async [cmd (args = [])] {
-  file = await get-file 'Make.akira'
-  key = cmd.replace /[-+|:]([a-zA-Z0-9$_])/g fn [i] { i.1.to-upper-case! }
-  code = transpile file.name file.code
-  run file.name ('module.exports = ' ++ code) | (!! key) | (-> &0 args)
-}
-
 run-a-file = async [filename context] {
   file = await get-file filename
   code = transpile file.name file.code
@@ -68,11 +48,6 @@ file-output = async [filepath] {
 file-debug = async [filepath] {
   files = await get-all-files filepath
   map (-> transpile &0.name &0.code) files
-}
-
-test = async [(filepath = 'test')] {
-  test-files = await get-all-files filepath
-  map test-file test-files
 }
 
 lex = async [filepath (cb = console.log)] {
@@ -90,11 +65,9 @@ module.exports = {
       cmd is 'compile' ? compile opts.0 opts.1
       cmd is 'debug' ? map file-debug opts
       cmd is 'help' ? help!
-      cmd is 'make' ? make opts.0 (tail opts)
       cmd is 'output' ? map file-output opts
       cmd is 'repl' ? repl!
       cmd is 'run' ? run-a-file opts.0
-      cmd is 'test' ? test!
       cmd is 'tokens' ? lex opts.0
       cmd is 'version' ? console.log ('akira ' ++ me.version)
       else ? help opts
@@ -107,6 +80,5 @@ module.exports = {
   @output file-output
   @repl repl
   @run run-a-file
-  @test test
   @write write-file
 }
