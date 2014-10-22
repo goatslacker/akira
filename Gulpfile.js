@@ -70,19 +70,16 @@ gulp.task('nodes', transpile(paths.nodes, dest.nodes))
 
 gulp.task('binary', transpile(paths.binary, dest.binary))
 
-// XXX
 gulp.task('core', function () {
-  return
-
-//  gulp.src(paths.core)
-//    .pipe(streamify(akira(function (code, file) {
-//      return this.transpile(file.path, code)
-//    })))
-//    .pipe(rename(function (path) {
-//      path.extname = '.js'
-//    }))
-//    .pipe(esprima())
-//    .pipe(gulp.dest('./tmp'))
+  gulp.src(paths.core)
+    .pipe(streamify(akira(function (code, file) {
+      return this.transpile(file.path, code)
+    })))
+    .pipe(rename(function (path) {
+      path.extname = '.js'
+    }))
+    .pipe(streamify(uglify()))
+    .pipe(gulp.dest('./lib/core'))
 })
 
 gulp.task('test', function () {
