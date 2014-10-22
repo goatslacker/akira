@@ -42,9 +42,11 @@ macro each fn [sym name test] {
 }
 
 module.exports = {
-  @eq (`fn [a b] { a == b })
-
-  @eq-val (`fn [a b] { a if a is b })
+  -- defined in lib/core/core
+  @map true
+  @eq true
+  @eq-val true
+  @Promise true
 
   @deep-eq (`fn [a b] {
       if a.length isnt b.length
@@ -148,7 +150,7 @@ module.exports = {
 
   @call (`fn  [obj prop & args] { (obj !! prop) | (.apply obj, args) })
 
-  @keys Object.keys
+  @keys (`Object.keys)
 
   @values (`fn  [x] { map fn [k] { x !! k } (keys x) })
 

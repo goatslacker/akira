@@ -1,3 +1,4 @@
+Promise = require 'bluebird'
 util = require 'util'
 me = require '../../package.json'
 { @run @lexer @gen-program-ast @transpile } = require '../lang/compiler'
