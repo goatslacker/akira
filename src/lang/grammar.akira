@@ -218,12 +218,12 @@ bnf = {
     (o 'Value | OptTerminator AllCallables' (-> n Pipeline $1 $4))
     (o 'Invocation | OptTerminator AllCallables' (-> n Pipeline $1 $4))
     (o 'Pipeline | OptTerminator AllCallables' (-> n Pipeline $1 $4))
+    (o '| AllCallables' (-> n Call $2))
+    (o '& | AllCallables' (-> n Call $3 'apply'))
   ]
 
   @Invocation [
     (o 'Accessibles Arguments' (-> n Call $1 $2))
-    (o 'Accessibles !' (-> n Call $1))
-    (o 'Accessibles & !' (-> n Call $1 'apply'))
   ]
 
   @Declaration [
