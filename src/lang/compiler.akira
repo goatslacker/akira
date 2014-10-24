@@ -69,7 +69,7 @@ transform = fn [name parsed]
       body = parsed.compile context name
       dependencies = parsed.add-deps context
       parsed.flag-core-methods body
-      program-body = (parsed.add-vars context) ++ (parsed.add-core!) ++ dependencies ++ (parsed.add-contracts body)
+      program-body = (parsed.add-vars context) ++ (| parsed.add-core) ++ dependencies ++ (parsed.add-contracts body)
       make-program program-body context
 
 gen-program-ast = fn [name code]

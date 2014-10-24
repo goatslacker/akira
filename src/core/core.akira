@@ -87,7 +87,7 @@ module.exports = {
 
   @join (`fn  [by vec]  vec.join by )
 
-  @reverse (`fn  [coll]  coll.reverse! )
+  @reverse (`fn  [coll] | coll.reverse )
 
   @to-map (`fn [f coll]
       x = {}
@@ -200,7 +200,7 @@ module.exports = {
 
   @nothing (`fn  [f vec]  filter f vec | (.length) | (== 0) )
 
-  @randomize (`fn [vec]  sort (-> (Math.random!) > 0.5) vec )
+  @randomize (`fn [vec]  sort (-> (| Math.random) > 0.5) vec )
 
   @take (`fn  [n vec]  vec.slice 0 n )
 
@@ -260,7 +260,7 @@ module.exports = {
       ) ([true] ++ args)
   )
 
-  @show (`fn  [i]  i.to-string! )
+  @show (`fn  [i] | i.to-string )
 
   @mod (`fn  [a b]  bin-expr '%' a b )
 
@@ -324,14 +324,14 @@ module.exports = {
 
   @camelize (`fn [str]
     str.replace /(-|_)+([a-zA-Z0-9$_])/g fn [i]
-      i.1.to-upper-case!
+      | i.1.to-upper-case
   )
 
-  @uppercase (`fn  [str]  str.to-upper-case! )
+  @uppercase (`fn  [str] | str.to-upper-case)
 
   @stringify (`fn  [& args]  foldl concat args )
 
-  @capitalize (`fn  [str]  (str.0.to-upper-case!) ++ (str.slice 1) )
+  @capitalize (`fn  [str]  (| str.0.to-upper-case) ++ (str.slice 1) )
 
   @chars (`fn  [f str]  str.split '' | map f )
 
@@ -349,7 +349,7 @@ module.exports = {
 
     new Promise fn [resolve reject]
       many.for-each fn [next]
-        do (next!)
+        do (| next)
         then fn [data]
           c.push data
           mdec n

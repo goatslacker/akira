@@ -26,13 +26,13 @@ get-token = fn [type chunk]
   cond
     type is 'IDENTIFIER' ||
     type is 'KEY' ||
-    type is 'OPERATION' ? parse-identifier &!
+    type is 'OPERATION' ? & | parse-identifier
     type is 'NUM' ? parse-alphanumeric type chunk 0
-    type is 'STR' ? parse-str &!
-    type is 'COMMENTS' ? parse-alphanumeric &!
+    type is 'STR' ? & | parse-str
+    type is 'COMMENTS' ? & | parse-alphanumeric
     type is 'LAMBDA' ? 'FN'
-    type is 'REGEXP' ? parse-regular-expressions &!
-    type is 'ARGS' ? parse-args &!
+    type is 'REGEXP' ? & | parse-regular-expressions
+    type is 'ARGS' ? & | parse-args
     type is 'WHITESPACE' ||
     type is 'TERMINATOR' ? ' '
     else ? [chunk.0 chunk.0 chunk.0]

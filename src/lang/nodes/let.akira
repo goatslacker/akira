@@ -11,7 +11,7 @@ Let = class
 
   compile [context]
     scope = get-scope context []
-    nodes = this.body.reverse!
+    nodes = | this.body.reverse
     ret = ast this.ret scope
 
     body = foldl (fn [nodes node]

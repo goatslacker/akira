@@ -12,21 +12,21 @@ Animal = {
 
 Cat = Animal << {
   @speak (= 'meow i am ' ++ this.name)
-  @sleep (= 'Purr ' ++ (prototype.sleep!))
+  @sleep (= 'Purr ' ++ (| prototype.sleep))
   @legs 4
 }
 
 cat = Cat << { @name 'Luna' }
 wasabi = Cat << { @name 'Wasabi' }
 
-cat.speak! | assert 'meow i am Luna'
+| cat.speak | assert 'meow i am Luna'
 cat.alive | assert true
 cat.eyes | assert 2
 cat.legs | assert 4
-cat.walk! | assert true
-cat.sleep! | assert 'Purr ZzZzZ...'
+| cat.walk | assert true
+| cat.sleep | assert 'Purr ZzZzZ...'
 
-wasabi.speak! | assert 'meow i am Wasabi'
+| wasabi.speak | assert 'meow i am Wasabi'
 
 ([1 2 3] 4 5 6) | ok-deep [1 2 3 4 5 6]
 ([1 2 3] [4]) | ok-deep [1 2 3 4]

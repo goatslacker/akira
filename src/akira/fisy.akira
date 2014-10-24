@@ -15,7 +15,7 @@ get-file = async [filepath]
 get-all-files = async [filepath]
   st = await fs.stat-async filepath
 
-  if st.is-directory!
+  if | st.is-directory
     ls = await fs.readdir-async filepath
     files = await map ls fn [file]
       fullpath = path.join filepath file

@@ -77,7 +77,7 @@ ljfdg = match
 
 ljfdg 0 0 | assert 2
 ljfdg 0 0 0 | assert 3
-ljfdg! | assert 4
+| ljfdg | assert 4
 
 
 gorje = match
@@ -94,7 +94,7 @@ oiejf = match
   [else] 3
 
 oiejf 1 0 3 | assert 1
-oiejf! | assert 3
+| oiejf | assert 3
 
 fjoes = match
   [[a b 3 4 5]] 1
@@ -105,7 +105,7 @@ fjoes [1 2 3 4 5] | assert 1
 fjoes [0 1 2 3 4] | assert 2
 
 ajoleif = match
-  [x b] b&!
+  [x b] & | b
 
 ajoleif 6 (-> &0) | assert 6
 

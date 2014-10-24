@@ -41,7 +41,7 @@ parse-alphanumeric = fn [t chunk (n = 1)]
   extract t chunk | (!! n)
 
 return-identifier = match
-  ['KEYWORDS' item] [(item.toUpperCase!) item item]
+  ['KEYWORDS' item] [(| item.toUpperCase) item item]
   [type item] [type item item]
 
 parse-identifier = fn [t chunk]
@@ -53,7 +53,7 @@ convert-regexp = fn [item]
   RegExp item.2 item.3
 
 parse-regular-expressions = fn []
-  extract &! | convert-regexp | (-> ['REGEXP' &0 &0])
+  & | extract | convert-regexp | (-> ['REGEXP' &0 &0])
 
 parse-args = fn [type chunk]
   token = extract type chunk | (!! 2)
@@ -78,13 +78,13 @@ get-token = fn [type chunk]
   cond
     type is 'IDENTIFIER' ||
     type is 'KEY' ||
-    type is 'OPERATION' ? parse-identifier &!
+    type is 'OPERATION' ? & | parse-identifier
     type is 'NUM' ? parse-alphanumeric type chunk 0
-    type is 'STR' ? parse-str &!
-    type is 'COMMENTS' ? parse-alphanumeric &!
+    type is 'STR' ? & | parse-str
+    type is 'COMMENTS' ? & | parse-alphanumeric
     type is 'LAMBDA' ? 'FN'
-    type is 'REGEXP' ? parse-regular-expressions &!
-    type is 'ARGS' ? parse-args &!
+    type is 'REGEXP' ? & | parse-regular-expressions
+    type is 'ARGS' ? & | parse-args
     type is 'WHITESPACE' ||
     type is 'TERMINATOR' ? ' '
     else ? [chunk.0 chunk.0 chunk.0]
@@ -102,7 +102,7 @@ incr-line = match
 
 get-next-index = fn [token]
   {
-    @index (token.2.toString! | (.length))
+    @index (| token.2.toString | (.length))
     @token token
   }
 
@@ -125,8 +125,8 @@ tokenize = fn [code]
   indentstack = []
 
   dedent = fn [f i]
-    if f!
-      dedent-num = indentstack.pop!
+    if | f
+      dedent-num = | indentstack.pop
       tokens.push ['DEDENT' dedent-num ' ' i]
       dedent f i
     else
