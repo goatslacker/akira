@@ -134,7 +134,6 @@ tokenize = fn [code]
       none
 
   lines.for-each fn [line i]
-    tokens.push ['TERMINATOR' ' ' ' ' i]
     indentation = if rx.COMMENTS.test line
       then none
       else rxindent.exec line
@@ -158,6 +157,7 @@ tokenize = fn [code]
     tokens.push.apply tokens (
       return-tokens line { @index 0 @line i } | (.filter filterWhitespace)
     )
+    tokens.push ['TERMINATOR' ' ' ' ' i]
     line
 
   dedent (-> indentstack.length) lines.length
