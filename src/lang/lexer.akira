@@ -124,14 +124,17 @@ tokenize = fn [code]
   tokens = []
   indentstack = []
 
-  dedent = fn [f i]
-    if | f
+  dedent-loop = fn [f i]
+    if indentstack.length && (| f)
       dedent-num = | indentstack.pop
       tokens.push ['DEDENT' dedent-num ' ' i]
-      dedent f i
+      dedent-loop f i
     else
       tokens.push ['TERMINATOR' ' ' ' ' i]
       none
+
+  dedent = fn [f i]
+    (dedent-loop f i) if indentstack.length && (| f)
 
   lines.for-each fn [line i]
     indentation = if rx.COMMENTS.test line
