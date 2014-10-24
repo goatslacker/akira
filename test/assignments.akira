@@ -6,12 +6,12 @@ b = 2,000
 assert a 1
 assert b 2,000
 
-none | ->
+| ->
 -- local a, no shadowing
   a = 3
   assert a 3
 
-none | ->
+| ->
 -- although we can reference a
   b = a - 1
   assert b 0

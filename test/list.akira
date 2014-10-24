@@ -9,13 +9,13 @@ array = [
 
 
 -- IIFE
-none | ->
+| ->
 -- Testing foldr, expressions in arguments, anonymous functions
   lastEl = (= (foldl (= (flip id &0 &1)) &0))
   lastEl [1 2 3] | assert 3
 
 -- Partial application
-none | ->
+| ->
   mapper = partial map square
   ok-array = (= (ok-deep &0 [1 4 9]))
 

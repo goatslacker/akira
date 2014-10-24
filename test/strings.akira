@@ -17,7 +17,7 @@ condense '      foo bar ' | assert 'foobar'
 
 'hi' * 3 | assert 'hihihi'
 
-none | ->
+| ->
   b = 'hello-world'
   c = b.replace /-([a-z])/g (fn [x] x.1.toUpperCase!)
   assert c 'helloWorld'
