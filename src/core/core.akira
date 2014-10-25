@@ -48,6 +48,7 @@ module.exports = {
 -- defined in lib/core/core
   @map true
   @filter true
+  @foldl true
   @eq true
   @eq-val true
   @Promise true
@@ -168,18 +169,6 @@ module.exports = {
   @any (`fn [f vec]  Array.prototype.some.call vec (-> f &0) )
 
   @all (`fn [f vec]  Array.prototype.every.call vec (-> f &0) )
-
-  @foldl (`fn [f vec a]
-    reduce = Array.prototype.reduce
-    reducer = (-> f &0 &1)
-
-    if vec.length is 0
-      []
-    else
-      if a == undefined
-        then reduce.call vec reducer
-        else reduce.call vec reducer a
-  )
 
   @foldr (`fn [f vec]
       if vec.length is 0
