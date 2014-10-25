@@ -431,7 +431,8 @@ bnf = {
   ]
 
   @Instantiate [
-    (o 'NEW Invocation' (-> n Instantiate $2))
+    (o 'NEW Accessibles Arguments' (-> n Instantiate (n Call $2 $3)))
+    (o 'NEW Accessibles' (-> n Instantiate (n Call $2)))
   ]
 
   @Exceptions [
