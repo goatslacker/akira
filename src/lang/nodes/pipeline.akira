@@ -1,6 +1,6 @@
 CallExpression = require 'ast/CallExpression'
 ast = require 'ast'
-inline = require 'inline'
+inline = require 'z/inline'
 
 push-last-call = fn [node]
   if node.callee.type == 'CallExpression'

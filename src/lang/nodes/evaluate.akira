@@ -1,6 +1,6 @@
 ast = require 'ast'
 esprima = require 'esprima'
-obj2str = require 'obj2str'
+obj2str = require 'z/obj2str'
 
 Evaluate = class
   [@expr @evl]

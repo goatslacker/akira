@@ -1,8 +1,8 @@
 ExpressionStatement = require 'ast/ExpressionStatement'
 ast = require 'ast'
-beta-redex = require 'betaRedex'
-implicit-return = require 'implicitReturn'
-get-scope = require 'getScope'
+beta-redex = require 'z/betaRedex'
+implicit-return = require 'z/implicitReturn'
+get-scope = require 'z/getScope'
 
 Let = class
   [body ret]

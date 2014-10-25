@@ -1,6 +1,6 @@
 MemberExpression = require 'ast/MemberExpression'
 ast = require 'ast'
-unwrap-expression-statement = require 'unwrapExpressionStatement'
+unwrap-expression-statement = require 'z/unwrapExpressionStatement'
 
 Access = class
   [@id @prop]

@@ -1,7 +1,7 @@
 escodegen = require 'escodegen'
 dune = require 'dune'
 lexer = require './lexer'
-implicit-return = require 'implicitReturn'
+implicit-return = require 'z/implicitReturn'
 { @parser } = require './parser'
 parser.yy = (require '../lang/nodes')
 parser.lexer = {

@@ -7,8 +7,8 @@ TypeSystem = require 'TypeSystem'
 ast = require 'ast'
 escodegen = require 'escodegen'
 esprima = require 'esprima'
-obj2str = require 'obj2str'
-unwrap-expression-statement = require 'unwrapExpressionStatement'
+obj2str = require 'z/obj2str'
+unwrap-expression-statement = require 'z/unwrapExpressionStatement'
 vm = require 'vm'
 
 run-macro = fn [name xargs context]

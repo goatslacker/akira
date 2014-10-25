@@ -2,8 +2,8 @@ IfStatement = require 'ast/IfStatement'
 Literal = require 'ast/Literal'
 
 ast = require 'ast'
-beta-redex = require 'betaRedex'
-implicit-return = require 'implicitReturn'
+beta-redex = require 'z/betaRedex'
+implicit-return = require 'z/implicitReturn'
 
 If = class
   [@test @consequent @alternate]

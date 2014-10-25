@@ -1,4 +1,4 @@
-make-array = require 'makeArray'
+make-array = require 'z/makeArray'
 
 make-block = fn [expr]
   {
