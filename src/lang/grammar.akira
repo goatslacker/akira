@@ -387,19 +387,19 @@ bnf = {
   ]
 
   @ClassMember [
-    (o 'Identifier [ Parameters ] Body' (-> n ClassMethod $1 $3 $5))
-    (o 'Identifier [ ] Body' (-> n ClassMethod $1 none $4))
-    (o 'Key Value' (-> [$1 $2]))
+    (o 'Identifier [ Parameters ] BodyOrExpression' (-> n ClassMethod $1 $3 $5))
+    (o 'Identifier [ ] BodyOrExpression' (-> n ClassMethod $1 none $4))
+    (o 'Key Value Terminator' (-> [$1 $2]))
   ]
 
   @ClassMembers [
     (o 'ClassMember' (-> n Arguments $1))
-    (o 'ClassMembers Terminator ClassMember' (-> n Arguments $1 $3))
+    (o 'ClassMembers ClassMember' (-> n Arguments $1 $2))
   ]
 
   @Constructor [
-    (o '[ Parameters ] Body' (-> n ClassMethod none $2 $4))
-    (o '[ ] Body' (-> n ClassMethod none none $3))
+    (o '[ Parameters ] BodyOrExpression' (-> n ClassMethod none $2 $4))
+    (o '[ ] BodyOrExpression' (-> n ClassMethod none none $3))
   ]
 
   @OptImplements [
@@ -413,8 +413,8 @@ bnf = {
   ]
 
   @Class [
-    (o 'CLASS OptInherits OptImplements Indent Constructor Dedent' (-> n Class $5 [] $3 $2))
-    (o 'CLASS OptInherits OptImplements Indent Constructor Terminator ClassMembers Dedent' (-> n Class $5 $7 $3 $2))
+    (o 'CLASS OptInherits OptImplements Indent Constructor DEDENT' (-> n Class $5 [] $3 $2))
+    (o 'CLASS OptInherits OptImplements Indent Constructor ClassMembers DEDENT' (-> n Class $5 $6 $3 $2))
   ]
 
   @KeyType [
