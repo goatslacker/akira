@@ -47,6 +47,7 @@ macro each fn [sym name test]
 module.exports = {
 -- defined in lib/core/core
   @map true
+  @filter true
   @eq true
   @eq-val true
   @Promise true
@@ -163,8 +164,6 @@ module.exports = {
   @key (`fn  [v x]  find (== v) x )
 
   @value (`fn  [k x]  x !! k )
-
-  @filter (`fn [f vec]  Array.prototype.filter.call vec (-> f &0) )
 
   @any (`fn [f vec]  Array.prototype.some.call vec (-> f &0) )
 
