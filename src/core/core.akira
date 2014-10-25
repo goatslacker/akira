@@ -350,10 +350,10 @@ module.exports = {
     new Promise fn [resolve reject]
       many.for-each fn [next]
         do (| next)
-        then fn [data]
-          c.push data
-          mdec n
-          (resolve c) if (n == 0)
-        catch reject
+          then fn [data]
+            c.push data
+            mdec n
+            (resolve c) if (n == 0)
+          catch reject
   )
 }

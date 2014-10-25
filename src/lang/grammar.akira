@@ -281,7 +281,9 @@ bnf = {
   ]
 
   @AsyncDo [
-    (o 'DO ValuePlusCalls OptTerminator THEN AllCallables Terminator CATCH AllCallables' (-> n Do $2 $5 $8))
+    (o 'DO ValuePlusCalls THEN AllCallables CATCH AllCallables' (-> n Do $2 $4 $6))
+    (o 'DO ValuePlusCalls Indent THEN AllCallables Terminator CATCH AllCallables Dedent' (-> n Do $2 $5 $8))
+    (o 'DO ValuePlusCalls Indent AllCallables Terminator DEDENT Terminator CATCH Indent AllCallables Dedent' (-> n Do $2 $4 $10))
   ]
 
   @Conditional [

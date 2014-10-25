@@ -16,8 +16,8 @@ compile = async [from target]
     try
       data = transpile file.name file.code
       do write-file file.name data from target
-      then (-> &0)
-      catch print
+        then (-> &0)
+        catch print
     catch err
       console.error 'Filename ' ++ file.name
       console.error err.stack
