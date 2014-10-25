@@ -12,20 +12,18 @@ with nodejs and npm
 git
 
     git clone git://github.com/goatslacker/akira.git
-    ln -s (pwd)/akira/bin/akira /usr/local/bin/akira
+    sudo npm link
 
 ## Usage
 
     ast [file]               - output the Mozilla Parse API for that file
     compile [file] [target]  - compile to JavaScript
-    make [command] [args]    - run akira unit tests
+    help                     - dis
     output [file]            - compile to JS and output
     repl                     - start the repl
     run [file]               - compile and interpret said file
     tokens [file]            - output the lexer tokens for that file
     version                  - akira version
-    watch [file] [target]    - watch a file for changes and compile on change
-
 
 ## Overview
 
@@ -115,12 +113,11 @@ akira | javascript
 
 Defining functions
 
-    sum = fn [a b] {
+    sum = fn [a b]
       a + b
-    }
-    sub = fn [a b] {
+
+    sub = fn [a b]
       a - b
-    }
 
 Invoking
 
@@ -128,13 +125,13 @@ Invoking
 
 Invoking with no arguments
 
-    'hello-world'.to-string!
+    | 'hello-world'.to-string
 
 IIFE/Beta-redex
 
-    fn [] {
+    | ->
       number-of-balloons = 99
-    }!
+    }
 
 Anonymous functions
 
@@ -220,30 +217,25 @@ This splits up the list into x = head(list) and xs = tail(list)
 
 ### Exceptions
 
-    try {
+    try
       some-function-that-may-crash!
-    } catch err {
+    catch err
       raise err
-    }
 
-### Do
+### Async/Await
 
-For handling async functions there's the do keyword...
+For handling async functions there are a few tools you can use
 
-    get-my-first-tweet = do
-      [tweets] <- get-tweets-for 'goatslacker'
-      [first-tweet] <- process-and-return-first tweets
-      decorate-first-tweet first-tweet
+  get-file = async [filepath]
+    file = path.join process.env.PWD filepath
+    data = await fs.read-file-async file
+    new File filepath (show data)
 
-...which compiles into
-
-    getMyFirstTweet = function (_$callback) {
-      return getTweetsFor('goatslacker', function (tweets) {
-        processAndReturnFirst(tweets, function (firstTweet) {
-          _$callback(decorateFirstTweet(firstTweet));
-        });
-      });
-    };
+  do get-file 'README.md'
+    then fn [x]
+      print x
+    catch fn [err]
+      print err
 
 ## Text Editor Support
 
