@@ -38,6 +38,38 @@ function transpile(from, to) {
   }
 }
 
+function test() {
+  return gulp.src('./test/*.akira')
+    .pipe(streamify(akira(function (code, file) {
+      util.log('Running', util.colors.magenta(file.path))
+      return this.transpile(file.path, code)
+    })))
+    .pipe(streamify(vm()))
+}
+
+function parser() {
+  return gulp.src('./lib/lang/grammar.js')
+    .pipe(streamify(vm(function (x) {
+      return x.generate()
+    })))
+    .pipe(rename(function (path) {
+      path.basename = 'parser'
+    }))
+    .pipe(gulp.dest('./lib/lang'))
+}
+
+function core() {
+  return gulp.src(paths.core)
+    .pipe(streamify(akira(function (code, file) {
+      return this.transpile(file.path, code)
+    })))
+    .pipe(rename(function (path) {
+      path.extname = '.js'
+    }))
+    .pipe(streamify(uglify()))
+    .pipe(gulp.dest('./lib/core'))
+}
+
 gulp.task('watch', function () {
   gulp.watch(paths.lexer, ['lexer'])
   gulp.watch(paths.grammar, ['grammar'])
@@ -47,52 +79,29 @@ gulp.task('watch', function () {
   gulp.watch(paths.akira, ['binary'])
 })
 
+// Single tasks
 gulp.task('lexer', transpile(paths.lexer, dest.lang))
-
 gulp.task('grammar', transpile(paths.grammar, dest.lang))
-
-gulp.task('parser', ['grammar'], function () {
-  gulp.src('./lib/lang/grammar.js')
-    .pipe(streamify(vm(function (x) {
-      return x.generate()
-    })))
-    .pipe(rename(function (path) {
-      path.basename = 'parser'
-    }))
-    .pipe(gulp.dest('./lib/lang'))
-})
-
+gulp.task('parser', ['grammar'], parser)
 gulp.task('compiler', transpile(paths.compiler, dest.lang))
-
 gulp.task('ast', transpile(paths.ast, dest.ast))
-
 gulp.task('nodes', transpile(paths.nodes, dest.nodes))
-
 gulp.task('binary', transpile(paths.binary, dest.binary))
-
-gulp.task('core', function () {
-  gulp.src(paths.core)
-    .pipe(streamify(akira(function (code, file) {
-      return this.transpile(file.path, code)
-    })))
-    .pipe(rename(function (path) {
-      path.extname = '.js'
-    }))
-    .pipe(streamify(uglify()))
-    .pipe(gulp.dest('./lib/core'))
-})
-
-gulp.task('test', function () {
-  gulp.src('./test/*.akira')
-    .pipe(streamify(akira(function (code, file) {
-      util.log('Running', util.colors.magenta(file.path))
-      return this.transpile(file.path, code)
-    })))
-    .pipe(streamify(vm()))
-})
-
-gulp.task('default', ['lexer', 'parser', 'compiler', 'ast', 'nodes', 'core', 'binary', 'grammar', 'parser', 'test'])
-gulp.task('all', ['default'])
-gulp.task('lang', ['lexer', 'parser', 'compiler'])
+gulp.task('core', core)
+gulp.task('test', test)
 gulp.task('rest', ['ast', 'nodes', 'core', 'binary'])
-gulp.task('notest', ['lang', 'rest'])
+
+// Dependent tasks
+gulp.task('lexer-sync', transpile(paths.lexer, dest.lang))
+gulp.task('grammar-sync', ['lexer-sync'], transpile(paths.grammar, dest.lang))
+gulp.task('parser-sync', ['grammar-sync'], parser)
+gulp.task('compiler-sync', ['parser-sync'], transpile(paths.compiler, dest.lang))
+gulp.task('lang', ['compiler-sync'])
+gulp.task('ast-sync', ['lang'], transpile(paths.ast, dest.ast))
+gulp.task('nodes-sync', ['lang'], transpile(paths.nodes, dest.nodes))
+gulp.task('binary-sync', ['lang'], transpile(paths.binary, dest.binary))
+gulp.task('core-sync', ['lang'], core)
+gulp.task('rest-sync', ['ast-sync', 'nodes-sync', 'binary-sync', 'core-sync'])
+
+// Main
+gulp.task('default', ['rest-sync'], test)
