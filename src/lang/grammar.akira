@@ -381,6 +381,7 @@ bnf = {
     (o 'Rest')
     (o 'Key')
     (o 'Vectors')
+    (o 'Maps')
   ]
 
   @Parameters [
