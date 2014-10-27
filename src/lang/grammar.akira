@@ -209,6 +209,7 @@ bnf = {
   @ValuePlusCalls [
     (o 'Value')
     (o 'Invocation')
+    (o 'Pipeline')
   ]
 
   @AllCallables [
