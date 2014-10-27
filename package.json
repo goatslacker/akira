@@ -22,7 +22,6 @@
     "Store",
     "ast",
     "gulp-akira",
-    "gulp-vm",
     "tg",
     "prelude",
     "z"
@@ -31,6 +30,7 @@
     "gulp": "^3.8.8",
     "gulp-rename": "^1.2.0",
     "gulp-streamify": "0.0.5",
+    "gulp-vm": "^1.0.1",
     "jison": "^0.4.15"
   },
   "bin": {
