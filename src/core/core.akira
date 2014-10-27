@@ -46,11 +46,13 @@ macro each fn [sym name test]
 
 module.exports = {
 -- defined in lib/core/core
-  @map true
-  @filter true
-  @foldl true
+  @all true
+  @any true
   @eq true
   @eq-val true
+  @filter true
+  @foldl true
+  @map true
   @Promise true
 
   @deep-eq (`fn [a b]
@@ -165,10 +167,6 @@ module.exports = {
   @key (`fn  [v x]  find (== v) x )
 
   @value (`fn  [k x]  x !! k )
-
-  @any (`fn [f vec]  Array.prototype.some.call vec (-> f &0) )
-
-  @all (`fn [f vec]  Array.prototype.every.call vec (-> f &0) )
 
   @foldr (`fn [f vec]
       if vec.length is 0
