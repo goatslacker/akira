@@ -1,0 +1,20 @@
+Identifier = require 'ast/Identifier'
+ast = require 'ast'
+
+Exception = class
+  [@tr @ca @type] this
+
+  compile [context]
+    error-type = if this.type
+      then ast this.type context
+      else Identifier 'Error'
+    {
+      @type 'ThrowStatement'
+      @argument {
+        @type 'NewExpression'
+        @callee error-type
+        @arguments [(ast this.ca context)]
+      }
+    }
+
+module.exports = Exception
