@@ -345,7 +345,7 @@ bnf = {
 
   @KeyValue [
     (o 'Key' (-> n Assignment $1 none))
-    (o 'Key Value' (-> n Assignment $1 $2))
+    (o 'Key ValuePlusCalls' (-> n Assignment $1 $2))
   ]
 
   @MapItems [
