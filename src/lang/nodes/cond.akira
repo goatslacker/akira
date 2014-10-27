@@ -25,7 +25,7 @@ Cond = class
       {
         @type 'SwitchCase'
         @test test
-        @consequent (body | ExpressionStatement | make-array)
+        @consequent body | ExpressionStatement | make-array
       }
 
     body = [{
