@@ -48,12 +48,15 @@ module.exports = {
 -- defined in lib/core/core
   @all true
   @any true
+  @concat-map true
   @eq true
   @eq-val true
   @filter true
   @foldl true
   @map true
   @Promise true
+  @take true
+  @take-while true
 
   @deep-eq (`fn [a b]
       if a.length isnt b.length
@@ -134,16 +137,6 @@ module.exports = {
       result
     )
 
-  @concat-map (`fn [f vec]
-      result = []
-      vec.for-each fn [x]
-        item = f x
-        if Array.isArray item
-          then Array.prototype.push.apply result item
-          else result.push item
-      result
-    )
-
   @assert (`fn [a b]
       if a != b
         raise 'Expected {{a}} == {{b}}'
@@ -188,15 +181,7 @@ module.exports = {
 
   @randomize (`fn [vec]  sort (-> (| Math.random) > 0.5) vec )
 
-  @take (`fn  [n vec]  vec.slice 0 n )
-
   @drop (`fn  [n vec]  vec.slice n )
-
-  @take-while (`fn [f [x & xs]]
-      if (f x) is true
-        then x +: (take-while f xs)
-        else []
-  )
 
   @apply (`fn  [f & args] f.apply f args)
 
