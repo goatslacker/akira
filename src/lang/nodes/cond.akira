@@ -17,7 +17,7 @@ Cond = class
         {
           @type 'UnaryExpression'
           @operator '!'
-          @argument (ast pattern.0 context)
+          @argument ast pattern.0 context
         }
 
       body = ast pattern.1 context
@@ -31,8 +31,8 @@ Cond = class
     body = [{
       @type 'SwitchStatement'
       @__cond true
-      @discriminant (Literal false)
-      @cases (map create-pattern this.patterns)
+      @discriminant Literal false
+      @cases map create-pattern this.patterns
     }]
     implicit-return body
     beta-redex body
