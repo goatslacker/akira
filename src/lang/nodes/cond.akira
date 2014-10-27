@@ -1,0 +1,41 @@
+ExpressionStatement = require 'ast/ExpressionStatement'
+Literal = require 'ast/Literal'
+ast = require 'ast'
+beta-redex = require 'z/betaRedex'
+implicit-return = require 'z/implicitReturn'
+make-array = require 'z/makeArray'
+
+Cond = class
+  [patterns def]
+    this.patterns = (patterns.args.slice 0) ++ [(def.slice 0)]
+
+  compile [context]
+    create-pattern = fn [pattern]
+      test = if pattern.0 == 'else'
+        none
+      else
+        {
+          @type 'UnaryExpression'
+          @operator '!'
+          @argument (ast pattern.0 context)
+        }
+
+      body = ast pattern.1 context
+
+      {
+        @type 'SwitchCase'
+        @test test
+        @consequent (body | ExpressionStatement | make-array)
+      }
+
+    body = [{
+      @type 'SwitchStatement'
+      @__cond true
+      @discriminant (Literal false)
+      @cases (map create-pattern this.patterns)
+    }]
+    implicit-return body
+    beta-redex body
+
+
+module.exports = Cond
