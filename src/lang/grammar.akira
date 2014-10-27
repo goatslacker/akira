@@ -147,8 +147,6 @@ bnf = {
     (o 'NONE' (-> n Literal none))
     (o 'BOOL' (-> n Literal ($1 is 'true')))
     (o 'REGEXP' (-> n Literal $1))
-    (o 'Vectors')
-    (o 'Maps')
     (o 'Accessibles')
     (o 'SpecialFunctions')
     (o 'Class')
@@ -158,13 +156,19 @@ bnf = {
     (o '( Expression OptTerminator )' (-> $2))
   ]
 
-  @Accessibles [
+  @Callables [
     (o 'Identifier')
-    (o 'Strings')
     (o 'Declaration')
     (o 'Prototype')
-    (o 'ArgumentsShorthand')
     (o 'Access')
+  ]
+
+  @Accessibles [
+    (o 'Callables')
+    (o 'Strings')
+    (o 'Vectors')
+    (o 'Maps')
+    (o 'ArgumentsShorthand')
   ]
 
   @TypeCheck [
@@ -221,7 +225,7 @@ bnf = {
   ]
 
   @Invocation [
-    (o 'Accessibles Arguments' (-> n Call $1 $2))
+    (o 'Callables Arguments' (-> n Call $1 $2))
     (o '| AllCallables' (-> n Call $2))
     (o '& | AllCallables' (-> n Call $3 'apply'))
   ]
@@ -434,8 +438,8 @@ bnf = {
   ]
 
   @Instantiate [
-    (o 'NEW Accessibles Arguments' (-> n Instantiate (n Call $2 $3)))
-    (o 'NEW Accessibles' (-> n Instantiate (n Call $2)))
+    (o 'NEW Callables Arguments' (-> n Instantiate (n Call $2 $3)))
+    (o 'NEW Callables' (-> n Instantiate (n Call $2)))
   ]
 
   @Exceptions [
