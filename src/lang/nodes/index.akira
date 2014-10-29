@@ -23,6 +23,7 @@ module.exports = {
   @Evaluate       (r 'evaluate')
   @If             (r 'if')
   @Identifier     (r 'identifier')
+  @Inst           (r 'inst')
   @Instantiate    (r 'instantiate')
   @Interface      (r 'interface')
   @Import         (r 'import')

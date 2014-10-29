@@ -16,7 +16,7 @@ identifiers = {
   @KEYWORDS [
     'if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none' 'do'
     'let' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match' 'interface'
-    'Maybe' 'Async' 'class' 'typealias' 'async' 'new' 'await'
+    'Maybe' 'Async' 'class' 'typealias' 'async' 'new' 'await' 'instanceof'
   ]
   @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
   @INHERITANCE ['<<']

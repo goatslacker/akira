@@ -1,0 +1,10 @@
+ast = require 'ast'
+BinaryExpression = require 'ast/BinaryExpression'
+
+Inst = class
+  [@a @b] this
+
+  compile [context]
+    BinaryExpression 'instanceof' (ast this.a context) (ast this.b context)
+
+module.exports = Inst

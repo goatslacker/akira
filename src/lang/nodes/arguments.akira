@@ -1,0 +1,20 @@
+ast = require 'ast'
+
+flatten = fn [args]
+  flat-args = []
+  args.for-each fn [arg]
+    if arg instanceof Arguments
+      then flat-args.push.apply flat-args (flatten arg.args)
+      else flat-args.push arg
+  flat-args
+
+
+Arguments = class
+  []
+    this.args = flatten (Array.prototype.slice.call arguments 0)
+
+  compile [context]
+    map (-> ast &0 context) this.args
+
+
+module.exports = Arguments
