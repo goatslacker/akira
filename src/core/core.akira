@@ -57,6 +57,7 @@ module.exports = {
   @Promise true
   @take true
   @take-while true
+  @range true
 
   @deep-eq (`fn [a b]
       if a.length isnt b.length
