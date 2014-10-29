@@ -22,10 +22,10 @@ Logic = class
       get-core-function this.operation
     else
       {
-        @type 'LogicalExpression'
-        @operator this.operation
-        @left (ast this.compare.0 context)
-        @right (ast this.compare.1 context)
+        :type 'LogicalExpression'
+        :operator this.operation
+        :left (ast this.compare.0 context)
+        :right (ast this.compare.1 context)
       }
 
 module.exports = Logic

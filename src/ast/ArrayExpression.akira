@@ -1,8 +1,8 @@
 ArrayExpression :: Vector -> Map
 ArrayExpression = fn [elements]
   {
-    @type 'ArrayExpression'
-    @elements elements
+    :type 'ArrayExpression'
+    :elements elements
   }
 
 module.exports = ArrayExpression

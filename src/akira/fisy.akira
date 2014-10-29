@@ -30,4 +30,4 @@ write-file = async [file code from (to = (path.dirname file))]
   write-path = filename.replace '.akira' '.js' | path.join to
   await fs.write-file-async write-path code
 
-functions = { @get-all-files @write-file @get-file }
+functions = { :get-all-files :write-file :get-file }

@@ -15,24 +15,24 @@ Cond = class
         none
       else
         {
-          @type 'UnaryExpression'
-          @operator '!'
-          @argument ast pattern.0 context
+          :type 'UnaryExpression'
+          :operator '!'
+          :argument ast pattern.0 context
         }
 
       body = ast pattern.1 context
 
       {
-        @type 'SwitchCase'
-        @test test
-        @consequent body | ExpressionStatement | make-array
+        :type 'SwitchCase'
+        :test test
+        :consequent body | ExpressionStatement | make-array
       }
 
     body = [{
-      @type 'SwitchStatement'
-      @__cond true
-      @discriminant Literal false
-      @cases map create-pattern this.patterns
+      :type 'SwitchStatement'
+      :__cond true
+      :discriminant Literal false
+      :cases map create-pattern this.patterns
     }]
     implicit-return body
     beta-redex body

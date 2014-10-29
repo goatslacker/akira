@@ -9,11 +9,11 @@ Exception = class
       then ast this.type context
       else Identifier 'Error'
     {
-      @type 'ThrowStatement'
-      @argument {
-        @type 'NewExpression'
-        @callee error-type
-        @arguments [(ast this.ca context)]
+      :type 'ThrowStatement'
+      :argument {
+        :type 'NewExpression'
+        :callee error-type
+        :arguments [(ast this.ca context)]
       }
     }
 

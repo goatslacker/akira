@@ -7,9 +7,9 @@ Instantiate = class
   compile [context]
     name = ast this.iden context
     {
-      @type 'NewExpression'
-      @callee name.callee
-      @arguments name.arguments
+      :type 'NewExpression'
+      :callee name.callee
+      :arguments name.arguments
     }
 
 module.exports = Instantiate

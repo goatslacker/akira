@@ -2,8 +2,8 @@ make-array = require 'z/makeArray'
 
 make-block = fn [expr]
   {
-    @type 'BlockStatement'
-    @body (make-array expr)
+    :type 'BlockStatement'
+    :body (make-array expr)
   }
 
 can-be-conditional = fn [consequent alternate]
@@ -14,10 +14,10 @@ can-be-conditional = fn [consequent alternate]
 
 ConditionalExpression = fn [test consequent alternate]
   {
-    @type 'ConditionalExpression'
-    @test test
-    @consequent consequent
-    @alternate alternate
+    :type 'ConditionalExpression'
+    :test test
+    :consequent consequent
+    :alternate alternate
   }
 
 IfStatement :: Map Vector | Map Maybe Vector | Maybe Map -> Map
@@ -25,10 +25,10 @@ IfStatement = fn [test consequent alternate]
   cond
     (can-be-conditional consequent alternate) ? ConditionalExpression test consequent alternate
     else ? {
-      @type 'IfStatement'
-      @test test
-      @consequent (make-block consequent)
-      @alternate ((make-block alternate) if alternate)
+      :type 'IfStatement'
+      :test test
+      :consequent (make-block consequent)
+      :alternate ((make-block alternate) if alternate)
     }
 
 module.exports = IfStatement

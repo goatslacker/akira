@@ -4,14 +4,14 @@ is-true = (= (assert &0 true))
 
 banana = {}
 
-{ @words 15 }
+{ :words 15 }
 banana.show
 count-alias = count
-{ @concat-key concat }
+{ :concat-key concat }
 div = 2
 plus-nine = (+ 9)
 mul = (= 0)
-{ @take-while }
+{ :take-while }
 id zip-with
 closed-function = ->
   gte = 2

@@ -3,21 +3,21 @@ ok-deep = fn [a b]
 
 -- I have to make a Animal, Cat example...
 Animal = {
-  @speak (= 'my name is ' ++ this.name)
-  @walk (= true)
-  @sleep (= 'ZzZzZ...')
-  @alive true
-  @eyes 2
+  :speak (= 'my name is ' ++ this.name)
+  :walk (= true)
+  :sleep (= 'ZzZzZ...')
+  :alive true
+  :eyes 2
 }
 
 Cat = Animal << {
-  @speak (= 'meow i am ' ++ this.name)
-  @sleep (= 'Purr ' ++ (| prototype.sleep))
-  @legs 4
+  :speak (= 'meow i am ' ++ this.name)
+  :sleep (= 'Purr ' ++ (| prototype.sleep))
+  :legs 4
 }
 
-cat = Cat << { @name 'Luna' }
-wasabi = Cat << { @name 'Wasabi' }
+cat = Cat << { :name 'Luna' }
+wasabi = Cat << { :name 'Wasabi' }
 
 | cat.speak | assert 'meow i am Luna'
 cat.alive | assert true
@@ -31,7 +31,7 @@ cat.legs | assert 4
 ([1 2 3] 4 5 6) | ok-deep [1 2 3 4 5 6]
 ([1 2 3] [4]) | ok-deep [1 2 3 4]
 
-a = { @a 1 } { @b 2 } { @c 3 }
+a = { :a 1 } { :b 2 } { :c 3 }
 assert a.a 1
 assert a.b 2
 assert a.c 3

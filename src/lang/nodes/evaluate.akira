@@ -10,7 +10,7 @@ Evaluate = class
     a = ast this.expr context
 
     if this.evl
-      { @__akira a }
+      { :__akira a }
     else
       xform = '(' ++ (obj2str a) ++ ')'
       xast = esprima.parse xform

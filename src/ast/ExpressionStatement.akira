@@ -8,7 +8,7 @@ convert-to-expression-statement = match
   [expr 'BlockStatement'] expr
   [expr 'ThrowStatement'] expr
   [expr 'VariableDeclaration'] expr
-  [else] { @type 'ExpressionStatement' @expression expr }
+  [else] { :type 'ExpressionStatement' :expression expr }
 
 ExpressionStatement :: Map | Vector -> Map | Vector
 ExpressionStatement = fn [expr]

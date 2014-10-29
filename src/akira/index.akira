@@ -1,9 +1,9 @@
 Promise = require 'bluebird'
 util = require 'util'
 me = require '../../package.json'
-{ @run @lexer @gen-program-ast @transpile } = require '../lang/compiler'
+{ :run :lexer :gen-program-ast :transpile } = require '../lang/compiler'
 
-{ @write-file @get-all-files @get-file } = import './fisy.akira'
+{ :write-file :get-all-files :get-file } = import './fisy.akira'
 repl = import './repl.akira'
 help = import './help.akira'
 
@@ -48,7 +48,7 @@ lex = async [filepath (cb = console.log)]
   lexer file.code | cb
 
 module.exports = {
-  @cli fn [args]
+  :cli fn [args]
     cmd = head args
     opts = tail args
 
@@ -64,12 +64,12 @@ module.exports = {
       cmd is 'version' ? console.log ('akira ' ++ me.version)
       else ? help opts
 
-  @ast to-ast
-  @compile compile
-  @debug file-debug
-  @lexer lex
-  @output file-output
-  @repl repl
-  @run run-a-file
-  @write write-file
+  :ast to-ast
+  :compile compile
+  :debug file-debug
+  :lexer lex
+  :output file-output
+  :repl repl
+  :run run-a-file
+  :write write-file
 }

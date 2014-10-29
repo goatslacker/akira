@@ -6,8 +6,8 @@ make-array = require 'z/makeArray'
 
 make-block = fn [expr]
   {
-    @type 'BlockStatement'
-    @body expr | make-array
+    :type 'BlockStatement'
+    :body expr | make-array
   }
 
 ExceptionGuard = class
@@ -15,15 +15,15 @@ ExceptionGuard = class
 
   compile [context]
     {
-      @type 'TryStatement'
-      @block ast this.tr context | ExpressionStatement | make-block
-      @handlers [{
-        @type 'CatchClause'
-        @param ast this.id context
-        @guard none
-        @body ast this.ca context | ExpressionStatement | make-block
+      :type 'TryStatement'
+      :block ast this.tr context | ExpressionStatement | make-block
+      :handlers [{
+        :type 'CatchClause'
+        :param ast this.id context
+        :guard none
+        :body ast this.ca context | ExpressionStatement | make-block
       }]
-      @finalizer none
+      :finalizer none
     }
 
 module.exports = ExceptionGuard

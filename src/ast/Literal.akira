@@ -1,7 +1,7 @@
 Literal = fn [value]
   {
-    @type 'Literal'
-    @value value
+    :type 'Literal'
+    :value value
   }
 
 module.exports = Literal

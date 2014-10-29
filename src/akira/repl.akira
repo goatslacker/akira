@@ -1,11 +1,11 @@
 export start-repl
 
 repl = require 'repl'
-context = { @console console }
+context = { :console console }
 vm = require 'vm'
 util = require 'util'
 
-{ @replify } = require '../lang/compiler.js'
+{ :replify } = require '../lang/compiler.js'
 
 inspect = fn [val]
   util.inspect val false 35
@@ -20,8 +20,8 @@ read-eval-print-loop = fn [data _ filename cb]
 
 start-repl = fn []
   repl.start {
-    @prompt 'akira> '
-    @input process.stdin
-    @output process.stdout
-    @eval read-eval-print-loop
+    :prompt 'akira> '
+    :input process.stdin
+    :output process.stdout
+    :eval read-eval-print-loop
   }

@@ -1,36 +1,36 @@
 rx = {
-  @IDENTIFIER /^([a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
-  @KEY /^(:[a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
-  @THIS /^(@[a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
-  @NUM /^(-?([0-9]+[\.e])?[0-9]+,?)+/
-  @STR /^('(.*?)')/
-  @ARGS /^(&([0-9]+))/
-  @LAMBDA /^->/
-  @OPERATION /^(<<|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:|::)/
-  @TERMINATOR /^\n/
-  @REGEXP /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
-  @COMMENTS /^(--.*)/
-  @WHITESPACE /^ /
+  :IDENTIFIER /^([a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
+  :KEY /^(:[a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
+  :THIS /^(@[a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
+  :NUM /^(-?([0-9]+[\.e])?[0-9]+,?)+/
+  :STR /^('(.*?)')/
+  :ARGS /^(&([0-9]+))/
+  :LAMBDA /^->/
+  :OPERATION /^(<<|<=|>=|>|<|(!|=)==?|\|\||\&\&|!!|\+\+|\+:|::)/
+  :TERMINATOR /^\n/
+  :REGEXP /^(\/((?![\s=])[^[\/\n\\]*(?:(?:\\[\s\S]|\[[^\]\n\\]*(?:\\[\s\S][^\]\n\\]*)*])[^[\/\n\\]*)*)\/)([imgy]{0,4})(?!\w)/
+  :COMMENTS /^(--.*)/
+  :WHITESPACE /^ /
 }
 
 identifiers = {
-  @KEYWORDS [
+  :KEYWORDS [
     'if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none' 'do'
     'let' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match' 'interface'
     'Maybe' 'Async' 'class' 'typealias' 'async' 'new' 'await' 'instanceof'
   ]
-  @COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
-  @INHERITANCE ['<<']
-  @ACCESSOR_OPERATOR ['!!']
-  @LEFT_OPERATORS ['++']
-  @RIGHT_OPERATORS ['+:']
-  @TYPE_OPERATOR ['::']
-  @NOT ['not']
-  @LOGIC ['&&' '||']
-  @BOOL ['true' 'false']
+  :COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']
+  :INHERITANCE ['<<']
+  :ACCESSOR_OPERATOR ['!!']
+  :LEFT_OPERATORS ['++']
+  :RIGHT_OPERATORS ['+:']
+  :TYPE_OPERATOR ['::']
+  :NOT ['not']
+  :LOGIC ['&&' '||']
+  :BOOL ['true' 'false']
 }
 
-ignore = { @COMMENTS @WHITESPACE }
+ignore = { :COMMENTS :WHITESPACE }
 
 get-type = fn [a]
   rx | find (-> &0.test a)
@@ -104,17 +104,17 @@ incr-line = match
 
 get-next-index = fn [token]
   {
-    @index (| token.2.toString | (.length))
-    @token token
+    :index (| token.2.toString | (.length))
+    :token token
   }
 
 return-tokens = match
   [code n] return-tokens code n []
   ['' _ tokens] tokens
   [else]
-    {@index @token} = process-chunk code n | get-next-index
+    {:index :token} = process-chunk code n | get-next-index
     tokens.push token
-    recur (code.substr index code.length) { @line (incr-line token.0 n.line) } tokens
+    recur (code.substr index code.length) { :line (incr-line token.0 n.line) } tokens
 
 filter-whitespace = fn [token]
   not (ignore !! token.0)
@@ -160,7 +160,7 @@ tokenize = fn [code]
       (dedent (-> indentstack.length) i) if line != '' && not (rx.COMMENTS.test line)
 
     tokens.push.apply tokens (
-      return-tokens line { @index 0 @line i } | (.filter filterWhitespace)
+      return-tokens line { :index 0 :line i } | (.filter filterWhitespace)
     )
     tokens.push ['TERMINATOR' ' ' ' ' i]
     line

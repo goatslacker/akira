@@ -2,17 +2,17 @@ convert-to-property :: Vector -> Map
 convert-to-property = fn [prop]
   [key value] = prop
   {
-    @type 'Property'
-    @key
-    @value
-    @kind 'init'
+    :type 'Property'
+    :key
+    :value
+    :kind 'init'
   }
 
 ObjectExpression :: Vector -> Map
 ObjectExpression = fn [props]
   {
-    @type 'ObjectExpression'
-    @properties (map convert-to-property props)
+    :type 'ObjectExpression'
+    :properties (map convert-to-property props)
   }
 
 module.exports = ObjectExpression

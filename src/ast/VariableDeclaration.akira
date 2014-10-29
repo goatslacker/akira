@@ -1,8 +1,8 @@
 variable-declarator = fn [id (init = none)]
   {
-    @type 'VariableDeclarator'
-    @id id
-    @init init
+    :type 'VariableDeclarator'
+    :id id
+    :init init
   }
 
 create-var = match
@@ -11,9 +11,9 @@ create-var = match
 
 VariableDeclaration = fn [declarations]
   {
-    @type 'VariableDeclaration'
-    @declarations (map create-var declarations)
-    @kind 'var'
+    :type 'VariableDeclaration'
+    :declarations (map create-var declarations)
+    :kind 'var'
   }
 
 module.exports = VariableDeclaration

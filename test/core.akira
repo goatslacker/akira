@@ -15,7 +15,7 @@ add-one = curried-sum 1
 2 | add-one | assert 3
 
 
-obj = { @foo 1 @bar 2 @baz 3 }
+obj = { :foo 1 :bar 2 :baz 3 }
 
 -- keys
 obj | keys | ok-deep ['foo' 'bar' 'baz']
