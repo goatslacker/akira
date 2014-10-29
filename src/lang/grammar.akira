@@ -152,9 +152,8 @@ bnf = {
     (o 'Class')
     (o 'Operation')
     (o 'Instance')
-    (o 'Markup')
     (o 'This')
-    (o '#' (-> n Identifier 'this'))
+    (o '@' (-> n Identifier 'this'))
     (o '( Indent Expression Dedent Terminator )' (-> $3))
     (o '( Expression OptTerminator )' (-> $2))
   ]
@@ -244,10 +243,6 @@ bnf = {
   @InlineDeclaration [
     (o 'LAMBDA Expression' (-> n Declaration none none $2))
     (o 'FN [ Parameters ] Expression' (-> n Declaration none $3 $5))
-  ]
-
-  @Markup [
-    (o ': Identifier Value Value' (-> n Markup $2 $3 $4))
   ]
 
   @LetOperation [
