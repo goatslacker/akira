@@ -1,6 +1,7 @@
 rx = {
   @IDENTIFIER /^([a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
   @KEY /^(@[a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
+  @THIS /^(#[a-zA-Z_$][0-9a-zA-Z_\-]*[\?]?)/
   @NUM /^(-?([0-9]+[\.e])?[0-9]+,?)+/
   @STR /^('(.*?)')/
   @ARGS /^(&([0-9]+))/
@@ -78,6 +79,7 @@ get-token = fn [type chunk]
   cond
     type is 'IDENTIFIER' ||
     type is 'KEY' ||
+    type is 'THIS' ||
     type is 'OPERATION' ? & | parse-identifier
     type is 'NUM' ? parse-alphanumeric type chunk 0
     type is 'STR' ? & | parse-str

@@ -153,6 +153,8 @@ bnf = {
     (o 'Operation')
     (o 'Instance')
     (o 'Markup')
+    (o 'This')
+    (o '#' (-> n Identifier 'this'))
     (o '( Indent Expression Dedent Terminator )' (-> $3))
     (o '( Expression OptTerminator )' (-> $2))
   ]
@@ -195,6 +197,7 @@ bnf = {
     (o 'Vectors = Expression' (-> n Assignment $1 $3))
     (o 'Maps = Expression' (-> n Assignment $1 $3))
     (o 'AccessOperation = Expression' (-> n Assignment $1 $3))
+    (o 'This = Expression' (-> n Assignment $1 $3))
   ]
 
   @Exporting [
@@ -345,6 +348,10 @@ bnf = {
     (o 'KEY' (-> n Identifier $1))
   ]
 
+  @This [
+    (o 'THIS' (-> n Access (n Identifier 'this') (n Identifier $1)))
+  ]
+
   @KeyValue [
     (o 'Key' (-> n Assignment $1 none))
     (o 'Key ValuePlusCalls' (-> n Assignment $1 $2))
@@ -385,7 +392,7 @@ bnf = {
     (o 'Identifier')
     (o '( Identifier = Value )' (-> n Assignment $2 $4))
     (o 'Rest')
-    (o 'Key')
+    (o 'This')
     (o 'Vectors')
     (o 'Maps')
   ]
@@ -398,7 +405,7 @@ bnf = {
   @ClassMember [
     (o 'Identifier [ Parameters ] BodyOrExpression' (-> n ClassMethod $1 $3 $5))
     (o 'Identifier [ ] BodyOrExpression' (-> n ClassMethod $1 none $4))
-    (o 'Key Value Terminator' (-> [$1 $2]))
+    (o 'This Value Terminator' (-> [$1 $2]))
   ]
 
   @ClassMembers [
