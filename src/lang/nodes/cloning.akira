@@ -1,0 +1,47 @@
+CallExpression = require 'ast/CallExpression'
+ExpressionStatement = require 'ast/ExpressionStatement'
+Identifier = require 'ast/Identifier'
+MemberExpression = require 'ast/MemberExpression'
+Store = require 'Store'
+ast = require 'ast'
+
+create-prop = fn [prop]
+  {
+    :type 'Property'
+    :key prop.key
+    :value {
+      :type 'ObjectExpression'
+      :properties [{
+        :type 'Property'
+        :key Identifier 'value'
+        :value prop.value
+        :kind 'init'
+      }]
+    }
+    :kind 'init'
+  }
+
+create-object = fn [a b]
+  x = if b.type == 'ObjectExpression'
+        then { :type 'ObjectExpression' :properties (map create-prop b.properties) }
+        else b
+
+  CallExpression (MemberExpression (Identifier 'Object') (Identifier 'create')) [(CallExpression (Identifier 'Object') [a]) x]
+
+Cloning = class
+  [@id @map] @
+
+  compile [context]
+    map = ast @map context
+    id = ast @id context
+
+    key = if map.type == 'Identifier'
+            then context !! map.name
+            else none
+
+    if map.type == 'ArrayExpression' || (key && key.type == 'ArrayExpression')
+      then CallExpression (MemberExpression map (Identifier 'concat')) id
+      else foldl create-object ([map] ++ id)
+
+
+module.exports = Cloning
