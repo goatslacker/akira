@@ -55,6 +55,7 @@ function parser() {
     .pipe(rename(function (path) {
       path.basename = 'parser'
     }))
+    .pipe(streamify(uglify()))
     .pipe(gulp.dest('./lib/lang'))
 }
 
