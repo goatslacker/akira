@@ -152,8 +152,6 @@ bnf = {
     (o 'Class')
     (o 'Operation')
     (o 'Instance')
-    (o 'This')
-    (o '@' (-> n Identifier 'this'))
     (o '( Indent Expression Dedent Terminator )' (-> $3))
     (o '( Expression OptTerminator )' (-> $2))
   ]
@@ -163,6 +161,7 @@ bnf = {
     (o 'Declaration')
     (o 'Prototype')
     (o 'Access')
+    (o 'This')
   ]
 
   :Accessibles [
@@ -171,6 +170,7 @@ bnf = {
     (o 'Vectors')
     (o 'Maps')
     (o 'ArgumentsShorthand')
+    (o '@' (-> n Identifier 'this'))
   ]
 
   :TypeCheck [
