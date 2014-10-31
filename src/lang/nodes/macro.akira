@@ -1,0 +1,12 @@
+Store = require 'Store'
+ast = require 'ast'
+
+Macro = class
+  [@name @args] @
+
+  compile [context]
+    name = @name.name
+    Store.macros !! name = (ast @args context)
+    []
+
+module.exports = Macro
