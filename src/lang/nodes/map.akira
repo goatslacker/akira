@@ -1,0 +1,26 @@
+Literal = require 'ast/Literal'
+ObjectExpression = require 'ast/ObjectExpression'
+ast = require 'ast'
+TypeSystem = require 'TypeSystem'
+
+Map = class
+  [@obj] @akira-name = 'Map'
+
+  compile [context]
+    get-pairs = fn [arg]
+      key = ast arg.id context
+      value = if arg.val == none
+        then if context !! arg.id.name
+          then key
+          else Literal arg.id.name
+        else ast arg.val context
+      value.__type = TypeSystem.infer value context
+      [key value]
+
+    properties = if @obj
+      then map get-pairs @obj.args
+      else []
+    ObjectExpression properties
+
+
+module.exports = Map
