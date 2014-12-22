@@ -48,8 +48,8 @@ Boolean
 Maps
 
     cat = {
-      @name 'Luna'
-      @age 2
+      :name 'Luna'
+      :age 2
     }
 
 Vectors
@@ -103,8 +103,8 @@ Property Access
 
 akira | javascript
 ----- | ----------
-{ @key 'value' } !! 'key' | { key: 'value' }['key']
-{ @key 'value' }.key | { key: 'value' }.key
+{ :key 'value' } !! 'key' | { key: 'value' }['key']
+{ :key 'value' }.key | { key: 'value' }.key
 [1 2 3 4] !! 2 | [1, 2, 3, 4][2]
 [1 2 3].1 | [1, 2, 3][0]
 
