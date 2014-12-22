@@ -218,6 +218,7 @@ bnf = {
     (o 'Accessibles')
     (o 'Invocation')
     (o 'SpecialFunctions')
+    (o 'PatternMatching')
     (o '( InlineDeclaration )' (-> $2))
   ]
 
