@@ -145,7 +145,6 @@ bnf = {
     (o 'NUM' (-> n Literal (Number ($1.replace /,/g ''))))
     (o 'NONE' (-> n Literal none))
     (o 'BOOL' (-> n Literal ($1 is 'true')))
-    (o 'REGEXP' (-> n Literal $1))
     (o 'Accessibles')
     (o 'SpecialFunctions')
     (o 'Class')
@@ -168,6 +167,7 @@ bnf = {
     (o 'Strings')
     (o 'Vectors')
     (o 'Maps')
+    (o 'REGEXP' (-> n Literal $1))
     (o 'ArgumentsShorthand')
     (o '@' (-> n Identifier 'this'))
   ]
