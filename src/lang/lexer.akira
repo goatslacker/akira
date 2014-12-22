@@ -16,7 +16,7 @@ rx = {
 identifiers = {
   :KEYWORDS [
     'if' 'then' 'else' 'import' 'export' 'try' 'catch' 'none' 'do'
-    'let' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match' 'interface'
+    'let' 'fn' 'raise' 'prototype' 'recur' 'macro' 'cond' 'match'
     'Maybe' 'Async' 'class' 'typealias' 'async' 'new' 'await' 'instanceof'
   ]
   :COMPARE ['==' '!=' '>' '>=' '<' '<=' 'is' 'isnt']

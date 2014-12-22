@@ -116,7 +116,6 @@ bnf = {
     (o 'DefMacro')
     (o 'TypeSignature')
     (o 'TypeAlias')
-    (o 'Interface')
   ]
 
   :Expression [
@@ -430,15 +429,6 @@ bnf = {
 
   :KeyType [
     (o 'Key TypeValue' (-> [$1 $2]))
-  ]
-
-  :InterfaceKeys [
-    (o 'KeyType' (-> n Arguments $1))
-    (o 'InterfaceKeys KeyType' (-> n Arguments $1 $2))
-  ]
-
-  :Interface [
-    (o 'INTERFACE Identifier { OptTerminator InterfaceKeys OptTerminator }' (-> n Interface $2 $5))
   ]
 
   :Instantiate [
