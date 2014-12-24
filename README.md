@@ -131,7 +131,6 @@ IIFE/Beta-redex
 
     | ->
       number-of-balloons = 99
-    }
 
 Anonymous functions
 
@@ -172,10 +171,9 @@ need to include the 'var' as there are no globals.
 
     a = 1        -- outter `a`
     b = 2
-    c = fn [] {
+    c = fn []
       a = 2      -- creates a local `a`
       b          -- `b` can be accessed in here
-    }
 
 
 ### Conditionals
@@ -198,19 +196,17 @@ Multiple conditions
 
 Factorial implemented using pattern matching
 
-    fact = match {
+    fact = match
       [1] 1
       [n] n * (fact n - 1)
-    }
 
 This splits up the list into x = head(list) and xs = tail(list)
 
-    sort-even-odd = fn [[x, & xs]] {
+    sort-even-odd = fn [[x, & xs]]
       cond
         not x ? []
         odd x ? (sort-even-odd xs) ++ [x]
         else ? x +: (sort-even-odd xs)
-    }
 
     [1 2 3 4 5 6] | sort-even-odd | assert-deep [2 4 6 5 3 1]
 
@@ -218,7 +214,7 @@ This splits up the list into x = head(list) and xs = tail(list)
 ### Exceptions
 
     try
-      some-function-that-may-crash!
+      | some-function-that-may-crash
     catch err
       raise err
 
